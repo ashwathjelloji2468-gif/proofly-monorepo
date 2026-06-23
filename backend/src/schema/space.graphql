@@ -1,0 +1,66 @@
+type Space {
+  id: ID!
+  name: String!
+  slug: String!
+  headerTitle: String!
+  customMessage: String!
+  logoUrl: String
+  collectVideo: Boolean!
+  collectText: Boolean!
+  theme: String!
+  customDomain: String
+  createdAt: String!
+  updatedAt: String!
+  testimonials: [Testimonial!]!
+  campaigns: [Campaign!]!
+  webhooks: [Webhook!]!
+  reward: Reward
+}
+
+input CreateSpaceInput {
+  name: String!
+  slug: String!
+  headerTitle: String!
+  customMessage: String!
+  logoUrl: String
+  collectVideo: Boolean
+  collectText: Boolean
+  theme: String
+  customDomain: String
+}
+
+input UpdateSpaceInput {
+  name: String
+  headerTitle: String
+  customMessage: String
+  logoUrl: String
+  collectVideo: Boolean
+  collectText: Boolean
+  theme: String
+  customDomain: String
+}
+
+type Webhook {
+  id: ID!
+  url: String!
+  isActive: Boolean!
+  createdAt: String!
+}
+
+input CreateWebhookInput {
+  spaceId: ID!
+  url: String!
+}
+
+extend type Query {
+  mySpaces: [Space!]!
+  spaceBySlug(slug: String!): Space
+}
+
+extend type Mutation {
+  createSpace(input: CreateSpaceInput!): Space!
+  updateSpace(id: ID!, input: UpdateSpaceInput!): Space!
+  deleteSpace(id: ID!): Boolean!
+  createWebhook(input: CreateWebhookInput!): Webhook!
+  deleteWebhook(id: ID!): Boolean!
+}

@@ -1,0 +1,24 @@
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  tier: BillingTier!
+  createdAt: String!
+  updatedAt: String!
+  spaces: [Space!]!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
+extend type Query {
+  me: User
+}
+
+extend type Mutation {
+  signup(email: String!, name: String!, password: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  updateBillingTier(tier: BillingTier!): User!
+}

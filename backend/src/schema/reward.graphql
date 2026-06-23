@@ -1,0 +1,20 @@
+type Reward {
+  id: ID!
+  discountCode: String!
+  message: String!
+  isActive: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  space: Space!
+}
+
+input CreateOrUpdateRewardInput {
+  spaceId: ID!
+  discountCode: String!
+  message: String!
+}
+
+extend type Mutation {
+  createOrUpdateReward(input: CreateOrUpdateRewardInput!): Reward!
+  deleteReward(spaceId: ID!): Boolean!
+}

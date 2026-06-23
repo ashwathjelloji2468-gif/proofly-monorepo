@@ -1,0 +1,27 @@
+type Campaign {
+  id: ID!
+  subject: String!
+  emailBody: String!
+  recipients: [String!]!
+  sentCount: Int!
+  space: Space!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input CreateCampaignInput {
+  spaceId: ID!
+  subject: String!
+  emailBody: String!
+  recipients: [String!]!
+}
+
+extend type Query {
+  campaigns(spaceId: ID!): [Campaign!]!
+  campaign(id: ID!): Campaign
+}
+
+extend type Mutation {
+  createCampaign(input: CreateCampaignInput!): Campaign!
+  sendCampaign(id: ID!): Campaign!
+}

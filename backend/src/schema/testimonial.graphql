@@ -1,0 +1,72 @@
+type Testimonial {
+  id: ID!
+  type: TestimonialType!
+  textContent: String
+  videoUrl: String
+  rating: Int!
+  reviewerName: String!
+  reviewerEmail: String!
+  reviewerTitle: String
+  reviewerSocial: String
+  reviewerAvatar: String
+  isApproved: Boolean!
+  isArchived: Boolean!
+  isPinned: Boolean!
+  sentiment: Sentiment
+  importedFrom: ImportedFrom
+  externalLink: String
+  createdAt: String!
+  updatedAt: String!
+  space: Space!
+}
+
+type TestimonialPayload {
+  testimonial: Testimonial!
+  reward: Reward
+}
+
+input CreateTestimonialInput {
+  spaceId: ID!
+  type: TestimonialType!
+  textContent: String
+  videoUrl: String
+  rating: Int
+  reviewerName: String!
+  reviewerEmail: String!
+  reviewerTitle: String
+  reviewerSocial: String
+  reviewerAvatar: String
+}
+
+input ImportTestimonialInput {
+  spaceId: ID!
+  importedFrom: ImportedFrom!
+  externalLink: String!
+  textContent: String!
+  rating: Int!
+  reviewerName: String!
+  reviewerEmail: String!
+  reviewerTitle: String
+  reviewerSocial: String
+  reviewerAvatar: String
+}
+
+input UpdateTestimonialInput {
+  isApproved: Boolean
+  isArchived: Boolean
+  isPinned: Boolean
+  sentiment: Sentiment
+}
+
+extend type Query {
+  allApprovedTestimonials: [Testimonial!]!
+  testimonials(spaceId: ID!, approvedOnly: Boolean): [Testimonial!]!
+  testimonial(id: ID!): Testimonial
+}
+
+extend type Mutation {
+  createTestimonial(input: CreateTestimonialInput!): TestimonialPayload!
+  importTestimonial(input: ImportTestimonialInput!): Testimonial!
+  updateTestimonial(id: ID!, input: UpdateTestimonialInput!): Testimonial!
+  deleteTestimonial(id: ID!): Boolean!
+}

@@ -1,0 +1,125 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum BillingTier {
+  FREE
+  PREMIUM
+}
+
+enum TestimonialType {
+  TEXT
+  VIDEO
+}
+
+enum Sentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+enum ImportedFrom {
+  TWITTER
+  GOOGLE
+  PRODUCTHUNT
+}
+
+model User {
+  id           String      @id @default(uuid())
+  email        String      @unique
+  passwordHash String
+  name         String
+  tier         BillingTier @default(FREE)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  spaces       Space[]
+}
+
+model Space {
+  id               String        @id @default(uuid())
+  name             String
+  slug             String        @unique
+  headerTitle      String
+  customMessage    String
+  logoUrl          String?
+  collectVideo     Boolean       @default(true)
+  collectText      Boolean       @default(true)
+  theme            String        @default("light")
+  customDomain     String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  userId           String
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  testimonials     Testimonial[]
+  campaigns        Campaign[]
+  webhooks         Webhook[]
+  reward           Reward?
+}
+
+model Testimonial {
+  id             String          @id @default(uuid())
+  type           TestimonialType
+  textContent    String?
+  videoUrl       String?
+  rating         Int             @default(5)
+  reviewerName   String
+  reviewerEmail  String
+  reviewerTitle  String?
+  reviewerSocial String?
+  reviewerAvatar String?
+  isApproved     Boolean         @default(false)
+  isArchived     Boolean         @default(false)
+  isPinned       Boolean         @default(false)
+  sentiment      Sentiment?
+  importedFrom   ImportedFrom?
+  externalLink   String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  spaceId        String
+  space          Space           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model Reward {
+  id           String   @id @default(uuid())
+  discountCode String
+  message      String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  spaceId      String   @unique
+  space        Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model Campaign {
+  id         String   @id @default(uuid())
+  subject    String
+  emailBody  String
+  recipients String[]
+  sentCount  Int      @default(0)
+  spaceId    String
+  space      Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Webhook {
+  id        String   @id @default(uuid())
+  url       String
+  isActive  Boolean  @default(true)
+  spaceId   String
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(uuid())
+  eventType String
+  spaceId   String
+  metadata  Json?
+  createdAt DateTime @default(now())
+}

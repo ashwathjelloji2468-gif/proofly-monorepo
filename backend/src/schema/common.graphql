@@ -1,0 +1,29 @@
+type Query {
+  _empty: String
+}
+
+type Mutation {
+  _empty: String
+}
+
+enum BillingTier {
+  FREE
+  PREMIUM
+}
+
+enum TestimonialType {
+  TEXT
+  VIDEO
+}
+
+enum Sentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+enum ImportedFrom {
+  TWITTER
+  GOOGLE
+  PRODUCTHUNT
+}

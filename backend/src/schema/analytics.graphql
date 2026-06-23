@@ -1,0 +1,13 @@
+type AnalyticsSummary {
+  viewsCount: Int!
+  testimonialSubmissions: Int!
+  widgetImpressions: Int!
+}
+
+extend type Query {
+  spaceAnalytics(spaceId: ID!): AnalyticsSummary!
+}
+
+extend type Mutation {
+  trackEvent(spaceId: ID!, eventType: String!, metadata: String): Boolean!
+}
