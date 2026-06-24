@@ -106,6 +106,7 @@ interface AppState {
   login: (email: string, password?: string) => Promise<boolean>;
   signup: (email: string, name: string, password?: string) => Promise<boolean>;
   githubLogin: (code: string) => Promise<boolean>;
+  googleLogin: (code: string, redirectUri: string) => Promise<boolean>;
   logout: () => void;
   updateProfile: (name: string, avatarUrl: string) => void;
   
@@ -584,6 +585,38 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (err: any) {
       set({ isLoading: false });
       throw new Error(err.message || 'GitHub login failed');
+    }
+  },
+
+  googleLogin: async (code: string, redirectUri: string) => {
+    set({ isLoading: true });
+    try {
+      const data = await gqlRequest(`
+        mutation GoogleLogin($code: String!, $redirectUri: String!) {
+          googleLogin(code: $code, redirectUri: $redirectUri) {
+            token
+            user {
+              id
+              email
+              name
+              tier
+            }
+          }
+        }
+      `, { code, redirectUri });
+
+      if (data && data.googleLogin) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', data.googleLogin.token);
+        }
+        await get().fetchUser();
+        return true;
+      }
+      set({ isLoading: false });
+      return false;
+    } catch (err: any) {
+      set({ isLoading: false });
+      throw new Error(err.message || 'Google login failed');
     }
   },
 

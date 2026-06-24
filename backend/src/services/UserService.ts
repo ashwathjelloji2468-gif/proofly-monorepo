@@ -181,4 +181,82 @@ export class UserService extends BaseService {
       user: userWithoutPassword
     };
   }
+
+  async googleLogin(code: string, redirectUri: string) {
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      throw new Error('GOOGLE_AUTH_NOT_CONFIGURED: Google Client ID or Secret is not configured in environment variables.');
+    }
+
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        code,
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code'
+      }).toString()
+    });
+
+    if (!tokenResponse.ok) {
+      const errText = await tokenResponse.text();
+      throw new Error(`Google token exchange failed: ${errText}`);
+    }
+
+    const tokenData = (await tokenResponse.json()) as any;
+    const accessToken = tokenData.access_token;
+
+    if (!accessToken) {
+      throw new Error(`Google token exchange response did not contain access token: ${JSON.stringify(tokenData)}`);
+    }
+
+    const profileResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+
+    if (!profileResponse.ok) {
+      throw new Error('Failed to fetch user profile from Google');
+    }
+
+    const profile = (await profileResponse.json()) as any;
+    const email = profile.email;
+    const name = profile.name || 'Google User';
+
+    if (!email) {
+      throw new Error('No email address returned from Google OAuth.');
+    }
+
+    const sanitizedEmail = email.toLowerCase().trim();
+    let user = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
+
+    if (!user) {
+      const randomPassword = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const passwordHash = await bcrypt.hash(randomPassword, 10);
+
+      user = await this.prisma.user.create({
+        data: {
+          email: sanitizedEmail,
+          name,
+          passwordHash,
+          tier: BillingTier.FREE
+        }
+      });
+    }
+
+    const token = this.generateToken(user.id, user.email);
+    const { passwordHash: _, ...userWithoutPassword } = user;
+
+    return {
+      token,
+      user: userWithoutPassword
+    };
+  }
 }

@@ -126,24 +126,15 @@ export default function LoginPage() {
           {/* Social Logins */}
           <div className="grid grid-cols-2 gap-3">
             <button 
-              onClick={async () => {
+              onClick={() => {
                 setAuthError('');
-                try {
-                  const success = await login('google-user@gmail.com', 'google-social-mock-password');
-                  if (success) {
-                    router.push('/dashboard?confetti=true');
-                  }
-                } catch (err) {
-                  try {
-                    await signup('google-user@gmail.com', 'Google User', 'google-social-mock-password');
-                    const success = await login('google-user@gmail.com', 'google-social-mock-password');
-                    if (success) {
-                      router.push('/dashboard?confetti=true');
-                    }
-                  } catch (signUpErr: any) {
-                    setAuthError(signUpErr.message || 'Google login failed.');
-                  }
+                const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+                if (!clientId) {
+                  setAuthError('Google Login is not configured. Please add NEXT_PUBLIC_GOOGLE_CLIENT_ID to your environment variables.');
+                  return;
                 }
+                const redirectUri = `${window.location.origin}/auth/callback`;
+                window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&state=google`;
               }}
               className="bg-[#09090B] border border-border-primary hover:bg-[#18181B] text-slate-300 text-[10px] font-bold py-2.5 px-4 rounded-lg flex items-center justify-center space-x-1.5 cursor-pointer transition"
             >
@@ -158,7 +149,7 @@ export default function LoginPage() {
                   return;
                 }
                 const redirectUri = `${window.location.origin}/auth/callback`;
-                window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email`;
+                window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email&state=github`;
               }}
               className="bg-[#09090B] border border-border-primary hover:bg-[#18181B] text-slate-300 text-[10px] font-bold py-2.5 px-4 rounded-lg flex items-center justify-center space-x-1.5 cursor-pointer transition"
             >
