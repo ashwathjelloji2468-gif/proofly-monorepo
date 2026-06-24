@@ -31,11 +31,13 @@ export function Footer() {
         </div>
 
         <div className="space-y-3 text-left">
-          <h4 className="text-white text-xs font-extrabold uppercase tracking-wider">Company</h4>
+          <h4 className="text-white text-xs font-extrabold uppercase tracking-wider hover:text-brand-teal transition-colors">
+            <Link href="/#about">Company</Link>
+          </h4>
           <ul className="space-y-2 text-xs text-muted-foreground">
-            <li><Link href="/#features" className="hover:text-white transition">About Us</Link></li>
-            <li><Link href="/#features" className="hover:text-white transition">SaaS Blog</Link></li>
-            <li><Link href="/#features" className="hover:text-white transition">Customers</Link></li>
+            <li><Link href="/#about" className="hover:text-white transition">About Us</Link></li>
+            <li><Link href="/#blog" className="hover:text-white transition">SaaS Blog</Link></li>
+            <li><Link href="/#showcase" className="hover:text-white transition">Customers</Link></li>
           </ul>
         </div>
 

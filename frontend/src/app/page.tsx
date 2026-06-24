@@ -28,6 +28,7 @@ import {
   Frown,
   Activity,
   User,
+  Users,
   Heart,
   Tag
 } from 'lucide-react';
@@ -50,6 +51,7 @@ export default function LandingPage() {
   const [layoutMode, setLayoutMode] = useState<'masonry' | 'grid' | 'carousel'>('masonry');
   const [filterFormat, setFilterFormat] = useState<'all' | 'video' | 'text'>('all');
   const [isDemoOpen, setIsDemoOpen] = useState(false);
+  const [openArticle, setOpenArticle] = useState<any>(null);
 
   useEffect(() => {
     fetchApprovedTestimonials();
@@ -1167,6 +1169,81 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
+      {/* ABOUT US SECTION */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={revealOnScrollVariants}
+        id="about" 
+        className="max-w-7xl mx-auto px-6 py-24 text-center space-y-16 relative overflow-hidden"
+      >
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-brand-emerald/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-brand-teal/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="space-y-4 max-w-2xl mx-auto">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest text-brand-emerald">Our Mission</span>
+          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            Powering Internet Trust with <span className="bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent">AI Social Proof</span>
+          </h2>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Proofly was founded to bridge the trust gap on the modern web. We replace static screenshots and text walls with immersive, verified video and interactive widgets that feel alive.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left max-w-5xl mx-auto">
+          <SpotlightCard className="p-8 space-y-4">
+            <div className="w-10 h-10 rounded-lg bg-brand-emerald/10 flex items-center justify-center">
+              <Sparkles className="w-5 h-5 text-brand-emerald" />
+            </div>
+            <h3 className="text-base font-bold text-white">Dynamic Technology</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              We process video testimonials natively in the browser and leverage AI transcription to let visitors search through review transcripts in real time.
+            </p>
+          </SpotlightCard>
+
+          <SpotlightCard className="p-8 space-y-4">
+            <div className="w-10 h-10 rounded-lg bg-brand-teal/10 flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-brand-teal" />
+            </div>
+            <h3 className="text-base font-bold text-white">Conversion Focus</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Our widgets are engineered for performance and conversion. Standard Proofly integrations see an average click-through rate increase of 27.4%.
+            </p>
+          </SpotlightCard>
+
+          <SpotlightCard className="p-8 space-y-4">
+            <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+              <Users className="w-5 h-5 text-indigo-400" />
+            </div>
+            <h3 className="text-base font-bold text-white">Transparent Ethics</h3>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              We prioritize data safety and compliance. Every testimonial is verified, reviewer details can be deleted at any time, and we are fully GDPR compliant.
+            </p>
+          </SpotlightCard>
+        </div>
+
+        {/* Story details */}
+        <div className="bg-[#18181B]/50 border border-border-primary rounded-2xl p-8 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 text-left backdrop-blur-sm">
+          <div className="space-y-3 max-w-xl">
+            <h4 className="text-sm font-bold text-white">Crafted for Modern Builders</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Whether you are an indie hacker launching your first SaaS beta or a growing startup scaling customer success, Proofly provides a beautiful, unified workspace to manage all your social proof assets in one single place.
+            </p>
+          </div>
+          <div className="flex gap-8 border-l border-border-primary/50 pl-0 md:pl-8 py-2">
+            <div>
+              <p className="text-2xl font-black text-brand-emerald">15k+</p>
+              <p className="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Reviews Displayed</p>
+            </div>
+            <div>
+              <p className="text-2xl font-black text-brand-teal">2.4x</p>
+              <p className="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Conversion Lift</p>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
       {/* PRICING SECTION */}
       <motion.section 
         initial="hidden"
@@ -1358,6 +1435,92 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
+      {/* SAAS BLOG SECTION */}
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={revealOnScrollVariants}
+        id="blog" 
+        className="max-w-7xl mx-auto px-6 py-24 text-center space-y-16 relative overflow-hidden"
+      >
+        <div className="space-y-4 max-w-2xl mx-auto">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest text-brand-teal">Latest Insights</span>
+          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            The Proofly <span className="bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent">Growth Blog</span>
+          </h2>
+          <p className="text-slate-400 text-sm">
+            Strategies, tutorials, and psychological insights to boost conversions using social proof.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left max-w-5xl mx-auto">
+          {[
+            {
+              title: 'The Psychology of Video Social Proof',
+              desc: 'Why face-to-face video testimonials trigger higher trust levels compared to static screenshots, and how to utilize them on your landing page.',
+              date: 'June 20, 2026',
+              readTime: '5 min read',
+              content: `### The Psychology of Video Social Proof
+              
+Trust is the ultimate currency of the web. When a visitor lands on your SaaS landing page, they are naturally skeptical. Video testimonials break through this skepticism by engaging two powerful human cognitive functions: **mirror neurons** and **facial recognition**.
+
+Seeing a real customer talk about their experience activates a sense of empathy and authenticity that text cannot replicate. By embedding dynamic video widgets next to key calls-to-action, companies notice average conversion rate lifts of up to 27.4%.`
+            },
+            {
+              title: 'How to Ask for Testimonials: The Guide',
+              desc: 'Step-by-step templates and email sequences to request text and video testimonials from your users without sounding desperate.',
+              date: 'June 18, 2026',
+              readTime: '8 min read',
+              content: `### How to Ask for Testimonials
+              
+The number one reason SaaS customers don't leave reviews is friction. If you send a generic "please review us" email, your response rate will be low.
+
+**The Golden Rules of Requesting Feedback:**
+1. **Timing**: Reach out when the user has just achieved a milestone (e.g. upgraded plans or processed their first webhook).
+2. **Reward Incentives**: Offer discount coupon codes (like we do with Proofly's reward settings).
+3. **Simplicity**: Use in-browser recording tools where reviewers can record with a single click.
+
+Using these steps, collection conversion rates increase by over 40%.`
+            },
+            {
+              title: 'Optimizing Video for Mobile Web browsers',
+              desc: 'Technical insights into building browser-based webcams, streaming binary chunks, and reducing file sizes using modern media APIs.',
+              date: 'June 14, 2026',
+              readTime: '6 min read',
+              content: `### Optimizing Video for Mobile Web
+              
+Capturing webcam video inside mobile Safari and Chrome presents significant challenges, from codec compatibility to mobile CPU thermal throttling.
+
+At Proofly, we utilize **RecordRTC** combined with custom audio stream encoding pipelines to compile recordings into lightweight webm/mp4 formats. This ensures video review collection remains fast even on low-bandwidth cellular connections.`
+            }
+          ].map((post, idx) => (
+            <SpotlightCard key={idx} className="p-6 flex flex-col justify-between space-y-6">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-[10px] font-bold text-slate-400">
+                  <span>{post.date}</span>
+                  <span className="text-brand-teal">{post.readTime}</span>
+                </div>
+                <h3 className="text-base font-bold text-white leading-snug group-hover:text-brand-teal transition">
+                  {post.title}
+                </h3>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  {post.desc}
+                </p>
+              </div>
+
+              <button 
+                onClick={() => setOpenArticle(post)}
+                className="inline-flex items-center space-x-1.5 text-xs font-semibold text-brand-teal hover:text-brand-teal-hover transition cursor-pointer self-start"
+              >
+                <span>Read Article</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </SpotlightCard>
+          ))}
+        </div>
+      </motion.section>
+
       {/* FAQ SECTION */}
       <motion.section 
         initial="hidden"
@@ -1407,6 +1570,69 @@ export default function LandingPage() {
           })}
         </div>
       </motion.section>
+
+      {/* BLOG ARTICLE READER MODAL */}
+      <AnimatePresence>
+        {openArticle && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpenArticle(null)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-[#18181B] border border-border-primary rounded-2xl overflow-hidden max-w-2xl w-full shadow-2xl relative z-10 text-left flex flex-col max-h-[85vh]"
+            >
+              <div className="flex items-center justify-between p-5 border-b border-border-primary/50 bg-[#1c1c1f]">
+                <div className="space-y-1">
+                  <span className="text-[10px] font-black uppercase text-brand-teal tracking-wider">
+                    {openArticle.readTime}
+                  </span>
+                  <h3 className="text-sm font-bold text-white leading-tight">
+                    {openArticle.title}
+                  </h3>
+                </div>
+                <button 
+                  onClick={() => setOpenArticle(null)} 
+                  className="text-slate-400 hover:text-white p-1 rounded-full cursor-pointer hover:bg-white/5 transition"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="p-6 overflow-y-auto space-y-4 text-slate-300 text-xs sm:text-sm leading-relaxed max-h-[60vh] scrollbar-thin">
+                {openArticle.content.split('\n\n').map((para: string, idx: number) => {
+                  if (para.startsWith('### ')) {
+                    return null; // Skip H3 as it is in the header
+                  }
+                  if (para.includes('1. ') || para.includes('2. ') || para.includes('3. ')) {
+                    return (
+                      <div key={idx} className="space-y-1.5 pl-4 border-l-2 border-brand-teal/30 my-3">
+                        {para.split('\n').map((line, lIdx) => (
+                          <p key={lIdx} className="text-slate-300">{line.trim()}</p>
+                        ))}
+                      </div>
+                    );
+                  }
+                  return <p key={idx}>{para.trim()}</p>;
+                })}
+              </div>
+              <div className="p-4 border-t border-border-primary/50 bg-[#1c1c1f] flex justify-end">
+                <button 
+                  onClick={() => setOpenArticle(null)}
+                  className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 font-bold text-xs py-2 px-4 rounded-lg transition cursor-pointer"
+                >
+                  Close Article
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* WATCH DEMO MODAL POPUP */}
       <AnimatePresence>
