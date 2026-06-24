@@ -19,7 +19,7 @@ export function SampleEmbedPlayground() {
       <p>Founder, StyleCo Ecom</p>
     </div>
   </div>
-  <p class="review">"PowerTestimonials is absolute magic. We doubled our checkout conversions in 3 days!"</p>
+  <p class="review">"Proofly is absolute magic. We doubled our checkout conversions in 3 days!"</p>
   <div class="rating">⭐⭐⭐⭐⭐</div>
 </div>`);
 
@@ -109,7 +109,7 @@ card.addEventListener('mouseleave', () => {
   glow.style.background = 'radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 60%)';
 });`);
 
-  const embedSnippet = `<script src="https://powertestimonials.com/embed.js" data-id="demo-space" defer></script>\n<div id="powertestimonials-widget"></div>`;
+  const embedSnippet = `<script src="https://proofly.com/embed.js" data-id="demo-space" defer></script>\n<div id="proofly-widget"></div>`;
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

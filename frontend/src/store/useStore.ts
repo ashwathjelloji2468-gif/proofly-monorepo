@@ -201,7 +201,7 @@ const initialTestimonials: Testimonial[] = [
     name: 'James Cole',
     company: 'Vortex Studio',
     role: 'Agency Owner',
-    review: 'We increased conversion rates by 18% for our clients within the first week of adding PowerTestimonials widgets. The custom branding makes it blend beautifully into any SaaS layout.',
+    review: 'We increased conversion rates by 18% for our clients within the first week of adding Proofly widgets. The custom branding makes it blend beautifully into any SaaS layout.',
     video_url: 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4',
     status: 'approved',
     rating: 5,

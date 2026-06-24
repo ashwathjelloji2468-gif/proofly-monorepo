@@ -13,7 +13,7 @@ export function Footer() {
             <div className="w-6 h-6 rounded bg-gradient-to-tr from-brand-emerald to-brand-teal flex items-center justify-center">
               <Sparkles className="w-3.5 h-3.5 text-white" />
             </div>
-            <span className="font-extrabold text-sm text-white">PowerTestimonials</span>
+            <span className="font-extrabold text-sm text-white">Proofly</span>
           </div>
           <p className="text-muted-foreground text-xs leading-relaxed max-w-xs">
             The premium AI-powered testimonials platform to collect, analyze, and showcase customer reviews with video processing and vector search.
@@ -50,7 +50,7 @@ export function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 pt-12 mt-12 border-t border-border-primary text-center text-xs text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} PowerTestimonials. All rights reserved. Powered by Supabase & Mux.</p>
+        <p>&copy; {new Date().getFullYear()} Proofly. All rights reserved. Powered by Supabase & Mux.</p>
       </div>
     </footer>
   );

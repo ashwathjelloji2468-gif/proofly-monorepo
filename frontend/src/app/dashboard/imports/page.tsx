@@ -58,7 +58,7 @@ export default function ImportsPage() {
       name: 'Elon Dev',
       company: 'X Corp',
       role: 'Software Architect',
-      review: 'PowerTestimonials has completely automated our review collection pipeline. We scaled to 10k users without touching a line of camera-capturing code.',
+      review: 'Proofly has completely automated our review collection pipeline. We scaled to 10k users without touching a line of camera-capturing code.',
       rating: 5,
       reviewerSocial: tweetUrl,
       reviewerAvatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150',

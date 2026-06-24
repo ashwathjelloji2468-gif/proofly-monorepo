@@ -39,13 +39,13 @@ export default function WidgetsPage() {
 
     switch (activeWidgetTab) {
       case 'wall':
-        return `<script src="https://cdn.powertestimonials.com/wall-of-love.js"${spaceVal}${themeVal}${radiusVal}${ratingVal}${dateVal} defer></script>\n<div id="pt-wall"></div>`;
+        return `<script src="https://cdn.proofly.com/wall-of-love.js"${spaceVal}${themeVal}${radiusVal}${ratingVal}${dateVal} defer></script>\n<div id="pt-wall"></div>`;
       case 'single':
-        return `<script src="https://cdn.powertestimonials.com/single-card.js" data-id="test-1"${themeVal}${radiusVal} defer></script>\n<div id="pt-single-card"></div>`;
+        return `<script src="https://cdn.proofly.com/single-card.js" data-id="test-1"${themeVal}${radiusVal} defer></script>\n<div id="pt-single-card"></div>`;
       case 'slider':
-        return `<script src="https://cdn.powertestimonials.com/carousel.js"${spaceVal}${themeVal}${radiusVal}${ratingVal} defer></script>\n<div id="pt-carousel"></div>`;
+        return `<script src="https://cdn.proofly.com/carousel.js"${spaceVal}${themeVal}${radiusVal}${ratingVal} defer></script>\n<div id="pt-carousel"></div>`;
       case 'badge':
-        return `<script src="https://cdn.powertestimonials.com/floating-badge.js"${spaceVal} data-position="bottom-right"${themeVal} defer></script>`;
+        return `<script src="https://cdn.proofly.com/floating-badge.js"${spaceVal} data-position="bottom-right"${themeVal} defer></script>`;
     }
   };
 

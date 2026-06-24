@@ -96,7 +96,7 @@ export default function DemoPlayground() {
 
   // Generate Script String
   const generateEmbedScript = () => {
-    return `<!-- PowerTestimonials Wall of Love Embed -->
+    return `<!-- Proofly Wall of Love Embed -->
 <div id="pt-wall-widget" 
   data-space="acme-saas" 
   data-layout="${layout}" 
@@ -105,7 +105,7 @@ export default function DemoPlayground() {
   data-tilt="${enableTilt}"
   data-sort="${sortBy}">
 </div>
-<script src="https://cdn.powertestimonials.ai/widget.js" async defer></script>`;
+<script src="https://cdn.proofly.ai/widget.js" async defer></script>`;
   };
 
   const handleCopyCode = () => {

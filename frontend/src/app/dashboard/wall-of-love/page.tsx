@@ -44,7 +44,7 @@ export default function WallOfLovePage() {
     const layoutQuery = `&layout=${layout}`;
     const videoQuery = onlyVideo ? `&video=true` : '';
     const ratingQuery = minRating > 0 ? `&rating=${minRating}` : '';
-    return `<script src="https://cdn.powertestimonials.com/widget.js" data-id="${selectedCollectionId}"${layoutQuery}${videoQuery}${ratingQuery} defer></script>\n<div id="pt-wall-of-love"></div>`;
+    return `<script src="https://cdn.proofly.com/widget.js" data-id="${selectedCollectionId}"${layoutQuery}${videoQuery}${ratingQuery} defer></script>\n<div id="pt-wall-of-love"></div>`;
   };
 
   const copyEmbedCode = () => {

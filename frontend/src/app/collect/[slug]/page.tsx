@@ -171,7 +171,7 @@ export default function CollectTestimonialPage() {
         </div>
         <div className="text-[10px] text-muted-foreground bg-[#18181B] px-3 py-1 rounded-full border border-border-primary flex items-center space-x-1">
           <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse" />
-          <span>Powered by PowerTestimonials</span>
+          <span>Powered by Proofly</span>
         </div>
       </header>
 
@@ -576,7 +576,7 @@ export default function CollectTestimonialPage() {
           <span>Collector page powered by</span>
           <span className="text-brand-emerald font-bold flex items-center space-x-0.5">
             <Sparkles className="w-3 h-3 text-brand-teal" />
-            <span>PowerTestimonials</span>
+            <span>Proofly</span>
           </span>
         </p>
       </footer>

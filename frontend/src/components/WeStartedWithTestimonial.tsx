@@ -127,7 +127,7 @@ export function WeStartedWithTestimonial() {
 
   // 5. Social Import State
   const [importSource, setImportSource] = useState<'twitter' | 'google' | 'linkedin'>('twitter');
-  const [importText, setImportText] = useState('PowerTestimonials is absolutely game-changing! We set up our reviews collector in under 15 minutes.');
+  const [importText, setImportText] = useState('Proofly is absolutely game-changing! We set up our reviews collector in under 15 minutes.');
   const [importAuthor, setImportAuthor] = useState('Marcus Vance');
   const [isImporting, setIsImporting] = useState(false);
   const [importSuccess, setImportSuccess] = useState(false);
@@ -135,7 +135,7 @@ export function WeStartedWithTestimonial() {
   // Clickable mock feed items to populate inputs
   const mockFeed = {
     twitter: [
-      { author: 'Jonathan Mercer', handle: '@jonathan_saas', content: 'PowerTestimonials is next level. Our conversion rates went up by 18% in the first week!', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' },
+      { author: 'Jonathan Mercer', handle: '@jonathan_saas', content: 'Proofly is next level. Our conversion rates went up by 18% in the first week!', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' },
       { author: 'Alex Rivera', handle: '@alex_m_dev', content: 'Just imported all our Google reviews into our landing page in under 5 minutes. Brilliant UX.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100' }
     ],
     google: [
@@ -143,7 +143,7 @@ export function WeStartedWithTestimonial() {
       { author: 'David Kim', handle: 'Verified Reviewer', content: 'The Wall of Love widget load speeds are blazing fast compared to testimonials.to. Excellent product.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100' }
     ],
     linkedin: [
-      { author: 'Emma Watson', handle: 'VP of Growth @ ScaleUp', content: 'We swapped testimonials.to for PowerTestimonials. The AI transcription and sentiment analysis tools save our marketing team hours of manual sorting.', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' },
+      { author: 'Emma Watson', handle: 'VP of Growth @ ScaleUp', content: 'We swapped testimonials.to for Proofly. The AI transcription and sentiment analysis tools save our marketing team hours of manual sorting.', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' },
       { author: 'Robert Chen', handle: 'Founder @ CloudStack', content: 'The developer APIs are well documented. We built a custom testimonial card layout using the JSON endpoints in less than an hour.', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100' }
     ]
   };

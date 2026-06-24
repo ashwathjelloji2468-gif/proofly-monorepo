@@ -173,7 +173,7 @@ export default function LandingPage() {
         '1 Active collection Space',
         '10 Total testimonials limit',
         'Standard text review collection',
-        'PowerTestimonials branding badge',
+        'Proofly branding badge',
         'Basic iframe display widget'
       ],
       cta: 'Start Free',
@@ -240,7 +240,7 @@ export default function LandingPage() {
       a: 'Incoming customer reviews are evaluated instantly by our local NLP model. Testimonials are tagged as Positive, Neutral, or Negative based on text syntax. Negative submissions can be set to bypass your approved feed automatically, saving your team hours of manual filtering.'
     },
     {
-      q: 'Does PowerTestimonials support custom domain mappings?',
+      q: 'Does Proofly support custom domain mappings?',
       a: 'Yes, under our Business and Enterprise plans, you can configure CNAME DNS aliases (e.g. feedback.yourcompany.com) so that hosted collection pages map cleanly to your brand domain.'
     },
     {
@@ -716,7 +716,7 @@ export default function LandingPage() {
               Testimonials Analytics <br />& AI Insights
             </h2>
             <p className="text-slate-400 text-sm leading-relaxed">
-              Testimonials.to gives you static comments. PowerTestimonials gives you intelligence. Understand what your users love, highlight positive sentiments, and track feature complaints automatically.
+              Testimonials.to gives you static comments. Proofly gives you intelligence. Understand what your users love, highlight positive sentiments, and track feature complaints automatically.
             </p>
             <ul className="space-y-3 text-xs text-slate-300">
               {['Auto-generate highlights summaries', 'Extract direct pull-out quotes', 'Identify positive/negative features categories'].map((pt, i) => (
@@ -1302,7 +1302,7 @@ export default function LandingPage() {
             </div>
             <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-2 font-mono text-[9px] text-slate-500">
               <span className="text-brand-teal font-extrabold uppercase block">QR Code & Form Link</span>
-              <span className="block truncate">powertestimonials.to/collect/acme-saas</span>
+              <span className="block truncate">proofly.to/collect/acme-saas</span>
             </div>
           </SpotlightCard>
 
@@ -1341,7 +1341,7 @@ export default function LandingPage() {
             </div>
             <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-1 font-mono text-[9px] text-slate-500">
               <span className="text-brand-teal font-extrabold uppercase block">One-Click Embed Code</span>
-              <code className="text-slate-400 block truncate">&lt;script src="powertestimonials.to/embed.js"&gt;&lt;/script&gt;</code>
+              <code className="text-slate-400 block truncate">&lt;script src="proofly.to/embed.js"&gt;&lt;/script&gt;</code>
             </div>
           </SpotlightCard>
         </div>
@@ -1370,7 +1370,7 @@ export default function LandingPage() {
         <div className="space-y-4">
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">Frequently Asked Questions</h2>
           <p className="text-slate-400 text-sm">
-            Everything you need to know about the PowerTestimonials platform.
+            Everything you need to know about the Proofly platform.
           </p>
         </div>
 

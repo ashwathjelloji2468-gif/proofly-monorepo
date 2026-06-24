@@ -60,7 +60,7 @@ export default function SettingsPage() {
       name: 'Starter Plan',
       price: '$0',
       period: 'forever',
-      features: ['1 Active collection Space', '10 Total testimonials limit', 'Standard text collections', 'PowerTestimonials watermark badge']
+      features: ['1 Active collection Space', '10 Total testimonials limit', 'Standard text collections', 'Proofly watermark badge']
     },
     {
       id: 'PRO',
@@ -297,7 +297,7 @@ export default function SettingsPage() {
                       </tr>
                       <tr>
                         <td className="py-2 text-zinc-500">Value / Target</td>
-                        <td className="py-2 text-white font-semibold">cname.powertestimonials.com</td>
+                        <td className="py-2 text-white font-semibold">cname.proofly.com</td>
                       </tr>
                     </tbody>
                   </table>

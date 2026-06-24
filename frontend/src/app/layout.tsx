@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PowerTestimonials - Premium AI Social Proof",
+  title: "Proofly - Premium AI Social Proof",
   description: "AI-powered social proof, testimonial collections, and interactive displays.",
 };
 

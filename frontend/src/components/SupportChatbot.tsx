@@ -18,7 +18,7 @@ export function SupportChatbot() {
     {
       id: 'welcome',
       sender: 'bot',
-      text: "Hi! I'm Fin, a conversational AI assistant. Ask me anything about PowerTestimonials—like widget embedding, video capture, pricing, or social reviews imports!",
+      text: "Hi! I'm Fin, a conversational AI assistant. Ask me anything about Proofly—like widget embedding, video capture, pricing, or social reviews imports!",
       timestamp: new Date()
     }
   ]);
@@ -78,27 +78,27 @@ export function SupportChatbot() {
 
       // Smart Fin AI Knowledge Base Router
       if (query.includes('collect') || query.includes('request') || query.includes('gather') || query.includes('link')) {
-        responseText = "To collect testimonials:\n\n1. Head over to your dashboard collections (`/dashboard/collections`).\n2. Click **Create Collection Space**.\n3. Input your branding preferences, reward coupons, and questions.\n4. Share the slug URL (e.g. `powertestimonials.com/collect/your-slug`) with users. They can record high-fidelity video feedback or write text instantly inside their browsers without installing anything!";
+        responseText = "To collect testimonials:\n\n1. Head over to your dashboard collections (`/dashboard/collections`).\n2. Click **Create Collection Space**.\n3. Input your branding preferences, reward coupons, and questions.\n4. Share the slug URL (e.g. `proofly.com/collect/your-slug`) with users. They can record high-fidelity video feedback or write text instantly inside their browsers without installing anything!";
       } else if (query.includes('embed') || query.includes('widget') || query.includes('wall') || query.includes('carousel') || query.includes('code') || query.includes('iframe')) {
-        responseText = "PowerTestimonials offers responsive script embeds:\n\n• **Wall of Love**: A masonry grids display featuring highlights.\n• **Carousel**: Interactive horizontal sliders.\n• **Playground**: Tweak spacing, tilt intensity, and copy custom code at `/demo`.\n\nTo install, copy the `<iframe src=\"...\" />` code block from the dashboard and paste it inside Webflow, Framer, React, or standard HTML containers.";
+        responseText = "Proofly offers responsive script embeds:\n\n• **Wall of Love**: A masonry grids display featuring highlights.\n• **Carousel**: Interactive horizontal sliders.\n• **Playground**: Tweak spacing, tilt intensity, and copy custom code at `/demo`.\n\nTo install, copy the `<iframe src=\"...\" />` code block from the dashboard and paste it inside Webflow, Framer, React, or standard HTML containers.";
       } else if (query.includes('pricing') || query.includes('cost') || query.includes('plan') || query.includes('free') || query.includes('upgrade') || query.includes('pro')) {
         responseText = "We offer four billing tiers:\n\n• **Free ($0)**: 1 collection space, 10 text reviews, and standard masonry layouts.\n• **Pro ($49/mo)**: 5 active spaces, webcam video reviews capture, and customized styling accents.\n• **Business ($79/mo)**: Unlimited video reviews, AI keyword trends, and custom domains settings.\n• **Enterprise ($249/mo)**: Semantic vector searches and priority help.\n\nYou can trigger upgrades via the billing setting triggers (`/dashboard/settings`).";
       } else if (query.includes('video') || query.includes('webcam') || query.includes('camera') || query.includes('record')) {
         responseText = "Our webcam recording is fully built on HTML5 video streaming: \n\n• Users record directly inside the public collectors screen.\n• Once uploaded, our server transcribes the speech, tags highlights, and analyzes client sentiment.\n• Admins can review details in the dashboard inbox and click **Approve** to showcase it instantly!";
       } else if (query.includes('ai') || query.includes('insights') || query.includes('sentiment') || query.includes('keyword') || query.includes('transcript')) {
-        responseText = "PowerTestimonials has integrated NLP pipelines:\n\n• **Auto-Transcripts**: Closed captioning and text extraction for all webcam videos.\n• **Sentiment Detection**: Classifies reviews as POSITIVE, NEUTRAL, or NEGATIVE.\n• **Keyword Mapping**: Extracts key search tags.\n• **Highlights Summaries**: Creates a bold summary snippet (`bestQuoteHighlight`) featured at the top of cards.";
+        responseText = "Proofly has integrated NLP pipelines:\n\n• **Auto-Transcripts**: Closed captioning and text extraction for all webcam videos.\n• **Sentiment Detection**: Classifies reviews as POSITIVE, NEUTRAL, or NEGATIVE.\n• **Keyword Mapping**: Extracts key search tags.\n• **Highlights Summaries**: Creates a bold summary snippet (`bestQuoteHighlight`) featured at the top of cards.";
       } else if (query.includes('search') || query.includes('vector') || query.includes('semantic')) {
         responseText = "Our dashboard features an AI Semantic Vector Search bar. Users can search their testimonials library using natural sentences (e.g. 'Show reviews from founders who liked onboarding'). The system maps semantic meanings rather than literal matches to return relevant records instantly.";
       } else if (query.includes('api') || query.includes('rest') || query.includes('integration') || query.includes('developer')) {
-        responseText = "Yes! PowerTestimonials is developer-friendly. We expose full JSON API endpoints for fetching approved testimonials dynamically, allowing you to build custom client grids. Refer to developer sandbox settings at `/demo` for embed configurations.";
+        responseText = "Yes! Proofly is developer-friendly. We expose full JSON API endpoints for fetching approved testimonials dynamically, allowing you to build custom client grids. Refer to developer sandbox settings at `/demo` for embed configurations.";
       } else if (query.includes('import') || query.includes('google') || query.includes('linkedin') || query.includes('twitter') || query.includes('reddit')) {
-        responseText = "To import reviews from external platforms:\n\n1. Navigate to the **Imports** dashboard (`/dashboard/imports`).\n2. Select your platform (Google Reviews, Twitter/X, LinkedIn, Reddit, or G2).\n3. Input reviews slugs or authorize syncing.\n4. PowerTestimonials imports the reviews into your inbox, preserving avatars, authors, and ratings.";
+        responseText = "To import reviews from external platforms:\n\n1. Navigate to the **Imports** dashboard (`/dashboard/imports`).\n2. Select your platform (Google Reviews, Twitter/X, LinkedIn, Reddit, or G2).\n3. Input reviews slugs or authorize syncing.\n4. Proofly imports the reviews into your inbox, preserving avatars, authors, and ratings.";
       } else if (query.includes('human') || query.includes('support') || query.includes('agent') || query.includes('talk') || query.includes('help')) {
         responseText = "Got it. I can loop in a human representative. Please fill in your contact information below, and our support lead will email you within 15 minutes:";
         isForm = true;
       } else {
         // Fallback natural AI answer matching anything typed
-        responseText = `I've analyzed our documentation database regarding your question ("${userInput}"). \n\nPowerTestimonials supports fully responsive widget customizers, smart NLP sentiment analysis, and social platform integrations. \n\nIf you have a project specific inquiry, feel free to ask about 'webcam recording', 'getting widget embeds', 'billing plans', or type 'human' to submit a support email!`;
+        responseText = `I've analyzed our documentation database regarding your question ("${userInput}"). \n\nProofly supports fully responsive widget customizers, smart NLP sentiment analysis, and social platform integrations. \n\nIf you have a project specific inquiry, feel free to ask about 'webcam recording', 'getting widget embeds', 'billing plans', or type 'human' to submit a support email!`;
       }
 
       setIsTyping(false);

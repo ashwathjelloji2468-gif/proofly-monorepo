@@ -59,7 +59,7 @@ export default function SignupPage() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-emerald to-brand-teal flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <span className="font-black text-lg text-white">PowerTestimonials</span>
+              <span className="font-black text-lg text-white">Proofly</span>
             </Link>
             <h2 className="text-xl font-bold tracking-tight text-white mt-4">Create your account</h2>
             <p className="text-muted-foreground text-xs">Get started collecting customer reviews with AI in seconds</p>

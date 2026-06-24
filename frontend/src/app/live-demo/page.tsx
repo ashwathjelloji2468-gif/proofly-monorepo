@@ -57,7 +57,7 @@ export default function LiveDemoPage() {
   const activeReviews = getFilteredReviews();
 
   const getEmbedCode = () => {
-    return `<iframe src="https://powertestimonials.com/embed/wall-of-love?theme=${theme}&glow=${glowEnabled}" width="100%" height="650" style="border:none; border-radius:12px; background:transparent;" defer></iframe>`;
+    return `<iframe src="https://proofly.com/embed/wall-of-love?theme=${theme}&glow=${glowEnabled}" width="100%" height="650" style="border:none; border-radius:12px; background:transparent;" defer></iframe>`;
   };
 
   const copyEmbedCode = () => {
@@ -80,7 +80,7 @@ export default function LiveDemoPage() {
         </div>
 
         <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none max-w-4xl mx-auto">
-          PowerTestimonials <span className="bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent">Live Demo Sandbox</span>
+          Proofly <span className="bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent">Live Demo Sandbox</span>
         </h1>
         
         <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">

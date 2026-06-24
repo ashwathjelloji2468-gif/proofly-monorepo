@@ -154,7 +154,7 @@ export function FlowStepAI() {
 app.post('/api/webhook', async (req, res) => {
   const event = req.body;
   if (event.type === 'payment_intent.succeeded') {
-    await PowerTestimonials.triggerJourney({
+    await Proofly.triggerJourney({
       email: event.data.customer_email,
       spaceId: 'acme-saas-suite',
       slackNotify: ${nodeSettings.trigger.slackAlerts},
@@ -165,7 +165,7 @@ app.post('/api/webhook', async (req, res) => {
 });`;
       case 'collector':
         return `// React Review Collector Widget
-import { TestimonialCollector } from '@powertestimonials/react';
+import { TestimonialCollector } from '@proofly/react';
 
 export default function ReviewPage() {
   return (
@@ -178,7 +178,7 @@ export default function ReviewPage() {
 }`;
       case 'ai':
         return `// AI Processing Engine API
-const review = await PowerTestimonials.process(reviewId, {
+const review = await Proofly.process(reviewId, {
   transcribe: true,
   transcribeLang: "${nodeSettings.ai.language}",
   minConfidence: ${nodeSettings.ai.minSentiment}
@@ -186,7 +186,7 @@ const review = await PowerTestimonials.process(reviewId, {
       case 'showcase':
         return `<!-- Responsive Wall of Love iFrame Embed -->
 <iframe 
-  src="https://powertestimonials.com/embed/acme-saas?theme=${nodeSettings.showcase.theme}&layout=${nodeSettings.showcase.layout}" 
+  src="https://proofly.com/embed/acme-saas?theme=${nodeSettings.showcase.theme}&layout=${nodeSettings.showcase.layout}" 
   width="100%" 
   height="600px" 
   frameborder="0"
