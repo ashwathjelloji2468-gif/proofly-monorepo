@@ -2,9 +2,22 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Sparkles } from 'lucide-react';
 
 export function Footer() {
+  const pathname = usePathname();
+
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <footer className="border-t border-border-primary bg-background py-16">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -21,23 +34,81 @@ export function Footer() {
         </div>
 
         <div className="space-y-3 text-left">
-          <h4 className="text-white text-xs font-extrabold uppercase tracking-wider">Product</h4>
+          <h4 className="text-white text-xs font-extrabold uppercase tracking-wider hover:text-brand-teal transition-colors">
+            <Link href="/#features" onClick={(e) => handleScroll(e, 'features')}>Product</Link>
+          </h4>
           <ul className="space-y-2 text-xs text-muted-foreground">
-            <li><Link href="/#features" className="hover:text-white transition">AI Insights</Link></li>
-            <li><Link href="/#features" className="hover:text-white transition">Video Recorder</Link></li>
-            <li><Link href="/#showcase" className="hover:text-white transition">Wall of Love</Link></li>
-            <li><Link href="/#pricing" className="hover:text-white transition">Pricing Plans</Link></li>
+            <li>
+              <Link 
+                href="/#features" 
+                onClick={(e) => handleScroll(e, 'features')}
+                className="hover:text-white transition"
+              >
+                AI Insights
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/#features" 
+                onClick={(e) => handleScroll(e, 'features')}
+                className="hover:text-white transition"
+              >
+                Video Recorder
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/#showcase" 
+                onClick={(e) => handleScroll(e, 'showcase')}
+                className="hover:text-white transition"
+              >
+                Wall of Love
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/#pricing" 
+                onClick={(e) => handleScroll(e, 'pricing')}
+                className="hover:text-white transition"
+              >
+                Pricing Plans
+              </Link>
+            </li>
           </ul>
         </div>
 
         <div className="space-y-3 text-left">
           <h4 className="text-white text-xs font-extrabold uppercase tracking-wider hover:text-brand-teal transition-colors">
-            <Link href="/#about">Company</Link>
+            <Link href="/#about" onClick={(e) => handleScroll(e, 'about')}>Company</Link>
           </h4>
           <ul className="space-y-2 text-xs text-muted-foreground">
-            <li><Link href="/#about" className="hover:text-white transition">About Us</Link></li>
-            <li><Link href="/#blog" className="hover:text-white transition">SaaS Blog</Link></li>
-            <li><Link href="/#showcase" className="hover:text-white transition">Customers</Link></li>
+            <li>
+              <Link 
+                href="/#about" 
+                onClick={(e) => handleScroll(e, 'about')}
+                className="hover:text-white transition"
+              >
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/#blog" 
+                onClick={(e) => handleScroll(e, 'blog')}
+                className="hover:text-white transition"
+              >
+                SaaS Blog
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/#showcase" 
+                onClick={(e) => handleScroll(e, 'showcase')}
+                className="hover:text-white transition"
+              >
+                Customers
+              </Link>
+            </li>
           </ul>
         </div>
 
