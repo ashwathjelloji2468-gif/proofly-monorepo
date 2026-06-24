@@ -20,5 +20,4 @@ services:
 databases:
   - name: proofly-db
     databaseName: proofly
-    user: postgres
     plan: free
