@@ -51,9 +51,9 @@ export class CampaignService extends BaseService {
       throw new Error('UNAUTHORIZED: You do not own this space.');
     }
 
-    // Campaigns are PREMIUM features
-    if (user.tier !== BillingTier.PREMIUM) {
-      throw new Error('PREMIUM_FEATURE: Email request campaigns are only available on the PREMIUM plan.');
+    // Campaigns require at least Pro plan
+    if (user.tier === BillingTier.FREE) {
+      throw new Error('PRO_FEATURE: Email request campaigns are only available on PRO, BUSINESS, or ENTERPRISE plans.');
     }
 
     if (input.recipients.length === 0) {

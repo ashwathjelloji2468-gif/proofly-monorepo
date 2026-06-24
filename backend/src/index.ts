@@ -133,6 +133,9 @@ async function startServer() {
         success_url: `${clientUrl}/dashboard?checkout=success`,
         cancel_url: `${clientUrl}/dashboard/settings?checkout=cancelled`,
         client_reference_id: userId,
+        metadata: {
+          tier: planName === 'Business' ? 'BUSINESS' : 'PRO'
+        }
       });
 
       return res.status(200).json({ url: session.url });
@@ -164,15 +167,16 @@ async function startServer() {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.client_reference_id;
+      const tier = session.metadata?.tier || 'PRO';
 
       if (userId) {
         try {
           const ctx = await createContext();
           const user = await ctx.prisma.user.update({
             where: { id: userId },
-            data: { tier: 'PREMIUM' }
+            data: { tier: tier as any }
           });
-          console.log(`💳 Real Webhook: User ${user.email} successfully upgraded to PREMIUM tier.`);
+          console.log(`💳 Real Webhook: User ${user.email} successfully upgraded to ${tier} tier.`);
         } catch (dbErr) {
           console.error('Failed to update user tier in database:', dbErr);
           return res.status(500).send('Database update failed');
@@ -186,17 +190,18 @@ async function startServer() {
   // Simulated Stripe webhook (for sandbox/local testing)
   app.post('/api/stripe-webhook-simulate', express.json(), async (req, res) => {
     try {
-      const { userId } = req.body;
+      const { userId, tier } = req.body;
       if (!userId) {
         return res.status(400).json({ error: 'Missing userId parameter' });
       }
 
+      const assignedTier = tier || 'PRO';
       const user = await createContext().then(ctx => ctx.prisma.user.update({
         where: { id: userId },
-        data: { tier: 'PREMIUM' }
+        data: { tier: assignedTier as any }
       }));
 
-      console.log(`💳 Webhook simulation: user ${user.email} tier updated to PREMIUM`);
+      console.log(`💳 Webhook simulation: user ${user.email} tier updated to ${user.tier}`);
       return res.status(200).json({ success: true, tier: user.tier });
     } catch (err: any) {
       console.error('Webhook simulation error:', err);

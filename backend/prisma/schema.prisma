@@ -9,7 +9,9 @@ generator client {
 
 enum BillingTier {
   FREE
-  PREMIUM
+  PRO
+  BUSINESS
+  ENTERPRISE
 }
 
 enum TestimonialType {

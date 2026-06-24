@@ -58,13 +58,17 @@ export class SpaceService extends BaseService {
       throw new Error(`SLUG_TAKEN: The space slug "${sanitizedSlug}" is already taken.`);
     }
 
-    // Billing plan restriction: Free tier limited to 2 spaces
-    if (user.tier === BillingTier.FREE) {
+    // Billing plan restrictions:
+    // Free: max 2 spaces
+    // Pro: max 5 spaces
+    // Business / Enterprise: unlimited
+    if (user.tier === BillingTier.FREE || user.tier === BillingTier.PRO) {
       const count = await this.prisma.space.count({
         where: { userId: user.id }
       });
-      if (count >= 2) {
-        throw new Error('LIMIT_REACHED: Free tier is limited to 2 spaces. Please upgrade to PREMIUM for unlimited spaces.');
+      const limit = user.tier === BillingTier.FREE ? 2 : 5;
+      if (count >= limit) {
+        throw new Error(`LIMIT_REACHED: Your current plan (${user.tier}) is limited to ${limit} spaces. Please upgrade to a higher tier for more spaces.`);
       }
     }
 
@@ -104,9 +108,9 @@ export class SpaceService extends BaseService {
     if (input.collectText !== undefined) data.collectText = input.collectText;
     if (input.theme !== undefined) data.theme = input.theme;
     if (input.customDomain !== undefined) {
-      // Custom domains require Premium plan
-      if (user.tier !== BillingTier.PREMIUM && input.customDomain) {
-        throw new Error('PREMIUM_FEATURE: Custom domains are only available on the PREMIUM plan.');
+      // Custom domains require Business or Enterprise plan
+      if (user.tier !== BillingTier.BUSINESS && user.tier !== BillingTier.ENTERPRISE && input.customDomain) {
+        throw new Error('BUSINESS_FEATURE: Custom domains are only available on the BUSINESS or ENTERPRISE plans.');
       }
       data.customDomain = input.customDomain;
     }
@@ -143,9 +147,9 @@ export class SpaceService extends BaseService {
       throw new Error('UNAUTHORIZED: You do not own this space.');
     }
 
-    // Webhooks are premium features
-    if (user.tier !== BillingTier.PREMIUM) {
-      throw new Error('PREMIUM_FEATURE: Webhooks are only available on the PREMIUM plan.');
+    // Webhooks require at least Pro plan
+    if (user.tier === BillingTier.FREE) {
+      throw new Error('PRO_FEATURE: Webhooks are only available on PRO, BUSINESS, or ENTERPRISE plans.');
     }
 
     return this.prisma.webhook.create({

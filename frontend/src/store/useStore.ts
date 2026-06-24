@@ -603,7 +603,6 @@ export const useStore = create<AppState>((set, get) => ({
   updateBillingTier: async (tier) => {
     set({ isLoading: true });
     try {
-      const backendTier = tier === 'FREE' ? 'FREE' : 'PREMIUM';
       const data = await gqlRequest(`
         mutation UpdateBillingTier($tier: BillingTier!) {
           updateBillingTier(tier: $tier) {
@@ -611,7 +610,7 @@ export const useStore = create<AppState>((set, get) => ({
             tier
           }
         }
-      `, { tier: backendTier });
+      `, { tier });
 
       if (data && data.updateBillingTier) {
         set(state => ({
@@ -1123,7 +1122,7 @@ export const useStore = create<AppState>((set, get) => ({
             email: u.email,
             name: u.name,
             avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(u.name)}`,
-            tier: u.tier === 'PREMIUM' ? 'PRO' : 'FREE'
+            tier: u.tier
           },
           collections: mappedCollections,
           testimonials: mappedTestimonials.length > 0 ? mappedTestimonials : initialTestimonials,
