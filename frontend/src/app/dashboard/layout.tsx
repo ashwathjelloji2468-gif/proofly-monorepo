@@ -87,9 +87,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         <div>
           {/* Brand Logo Header */}
-          <div className="flex items-center space-x-2.5 px-4 py-5 border-b border-border-primary overflow-hidden">
+          <Link href="/" className="flex items-center space-x-2.5 px-4 py-5 border-b border-border-primary overflow-hidden hover:opacity-90 transition cursor-pointer">
             <ProoflyLogo iconSize={28} showText={!isCollapsed} />
-          </div>
+          </Link>
 
           {/* Navigation Links */}
           <nav className="p-3 space-y-1">
