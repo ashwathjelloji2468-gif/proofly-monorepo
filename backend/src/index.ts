@@ -115,7 +115,8 @@ async function startServer() {
       }
 
       const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-      const priceId = planName === 'Business' ? process.env.STRIPE_BUSINESS_PRICE_ID : process.env.STRIPE_PRO_PRICE_ID;
+      const isBusiness = planName?.toLowerCase().includes('business');
+      const priceId = isBusiness ? process.env.STRIPE_BUSINESS_PRICE_ID : process.env.STRIPE_PRO_PRICE_ID;
 
       if (!priceId) {
         return res.status(400).json({ error: `Price ID for plan '${planName}' is not configured.` });
@@ -134,7 +135,7 @@ async function startServer() {
         cancel_url: `${clientUrl}/dashboard/settings?checkout=cancelled`,
         client_reference_id: userId,
         metadata: {
-          tier: planName === 'Business' ? 'BUSINESS' : 'PRO'
+          tier: isBusiness ? 'BUSINESS' : 'PRO'
         }
       });
 

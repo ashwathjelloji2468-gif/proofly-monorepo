@@ -65,7 +65,7 @@ export function StripeCheckoutModal({ isOpen, onClose, planName, price, tierKey 
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ userId: user.id })
+          body: JSON.stringify({ userId: user.id, tier: tierKey })
         });
       }
     } catch (err) {
