@@ -1,0 +1,14 @@
+type StaticPage {
+  slug: String!
+  title: String!
+  content: String!
+  updatedAt: String!
+}
+
+extend type Query {
+  staticPage(slug: String!): StaticPage
+}
+
+extend type Mutation {
+  upsertStaticPage(slug: String!, title: String!, content: String!): StaticPage!
+}

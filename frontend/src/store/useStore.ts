@@ -96,8 +96,16 @@ interface SearchResult {
   matchReason: string;
 }
 
+export interface StaticPage {
+  slug: string;
+  title: string;
+  content: string;
+  updatedAt: string;
+}
+
 interface AppState {
   user: User | null;
+  fetchStaticPage: (slug: string) => Promise<StaticPage | null>;
   collections: Collection[];
   testimonials: Testimonial[];
   isLoading: boolean;
@@ -794,6 +802,32 @@ export const useStore = create<AppState>((set, get) => ({
       return null;
     } catch (err) {
       console.error('Fetch collection by slug failed:', err);
+      set({ isLoading: false });
+      return null;
+    }
+  },
+
+  fetchStaticPage: async (slug: string) => {
+    set({ isLoading: true });
+    try {
+      const data = await gqlRequest(`
+        query StaticPage($slug: String!) {
+          staticPage(slug: $slug) {
+            slug
+            title
+            content
+            updatedAt
+          }
+        }
+      `, { slug });
+
+      set({ isLoading: false });
+      if (data && data.staticPage) {
+        return data.staticPage;
+      }
+      return null;
+    } catch (err) {
+      console.error('Fetch static page failed:', err);
       set({ isLoading: false });
       return null;
     }

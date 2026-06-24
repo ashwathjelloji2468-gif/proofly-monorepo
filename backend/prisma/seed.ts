@@ -10,6 +10,7 @@ async function main() {
   await prisma.testimonial.deleteMany();
   await prisma.space.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.staticPage.deleteMany();
 
   // 1. Create default admin user
   const passwordHash = await bcrypt.hash('password123', 10);
@@ -251,6 +252,105 @@ async function main() {
     });
   }
   console.log(`✍️ Created ${testimonialsData.length} testimonials for acme-saas`);
+
+  // 4. Seed Legal Pages
+  const legalPages = [
+    {
+      slug: 'terms',
+      title: 'Terms of Service',
+      content: `# Terms of Service
+
+*Last updated: June 2026*
+
+Welcome to **Proofly** (referred to as "we", "our", or "us"). By accessing or using our platform, website, and services, you agree to comply with and be bound by these Terms of Service. Please read them carefully.
+
+## 1. Acceptance of Terms
+By creating an account, upgrading to premium plans (Pro or Business), or embedding our widgets, you agree to these Terms. If you do not agree, you must not use our platform.
+
+## 2. Account Registration and Subscriptions
+* You must provide accurate and complete information when registering.
+* **Billing Tiers**: We offer Free, Pro, and Business tiers. Free users are restricted to 2 spaces and cannot configure webhooks or custom domains. Pro users can create up to 5 spaces and add webhooks. Business users have unlimited spaces, webhooks, and custom domain mapping.
+* Payments are handled via Stripe checkout. All subscriptions will auto-renew until cancelled in your billing portal.
+
+## 3. Reviewer Consent and Video Testimonials
+* When collecting testimonials, you warrant that you have obtained appropriate consent from reviewers to display their names, titles, avatars, and comments/videos publicly.
+* We process video testimonials using Mux. You are responsible for ensuring uploaded contents do not violate third-party intellectual property or copyright.
+
+## 4. Limitation of Liability
+Proofly is provided "as is". In no event shall we be liable for any indirect, incidental, or consequential damages resulting from service downtime, data loss, or testimonial widget display failures.`
+    },
+    {
+      slug: 'privacy',
+      title: 'Privacy Policy',
+      content: `# Privacy Policy
+
+*Last updated: June 2026*
+
+At **Proofly**, we protect your privacy. This Privacy Policy describes how we collect, use, and share information when you use our platform.
+
+## 1. Information We Collect
+* **Account Information**: Name, email, password hash, and billing information (processed securely through Stripe).
+* **Reviewer Content**: Text testimonials, video URLs (stored on Cloudinary and Mux), ratings, reviewer names, emails, titles, and social handles that you or your reviewers submit.
+* **Imported Reviews**: If you connect Google, Twitter/X, or ProductHunt, we import selected public posts and reviewer avatars to display on your Wall of Love.
+
+## 2. Cookies and Analytics
+* We use essential session cookies to manage authentication.
+* We track page views, testimonial widget clicks, and video plays through our custom Analytics service to give you insights in your creator dashboard.
+
+## 3. Data Sharing and Third-Party Sub-processors
+* We use **Prisma** to access PostgreSQL databases hosted on **Neon**.
+* Video uploads are processed using **Mux**.
+* Image and media file storage is managed by **Cloudinary**.
+* Payment processing is secured by **Stripe**.`
+    },
+    {
+      slug: 'gdpr',
+      title: 'GDPR Compliance',
+      content: `# GDPR Compliance
+
+*Last updated: June 2026*
+
+**Proofly** is committed to meeting the requirements of the General Data Protection Regulation (GDPR). We ensure all European Union user data is processed securely and with complete transparency.
+
+## 1. Data Controller vs. Data Processor
+* **Data Controller**: You (the Proofly account holder/space creator) act as the Controller for any reviewer testimonials, emails, names, or video recordings collected through your Proofly submission forms.
+* **Data Processor**: Proofly acts as the Processor. We store and process reviews, videos, and reviewer details strictly on your behalf and in accordance with your instructions.
+
+## 2. Reviewer Rights
+Under the GDPR, individuals who submit testimonials to your spaces have the right to:
+* Access their collected data.
+* Correct incorrect information (e.g. updating reviewer name or avatar).
+* Request complete erasure (the "Right to be Forgotten") from our database.
+
+## 3. Erasure Procedure
+If a reviewer requests testimonial deletion, you can delete their record in your **Proofly Inbox**. Deleting a testimonial permanently purges the text, rating, reviewer details, and Mux video file from our records and sub-processors.
+
+## 4. Contact Us
+For Data Processing Agreements (DPA) or GDPR queries, reach out to our team at \`gdpr@proofly.co\`.`
+    },
+    {
+      slug: 'legal',
+      title: 'Legal Overview',
+      content: `# Proofly Legal Directory
+
+Welcome to Proofly's central legal resource directory. We believe in absolute transparency, security, and giving you complete control over your customer review data.
+
+Please select one of the core documents below to learn more about your rights, obligations, and data compliance when using Proofly widgets:
+
+* **[Terms of Service](/terms)**: Understand usage rights, Billing Tiers (Free, Pro, Business limitations), and payment policies.
+* **[Privacy Policy](/privacy)**: Learn what data we collect from you, how we handle reviewer data, and our third-party integrations (Mux, Stripe, Cloudinary).
+* **[GDPR Compliance](/gdpr)**: View how we protect EU residents' rights, delete reviewer data, and act as a reliable Data Processor.
+
+If you have any custom compliance requirements, feel free to contact us or interact with our Fin AI support bot.`
+    }
+  ];
+
+  for (const page of legalPages) {
+    await prisma.staticPage.create({
+      data: page
+    });
+  }
+  console.log(`📄 Seeded ${legalPages.length} legal static pages`);
 
   console.log('✅ Seeding complete!');
 }

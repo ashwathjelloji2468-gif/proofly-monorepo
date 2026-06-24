@@ -4,6 +4,7 @@ import { testimonialResolvers } from './testimonial';
 import { campaignResolvers } from './campaign';
 import { analyticsResolvers } from './analytics';
 import { rewardResolvers } from './reward';
+import { staticPageResolvers } from './staticPage';
 
 export const resolvers = {
   Query: {
@@ -11,7 +12,8 @@ export const resolvers = {
     ...spaceResolvers.Query,
     ...testimonialResolvers.Query,
     ...campaignResolvers.Query,
-    ...analyticsResolvers.Query
+    ...analyticsResolvers.Query,
+    ...staticPageResolvers.Query
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -19,7 +21,8 @@ export const resolvers = {
     ...testimonialResolvers.Mutation,
     ...campaignResolvers.Mutation,
     ...analyticsResolvers.Mutation,
-    ...rewardResolvers.Mutation
+    ...rewardResolvers.Mutation,
+    ...staticPageResolvers.Mutation
   },
   User: authResolvers.User,
   Space: spaceResolvers.Space,

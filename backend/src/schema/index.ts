@@ -8,7 +8,8 @@ const files = [
   'testimonial.graphql',
   'campaign.graphql',
   'analytics.graphql',
-  'reward.graphql'
+  'reward.graphql',
+  'staticPage.graphql'
 ];
 
 export const typeDefs = files.map(file => {

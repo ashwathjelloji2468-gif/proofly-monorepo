@@ -125,3 +125,10 @@ model AnalyticsEvent {
   metadata  Json?
   createdAt DateTime @default(now())
 }
+
+model StaticPage {
+  slug      String   @id
+  title     String
+  content   String
+  updatedAt DateTime @updatedAt
+}
