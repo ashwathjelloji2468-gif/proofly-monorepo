@@ -150,24 +150,15 @@ export default function LoginPage() {
               <span>Google Login</span>
             </button>
             <button 
-              onClick={async () => {
+              onClick={() => {
                 setAuthError('');
-                try {
-                  const success = await login('github-user@gmail.com', 'github-social-mock-password');
-                  if (success) {
-                    router.push('/dashboard?confetti=true');
-                  }
-                } catch (err) {
-                  try {
-                    await signup('github-user@gmail.com', 'GitHub User', 'github-social-mock-password');
-                    const success = await login('github-user@gmail.com', 'github-social-mock-password');
-                    if (success) {
-                      router.push('/dashboard?confetti=true');
-                    }
-                  } catch (signUpErr: any) {
-                    setAuthError(signUpErr.message || 'GitHub login failed.');
-                  }
+                const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+                if (!clientId) {
+                  setAuthError('GitHub Login is not configured. Please add NEXT_PUBLIC_GITHUB_CLIENT_ID to your environment variables.');
+                  return;
                 }
+                const redirectUri = `${window.location.origin}/auth/callback`;
+                window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user:email`;
               }}
               className="bg-[#09090B] border border-border-primary hover:bg-[#18181B] text-slate-300 text-[10px] font-bold py-2.5 px-4 rounded-lg flex items-center justify-center space-x-1.5 cursor-pointer transition"
             >

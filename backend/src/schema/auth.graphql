@@ -20,5 +20,6 @@ extend type Query {
 extend type Mutation {
   signup(email: String!, name: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
+  githubLogin(code: String!): AuthPayload!
   updateBillingTier(tier: BillingTier!): User!
 }

@@ -26,6 +26,34 @@ export function StripeCheckoutModal({ isOpen, onClose, planName, price, tierKey 
     e.preventDefault();
     setStep('loading');
 
+    // 1. Try real Stripe Checkout redirect
+    if (user?.id) {
+      try {
+        const checkoutUrl = (process.env.NEXT_PUBLIC_GRAPHQL_URL 
+          ? process.env.NEXT_PUBLIC_GRAPHQL_URL.replace('/graphql', '/api/stripe-checkout') 
+          : 'http://localhost:4000/api/stripe-checkout');
+
+        const checkoutRes = await fetch(checkoutUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId: user.id, planName })
+        });
+
+        if (checkoutRes.ok) {
+          const data = await checkoutRes.json();
+          if (data.url) {
+            window.location.href = data.url;
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Real Stripe Checkout not available or failed. Falling back to simulated checkout.', err);
+      }
+    }
+
+    // 2. Simulated webhook fallback (if Stripe is not configured/failed)
     try {
       if (user?.id) {
         const webhookUrl = (process.env.NEXT_PUBLIC_GRAPHQL_URL 

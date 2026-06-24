@@ -85,4 +85,100 @@ export class UserService extends BaseService {
     const { passwordHash: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }
+
+  async githubLogin(code: string) {
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      throw new Error('GITHUB_AUTH_NOT_CONFIGURED: GitHub Client ID or Secret is not configured in environment variables.');
+    }
+
+    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        client_id: clientId,
+        client_secret: clientSecret,
+        code
+      })
+    });
+
+    if (!tokenResponse.ok) {
+      const errText = await tokenResponse.text();
+      throw new Error(`GitHub token exchange failed: ${errText}`);
+    }
+
+    const tokenData = (await tokenResponse.json()) as any;
+    const accessToken = tokenData.access_token;
+
+    if (!accessToken) {
+      throw new Error(`GitHub token exchange response did not contain access token: ${JSON.stringify(tokenData)}`);
+    }
+
+    const userProfileResponse = await fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'User-Agent': 'proofly-backend'
+      }
+    });
+
+    if (!userProfileResponse.ok) {
+      throw new Error('Failed to fetch user profile from GitHub');
+    }
+
+    const userProfile = (await userProfileResponse.json()) as any;
+
+    const emailsResponse = await fetch('https://api.github.com/user/emails', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'User-Agent': 'proofly-backend'
+      }
+    });
+
+    let email = userProfile.email;
+
+    if (emailsResponse.ok) {
+      const emails = (await emailsResponse.json()) as any[];
+      const primaryEmail = emails.find(e => e.primary && e.verified);
+      if (primaryEmail) {
+        email = primaryEmail.email;
+      } else if (emails.length > 0) {
+        email = emails[0].email;
+      }
+    }
+
+    if (!email) {
+      throw new Error('No verified email address returned from GitHub OAuth.');
+    }
+
+    const sanitizedEmail = email.toLowerCase().trim();
+    let user = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
+
+    if (!user) {
+      const name = userProfile.name || userProfile.login || 'GitHub User';
+      const randomPassword = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const passwordHash = await bcrypt.hash(randomPassword, 10);
+
+      user = await this.prisma.user.create({
+        data: {
+          email: sanitizedEmail,
+          name,
+          passwordHash,
+          tier: BillingTier.FREE
+        }
+      });
+    }
+
+    const token = this.generateToken(user.id, user.email);
+    const { passwordHash: _, ...userWithoutPassword } = user;
+
+    return {
+      token,
+      user: userWithoutPassword
+    };
+  }
 }

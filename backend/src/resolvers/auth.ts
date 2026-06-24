@@ -19,6 +19,9 @@ export const authResolvers = {
     login: async (_parent: any, args: any, context: GraphQLContext) => {
       return context.services.user.login(args.email, args.password);
     },
+    githubLogin: async (_parent: any, args: { code: string }, context: GraphQLContext) => {
+      return context.services.user.githubLogin(args.code);
+    },
     updateBillingTier: async (_parent: any, args: { tier: BillingTier }, context: GraphQLContext) => {
       return context.services.user.updateBillingTier(args.tier);
     }

@@ -105,6 +105,7 @@ interface AppState {
   // Auth actions
   login: (email: string, password?: string) => Promise<boolean>;
   signup: (email: string, name: string, password?: string) => Promise<boolean>;
+  githubLogin: (code: string) => Promise<boolean>;
   logout: () => void;
   updateProfile: (name: string, avatarUrl: string) => void;
   
@@ -551,6 +552,38 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (err: any) {
       set({ isLoading: false });
       throw new Error(err.message || 'Signup failed');
+    }
+  },
+
+  githubLogin: async (code: string) => {
+    set({ isLoading: true });
+    try {
+      const data = await gqlRequest(`
+        mutation GithubLogin($code: String!) {
+          githubLogin(code: $code) {
+            token
+            user {
+              id
+              email
+              name
+              tier
+            }
+          }
+        }
+      `, { code });
+
+      if (data && data.githubLogin) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', data.githubLogin.token);
+        }
+        await get().fetchUser();
+        return true;
+      }
+      set({ isLoading: false });
+      return false;
+    } catch (err: any) {
+      set({ isLoading: false });
+      throw new Error(err.message || 'GitHub login failed');
     }
   },
 

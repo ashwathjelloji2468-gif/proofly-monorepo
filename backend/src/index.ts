@@ -10,6 +10,7 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
+import Stripe from 'stripe';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 import { createContext } from './context';
@@ -99,9 +100,86 @@ async function startServer() {
     }
   });
 
+  const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
+
+  // Stripe Checkout Session generation endpoint
+  app.post('/api/stripe-checkout', express.json(), async (req, res) => {
+    try {
+      const { userId, planName } = req.body;
+      if (!userId) {
+        return res.status(400).json({ error: 'Missing userId parameter' });
+      }
+
+      if (!stripe) {
+        return res.status(500).json({ error: 'Stripe Secret Key is not configured on this server.' });
+      }
+
+      const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+      const priceId = planName === 'Business' ? process.env.STRIPE_BUSINESS_PRICE_ID : process.env.STRIPE_PRO_PRICE_ID;
+
+      if (!priceId) {
+        return res.status(400).json({ error: `Price ID for plan '${planName}' is not configured.` });
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price: priceId,
+            quantity: 1,
+          },
+        ],
+        mode: 'subscription',
+        success_url: `${clientUrl}/dashboard?checkout=success`,
+        cancel_url: `${clientUrl}/dashboard/settings?checkout=cancelled`,
+        client_reference_id: userId,
+      });
+
+      return res.status(200).json({ url: session.url });
+    } catch (err: any) {
+      console.error('Stripe checkout error:', err);
+      return res.status(500).json({ error: err.message || 'Failed to create checkout session' });
+    }
+  });
+
   // Stripe checkout webhook (for production)
-  app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async (_req, res) => {
-    // Real Stripe webhook event handling structure
+  app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+    const sig = req.headers['stripe-signature'];
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+    if (!sig || !webhookSecret || !stripe) {
+      console.warn('Webhook received but signature, secret, or Stripe instance was not configured.');
+      return res.status(400).json({ error: 'Signature verification failed or Stripe not configured.' });
+    }
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+    } catch (err: any) {
+      console.error('Webhook signature verification failed:', err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const userId = session.client_reference_id;
+
+      if (userId) {
+        try {
+          const ctx = await createContext();
+          const user = await ctx.prisma.user.update({
+            where: { id: userId },
+            data: { tier: 'PREMIUM' }
+          });
+          console.log(`💳 Real Webhook: User ${user.email} successfully upgraded to PREMIUM tier.`);
+        } catch (dbErr) {
+          console.error('Failed to update user tier in database:', dbErr);
+          return res.status(500).send('Database update failed');
+        }
+      }
+    }
+
     return res.status(200).json({ received: true });
   });
 
