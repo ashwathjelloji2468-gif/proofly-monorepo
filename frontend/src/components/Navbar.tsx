@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/useStore';
 import { Sparkles, ArrowRight } from 'lucide-react';
+import { ProoflyLogo } from './ProoflyLogo';
 
 export function Navbar() {
   const user = useStore(state => state.user);
@@ -30,13 +31,8 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border-primary bg-background/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-emerald to-brand-teal flex items-center justify-center shadow-lg shadow-brand-emerald/10 group-hover:scale-105 transition-transform">
-            <Sparkles className="w-4 h-4 text-white" />
-          </div>
-          <span className="font-black text-lg text-white tracking-tight">
-            Power<span className="bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent">Testimonials</span>
-          </span>
+        <Link href="/" className="group hover:opacity-90 transition-opacity">
+          <ProoflyLogo iconSize={34} showText={true} />
         </Link>
 
         {/* Navigation */}

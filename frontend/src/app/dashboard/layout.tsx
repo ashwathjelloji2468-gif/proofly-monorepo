@@ -23,6 +23,7 @@ import {
 
 import { useStore } from '@/store/useStore';
 import { ConfettiRibbons } from '@/components/ConfettiRibbons';
+import { ProoflyLogo } from '@/components/ProoflyLogo';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -86,15 +87,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         <div>
           {/* Brand Logo Header */}
-          <div className="flex items-center space-x-2.5 px-4 py-5 border-b border-border-primary">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-brand-emerald to-brand-teal flex items-center justify-center shadow-md shrink-0">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
-            {!isCollapsed && (
-              <span className="font-extrabold text-sm text-white tracking-tight">
-                Power<span className="text-brand-emerald">Testimonials</span>
-              </span>
-            )}
+          <div className="flex items-center space-x-2.5 px-4 py-5 border-b border-border-primary overflow-hidden">
+            <ProoflyLogo iconSize={28} showText={!isCollapsed} />
           </div>
 
           {/* Navigation Links */}
