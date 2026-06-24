@@ -4,8 +4,8 @@
   "description": "GraphQL backend clone of Testimonials.to with Apollo Server, Prisma, and PostgreSQL",
   "main": "dist/index.js",
   "scripts": {
-    "build": "prisma generate && tsc",
-    "postinstall": "prisma generate && tsc",
+    "build": "prisma generate && tsc && mkdir -p dist/schema && cp src/schema/*.graphql dist/schema/",
+    "postinstall": "prisma generate && tsc && mkdir -p dist/schema && cp src/schema/*.graphql dist/schema/",
     "start": "node dist/index.js",
     "dev": "nodemon --watch src -e ts,graphql --exec ts-node src/index.ts",
     "db:migrate": "prisma migrate dev",
