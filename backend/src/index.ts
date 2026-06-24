@@ -115,8 +115,20 @@ async function startServer() {
       }
 
       const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-      const isBusiness = planName?.toLowerCase().includes('business');
-      const priceId = isBusiness ? process.env.STRIPE_BUSINESS_PRICE_ID : process.env.STRIPE_PRO_PRICE_ID;
+      const lowerPlan = planName?.toLowerCase() || '';
+      let priceId = '';
+      let resolvedTier = 'PRO';
+
+      if (lowerPlan.includes('enterprise')) {
+        priceId = process.env.STRIPE_ENTERPRISE_PRICE_ID || '';
+        resolvedTier = 'ENTERPRISE';
+      } else if (lowerPlan.includes('business')) {
+        priceId = process.env.STRIPE_BUSINESS_PRICE_ID || '';
+        resolvedTier = 'BUSINESS';
+      } else {
+        priceId = process.env.STRIPE_PRO_PRICE_ID || '';
+        resolvedTier = 'PRO';
+      }
 
       if (!priceId) {
         return res.status(400).json({ error: `Price ID for plan '${planName}' is not configured.` });
@@ -135,7 +147,7 @@ async function startServer() {
         cancel_url: `${clientUrl}/dashboard/settings?checkout=cancelled`,
         client_reference_id: userId,
         metadata: {
-          tier: isBusiness ? 'BUSINESS' : 'PRO'
+          tier: resolvedTier
         }
       });
 
