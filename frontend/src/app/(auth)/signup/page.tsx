@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
 import Link from 'next/link';
 import { Sparkles, Loader } from 'lucide-react';
+import { ProoflyLogo } from '@/components/ProoflyLogo';
 
 import { useStore } from '@/store/useStore';
 
@@ -54,12 +55,9 @@ export default function SignupPage() {
         <div className="bg-[#18181B] border border-border-primary rounded-2xl shadow-2xl p-8 space-y-6 text-left">
           
           {/* Logo & Header */}
-          <div className="text-center space-y-2">
-            <Link href="/" className="inline-flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-emerald to-brand-teal flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-black text-lg text-white">Proofly</span>
+          <div className="text-center space-y-2 flex flex-col items-center justify-center">
+            <Link href="/" className="inline-block hover:opacity-90 transition">
+              <ProoflyLogo iconSize={36} showText={true} />
             </Link>
             <h2 className="text-xl font-bold tracking-tight text-white mt-4">Create your account</h2>
             <p className="text-muted-foreground text-xs">Get started collecting customer reviews with AI in seconds</p>
