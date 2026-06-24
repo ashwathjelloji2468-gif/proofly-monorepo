@@ -68,23 +68,66 @@ export function SupportChatbot() {
     triggerFinResponse(userText);
   };
 
-  const triggerFinResponse = (userInput: string) => {
+  const triggerFinResponse = async (userInput: string) => {
     setIsTyping(true);
-    const query = userInput.toLowerCase();
+    
+    try {
+      const backendUrl = (process.env.NEXT_PUBLIC_GRAPHQL_URL 
+        ? process.env.NEXT_PUBLIC_GRAPHQL_URL.replace('/graphql', '/api/chat') 
+        : 'http://localhost:4000/api/chat');
 
+      const response = await fetch(backendUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: userInput })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.reply) {
+          setIsTyping(false);
+          const isForm = userInput.toLowerCase().includes('human') || userInput.toLowerCase().includes('support') || userInput.toLowerCase().includes('agent') || userInput.toLowerCase().includes('talk') || userInput.toLowerCase().includes('help');
+          setMessages(prev => [
+            ...prev,
+            {
+              id: Math.random().toString(),
+              sender: 'bot',
+              text: data.reply,
+              timestamp: new Date(),
+              isLeadForm: isForm
+            }
+          ]);
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend chatbot API call failed, using client-side fallback:', err);
+    }
+
+    // Client-side fallback if backend API fails
+    const query = userInput.toLowerCase();
     setTimeout(() => {
       let responseText = '';
       let isForm = false;
 
-      // Smart Fin AI Knowledge Base Router
-      if (query.includes('collect') || query.includes('request') || query.includes('gather') || query.includes('link')) {
-        responseText = "To collect testimonials:\n\n1. Head over to your dashboard collections (`/dashboard/collections`).\n2. Click **Create Collection Space**.\n3. Input your branding preferences, reward coupons, and questions.\n4. Share the slug URL (e.g. `proofly.com/collect/your-slug`) with users. They can record high-fidelity video feedback or write text instantly inside their browsers without installing anything!";
+      if (query.match(/^(hi|hello|hey|hlo|hola|howdy|yo|greetings|sup|good morning|good afternoon)/)) {
+        responseText = "Hey there! 👋 I'm Fin, your Proofly assistant. How can I help you grow your business with social proof today?";
+      } else if (query.includes('how are you') || query.includes('how\'s it going') || query.includes('how do you do')) {
+        responseText = "I'm doing great, thank you! 🚀 Ready to help you gather some awesome customer testimonials. What's on your mind?";
+      } else if (query.includes('who are you') || query.includes('your name') || query.includes('what is fin')) {
+        responseText = "I'm Fin, the friendly AI support agent for Proofly! I can guide you on how to collect video testimonials, embed widgets, set up custom domains, or manage your billing plans.";
+      } else if (query.includes('who created you') || query.includes('who made you') || query.includes('creator') || query.includes('developer')) {
+        responseText = "I was created by the engineering team at Proofly to make customer feedback collection seamless and beautiful for everyone!";
+      } else if (query.includes('collect') || query.includes('request') || query.includes('gather') || query.includes('link')) {
+        responseText = "To collect testimonials:\n\n1. Head to your dashboard collections (`/dashboard/collections`).\n2. Click **Create Collection Space**.\n3. Input your branding preferences, reward coupons, and questions.\n4. Share the slug URL (e.g., `proofly.com/collect/your-slug`) with users. They can record high-fidelity video feedback or write text reviews instantly inside their browsers without installing anything!";
       } else if (query.includes('embed') || query.includes('widget') || query.includes('wall') || query.includes('carousel') || query.includes('code') || query.includes('iframe')) {
-        responseText = "Proofly offers responsive script embeds:\n\n• **Wall of Love**: A masonry grids display featuring highlights.\n• **Carousel**: Interactive horizontal sliders.\n• **Playground**: Tweak spacing, tilt intensity, and copy custom code at `/demo`.\n\nTo install, copy the `<iframe src=\"...\" />` code block from the dashboard and paste it inside Webflow, Framer, React, or standard HTML containers.";
-      } else if (query.includes('pricing') || query.includes('cost') || query.includes('plan') || query.includes('free') || query.includes('upgrade') || query.includes('pro')) {
-        responseText = "We offer four billing tiers:\n\n• **Free ($0)**: 1 collection space, 10 text reviews, and standard masonry layouts.\n• **Pro ($49/mo)**: 5 active spaces, webcam video reviews capture, and customized styling accents.\n• **Business ($79/mo)**: Unlimited video reviews, AI keyword trends, and custom domains settings.\n• **Enterprise ($249/mo)**: Semantic vector searches and priority help.\n\nYou can trigger upgrades via the billing setting triggers (`/dashboard/settings`).";
+        responseText = "Proofly offers responsive script embeds:\n\n• **Wall of Love**: A masonry grid display featuring highlights.\n• **Carousel**: Interactive horizontal sliders.\n• **Playground**: Tweak spacing, tilt intensity, and copy custom code at `/demo`.\n\nTo install, copy the `<iframe src=\"...\" />` code block from the dashboard and paste it inside Webflow, Framer, React, or standard HTML containers.";
+      } else if (query.includes('pricing') || query.includes('cost') || query.includes('plan') || query.includes('free') || query.includes('upgrade') || query.includes('pro') || query.includes('business')) {
+        responseText = "We offer four billing tiers:\n\n• **Free ($0)**: 1 collection space, 10 text reviews, and standard masonry layouts.\n• **Pro ($49/mo)**: 5 active spaces, webcam video reviews capture, and customized styling accents.\n• **Business ($99/mo)**: Unlimited video reviews, AI keyword trends, and custom domains settings.\n• **Enterprise ($249/mo)**: Semantic vector searches and priority help.\n\nYou can trigger upgrades via the billing setting triggers (`/dashboard/settings`).";
       } else if (query.includes('video') || query.includes('webcam') || query.includes('camera') || query.includes('record')) {
-        responseText = "Our webcam recording is fully built on HTML5 video streaming: \n\n• Users record directly inside the public collectors screen.\n• Once uploaded, our server transcribes the speech, tags highlights, and analyzes client sentiment.\n• Admins can review details in the dashboard inbox and click **Approve** to showcase it instantly!";
+        responseText = "Our webcam recording is fully built on HTML5 video streaming:\n\n• Users record directly inside the public collectors screen.\n• Once uploaded, our server transcribes the speech, tags highlights, and analyzes client sentiment.\n• Admins can review details in the dashboard inbox and click **Approve** to showcase it instantly!";
       } else if (query.includes('ai') || query.includes('insights') || query.includes('sentiment') || query.includes('keyword') || query.includes('transcript')) {
         responseText = "Proofly has integrated NLP pipelines:\n\n• **Auto-Transcripts**: Closed captioning and text extraction for all webcam videos.\n• **Sentiment Detection**: Classifies reviews as POSITIVE, NEUTRAL, or NEGATIVE.\n• **Keyword Mapping**: Extracts key search tags.\n• **Highlights Summaries**: Creates a bold summary snippet (`bestQuoteHighlight`) featured at the top of cards.";
       } else if (query.includes('search') || query.includes('vector') || query.includes('semantic')) {
@@ -96,9 +139,10 @@ export function SupportChatbot() {
       } else if (query.includes('human') || query.includes('support') || query.includes('agent') || query.includes('talk') || query.includes('help')) {
         responseText = "Got it. I can loop in a human representative. Please fill in your contact information below, and our support lead will email you within 15 minutes:";
         isForm = true;
+      } else if (query.match(/^(thanks|thank you|awesome|cool|great|nice|perfect|ok|okay)/)) {
+        responseText = "You're very welcome! Let me know if there's anything else I can assist you with. Happy collecting! 🚀";
       } else {
-        // Fallback natural AI answer matching anything typed
-        responseText = `I've analyzed our documentation database regarding your question ("${userInput}"). \n\nProofly supports fully responsive widget customizers, smart NLP sentiment analysis, and social platform integrations. \n\nIf you have a project specific inquiry, feel free to ask about 'webcam recording', 'getting widget embeds', 'billing plans', or type 'human' to submit a support email!`;
+        responseText = `I've analyzed our documentation database regarding your question ("${userInput}").\n\nProofly supports fully responsive widget customizers, smart NLP sentiment analysis, and social platform integrations.\n\nIf you have a specific question about setup or features, feel free to ask about 'webcam recording', 'getting widget embeds', 'billing plans', or type 'human' to submit a support email!`;
       }
 
       setIsTyping(false);
