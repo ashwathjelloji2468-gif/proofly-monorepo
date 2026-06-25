@@ -131,6 +131,8 @@ interface AppState {
   createCollection: (collection: Omit<Collection, 'id' | 'user_id' | 'createdAt' | 'slug'>) => Promise<Collection | null>;
   deleteCollection: (id: string) => Promise<void>;
   fetchCollectionBySlug: (slug: string) => Promise<Collection | null>;
+  updateCollection: (id: string, collection: { title: string; description: string; logoUrl?: string | null; theme: string; collectVideo: boolean; collectText: boolean }) => Promise<Collection | null>;
+  updateCollectionReward: (spaceId: string, reward: { discountCode: string; message: string } | null) => Promise<void>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -767,6 +769,126 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (err) {
       console.error('Delete collection failed:', err);
       set({ isLoading: false });
+    }
+  },
+
+  updateCollection: async (id, collection) => {
+    set({ isLoading: true });
+    try {
+      const data = await gqlRequest(`
+        mutation UpdateSpace($id: ID!, $input: UpdateSpaceInput!) {
+          updateSpace(id: $id, input: $input) {
+            id
+            name
+            slug
+            headerTitle
+            customMessage
+            logoUrl
+            theme
+            collectVideo
+            collectText
+            createdAt
+            reward {
+              id
+              discountCode
+              message
+              isActive
+            }
+          }
+        }
+      `, {
+        id,
+        input: {
+          name: collection.title,
+          customMessage: collection.description,
+          logoUrl: collection.logoUrl || null,
+          collectVideo: collection.collectVideo,
+          collectText: collection.collectText,
+          theme: collection.theme
+        }
+      });
+
+      if (data && data.updateSpace) {
+        const s = data.updateSpace;
+        const updatedCol: Collection = {
+          id: s.id,
+          user_id: get().user?.id || '',
+          title: s.name,
+          description: s.customMessage,
+          logoUrl: s.logoUrl || undefined,
+          theme: s.theme,
+          collectVideo: s.collectVideo,
+          collectText: s.collectText,
+          customQuestions: s.customMessage ? [s.customMessage] : [],
+          slug: s.slug,
+          createdAt: s.createdAt,
+          reward: s.reward
+        };
+        set(state => ({
+          collections: state.collections.map(c => c.id === id ? updatedCol : c),
+          isLoading: false
+        }));
+        return updatedCol;
+      }
+      set({ isLoading: false });
+      return null;
+    } catch (err: any) {
+      set({ isLoading: false });
+      throw new Error(err.message || 'Failed to update collection');
+    }
+  },
+
+  updateCollectionReward: async (spaceId, reward) => {
+    set({ isLoading: true });
+    try {
+      if (reward) {
+        // Create or update reward
+        const data = await gqlRequest(`
+          mutation CreateOrUpdateReward($input: CreateOrUpdateRewardInput!) {
+            createOrUpdateReward(input: $input) {
+              id
+              discountCode
+              message
+              isActive
+            }
+          }
+        `, {
+          input: {
+            spaceId,
+            discountCode: reward.discountCode,
+            message: reward.message
+          }
+        });
+
+        if (data && data.createOrUpdateReward) {
+          const r = data.createOrUpdateReward;
+          set(state => ({
+            collections: state.collections.map(c => c.id === spaceId ? { ...c, reward: r } : c),
+            isLoading: false
+          }));
+        } else {
+          set({ isLoading: false });
+        }
+      } else {
+        // Delete reward
+        const data = await gqlRequest(`
+          mutation DeleteReward($spaceId: ID!) {
+            deleteReward(spaceId: $spaceId)
+          }
+        `, { spaceId });
+
+        if (data && data.deleteReward) {
+          set(state => ({
+            collections: state.collections.map(c => c.id === spaceId ? { ...c, reward: null } : c),
+            isLoading: false
+          }));
+        } else {
+          set({ isLoading: false });
+        }
+      }
+    } catch (err: any) {
+      set({ isLoading: false });
+      throw new Error(err.message || 'Failed to update collection reward');
     }
   },
 
