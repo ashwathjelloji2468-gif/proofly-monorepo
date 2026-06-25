@@ -4,13 +4,15 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useStore } from '@/store/useStore';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Menu, X } from 'lucide-react';
 import { ProoflyLogo } from './ProoflyLogo';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navbar() {
   const user = useStore(state => state.user);
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -102,8 +104,72 @@ export function Navbar() {
               </Link>
             </>
           )}
+
+          {/* Mobile Menu Toggle Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex md:hidden text-slate-400 hover:text-white p-1 focus:outline-none transition cursor-pointer"
+            aria-label="Toggle Menu"
+          >
+            {isOpen ? <X className="w-5.5 h-5.5" /> : <Menu className="w-5.5 h-5.5" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="md:hidden border-t border-border-primary/50 bg-[#09090B]/95 backdrop-blur-sm overflow-hidden"
+          >
+            <div className="px-6 py-4 flex flex-col space-y-4 text-left">
+              <Link 
+                href="/#features" 
+                onClick={(e) => { handleScroll(e, 'features'); setIsOpen(false); }}
+                className="text-xs font-semibold text-muted-foreground hover:text-white transition-colors py-2 border-b border-white/5"
+              >
+                Features
+              </Link>
+              <Link 
+                href="/#showcase" 
+                onClick={(e) => { handleScroll(e, 'showcase'); setIsOpen(false); }}
+                className="text-xs font-semibold text-muted-foreground hover:text-white transition-colors py-2 border-b border-white/5"
+              >
+                Wall of Love
+              </Link>
+              <Link 
+                href="/flowstep" 
+                onClick={() => setIsOpen(false)}
+                className="text-xs font-semibold text-brand-teal flex items-center space-x-1.5 hover:text-brand-teal-hover transition-colors py-2 border-b border-white/5 relative group"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-brand-teal" />
+                <span>FlowStep AI</span>
+                <span className="ml-2 bg-indigo-600 text-indigo-100 text-[5px] font-black uppercase px-1 py-0.5 rounded tracking-wider">
+                  New
+                </span>
+              </Link>
+              <Link 
+                href="/#pricing" 
+                onClick={(e) => { handleScroll(e, 'pricing'); setIsOpen(false); }}
+                className="text-xs font-semibold text-muted-foreground hover:text-white transition-colors py-2 border-b border-white/5"
+              >
+                Pricing
+              </Link>
+              <Link 
+                href="/#faq" 
+                onClick={(e) => { handleScroll(e, 'faq'); setIsOpen(false); }}
+                className="text-xs font-semibold text-muted-foreground hover:text-white transition-colors py-2"
+              >
+                FAQ
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

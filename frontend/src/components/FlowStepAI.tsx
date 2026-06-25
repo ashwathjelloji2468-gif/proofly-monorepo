@@ -323,114 +323,117 @@ const review = await Proofly.process(reviewId, {
               )}
             </AnimatePresence>
 
-            {/* Canvas Nodes Grid */}
-            <div className="grid grid-cols-4 gap-4 relative z-10 py-6 items-center">
-              
-              {/* Connecting SVGs Container Overlay */}
-              <div className="absolute inset-0 pointer-events-none z-0">
-                <svg className="w-full h-full" viewBox="0 0 600 200" preserveAspectRatio="none">
-                  {/* Neon Indigo to Teal Gradients */}
-                  <defs>
-                    <linearGradient id="neonLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#6C5CFF" />
-                      <stop offset="50%" stopColor="#8677FF" />
-                      <stop offset="100%" stopColor="#F59E0B" />
-                    </linearGradient>
-                  </defs>
-                  
-                  {/* Path 1: Trigger to Collector */}
-                  <path 
-                    d="M 120 100 C 180 100, 180 100, 210 100" 
-                    fill="none" 
-                    stroke="url(#neonLineGrad)" 
-                    strokeWidth="2.5"
-                    className="flow-line-animated"
-                  />
-                  
-                  {/* Path 2: Collector to AI */}
-                  <path 
-                    d="M 270 100 C 330 100, 330 100, 360 100" 
-                    fill="none" 
-                    stroke="url(#neonLineGrad)" 
-                    strokeWidth="2.5"
-                    className="flow-line-animated"
-                  />
-                  
-                  {/* Path 3: AI to Showcase */}
-                  <path 
-                    d="M 420 100 C 480 100, 480 100, 510 100" 
-                    fill="none" 
-                    stroke="url(#neonLineGrad)" 
-                    strokeWidth="2.5"
-                    className="flow-line-animated"
-                  />
-                </svg>
-              </div>
+            {/* Scrollable container to prevent node squishing on mobile */}
+            <div className="w-full overflow-x-auto scrollbar-thin py-2">
+              {/* Canvas Nodes Grid */}
+              <div className="grid grid-cols-4 gap-4 relative z-10 py-6 items-center min-w-[500px]">
+                
+                {/* Connecting SVGs Container Overlay */}
+                <div className="absolute inset-0 pointer-events-none z-0">
+                  <svg className="w-full h-full" viewBox="0 0 600 200" preserveAspectRatio="none">
+                    {/* Neon Indigo to Teal Gradients */}
+                    <defs>
+                      <linearGradient id="neonLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#6C5CFF" />
+                        <stop offset="50%" stopColor="#8677FF" />
+                        <stop offset="100%" stopColor="#F59E0B" />
+                      </linearGradient>
+                    </defs>
+                    
+                    {/* Path 1: Trigger to Collector */}
+                    <path 
+                      d="M 120 100 C 180 100, 180 100, 210 100" 
+                      fill="none" 
+                      stroke="url(#neonLineGrad)" 
+                      strokeWidth="2.5"
+                      className="flow-line-animated"
+                    />
+                    
+                    {/* Path 2: Collector to AI */}
+                    <path 
+                      d="M 270 100 C 330 100, 330 100, 360 100" 
+                      fill="none" 
+                      stroke="url(#neonLineGrad)" 
+                      strokeWidth="2.5"
+                      className="flow-line-animated"
+                    />
+                    
+                    {/* Path 3: AI to Showcase */}
+                    <path 
+                      d="M 420 100 C 480 100, 480 100, 510 100" 
+                      fill="none" 
+                      stroke="url(#neonLineGrad)" 
+                      strokeWidth="2.5"
+                      className="flow-line-animated"
+                    />
+                  </svg>
+                </div>
 
-              {/* Node 1: Trigger */}
-              <div className="z-10 flex justify-center">
-                <button
-                  onClick={() => { setSelectedNodeId('trigger'); addLog('Inspecting Trigger webhook settings'); }}
-                  className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
-                    selectedNodeId === 'trigger'
-                      ? 'bg-[#181635] border-[#4f46e5]/60 ring-2 ring-[#6366f1]/20 scale-105'
-                      : 'bg-[#0c0d1b] border-[#1f213a] hover:border-indigo-500/30'
-                  }`}
-                >
-                  <Database className="w-5 h-5 text-indigo-400" />
-                  <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.trigger}</span>
-                  <span className="text-[6px] text-zinc-550 block font-bold">TRIGGER</span>
-                </button>
-              </div>
+                {/* Node 1: Trigger */}
+                <div className="z-10 flex justify-center">
+                  <button
+                    onClick={() => { setSelectedNodeId('trigger'); addLog('Inspecting Trigger webhook settings'); }}
+                    className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
+                      selectedNodeId === 'trigger'
+                        ? 'bg-[#181635] border-[#4f46e5]/60 ring-2 ring-[#6366f1]/20 scale-105'
+                        : 'bg-[#0c0d1b] border-[#1f213a] hover:border-indigo-500/30'
+                    }`}
+                  >
+                    <Database className="w-5 h-5 text-indigo-400" />
+                    <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.trigger}</span>
+                    <span className="text-[6px] text-zinc-550 block font-bold">TRIGGER</span>
+                  </button>
+                </div>
 
-              {/* Node 2: Collector */}
-              <div className="z-10 flex justify-center">
-                <button
-                  onClick={() => { setSelectedNodeId('collector'); addLog('Inspecting Review Collector parameters'); }}
-                  className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
-                    selectedNodeId === 'collector'
-                      ? 'bg-brand-teal/10 border-[#8677FF]/60 ring-2 ring-[#8677FF]/20 scale-105'
-                      : 'bg-[#0c0d1b] border-[#1f213a] hover:border-brand-teal/30'
-                  }`}
-                >
-                  <Video className="w-5 h-5 text-brand-teal" />
-                  <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.collector}</span>
-                  <span className="text-[6px] text-zinc-550 block font-bold">COLLECTION</span>
-                </button>
-              </div>
+                {/* Node 2: Collector */}
+                <div className="z-10 flex justify-center">
+                  <button
+                    onClick={() => { setSelectedNodeId('collector'); addLog('Inspecting Review Collector parameters'); }}
+                    className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
+                      selectedNodeId === 'collector'
+                        ? 'bg-brand-teal/10 border-[#8677FF]/60 ring-2 ring-[#8677FF]/20 scale-105'
+                        : 'bg-[#0c0d1b] border-[#1f213a] hover:border-brand-teal/30'
+                    }`}
+                  >
+                    <Video className="w-5 h-5 text-brand-teal" />
+                    <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.collector}</span>
+                    <span className="text-[6px] text-zinc-550 block font-bold">COLLECTION</span>
+                  </button>
+                </div>
 
-              {/* Node 3: AI Pipeline */}
-              <div className="z-10 flex justify-center">
-                <button
-                  onClick={() => { setSelectedNodeId('ai'); addLog('Inspecting AI analysis settings'); }}
-                  className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
-                    selectedNodeId === 'ai'
-                      ? 'bg-brand-emerald/10 border-[#6C5CFF]/60 ring-2 ring-[#6C5CFF]/20 scale-105'
-                      : 'bg-[#0c0d1b] border-[#1f213a] hover:border-brand-emerald/30'
-                  }`}
-                >
-                  <Cpu className="w-5 h-5 text-brand-emerald" />
-                  <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.ai}</span>
-                  <span className="text-[6px] text-zinc-550 block font-bold">AI PIPELINE</span>
-                </button>
-              </div>
+                {/* Node 3: AI Mod */}
+                <div className="z-10 flex justify-center">
+                  <button
+                    onClick={() => { setSelectedNodeId('ai'); addLog('Inspecting AI analysis and filters'); }}
+                    className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
+                      selectedNodeId === 'ai'
+                        ? 'bg-[#153523] border-brand-emerald/60 ring-2 ring-brand-emerald/20 scale-105'
+                        : 'bg-[#0c0d1b] border-[#1f213a] hover:border-brand-emerald/30'
+                    }`}
+                  >
+                    <Cpu className="w-5 h-5 text-brand-emerald" />
+                    <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.ai}</span>
+                    <span className="text-[6px] text-zinc-550 block font-bold">AI moderation</span>
+                  </button>
+                </div>
 
-              {/* Node 4: Showcase Display */}
-              <div className="z-10 flex justify-center">
-                <button
-                  onClick={() => { setSelectedNodeId('showcase'); addLog('Inspecting Showcase Widget theme'); }}
-                  className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
-                    selectedNodeId === 'showcase'
-                      ? 'bg-[#352515] border-[#f59e0b]/60 ring-2 ring-[#f59e0b]/20 scale-105'
-                      : 'bg-[#0c0d1b] border-[#1f213a] hover:border-amber-500/30'
-                  }`}
-                >
-                  <Layout className="w-5 h-5 text-amber-400" />
-                  <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.showcase}</span>
-                  <span className="text-[6px] text-zinc-550 block font-bold">SHOWCASE</span>
-                </button>
-              </div>
+                {/* Node 4: Showcase Display */}
+                <div className="z-10 flex justify-center">
+                  <button
+                    onClick={() => { setSelectedNodeId('showcase'); addLog('Inspecting Showcase Widget theme'); }}
+                    className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
+                      selectedNodeId === 'showcase'
+                        ? 'bg-[#352515] border-[#f59e0b]/60 ring-2 ring-[#f59e0b]/20 scale-105'
+                        : 'bg-[#0c0d1b] border-[#1f213a] hover:border-amber-500/30'
+                    }`}
+                  >
+                    <Layout className="w-5 h-5 text-amber-400" />
+                    <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.showcase}</span>
+                    <span className="text-[6px] text-zinc-550 block font-bold">SHOWCASE</span>
+                  </button>
+                </div>
 
+              </div>
             </div>
 
             {/* Config details & developer code section at bottom */}

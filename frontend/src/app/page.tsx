@@ -1231,7 +1231,7 @@ export default function LandingPage() {
               Whether you are an indie hacker launching your first SaaS beta or a growing startup scaling customer success, Proofly provides a beautiful, unified workspace to manage all your social proof assets in one single place.
             </p>
           </div>
-          <div className="flex gap-8 border-l border-border-primary/50 pl-0 md:pl-8 py-2">
+          <div className="flex gap-8 border-l-0 md:border-l border-border-primary/50 pl-0 md:pl-8 py-2">
             <div>
               <p className="text-2xl font-black text-brand-emerald">15k+</p>
               <p className="text-[9px] uppercase font-bold text-slate-400 tracking-wider">Reviews Displayed</p>
