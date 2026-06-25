@@ -56,16 +56,23 @@ jobs:
 
       # --- BACKEND DEPLOY (RENDER) ---
       - name: Trigger Render Deploy Hook
-        if: secrets.RENDER_DEPLOY_HOOK_URL != ''
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        if: env.RENDER_DEPLOY_HOOK != ''
         run: |
           echo "Triggering Render deployment..."
-          curl -f -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          curl -f -X POST "$RENDER_DEPLOY_HOOK"
 
       # --- FRONTEND DEPLOY (VERCEL) ---
       - name: Deploy to Vercel
-        if: secrets.VERCEL_TOKEN != '' && secrets.VERCEL_ORG_ID != '' && secrets.VERCEL_PROJECT_ID != ''
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        if: env.VERCEL_TOKEN != '' && env.VERCEL_ORG_ID != '' && env.VERCEL_PROJECT_ID != ''
         run: |
           echo "Installing Vercel CLI..."
           npm install --global vercel@latest
           echo "Deploying to Vercel production..."
-          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --scope=${{ secrets.VERCEL_ORG_ID }} --confirm --yes
+          vercel deploy --prod --token=$VERCEL_TOKEN --scope=$VERCEL_ORG_ID --confirm --yes
+
