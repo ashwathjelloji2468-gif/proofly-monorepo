@@ -7,6 +7,7 @@ async function main() {
   console.log('🌱 Seeding database...');
 
   // Clear existing data to ensure a clean starting point
+  await prisma.reward.deleteMany();
   await prisma.testimonial.deleteMany();
   await prisma.space.deleteMany();
   await prisma.user.deleteMany();
@@ -56,6 +57,26 @@ async function main() {
     },
   });
   console.log('📁 Created spaces: acme-saas, mobile-app');
+
+  // 2b. Create default rewards for spaces
+  await prisma.reward.create({
+    data: {
+      spaceId: 'col-1',
+      discountCode: 'ACME20OFF',
+      message: 'Get 20% Off Your Next Purchase!',
+      isActive: true,
+    },
+  });
+
+  await prisma.reward.create({
+    data: {
+      spaceId: 'col-2',
+      discountCode: 'BETA30FREE',
+      message: 'Get 30% Off Your Next Purchase!',
+      isActive: true,
+    },
+  });
+  console.log('🎁 Created rewards: ACME20OFF, BETA30FREE');
 
   // 3. Create Testimonials for space1 (Acme SaaS Suite)
   const testimonialsData = [

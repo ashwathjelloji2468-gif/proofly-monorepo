@@ -149,8 +149,8 @@ export default function CollectTestimonialPage() {
     }
   };
 
-  const copyCouponCode = () => {
-    navigator.clipboard.writeText('POWER20');
+  const copyCouponCode = (code: string) => {
+    navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -304,7 +304,11 @@ export default function CollectTestimonialPage() {
                         <h3 className="text-sm font-bold text-white">Record Video</h3>
                         <p className="text-xs text-muted-foreground mb-2">Record up to 60 seconds of webcam review.</p>
                       </div>
-                      <WebcamRecorder onRecordComplete={handleRecordComplete} />
+                      <WebcamRecorder 
+                        onRecordComplete={handleRecordComplete} 
+                        questions={collection.customQuestions}
+                        spaceName={collection.title}
+                      />
                       {videoURL && (
                         <div className="flex justify-end pt-3">
                           <button
@@ -520,28 +524,32 @@ export default function CollectTestimonialPage() {
               </div>
 
               {/* Reward Coupon Overlay */}
-              <div className="bg-[#09090B] border border-border-primary rounded-2xl p-6 max-w-sm mx-auto space-y-4 shadow-inner relative overflow-hidden">
-                {/* Glow orbs background decoration */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-brand-teal/5 rounded-full blur-2xl -z-10" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-brand-emerald/5 rounded-full blur-2xl -z-10" />
-                
-                <div className="space-y-1">
-                  <span className="text-[10px] text-brand-teal font-extrabold uppercase tracking-widest block">Incentive Reward</span>
-                  <h4 className="text-sm font-extrabold text-white">Get 20% Off Your Next Purchase!</h4>
-                  <p className="text-[10px] text-muted-foreground">Use this coupon code during your checkout process.</p>
-                </div>
+              {collection.reward && collection.reward.isActive && (
+                <div className="bg-[#09090B] border border-border-primary rounded-2xl p-6 max-w-sm mx-auto space-y-4 shadow-inner relative overflow-hidden">
+                  {/* Glow orbs background decoration */}
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-brand-teal/5 rounded-full blur-2xl -z-10" />
+                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-brand-emerald/5 rounded-full blur-2xl -z-10" />
+                  
+                  <div className="space-y-1">
+                    <span className="text-[10px] text-brand-teal font-extrabold uppercase tracking-widest block">Incentive Reward</span>
+                    <h4 className="text-sm font-extrabold text-white">{collection.reward.message}</h4>
+                    <p className="text-[10px] text-muted-foreground">Use this coupon code during your checkout process.</p>
+                  </div>
 
-                <div className="bg-[#18181B] border border-border-primary/80 rounded-xl p-3 flex items-center justify-between">
-                  <code className="font-mono text-sm font-black text-brand-emerald tracking-wider pl-2">POWER20</code>
-                  <button
-                    onClick={copyCouponCode}
-                    className="bg-[#09090B] hover:bg-[#18181B] text-slate-300 hover:text-white p-2 rounded-lg border border-border-primary transition flex items-center space-x-1 text-[10px] font-bold cursor-pointer"
-                  >
-                    <Copy className="w-3.5 h-3.5 text-brand-teal" />
-                    <span>{copied ? 'Copied!' : 'Copy'}</span>
-                  </button>
+                  <div className="bg-[#18181B] border border-border-primary/80 rounded-xl p-3 flex items-center justify-between">
+                    <code className="font-mono text-sm font-black text-brand-emerald tracking-wider pl-2">
+                      {collection.reward.discountCode}
+                    </code>
+                    <button
+                      onClick={() => copyCouponCode(collection.reward!.discountCode)}
+                      className="bg-[#09090B] hover:bg-[#18181B] text-slate-300 hover:text-white p-2 rounded-lg border border-border-primary transition flex items-center space-x-1 text-[10px] font-bold cursor-pointer"
+                    >
+                      <Copy className="w-3.5 h-3.5 text-brand-teal" />
+                      <span>{copied ? 'Copied!' : 'Copy'}</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="pt-2">
                 <button

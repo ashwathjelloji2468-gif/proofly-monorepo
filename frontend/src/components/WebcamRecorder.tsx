@@ -5,9 +5,11 @@ import { Camera, Video, VideoOff, RotateCcw } from 'lucide-react';
 
 interface WebcamRecorderProps {
   onRecordComplete: (blob: Blob, url: string) => void;
+  questions?: string[];
+  spaceName?: string;
 }
 
-export function WebcamRecorder({ onRecordComplete }: WebcamRecorderProps) {
+export function WebcamRecorder({ onRecordComplete, questions, spaceName }: WebcamRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [videoBlob, setVideoBlob] = useState<Blob | null>(null);
   const [videoURL, setVideoURL] = useState<string | null>(null);
@@ -139,6 +141,28 @@ export function WebcamRecorder({ onRecordComplete }: WebcamRecorderProps) {
           <div className="absolute top-4 right-4 bg-red-600 text-white font-mono text-xs px-2.5 py-1 rounded-md flex items-center space-x-1.5 animate-pulse">
             <span className="w-2 h-2 rounded-full bg-white" />
             <span>0:{secondsLeft < 10 ? '0' : ''}{secondsLeft}</span>
+          </div>
+        )}
+
+        {/* Guiding Questions Overlay */}
+        {!videoURL && streamActive && (
+          <div className="absolute bottom-3 left-3 right-3 bg-black/75 border border-white/10 rounded-lg p-2.5 text-left z-20 select-none pointer-events-none">
+            <p className="text-[9px] font-black uppercase text-brand-emerald tracking-widest mb-1 flex items-center gap-1">
+              <span>💡 Guiding Prompts:</span>
+            </p>
+            <ul className="space-y-0.5 text-[8px] text-slate-300 font-medium list-decimal pl-3.5">
+              {questions && questions.length > 1 ? (
+                questions.map((q, idx) => (
+                  <li key={idx}>{q}</li>
+                ))
+              ) : (
+                <>
+                  <li>State your name / introduce yourself.</li>
+                  <li>What do you love about {spaceName || 'us'}?</li>
+                  <li>How did we help you or solve your challenge?</li>
+                </>
+              )}
+            </ul>
           </div>
         )}
 

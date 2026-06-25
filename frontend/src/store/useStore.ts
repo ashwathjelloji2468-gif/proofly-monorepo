@@ -62,6 +62,12 @@ export interface Collection {
   customQuestions: string[];
   slug: string;
   createdAt: string;
+  reward?: {
+    id: string;
+    discountCode: string;
+    message: string;
+    isActive: boolean;
+  } | null;
 }
 
 export interface Testimonial {
@@ -157,7 +163,13 @@ const initialCollections: Collection[] = [
       'Would you recommend us to other developers?'
     ],
     slug: 'acme-saas',
-    createdAt: new Date(Date.now() - 3600000 * 24 * 30).toISOString()
+    createdAt: new Date(Date.now() - 3600000 * 24 * 30).toISOString(),
+    reward: {
+      id: 'reward-1',
+      discountCode: 'ACME20OFF',
+      message: 'Get 20% Off Your Next Purchase!',
+      isActive: true
+    }
   },
   {
     id: 'col-2',
@@ -174,7 +186,13 @@ const initialCollections: Collection[] = [
       'Any bugs or glitches encountered?'
     ],
     slug: 'mobile-app',
-    createdAt: new Date(Date.now() - 3600000 * 24 * 10).toISOString()
+    createdAt: new Date(Date.now() - 3600000 * 24 * 10).toISOString(),
+    reward: {
+      id: 'reward-2',
+      discountCode: 'BETA30FREE',
+      message: 'Get 30% Off Your Next Purchase!',
+      isActive: true
+    }
   }
 ];
 
@@ -768,6 +786,12 @@ export const useStore = create<AppState>((set, get) => ({
             collectVideo
             collectText
             createdAt
+            reward {
+              id
+              discountCode
+              message
+              isActive
+            }
           }
         }
       `, { slug });
@@ -785,7 +809,8 @@ export const useStore = create<AppState>((set, get) => ({
           collectText: s.collectText,
           customQuestions: s.customMessage ? [s.customMessage] : [],
           slug: s.slug,
-          createdAt: s.createdAt
+          createdAt: s.createdAt,
+          reward: s.reward
         };
         set(state => {
           const exists = state.collections.some(c => c.id === col.id);
