@@ -55,16 +55,7 @@ export function Navbar() {
             Wall of Love
           </Link>
           
-          <Link 
-            href="/flowstep" 
-            className="text-sm font-semibold text-brand-teal flex items-center space-x-1 hover:text-brand-teal-hover transition-colors relative group"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-brand-teal group-hover:animate-spin" />
-            <span>FlowStep AI</span>
-            <span className="absolute -top-3.5 -right-3 bg-indigo-600 text-indigo-100 text-[6px] font-black uppercase px-1 py-0.5 rounded tracking-wider animate-pulse">
-              New
-            </span>
-          </Link>
+
           
           <Link 
             href="/#pricing" 
@@ -141,17 +132,7 @@ export function Navbar() {
               >
                 Wall of Love
               </Link>
-              <Link 
-                href="/flowstep" 
-                onClick={() => setIsOpen(false)}
-                className="text-xs font-semibold text-brand-teal flex items-center space-x-1.5 hover:text-brand-teal-hover transition-colors py-2 border-b border-white/5 relative group"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-brand-teal" />
-                <span>FlowStep AI</span>
-                <span className="ml-2 bg-indigo-600 text-indigo-100 text-[5px] font-black uppercase px-1 py-0.5 rounded tracking-wider">
-                  New
-                </span>
-              </Link>
+
               <Link 
                 href="/#pricing" 
                 onClick={(e) => { handleScroll(e, 'pricing'); setIsOpen(false); }}
