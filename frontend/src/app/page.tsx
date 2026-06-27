@@ -976,7 +976,7 @@ export default function LandingPage() {
             </div>
             <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-2 font-mono text-[9px] text-slate-500">
               <span className="text-brand-teal font-extrabold uppercase block">QR Code & Form Link</span>
-              <span className="block truncate">proofly-chi.vercel.app/collect/acme-saas</span>
+              <span className="block truncate">useproofly.vercel.app/collect/acme-saas</span>
             </div>
           </SpotlightCard>
 
@@ -1015,7 +1015,7 @@ export default function LandingPage() {
             </div>
             <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-1 font-mono text-[9px] text-slate-500">
               <span className="text-brand-teal font-extrabold uppercase block">One-Click Embed Code</span>
-              <code className="text-slate-400 block truncate">&lt;script src="proofly-chi.vercel.app/embed.js"&gt;&lt;/script&gt;</code>
+              <code className="text-slate-400 block truncate">&lt;script src="useproofly.vercel.app/embed.js"&gt;&lt;/script&gt;</code>
             </div>
           </SpotlightCard>
         </div>
