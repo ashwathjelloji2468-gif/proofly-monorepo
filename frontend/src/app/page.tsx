@@ -62,6 +62,20 @@ export default function LandingPage() {
   const [typedText, setTypedText] = useState("");
   const [searchText, setSearchText] = useState("");
   const [widgetLoading, setWidgetLoading] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showSparkle, setShowSparkle] = useState(false);
+
+  // Simulated testimonial submission timing
+  useEffect(() => {
+    if (heroTab !== 'recorder') {
+      setIsSubmitted(false);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setIsSubmitted(true);
+    }, 3500);
+    return () => clearTimeout(timeout);
+  }, [heroTab]);
 
   // Search input typing effect inside Manage tab
   useEffect(() => {
@@ -192,6 +206,7 @@ export default function LandingPage() {
   useEffect(() => {
     if (heroTab !== 'dashboard') {
       setTypedText("");
+      setShowSparkle(false);
       return;
     }
     let currentText = "";
@@ -203,6 +218,7 @@ export default function LandingPage() {
         charIndex++;
       } else {
         clearInterval(interval);
+        setShowSparkle(true);
       }
     }, 20);
     return () => clearInterval(interval);
@@ -738,6 +754,29 @@ export default function LandingPage() {
                             <div className="bg-gradient-to-r from-brand-emerald/15 to-brand-teal/15 border border-brand-emerald/20 px-2 py-1 rounded text-[8px] text-left text-slate-300 z-10 leading-snug">
                               ❓ <strong>Q1:</strong> What do you love about Acme?
                             </div>
+
+                            {/* Success Checkmark Overlay */}
+                            <AnimatePresence>
+                              {isSubmitted && (
+                                <motion.div 
+                                  initial={{ opacity: 0, scale: 0.95 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  exit={{ opacity: 0, scale: 0.95 }}
+                                  className="absolute inset-0 bg-[#09090B]/95 z-20 flex flex-col items-center justify-center space-y-1.5"
+                                >
+                                  <motion.div 
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: [0, 1.2, 1] }}
+                                    transition={{ duration: 0.4, ease: "easeOut" }}
+                                    className="w-8 h-8 rounded-full bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center text-brand-emerald"
+                                  >
+                                    <Check className="w-4 h-4" />
+                                  </motion.div>
+                                  <span className="text-[9px] font-bold text-white uppercase tracking-wider block">Submission Success!</span>
+                                  <span className="text-[7px] text-zinc-500 font-mono">Sending to Wall of Love...</span>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </div>
 
                           {/* Customer name / email Form */}
@@ -861,8 +900,20 @@ export default function LandingPage() {
 
                         {/* Center column: AI Summary panel & tags */}
                         <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-2 flex flex-col justify-between sm:col-span-1 text-left">
-                          <div className="space-y-1">
-                            <span className="text-[8px] font-black text-[#8677FF] uppercase tracking-wider block">AI Analysis Summary</span>
+                          <div className="space-y-1 relative">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[8px] font-black text-[#8677FF] uppercase tracking-wider block">AI Analysis Summary</span>
+                              {showSparkle && (
+                                <motion.span
+                                  initial={{ scale: 0, opacity: 0 }}
+                                  animate={{ scale: [0, 1.4, 1], opacity: [0, 1, 0.8] }}
+                                  transition={{ duration: 1.2 }}
+                                  className="text-brand-teal"
+                                >
+                                  <Sparkles className="w-3 h-3" />
+                                </motion.span>
+                              )}
+                            </div>
                             <div className="bg-zinc-950 border border-border-primary/60 p-2 rounded text-[8px] font-mono text-slate-300 min-h-[65px] leading-relaxed">
                               {typedText}
                               <span className="w-1 h-2.5 bg-brand-teal inline-block ml-0.5 animate-pulse" />
@@ -1020,46 +1071,82 @@ export default function LandingPage() {
                               animate={{ opacity: 1 }}
                               className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-grow items-center"
                             >
-                              {/* Card 1: Float up-and-down animation */}
-                              <motion.div 
-                                animate={{ y: [0, -6, 0] }}
-                                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                                className="bg-zinc-950 border border-zinc-900 p-3.5 rounded-xl space-y-2.5 flex flex-col justify-between text-left shadow-lg hover:border-brand-emerald/45 transition duration-300 group cursor-pointer h-[135px]"
-                              >
-                                <div className="space-y-1">
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex space-x-0.5 text-amber-400 text-[8px]">
-                                      {Array.from({ length: 5 }).map((_, i) => (
-                                        <Star key={i} className="w-2 h-2 fill-current" />
-                                      ))}
-                                    </div>
-                                    <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[6px] font-black uppercase px-1 py-0.2 rounded">
-                                      Positive
-                                    </span>
-                                  </div>
-                                  <p className="text-[10px] leading-relaxed text-slate-300 italic group-hover:text-white transition line-clamp-3">
-                                    "Setup took under 15 minutes. Our onboarding speed doubled instantly!"
-                                  </p>
-                                </div>
-                                <div className="flex items-center space-x-2 pt-1.5 border-t border-zinc-900/60">
-                                  <img 
-                                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50" 
-                                    alt="Sarah Jenkins"
-                                    className="w-5 h-5 rounded-full object-cover border border-zinc-800"
-                                  />
-                                  <div className="text-left leading-none">
-                                    <span className="text-[9px] font-bold text-white block">Sarah Jenkins</span>
-                                    <span className="text-[7px] text-zinc-500 block mt-0.5">SaaS Founder</span>
-                                  </div>
-                                </div>
-                              </motion.div>
+                              {/* Card 1: Fly in from top-left, land with glow and heart, then float */}
+                               <motion.div 
+                                 layout
+                                 initial={{ 
+                                   x: -160, 
+                                   y: -160, 
+                                   scale: 0.85,
+                                   opacity: 0,
+                                   rotate: -8
+                                 }}
+                                 animate={{ 
+                                   x: 0, 
+                                   y: 0, 
+                                   scale: 1,
+                                   opacity: 1,
+                                   rotate: 0
+                                 }}
+                                 transition={{ 
+                                   duration: 1.1, 
+                                   ease: [0.16, 1, 0.3, 1],
+                                   delay: 0.2
+                                 }}
+                                 className="bg-zinc-950 border border-zinc-900 p-3.5 rounded-xl space-y-2.5 flex flex-col justify-between text-left shadow-lg hover:border-brand-emerald/45 transition duration-300 group cursor-pointer h-[135px] relative overflow-hidden"
+                               >
+                                 {/* Floating heart specific to this landing card */}
+                                 <motion.div
+                                   initial={{ y: 20, opacity: 0, scale: 0.6 }}
+                                   animate={{ y: -60, opacity: [0, 1, 0], scale: [0.6, 1.2, 0.8] }}
+                                   transition={{ delay: 1.3, duration: 2, ease: "easeOut" }}
+                                   className="absolute top-2 right-4 text-brand-emerald text-sm pointer-events-none z-10"
+                                  >
+                                    ❤️
+                                  </motion.div>
 
-                              {/* Card 2: Offset float animation */}
-                              <motion.div 
-                                animate={{ y: [0, 6, 0] }}
-                                transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-                                className="bg-zinc-950 border border-zinc-900 p-3.5 rounded-xl space-y-2.5 flex flex-col justify-between text-left shadow-lg hover:border-brand-teal/45 transition duration-300 group cursor-pointer h-[135px]"
-                              >
+                                 {/* Glow Border Overlay that fades out after 1.2s */}
+                                 <motion.div
+                                   initial={{ opacity: 0.9 }}
+                                   animate={{ opacity: 0 }}
+                                   transition={{ delay: 1.3, duration: 1.0 }}
+                                   className="absolute inset-0 rounded-xl border border-[#8677FF] pointer-events-none shadow-[0_0_15px_rgba(108,92,255,0.45)] z-10"
+                                 />
+                                 <div className="space-y-1">
+                                   <div className="flex items-center justify-between">
+                                     <div className="flex space-x-0.5 text-amber-400 text-[8px]">
+                                       {Array.from({ length: 5 }).map((_, i) => (
+                                         <Star key={i} className="w-2.5 h-2.5 fill-current" />
+                                       ))}
+                                     </div>
+                                     <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[6px] font-black uppercase px-1 py-0.2 rounded">
+                                       Positive
+                                     </span>
+                                   </div>
+                                   <p className="text-[10px] leading-relaxed text-slate-300 italic group-hover:text-white transition line-clamp-3">
+                                     "Setup took under 15 minutes. Our onboarding speed doubled instantly!"
+                                   </p>
+                                 </div>
+                                 <div className="flex items-center space-x-2 pt-1.5 border-t border-zinc-900/60">
+                                   <img 
+                                     src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50" 
+                                     alt="Sarah Jenkins"
+                                     className="w-5 h-5 rounded-full object-cover border border-zinc-800"
+                                   />
+                                   <div className="text-left leading-none">
+                                     <span className="text-[9px] font-bold text-white block">Sarah Jenkins</span>
+                                     <span className="text-[7px] text-zinc-500 block mt-0.5">SaaS Founder</span>
+                                   </div>
+                                 </div>
+                               </motion.div>
+
+                               {/* Card 2: Offset float animation with layout shifting */}
+                               <motion.div 
+                                 layout
+                                 animate={{ y: [0, 6, 0] }}
+                                 transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
+                                 className="bg-zinc-950 border border-zinc-900 p-3.5 rounded-xl space-y-2.5 flex flex-col justify-between text-left shadow-lg hover:border-brand-teal/45 transition duration-300 group cursor-pointer h-[135px]"
+                               >
                                 <div className="space-y-1">
                                   <div className="flex items-center justify-between">
                                     <div className="flex space-x-0.5 text-amber-400 text-[8px]">
