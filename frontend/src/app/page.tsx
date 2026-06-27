@@ -572,53 +572,78 @@ export default function LandingPage() {
             <SpotlightCard className="p-6 rounded-2xl shadow-2xl flex flex-col gap-6 relative min-h-[460px]" glowColor="rgba(108, 92, 255, 0.1)">
               <div className="absolute top-0 right-0 w-24 h-24 bg-brand-emerald/5 rounded-full blur-xl pointer-events-none" />
               
-              {/* Window Header: Window Controls & Interactive Pills */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-primary/50 pb-4">
-                {/* Window Dots */}
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
+              {/* Window Header: Window Controls & Premium Connected Workflow Indicator */}
+              <div className="flex flex-col gap-4 border-b border-border-primary/50 pb-4">
+                {/* Window Dots & Status */}
+                <div className="flex items-center justify-between select-none">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                  </div>
+                  <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">Interactive Sandbox Workflow</span>
                 </div>
                 
-                {/* Product Navigation Tabs - Premium Rounded Pills with smooth sliding underline & workflow progress indicators */}
-                <div className="bg-[#09090B] border border-border-primary/80 p-1.5 rounded-full flex items-center space-x-1 sm:space-x-1.5 shadow-inner relative z-10">
-                  {[
-                    { id: 'recorder', label: '① Collect' },
-                    { id: 'dashboard', label: '② Manage' },
-                    { id: 'widget', label: '③ Showcase' }
-                  ].map((tab, idx) => (
-                    <React.Fragment key={tab.id}>
-                      {idx > 0 && (
-                        <span className="text-zinc-700 text-[10px] select-none font-bold">→</span>
-                      )}
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => handleHeroTabChange(tab.id as any)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            handleHeroTabChange(tab.id as any);
-                          }
-                        }}
-                        className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-colors duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-emerald/50 ${
-                          heroTab === tab.id
-                            ? 'text-white'
-                            : 'text-zinc-500 hover:text-zinc-300'
-                        }`}
-                        aria-label={`Show ${tab.label}`}
-                      >
-                        {heroTab === tab.id && (
-                          <motion.span
-                            layoutId="heroTabActive"
-                            className="absolute inset-0 bg-gradient-to-r from-brand-emerald to-brand-teal rounded-full -z-10 shadow-[0_0_15px_rgba(16,185,129,0.45)]"
-                            transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                          />
+                {/* Premium Workflow Navigation Indicator Row */}
+                <div className="w-full flex items-center justify-center overflow-x-auto py-2 px-1 scrollbar-none">
+                  <div className="flex items-center space-x-2 sm:space-x-4 flex-nowrap z-10 relative">
+                    {[
+                      { id: 'recorder', label: '① 🎥 Collect' },
+                      { id: 'dashboard', label: '② 📊 Manage' },
+                      { id: 'widget', label: '③ 💖 Showcase' }
+                    ].map((tab, idx) => (
+                      <React.Fragment key={tab.id}>
+                        {idx > 0 && (
+                          <>
+                            {/* Mobile Connector Arrow */}
+                            <span className="sm:hidden text-zinc-700 text-xs font-black select-none">→</span>
+                            
+                            {/* Desktop Glowing Animated SVG Connector */}
+                            <div className="hidden sm:block w-12 h-2 relative select-none">
+                              <svg className="w-full h-full overflow-visible" viewBox="0 0 48 8">
+                                <line x1="0" y1="4" x2="48" y2="4" stroke="#27272A" strokeWidth="2" strokeDasharray="3 3" />
+                                {((idx === 1 && heroTab === 'recorder') || (idx === 2 && heroTab === 'dashboard')) && (
+                                  <motion.line 
+                                    x1="0" y1="4" x2="48" y2="4" 
+                                    stroke="url(#connectorGlow)" 
+                                    strokeWidth="2.5" 
+                                    initial={{ strokeDasharray: "8 40", strokeDashoffset: 48 }}
+                                    animate={{ strokeDashoffset: [48, -48] }}
+                                    transition={{ repeat: Infinity, duration: 1.3, ease: "linear" }}
+                                  />
+                                )}
+                                <defs>
+                                  <linearGradient id="connectorGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="transparent" />
+                                    <stop offset="50%" stopColor="#8677FF" />
+                                    <stop offset="100%" stopColor="transparent" />
+                                  </linearGradient>
+                                </defs>
+                              </svg>
+                            </div>
+                          </>
                         )}
-                        <span>{tab.label}</span>
-                      </motion.button>
-                    </React.Fragment>
-                  ))}
+                        <motion.button
+                          whileHover={{ scale: 1.06, y: -2 }}
+                          whileTap={{ scale: 0.96 }}
+                          onClick={() => handleHeroTabChange(tab.id as any)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              handleHeroTabChange(tab.id as any);
+                            }
+                          }}
+                          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8677FF]/50 ${
+                            heroTab === tab.id
+                              ? 'bg-gradient-to-r from-[#6C5CFF] to-[#8677FF] border border-[#8677FF]/40 text-white shadow-[0_0_15px_rgba(108,92,255,0.45)] scale-[1.03]'
+                              : 'bg-white/5 border border-white/10 text-white/70 hover:text-white backdrop-blur-md'
+                          }`}
+                          aria-label={`Show step ${idx + 1}`}
+                        >
+                          <span>{tab.label}</span>
+                        </motion.button>
+                      </React.Fragment>
+                    ))}
+                  </div>
                 </div>
               </div>
 
