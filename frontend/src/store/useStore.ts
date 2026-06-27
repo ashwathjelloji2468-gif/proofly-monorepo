@@ -109,6 +109,37 @@ export interface StaticPage {
   updatedAt: string;
 }
 
+export interface RoadmapItem {
+  id: string;
+  title: string;
+  desc: string;
+  status: 'planned' | 'in_progress' | 'under_review' | 'completed';
+  category: 'AI' | 'Core' | 'Integrations';
+  priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  estimatedRelease: string;
+  progress: number;
+  tags: string[];
+  lastUpdated: string;
+}
+
+export interface SupportTicket {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  category: string;
+  priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  message: string;
+  status: 'OPEN' | 'PENDING' | 'CLOSED';
+  createdAt: string;
+  replies: {
+    id: string;
+    author: string;
+    message: string;
+    createdAt: string;
+  }[];
+}
+
 interface AppState {
   user: User | null;
   fetchStaticPage: (slug: string) => Promise<StaticPage | null>;
@@ -142,6 +173,15 @@ interface AppState {
   
   // Search actions
   searchTestimonials: (query: string) => SearchResult[];
+
+  // Roadmap & Support State
+  roadmapItems: RoadmapItem[];
+  supportTickets: SupportTicket[];
+  createRoadmapItem: (item: Omit<RoadmapItem, 'id' | 'lastUpdated'>) => void;
+  updateRoadmapItemStatus: (id: string, status: RoadmapItem['status']) => void;
+  createSupportTicket: (ticket: Omit<SupportTicket, 'id' | 'status' | 'createdAt' | 'replies'>) => void;
+  addTicketReply: (ticketId: string, message: string) => void;
+  closeTicket: (ticketId: string) => void;
 
   // Data sync actions
   fetchUser: () => Promise<void>;
@@ -514,10 +554,63 @@ const initialTestimonials: Testimonial[] = [
   }
 ];
 
+const initialRoadmapItems: RoadmapItem[] = [
+  {
+    id: 'road-1',
+    title: 'Self-serve white label branding',
+    desc: 'Allow users to bind custom domain URLs (e.g. reviews.domain.com) and serve collectors with full brand white-labeling.',
+    status: 'in_progress',
+    category: 'Core',
+    priority: 'HIGH',
+    estimatedRelease: 'Q3 2026',
+    progress: 75,
+    tags: ['white-label', 'custom-domains'],
+    lastUpdated: '2026-06-27T12:00:00Z'
+  },
+  {
+    id: 'road-2',
+    title: 'AI Video Transcription & Summaries',
+    desc: 'Automatically transcribe incoming video reviews and extract summaries, key highlights, and feature-attribution tags.',
+    status: 'completed',
+    category: 'AI',
+    priority: 'HIGH',
+    estimatedRelease: 'Released',
+    progress: 100,
+    tags: ['transcription', 'summaries'],
+    lastUpdated: '2026-06-26T12:00:00Z'
+  },
+  {
+    id: 'road-3',
+    title: 'Shopify Checkout Badge Integration',
+    desc: 'Create direct checkout badge connectors to display product-specific ratings inside Shopify merchant stores.',
+    status: 'planned',
+    category: 'Integrations',
+    priority: 'MEDIUM',
+    estimatedRelease: 'Q4 2026',
+    progress: 10,
+    tags: ['shopify', 'e-commerce'],
+    lastUpdated: '2026-06-27T10:00:00Z'
+  },
+  {
+    id: 'road-4',
+    title: 'SAML Single Sign-On (SSO)',
+    desc: 'Enterprise security auth mapping to support Okta, Google Workspace, and Microsoft Azure integrations.',
+    status: 'under_review',
+    category: 'Core',
+    priority: 'HIGH',
+    estimatedRelease: 'Q3 2026',
+    progress: 40,
+    tags: ['sso', 'enterprise-security'],
+    lastUpdated: '2026-06-27T08:00:00Z'
+  }
+];
+
 export const useStore = create<AppState>((set, get) => ({
   user: null, // start as null so layout can trigger refresh if token exists
   collections: initialCollections, // default fallbacks
   testimonials: initialTestimonials, // default fallbacks
+  roadmapItems: initialRoadmapItems,
+  supportTickets: [],
   isLoading: false,
 
 
@@ -1579,5 +1672,74 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (err) {
       console.error('Fetch approved testimonials failed:', err);
     }
+  },
+
+  createRoadmapItem: (item) => {
+    const newItem: RoadmapItem = {
+      ...item,
+      id: `road-${Date.now()}`,
+      lastUpdated: new Date().toISOString()
+    };
+    set((state) => ({
+      roadmapItems: [newItem, ...state.roadmapItems]
+    }));
+  },
+
+  updateRoadmapItemStatus: (id, status) => {
+    set((state) => ({
+      roadmapItems: state.roadmapItems.map((item) => 
+        item.id === id ? { ...item, status, lastUpdated: new Date().toISOString() } : item
+      )
+    }));
+  },
+
+  createSupportTicket: (ticket) => {
+    const newTicket: SupportTicket = {
+      ...ticket,
+      id: `ticket-${Date.now()}`,
+      status: 'OPEN',
+      createdAt: new Date().toISOString(),
+      replies: []
+    };
+    set((state) => ({
+      supportTickets: [newTicket, ...state.supportTickets]
+    }));
+  },
+
+  addTicketReply: (ticketId, message) => {
+    set((state) => ({
+      supportTickets: state.supportTickets.map((t) => {
+        if (t.id === ticketId) {
+          const newReply = {
+            id: `reply-${Date.now()}`,
+            author: 'You',
+            message,
+            createdAt: new Date().toISOString()
+          };
+          
+          const autoReply = {
+            id: `reply-auto-${Date.now() + 500}`,
+            author: 'Proofly Support Desk',
+            message: `Thank you for your update. We have logged these details under category "${t.category}" with priority "${t.priority}". An agent will review and follow up shortly.`,
+            createdAt: new Date(Date.now() + 1000).toISOString()
+          };
+
+          return {
+            ...t,
+            status: 'PENDING' as const,
+            replies: [...t.replies, newReply, autoReply]
+          };
+        }
+        return t;
+      })
+    }));
+  },
+
+  closeTicket: (ticketId) => {
+    set((state) => ({
+      supportTickets: state.supportTickets.map((t) => 
+        t.id === ticketId ? { ...t, status: 'CLOSED' as const } : t
+      )
+    }));
   }
 }));
