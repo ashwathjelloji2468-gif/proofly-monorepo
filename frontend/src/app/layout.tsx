@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GlobalBackground } from "@/components/GlobalBackground";
 import { SupportChatbot } from "@/components/SupportChatbot";
+import { CookieConsent } from "@/components/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <GlobalBackground />
         {children}
         <SupportChatbot />
+        <CookieConsent />
       </body>
     </html>
   );
