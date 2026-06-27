@@ -150,7 +150,7 @@ export function Navbar() {
     { name: '📈 Attributions & Analytics', description: 'Measure conversions and play duration rates', path: '/product/analytics' },
     { name: '🏷️ Pricing Plans', description: 'Compare Free, Growth, and Premium tiers', path: '/#pricing', id: 'pricing' },
     { name: '📚 Product Documentation', description: 'API reference guides and setup manuals', path: '/docs' },
-    { name: '🔌 REST API References', description: 'Interact with Proofly programmatically', path: '/docs/api' },
+    { name: '🔌 REST API References', description: 'Interact with Proofly programmatically', path: '/developers/api' },
     { name: '🚀 Features Changelog', description: 'See what has been newly updated', path: '/changelog' },
     { name: '✍️ Platform Blog', description: 'Tips and tricks to boost sales conversions', path: '/blog' },
     { name: '❓ Frequently Asked Questions', description: 'General client support FAQ', path: '/#faq', id: 'faq' }
@@ -385,7 +385,7 @@ export function Navbar() {
                   >
                     {[
                       { icon: <FileCode className="w-3.5 h-3.5" />, title: 'Documentation', path: '/docs' },
-                      { icon: <Code className="w-3.5 h-3.5" />, title: 'Developer API', path: '/docs/api' },
+                      { icon: <Code className="w-3.5 h-3.5" />, title: 'Developer API', path: '/developers/api' },
                       { icon: <TrendingUp className="w-3.5 h-3.5" />, title: 'Integrations', path: '/dashboard' },
                       { icon: <Map className="w-3.5 h-3.5" />, title: 'Product Roadmap', path: '/roadmap' },
                       { icon: <History className="w-3.5 h-3.5" />, title: 'Changelog updates', path: '/changelog' },
