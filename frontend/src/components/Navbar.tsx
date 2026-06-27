@@ -143,9 +143,11 @@ export function Navbar() {
 
   // Command palette navigation entries
   const commandPaletteItems = [
-    { name: '🎥 Collect Testimonials', description: 'Interactive recording tool settings', path: '/#features', id: 'features' },
-    { name: '📊 AI Workspace', description: 'Testimonial inbox management dashboard', path: '/dashboard' },
-    { name: '💖 Wall of Love', description: 'Widgets and custom wall displays', path: '/#showcase', id: 'showcase' },
+    { name: '🎥 Collect Testimonials', description: 'Interactive recording tool settings', path: '/product/collect' },
+    { name: '📊 AI Workspace', description: 'Testimonial inbox management dashboard', path: '/product/ai-workspace' },
+    { name: '💖 Wall of Love', description: 'Widgets and custom wall displays', path: '/product/wall-of-love' },
+    { name: '🔌 Embed Code Snippets', description: 'Framework scripts for HTML, React, Next.js', path: '/product/embeds' },
+    { name: '📈 Attributions & Analytics', description: 'Measure conversions and play duration rates', path: '/product/analytics' },
     { name: '🏷️ Pricing Plans', description: 'Compare Free, Growth, and Premium tiers', path: '/#pricing', id: 'pricing' },
     { name: '📚 Product Documentation', description: 'API reference guides and setup manuals', path: '/docs' },
     { name: '🔌 REST API References', description: 'Interact with Proofly programmatically', path: '/docs/api' },
@@ -246,13 +248,13 @@ export function Navbar() {
                     className="absolute top-10 left-1/2 -translate-x-1/2 bg-[#0d0e19]/95 backdrop-blur-xl border border-white/[0.08] p-4 rounded-2xl w-[480px] grid grid-cols-2 gap-3 shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
                   >
                     {[
-                      { icon: <Video className="w-4 h-4 text-[#8677FF]" />, title: '🎥 Collect Testimonials', desc: 'Gather rich feedback easily.', id: 'features' },
-                      { icon: <LayoutDashboard className="w-4 h-4 text-brand-emerald" />, title: '📊 AI Workspace', desc: 'AI summary curation suite.', path: '/dashboard' },
-                      { icon: <Heart className="w-4 h-4 text-red-500" />, title: '💖 Wall of Love', desc: 'Beautiful social proof grids.', id: 'showcase' },
-                      { icon: <Sparkles className="w-4 h-4 text-brand-teal" />, title: '🤖 AI Insights', desc: 'Autodetect feedback sentiment.', path: '/dashboard' },
-                      { icon: <Code className="w-4 h-4 text-purple-400" />, title: '🔌 Embeds', desc: 'Single-line copy HTML display.', path: '/dashboard' },
-                      { icon: <TrendingUp className="w-4 h-4 text-yellow-400" />, title: '📈 Analytics', desc: 'Measure conversion lift stats.', path: '/dashboard' }
-                    ].map((item, idx) => (
+                      { icon: <Video className="w-4 h-4 text-[#8677FF]" />, title: '🎥 Collect Testimonials', desc: 'Gather rich feedback easily.', path: '/product/collect' },
+                      { icon: <LayoutDashboard className="w-4 h-4 text-brand-emerald" />, title: '📊 AI Workspace', desc: 'AI summary curation suite.', path: '/product/ai-workspace' },
+                      { icon: <Heart className="w-4 h-4 text-red-500" />, title: '💖 Wall of Love', desc: 'Beautiful social proof grids.', path: '/product/wall-of-love' },
+                      { icon: <Sparkles className="w-4 h-4 text-brand-teal" />, title: '🤖 AI Insights', desc: 'Autodetect feedback sentiment.', path: '/product/ai-workspace' },
+                      { icon: <Code className="w-4 h-4 text-purple-400" />, title: '🔌 Embeds', desc: 'Single-line copy HTML display.', path: '/product/embeds' },
+                      { icon: <TrendingUp className="w-4 h-4 text-yellow-400" />, title: '📈 Analytics', desc: 'Measure conversion lift stats.', path: '/product/analytics' }
+                    ].map((item: any, idx) => (
                       <Link 
                         key={idx}
                         href={item.path || `/#${item.id}`}
