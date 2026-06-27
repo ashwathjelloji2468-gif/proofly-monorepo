@@ -520,9 +520,9 @@ export default function LandingPage() {
               desc: 'Filter customer database reviews instantly using natural language vector queries. Find reviews about specific topics.'
             },
             {
-              icon: <Cpu className="w-5 h-5 text-brand-teal" />,
-              title: 'AI Insights Dashboard',
-              desc: 'Auto-detect customer praise themes, keywords clouds, sentiment trends, and common complaints logs.'
+              icon: <Cpu className="w-5 h-5 text-brand-teal animate-pulse" />,
+              title: 'AI Testimonial Amplifier',
+              desc: 'Proofly automatically analyzes reviews, extracts the most persuasive hooks, drafts ready-to-share social posts, and recommends high-conversion placements.'
             },
             {
               icon: <Terminal className="w-5 h-5 text-brand-emerald" />,
