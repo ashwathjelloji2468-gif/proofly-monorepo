@@ -330,7 +330,7 @@ export default function LandingPage() {
       <Navbar />
 
       {/* HERO SECTION */}
-      <section className="max-w-7xl mx-auto px-6 pt-24 pb-16 relative w-full">
+      <section id="home" className="max-w-7xl mx-auto px-6 pt-24 pb-16 relative w-full">
         
         {/* Floating Avatars in Hero Background */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden select-none -z-10">
