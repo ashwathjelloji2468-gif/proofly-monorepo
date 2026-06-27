@@ -660,6 +660,16 @@ export default function LandingPage() {
                       transition={{ duration: 0.28, ease: "easeOut" }}
                       className="space-y-4 text-left relative"
                     >
+                      {/* Outcome Text Block */}
+                      <div className="space-y-1 select-none">
+                        <h3 className="text-sm sm:text-base font-extrabold text-white leading-tight">
+                          Capture customer testimonials in under 60 seconds.
+                        </h3>
+                        <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                          No downloads. No complicated setup. Simply send a link and let customers record high-quality video or text testimonials from any device.
+                        </p>
+                      </div>
+
                       {/* Animated Cursor Pointer simulating interaction */}
                       <motion.div 
                         initial={{ x: 260, y: 220, opacity: 0 }}
@@ -684,7 +694,7 @@ export default function LandingPage() {
                       </motion.div>
 
                       {/* Browser Frame Mockup */}
-                      <div className="bg-[#09090B] border border-border-primary rounded-xl overflow-hidden flex flex-col justify-between p-4 relative min-h-[300px]">
+                      <div className="bg-[#09090B] border border-border-primary rounded-xl overflow-hidden flex flex-col justify-between p-4 relative min-h-[220px]">
                         
                         {/* Top Form Header with Space Brand */}
                         <div className="flex items-center justify-between border-b border-border-primary/50 pb-2">
@@ -770,9 +780,16 @@ export default function LandingPage() {
 
                       </div>
 
-                      <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
-                        "Capture testimonials in under 60 seconds."
-                      </p>
+                      {/* Outcome Footer with CTA */}
+                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
+                        <span className="text-zinc-500 font-bold uppercase tracking-wider">Fast. Simple. Frictionless.</span>
+                        <Link href="/demo">
+                          <span className="text-[#8677FF] hover:text-[#9c8fff] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
+                            <span>Learn More</span>
+                            <span>→</span>
+                          </span>
+                        </Link>
+                      </div>
                     </motion.div>
                   )}
 
@@ -786,6 +803,16 @@ export default function LandingPage() {
                       transition={{ duration: 0.28, ease: "easeOut" }}
                       className="space-y-4 text-left"
                     >
+                      {/* Outcome Text Block */}
+                      <div className="space-y-1 select-none">
+                        <h3 className="text-sm sm:text-base font-extrabold text-white leading-tight">
+                          AI organizes, summarizes, and analyzes every testimonial automatically.
+                        </h3>
+                        <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                          Search testimonials instantly, identify customer sentiment, discover recurring themes, and uncover insights without reading every submission manually.
+                        </p>
+                      </div>
+
                       {/* Dashboard header statistics count-up */}
                       <div className="grid grid-cols-4 gap-3">
                         <div className="bg-[#09090B] border border-border-primary p-2.5 rounded-xl space-y-0.5 text-center">
@@ -809,7 +836,7 @@ export default function LandingPage() {
                       </div>
 
                       {/* Mock workspace view */}
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-stretch min-h-[175px]">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-stretch min-h-[160px]">
                         
                         {/* Left column: Inbox feed list & Search bar */}
                         <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-2 flex flex-col sm:col-span-1">
@@ -883,9 +910,16 @@ export default function LandingPage() {
 
                       </div>
 
-                      <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
-                        "AI automatically summarizes customer feedback."
-                      </p>
+                      {/* Outcome Footer with CTA */}
+                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
+                        <span className="text-zinc-500 font-bold uppercase tracking-wider">Organized. Intelligent. Time-saving.</span>
+                        <Link href="/demo">
+                          <span className="text-[#8677FF] hover:text-[#9c8fff] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
+                            <span>Learn More</span>
+                            <span>→</span>
+                          </span>
+                        </Link>
+                      </div>
                     </motion.div>
                   )}
 
@@ -899,6 +933,16 @@ export default function LandingPage() {
                       transition={{ duration: 0.28, ease: "easeOut" }}
                       className="space-y-4 text-left relative"
                     >
+                      {/* Outcome Text Block */}
+                      <div className="space-y-1 select-none">
+                        <h3 className="text-sm sm:text-base font-extrabold text-white leading-tight">
+                          Publish beautiful social proof that increases trust and conversions.
+                        </h3>
+                        <p className="text-[10.5px] text-slate-400 leading-relaxed">
+                          Embed testimonials anywhere on your website, create stunning Wall of Love pages, and turn authentic customer stories into powerful conversion assets.
+                        </p>
+                      </div>
+
                       {/* Rising hearts overlay */}
                       <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl z-20">
                         {[...Array(6)].map((_, i) => (
@@ -925,7 +969,7 @@ export default function LandingPage() {
                       </div>
 
                       {/* Mockup frame content with loading shimmer simulation */}
-                      <div className="bg-[#09090B] border border-border-primary rounded-xl p-4 min-h-[225px] flex flex-col justify-between relative overflow-hidden">
+                      <div className="bg-[#09090B] border border-border-primary rounded-xl p-4 min-h-[160px] flex flex-col justify-between relative overflow-hidden">
                         
                         {/* Company branding header */}
                         <div className="flex items-center justify-between border-b border-border-primary/50 pb-2 mb-2">
@@ -1049,9 +1093,16 @@ export default function LandingPage() {
 
                       </div>
 
-                      <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
-                        "Publish beautiful testimonial walls anywhere."
-                      </p>
+                      {/* Outcome Footer with CTA */}
+                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
+                        <span className="text-zinc-500 font-bold uppercase tracking-wider">Trust. Credibility. Growth.</span>
+                        <Link href="/demo">
+                          <span className="text-[#8677FF] hover:text-[#9c8fff] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
+                            <span>Learn More</span>
+                            <span>→</span>
+                          </span>
+                        </Link>
+                      </div>
                     </motion.div>
                   )}
 
