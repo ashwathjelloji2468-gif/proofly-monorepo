@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, 
   ArrowRight, 
   Play, 
+  Pause,
+  Volume2,
+  Maximize2,
   Check, 
   Video, 
   MessageSquare, 
@@ -57,15 +60,92 @@ export default function LandingPage() {
   const [reviewsCount, setReviewsCount] = useState(0);
   const [inboxCount, setInboxCount] = useState(0);
   const [typedText, setTypedText] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [widgetLoading, setWidgetLoading] = useState(true);
 
-  // 1. Auto-play loop to cycle tabs every 4.5 seconds
+  // Search input typing effect inside Manage tab
+  useEffect(() => {
+    if (heroTab !== 'dashboard') {
+      setSearchText("");
+      return;
+    }
+    const fullSearch = "setup";
+    let text = "";
+    let idx = 0;
+    const interval = setInterval(() => {
+      if (idx < fullSearch.length) {
+        text += fullSearch[idx];
+        setSearchText(text);
+        idx++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 250);
+    return () => clearInterval(interval);
+  }, [heroTab]);
+
+  // Skeletal loader delay inside Showcase tab
+  useEffect(() => {
+    if (heroTab !== 'widget') {
+      setWidgetLoading(true);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setWidgetLoading(false);
+    }, 900);
+    return () => clearTimeout(timeout);
+  }, [heroTab]);
+
+  // Simulated Video Player States
+  const [videoPlaying, setVideoPlaying] = useState(true);
+  const [videoTime, setVideoTime] = useState(0);
+
+  // Reset video when demo modal opens
+  useEffect(() => {
+    if (isDemoOpen) {
+      setVideoTime(0);
+      setVideoPlaying(true);
+    }
+  }, [isDemoOpen]);
+
+  // Video clock ticking up to 45 seconds
+  useEffect(() => {
+    if (!isDemoOpen || !videoPlaying) return;
+    const interval = setInterval(() => {
+      setVideoTime((prev) => (prev >= 45 ? 0 : prev + 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isDemoOpen, videoPlaying]);
+
+  const autoplayTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Clean up autoplay timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (autoplayTimeoutRef.current) clearTimeout(autoplayTimeoutRef.current);
+    };
+  }, []);
+
+  // Handler for custom tab changes (pauses autoplay, schedules resume after 8s)
+  const handleHeroTabChange = (tabId: 'recorder' | 'dashboard' | 'widget') => {
+    setHeroTab(tabId);
+    setAutoPlay(false);
+    if (autoplayTimeoutRef.current) {
+      clearTimeout(autoplayTimeoutRef.current);
+    }
+    autoplayTimeoutRef.current = setTimeout(() => {
+      setAutoPlay(true);
+    }, 8000);
+  };
+
+  // 1. Auto-play loop to cycle tabs every 4.5 seconds (Collect -> Manage -> Showcase)
   useEffect(() => {
     if (!autoPlay) return;
     const interval = setInterval(() => {
       setHeroTab((prev) => {
-        if (prev === 'dashboard') return 'recorder';
-        if (prev === 'recorder') return 'widget';
-        return 'dashboard';
+        if (prev === 'recorder') return 'dashboard';
+        if (prev === 'dashboard') return 'widget';
+        return 'recorder';
       });
     }, 4500);
     return () => clearInterval(interval);
@@ -501,26 +581,24 @@ export default function LandingPage() {
                   <div className="w-3 h-3 rounded-full bg-green-500" />
                 </div>
                 
-                {/* Product Navigation Tabs - Rounded Pills with smooth sliding underline */}
-                <div className="bg-[#09090B] border border-border-primary/80 p-1 rounded-full flex items-center space-x-1">
+                {/* Product Navigation Tabs - Premium Rounded Pills with smooth sliding underline */}
+                <div className="bg-[#09090B] border border-border-primary/80 p-1.5 rounded-full flex items-center space-x-1 shadow-inner relative z-10">
                   {[
                     { id: 'recorder', label: '🎥 Collect' },
                     { id: 'dashboard', label: '📊 Manage' },
                     { id: 'widget', label: '💖 Showcase' }
                   ].map((tab) => (
-                    <button
+                    <motion.button
                       key={tab.id}
-                      onClick={() => {
-                        setHeroTab(tab.id as any);
-                        setAutoPlay(false); // Pause auto-play on click
-                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleHeroTabChange(tab.id as any)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
-                          setHeroTab(tab.id as any);
-                          setAutoPlay(false);
+                          handleHeroTabChange(tab.id as any);
                         }
                       }}
-                      className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-colors duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-emerald/50 ${
+                      className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-colors duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-emerald/50 ${
                         heroTab === tab.id
                           ? 'text-white'
                           : 'text-zinc-500 hover:text-zinc-300'
@@ -530,87 +608,137 @@ export default function LandingPage() {
                       {heroTab === tab.id && (
                         <motion.span
                           layoutId="heroTabActive"
-                          className="absolute inset-0 bg-brand-emerald rounded-full -z-10 shadow-md shadow-brand-emerald/20"
-                          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                          className="absolute inset-0 bg-gradient-to-r from-brand-emerald to-brand-teal rounded-full -z-10 shadow-[0_0_15px_rgba(16,185,129,0.45)]"
+                          transition={{ type: 'spring', stiffness: 350, damping: 25 }}
                         />
                       )}
                       <span>{tab.label}</span>
-                    </button>
+                    </motion.button>
                   ))}
                 </div>
               </div>
 
-              {/* FIXED WRAPPER WITH FADE + SLIGHT SCALE TRANSITIONS */}
-              <div className="relative flex-1 flex flex-col justify-center min-h-[340px]">
+              <div className="relative flex-1 flex flex-col justify-center min-h-[350px]">
                 <AnimatePresence mode="wait">
                   
-                  {/* TAB 1: Collect (🎥 Recorder UI) */}
+                  {/* TAB 1: Collect (🎥 Collect) */}
                   {heroTab === 'recorder' && (
                     <motion.div 
                       key="recorder"
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.25 }}
-                      className="space-y-4 text-left"
+                      initial={{ opacity: 0, y: 10, scale: 0.99 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.99 }}
+                      transition={{ duration: 0.28, ease: "easeOut" }}
+                      className="space-y-4 text-left relative"
                     >
-                      {/* Simulated Recorder Viewport */}
-                      <div className="bg-[#09090B] border border-border-primary rounded-xl overflow-hidden aspect-square sm:aspect-video flex flex-col justify-between p-4 relative">
-                        {/* Pulsing REC Indicator Overlay */}
-                        <div className="flex items-center justify-between w-full z-10">
-                          <div className="bg-black/60 border border-zinc-800/80 backdrop-blur py-1 px-2.5 rounded-lg text-[9px] font-mono text-red-500 flex items-center space-x-1.5 select-none font-bold">
-                            <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-                            <span>REC: 00:{recordingSeconds < 10 ? `0${recordingSeconds}` : recordingSeconds}</span>
+                      {/* Animated Cursor Pointer simulating interaction */}
+                      <motion.div 
+                        initial={{ x: 260, y: 220, opacity: 0 }}
+                        animate={{ 
+                          x: [260, 110, 110, 110], 
+                          y: [220, 240, 240, 280], 
+                          opacity: [0, 1, 1, 0],
+                          scale: [1, 1, 0.9, 1]
+                        }}
+                        transition={{ 
+                          duration: 4.5, 
+                          repeat: Infinity, 
+                          repeatType: "loop", 
+                          times: [0, 0.4, 0.5, 0.6],
+                          ease: "easeInOut" 
+                        }}
+                        className="absolute z-40 pointer-events-none text-white text-xs drop-shadow-md"
+                      >
+                        <svg className="w-5 h-5 fill-white stroke-black stroke-1" viewBox="0 0 24 24">
+                          <path d="M4.5 3V17L9.5 12H16.5L4.5 3Z" />
+                        </svg>
+                      </motion.div>
+
+                      {/* Browser Frame Mockup */}
+                      <div className="bg-[#09090B] border border-border-primary rounded-xl overflow-hidden flex flex-col justify-between p-4 relative min-h-[300px]">
+                        
+                        {/* Top Form Header with Space Brand */}
+                        <div className="flex items-center justify-between border-b border-border-primary/50 pb-2">
+                          <span className="text-[10px] font-black text-brand-emerald bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase tracking-wider">
+                            Acme Space ➔ Review Submission
+                          </span>
+                          <span className="text-[8px] font-mono text-zinc-500">Video Recorder Active</span>
+                        </div>
+
+                        {/* Split Form & Video preview */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-2 flex-1 items-center">
+                          {/* Webcam Recorder Box */}
+                          <div className="bg-[#0c0d12] border border-zinc-900 rounded-lg aspect-square sm:aspect-auto sm:h-[135px] flex flex-col justify-between p-2 relative overflow-hidden">
+                            {/* REC pulse indicator */}
+                            <div className="flex items-center justify-between z-10">
+                              <div className="bg-black/60 border border-zinc-800/80 px-2 py-0.5 rounded text-[7px] font-mono text-red-500 flex items-center space-x-1 font-bold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
+                                <span>REC: 00:{recordingSeconds < 10 ? `0${recordingSeconds}` : recordingSeconds}</span>
+                              </div>
+
+                              {/* Audio Waveform */}
+                              <div className="flex items-end gap-0.5 h-2.5 overflow-hidden">
+                                {[2, 4, 3, 5, 2, 4, 3].map((h, i) => (
+                                  <motion.div
+                                    key={i}
+                                    animate={{ height: [`${h*15}%`, `${h*15 + 40}%`, `${h*15}%`] }}
+                                    transition={{ repeat: Infinity, duration: 0.8 + (i % 2) * 0.2, ease: "easeInOut" }}
+                                    className="w-0.5 bg-brand-emerald rounded-full"
+                                    style={{ height: `${h*15}%` }}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Center camera silhouette */}
+                            <div className="absolute inset-0 flex items-center justify-center opacity-75">
+                              <Video className="w-8 h-8 text-zinc-700 animate-pulse" />
+                            </div>
+
+                            {/* Custom Guiding Prompt Banner overlay */}
+                            <div className="bg-gradient-to-r from-brand-emerald/15 to-brand-teal/15 border border-brand-emerald/20 px-2 py-1 rounded text-[8px] text-left text-slate-300 z-10 leading-snug">
+                              ❓ <strong>Q1:</strong> What do you love about Acme?
+                            </div>
                           </div>
+
+                          {/* Customer name / email Form */}
+                          <div className="space-y-2 text-left">
+                            <div className="space-y-0.5">
+                              <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-wider block">Customer Name</span>
+                              <div className="w-full bg-[#18181B] border border-border-primary px-2.5 py-1.5 rounded text-[10px] text-white font-mono">
+                                Sarah Jenkins
+                              </div>
+                            </div>
+                            <div className="space-y-0.5">
+                              <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-wider block">Email Address</span>
+                              <div className="w-full bg-[#18181B] border border-border-primary px-2.5 py-1.5 rounded text-[10px] text-white font-mono truncate">
+                                sarah@devflow.io
+                              </div>
+                            </div>
+                            {/* Question Progress bar */}
+                            <div className="space-y-1 pt-1">
+                              <div className="flex justify-between text-[7px] text-zinc-500 font-bold uppercase">
+                                <span>Progress</span>
+                                <span>Question 1 of 3</span>
+                              </div>
+                              <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+                                <div className="w-1/3 h-full bg-brand-emerald" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Action buttons footer */}
+                        <div className="flex items-center justify-between border-t border-border-primary/50 pt-2">
+                          <span className="text-[8px] text-zinc-500 font-semibold">Webcam review collection preview</span>
                           
-                          {/* Animating Waveform */}
-                          <div className="flex items-center space-x-1.5 bg-black/60 border border-zinc-800/80 px-2 py-1 rounded-lg backdrop-blur select-none">
-                            <span className="text-[7px] text-zinc-400 font-mono">AUDIO</span>
-                            <div className="flex items-end gap-0.5 h-3 overflow-hidden">
-                              {[3, 5, 2, 4, 6, 3, 5].map((h, idx) => (
-                                <motion.div
-                                  key={idx}
-                                  animate={{ height: [`${h*15}%`, `${h*15 + 40}%`, `${h*15}%`] }}
-                                  transition={{ repeat: Infinity, duration: 0.8 + (idx % 2) * 0.2, ease: "easeInOut" }}
-                                  className="w-0.5 bg-brand-emerald rounded-full"
-                                  style={{ height: `${h*15}%` }}
-                                />
-                              ))}
-                            </div>
+                          {/* Record button */}
+                          <div className="flex items-center space-x-2 bg-[#18181B] border border-border-primary px-3 py-1 rounded-full text-[9px] font-bold text-slate-300">
+                            <span className="w-2.5 h-2.5 bg-red-600 rounded-full animate-ping" />
+                            <span>Stop Video</span>
                           </div>
                         </div>
 
-                        {/* Guiding Questions HUD Overlay */}
-                        <div className="absolute inset-x-4 top-14 bg-gradient-to-r from-brand-emerald/20 to-brand-teal/20 backdrop-blur-md border border-brand-emerald/30 p-3 rounded-lg z-10 text-left space-y-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
-                          <div className="flex items-center justify-between text-[8px] font-black text-brand-emerald uppercase tracking-wider">
-                            <span>Guiding Question 1 of 3</span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-ping" />
-                          </div>
-                          <p className="text-[10px] sm:text-xs font-bold text-white leading-normal">
-                            ❓ How does Proofly help your startup build conversion trust?
-                          </p>
-                          {/* Progress bar */}
-                          <div className="w-full h-1 bg-zinc-950 rounded-full overflow-hidden">
-                            <div className="w-1/3 h-full bg-brand-emerald" />
-                          </div>
-                        </div>
-
-                        {/* Camera stream placeholder image */}
-                        <div className="absolute inset-0 bg-[#0c0d12] flex items-center justify-center z-0">
-                          <div className="w-20 h-20 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center shadow-inner opacity-75">
-                            <Video className="w-8 h-8 text-zinc-700 animate-pulse" />
-                          </div>
-                        </div>
-
-                        {/* Recording Action HUD bottom row */}
-                        <div className="flex items-center justify-center w-full z-10">
-                          <div className="bg-black/60 border border-zinc-800/80 backdrop-blur p-2 rounded-full flex items-center space-x-3">
-                            <div className="w-8 h-8 rounded-full bg-red-600 hover:bg-red-700 cursor-pointer flex items-center justify-center transition border border-red-500 shadow shadow-red-900/30">
-                              <span className="w-3.5 h-3.5 bg-white rounded-sm" />
-                            </div>
-                            <span className="text-[10px] font-bold text-slate-300 pr-2">Stop Recording</span>
-                          </div>
-                        </div>
                       </div>
 
                       <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
@@ -619,81 +747,130 @@ export default function LandingPage() {
                     </motion.div>
                   )}
 
-                  {/* TAB 2: Manage (📊 Dashboard) */}
+                  {/* TAB 2: Manage (📊 Manage) */}
                   {heroTab === 'dashboard' && (
                     <motion.div 
                       key="dashboard"
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.25 }}
+                      initial={{ opacity: 0, y: 10, scale: 0.99 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.99 }}
+                      transition={{ duration: 0.28, ease: "easeOut" }}
                       className="space-y-4 text-left"
                     >
-                      {/* Dashboard demo counters with count-up animation */}
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
-                          <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Sentiment</span>
-                          <span className="text-sm font-black text-white flex items-center justify-center space-x-1">
-                            <span className="bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent">
-                              {sentimentScore}%
-                            </span>
+                      {/* Dashboard header statistics count-up */}
+                      <div className="grid grid-cols-4 gap-3">
+                        <div className="bg-[#09090B] border border-border-primary p-2.5 rounded-xl space-y-0.5 text-center">
+                          <span className="text-[7px] text-muted-foreground uppercase font-black tracking-wider block">Sentiment</span>
+                          <span className="text-xs font-black text-white bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent block">
+                            {sentimentScore}%
                           </span>
                         </div>
-                        <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
-                          <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Webcam Reviews</span>
-                          <span className="text-sm font-black text-white">{reviewsCount}</span>
+                        <div className="bg-[#09090B] border border-border-primary p-2.5 rounded-xl space-y-0.5 text-center">
+                          <span className="text-[7px] text-muted-foreground uppercase font-black tracking-wider block">Reviews</span>
+                          <span className="text-xs font-black text-white block">{reviewsCount}</span>
                         </div>
-                        <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
-                          <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Total Inbox</span>
-                          <span className="text-sm font-black text-white">{inboxCount}</span>
+                        <div className="bg-[#09090B] border border-border-primary p-2.5 rounded-xl space-y-0.5 text-center">
+                          <span className="text-[7px] text-muted-foreground uppercase font-black tracking-wider block">Total Inbox</span>
+                          <span className="text-xs font-black text-white block">{inboxCount}</span>
+                        </div>
+                        <div className="bg-[#09090B] border border-border-primary p-2.5 rounded-xl space-y-0.5 text-center">
+                          <span className="text-[7px] text-muted-foreground uppercase font-black tracking-wider block">Response</span>
+                          <span className="text-xs font-black text-white block">98%</span>
                         </div>
                       </div>
 
-                      {/* Inbox simulation card with typing effect */}
-                      <div className="bg-[#09090B] border border-border-primary rounded-xl p-4 space-y-3 relative overflow-hidden">
-                        <div className="flex items-center justify-between border-b border-border-primary/50 pb-2">
-                          <div className="flex items-center space-x-2">
-                            <span className="w-2 h-2 rounded-full bg-brand-emerald" />
-                            <span className="text-[9px] font-bold text-white uppercase tracking-wider">AI Analysis summary</span>
-                          </div>
-                          <span className="text-[8px] text-brand-emerald font-black bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase">
-                            Approved
-                          </span>
-                        </div>
+                      {/* Mock workspace view */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-stretch min-h-[175px]">
                         
-                        {/* Typing animation effect container */}
-                        <div className="min-h-[44px]">
-                          <p className="text-xs text-slate-300 leading-relaxed font-mono">
-                            {typedText}
-                            <span className="w-1.5 h-3 bg-brand-teal inline-block ml-0.5 animate-pulse" />
-                          </p>
+                        {/* Left column: Inbox feed list & Search bar */}
+                        <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-2 flex flex-col sm:col-span-1">
+                          {/* Search bar with typing effect */}
+                          <div className="bg-zinc-950 border border-border-primary px-2.5 py-1 rounded text-[9px] text-slate-300 font-mono flex items-center justify-between">
+                            <span className="truncate">{searchText || "search reviews..."}</span>
+                            <Search className="w-2.5 h-2.5 text-zinc-500" />
+                          </div>
+                          
+                          {/* Small list items */}
+                          <div className="space-y-1.5 flex-1 overflow-y-auto">
+                            <div className="bg-brand-emerald/5 border border-brand-emerald/30 p-1.5 rounded text-[8px] flex items-center justify-between">
+                              <span className="font-bold text-white truncate">Sarah Jenkins</span>
+                              <span className="text-[6px] text-brand-emerald font-black uppercase bg-brand-emerald/10 border border-brand-emerald/20 px-1 py-0.2 rounded">Positive</span>
+                            </div>
+                            <div className="bg-zinc-950 border border-border-primary/50 p-1.5 rounded text-[8px] flex items-center justify-between opacity-60">
+                              <span className="font-bold text-slate-400 truncate">James Cole</span>
+                              <span className="text-[6px] text-brand-teal font-black uppercase bg-brand-teal/10 border border-brand-teal/20 px-1 py-0.2 rounded">Video</span>
+                            </div>
+                          </div>
                         </div>
 
-                        {/* Keyword Cloud */}
-                        <div className="flex items-center gap-1.5 flex-wrap pt-2">
-                          <span className="text-[8px] bg-zinc-900 border border-border-primary px-2 py-0.5 rounded text-slate-400">#onboarding</span>
-                          <span className="text-[8px] bg-zinc-900 border border-border-primary px-2 py-0.5 rounded text-slate-400">#rest-api</span>
-                          <span className="text-[8px] bg-zinc-900 border border-border-primary px-2 py-0.5 rounded text-slate-400">#speed</span>
+                        {/* Center column: AI Summary panel & tags */}
+                        <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-2 flex flex-col justify-between sm:col-span-1 text-left">
+                          <div className="space-y-1">
+                            <span className="text-[8px] font-black text-[#8677FF] uppercase tracking-wider block">AI Analysis Summary</span>
+                            <div className="bg-zinc-950 border border-border-primary/60 p-2 rounded text-[8px] font-mono text-slate-300 min-h-[65px] leading-relaxed">
+                              {typedText}
+                              <span className="w-1 h-2.5 bg-brand-teal inline-block ml-0.5 animate-pulse" />
+                            </div>
+                          </div>
+
+                          {/* Keyword Cloud tags */}
+                          <div className="flex flex-wrap gap-1">
+                            <span className="text-[7px] bg-zinc-950 border border-border-primary/80 px-1.5 py-0.5 rounded text-slate-400">#onboarding</span>
+                            <span className="text-[7px] bg-zinc-950 border border-border-primary/80 px-1.5 py-0.5 rounded text-slate-400">#rest-api</span>
+                          </div>
                         </div>
+
+                        {/* Right column: SVG Line chart */}
+                        <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-1 text-left relative overflow-hidden flex flex-col justify-between sm:col-span-1">
+                          <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Conversion Lift</span>
+                          
+                          {/* SVG line chart */}
+                          <div className="flex-1 w-full h-10 relative pt-2">
+                            <svg className="w-full h-full overflow-visible" viewBox="0 0 100 40">
+                              <motion.path 
+                                d="M0,35 Q15,30 30,20 T60,15 T90,5" 
+                                fill="none" 
+                                stroke="url(#chartGrad)" 
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: 1 }}
+                                transition={{ duration: 1.5, ease: "easeInOut" }}
+                              />
+                              <defs>
+                                <linearGradient id="chartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                  <stop offset="0%" stopColor="#10B981" />
+                                  <stop offset="100%" stopColor="#8677FF" />
+                                </linearGradient>
+                              </defs>
+                            </svg>
+                          </div>
+                          <div className="flex justify-between text-[6px] text-zinc-500 font-mono">
+                            <span>Week 1</span>
+                            <span>Week 2</span>
+                            <span>Week 3</span>
+                          </div>
+                        </div>
+
                       </div>
 
                       <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
-                        Organize every testimonial and uncover customer insights with AI.
+                        Organize every testimonial and uncover customer insights powered by AI.
                       </p>
                     </motion.div>
                   )}
 
-                  {/* TAB 3: Showcase (💖 Wall of Love) */}
+                  {/* TAB 3: Showcase (💖 Showcase) */}
                   {heroTab === 'widget' && (
                     <motion.div 
                       key="widget"
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.25 }}
+                      initial={{ opacity: 0, y: 10, scale: 0.99 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.99 }}
+                      transition={{ duration: 0.28, ease: "easeOut" }}
                       className="space-y-4 text-left relative"
                     >
-                      {/* Rising hearts simulation */}
+                      {/* Rising hearts overlay */}
                       <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl z-20">
                         {[...Array(6)].map((_, i) => (
                           <motion.div
@@ -718,76 +895,128 @@ export default function LandingPage() {
                         ))}
                       </div>
 
-                      {/* Mini Wall of Love grid with floating animation */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Mockup frame content with loading shimmer simulation */}
+                      <div className="bg-[#09090B] border border-border-primary rounded-xl p-4 min-h-[225px] flex flex-col justify-between relative overflow-hidden">
                         
-                        {/* Testimonial Card 1 with subtle float */}
-                        <motion.div 
-                          animate={{ y: [0, -6, 0] }}
-                          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                          className="bg-[#09090B] border border-border-primary p-4 rounded-xl space-y-3 flex flex-col justify-between text-left shadow-lg hover:border-brand-emerald/40 transition duration-300 group cursor-pointer"
-                        >
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <div className="flex space-x-0.5 text-amber-400 text-[10px]">
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                  <Star key={i} className="w-2.5 h-2.5 fill-current" />
-                                ))}
-                              </div>
-                              <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[8px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider">
-                                Positive
-                              </span>
-                            </div>
-                            <p className="text-[11px] leading-relaxed text-slate-300 italic group-hover:text-white transition">
-                              "Setup took under 15 minutes. Our onboarding speed doubled instantly!"
-                            </p>
-                          </div>
-                          <div className="flex items-center space-x-2 pt-2 border-t border-border-primary/40">
-                            <img 
-                              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50" 
-                              alt="Sarah Jenkins"
-                              className="w-6 h-6 rounded-full object-cover border border-border-primary"
-                            />
-                            <div className="text-left leading-none">
-                              <span className="text-[10px] font-bold text-white block">Sarah Jenkins</span>
-                              <span className="text-[8px] text-zinc-500 block mt-0.5">SaaS Founder</span>
-                            </div>
-                          </div>
-                        </motion.div>
+                        {/* Company branding header */}
+                        <div className="flex items-center justify-between border-b border-border-primary/50 pb-2 mb-2">
+                          <span className="text-[9px] font-black text-white uppercase tracking-wider">
+                            🚀 Acme SaaS ➔ Testimonial Widget
+                          </span>
+                          <span className="text-[7px] text-zinc-500 font-mono">Embedded Wall of Love</span>
+                        </div>
 
-                        {/* Testimonial Card 2 with offset float */}
-                        <motion.div 
-                          animate={{ y: [0, 6, 0] }}
-                          transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-                          className="bg-[#09090B] border border-border-primary p-4 rounded-xl space-y-3 flex flex-col justify-between text-left shadow-lg hover:border-brand-teal/40 transition duration-300 group cursor-pointer"
-                        >
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <div className="flex space-x-0.5 text-amber-400 text-[10px]">
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                  <Star key={i} className="w-2.5 h-2.5 fill-current" />
-                                ))}
+                        <AnimatePresence mode="wait">
+                          {widgetLoading ? (
+                            /* SKELETON LOADER SCREEN */
+                            <motion.div 
+                              key="skeleton"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-grow items-center"
+                            >
+                              <div className="bg-zinc-950/60 border border-zinc-900 p-4 rounded-xl space-y-3 animate-pulse h-[125px] flex flex-col justify-between">
+                                <div className="space-y-2">
+                                  <div className="w-16 h-2 bg-zinc-800 rounded" />
+                                  <div className="w-full h-3 bg-zinc-800 rounded" />
+                                  <div className="w-2/3 h-3 bg-zinc-800 rounded" />
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-6 h-6 rounded-full bg-zinc-800" />
+                                  <div className="w-12 h-2 bg-zinc-800 rounded" />
+                                </div>
                               </div>
-                              <span className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 text-[8px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider">
-                                Video
-                              </span>
-                            </div>
-                            <p className="text-[11px] leading-relaxed text-slate-300 italic group-hover:text-white transition">
-                              "We increased conversion rates by 18% for our clients in week 1."
-                            </p>
-                          </div>
-                          <div className="flex items-center space-x-2 pt-2 border-t border-border-primary/40">
-                            <img 
-                              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50" 
-                              alt="James Cole"
-                              className="w-6 h-6 rounded-full object-cover border border-border-primary"
-                            />
-                            <div className="text-left leading-none">
-                              <span className="text-[10px] font-bold text-white block">James Cole</span>
-                              <span className="text-[8px] text-zinc-500 block mt-0.5">Agency Owner</span>
-                            </div>
-                          </div>
-                        </motion.div>
+                              <div className="bg-zinc-950/60 border border-zinc-900 p-4 rounded-xl space-y-3 animate-pulse h-[125px] flex flex-col justify-between">
+                                <div className="space-y-2">
+                                  <div className="w-16 h-2 bg-zinc-800 rounded" />
+                                  <div className="w-full h-3 bg-zinc-800 rounded" />
+                                  <div className="w-2/3 h-3 bg-zinc-800 rounded" />
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <div className="w-6 h-6 rounded-full bg-zinc-800" />
+                                  <div className="w-12 h-2 bg-zinc-800 rounded" />
+                                </div>
+                              </div>
+                            </motion.div>
+                          ) : (
+                            /* REAL WIDGET SCREEN WITH FLOATING AND HOVER INTERACTIONS */
+                            <motion.div 
+                              key="real-cards"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-grow items-center"
+                            >
+                              {/* Card 1: Float up-and-down animation */}
+                              <motion.div 
+                                animate={{ y: [0, -6, 0] }}
+                                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                                className="bg-zinc-950 border border-zinc-900 p-3.5 rounded-xl space-y-2.5 flex flex-col justify-between text-left shadow-lg hover:border-brand-emerald/45 transition duration-300 group cursor-pointer h-[135px]"
+                              >
+                                <div className="space-y-1">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex space-x-0.5 text-amber-400 text-[8px]">
+                                      {Array.from({ length: 5 }).map((_, i) => (
+                                        <Star key={i} className="w-2 h-2 fill-current" />
+                                      ))}
+                                    </div>
+                                    <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[6px] font-black uppercase px-1 py-0.2 rounded">
+                                      Positive
+                                    </span>
+                                  </div>
+                                  <p className="text-[10px] leading-relaxed text-slate-300 italic group-hover:text-white transition line-clamp-3">
+                                    "Setup took under 15 minutes. Our onboarding speed doubled instantly!"
+                                  </p>
+                                </div>
+                                <div className="flex items-center space-x-2 pt-1.5 border-t border-zinc-900/60">
+                                  <img 
+                                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50" 
+                                    alt="Sarah Jenkins"
+                                    className="w-5 h-5 rounded-full object-cover border border-zinc-800"
+                                  />
+                                  <div className="text-left leading-none">
+                                    <span className="text-[9px] font-bold text-white block">Sarah Jenkins</span>
+                                    <span className="text-[7px] text-zinc-500 block mt-0.5">SaaS Founder</span>
+                                  </div>
+                                </div>
+                              </motion.div>
+
+                              {/* Card 2: Offset float animation */}
+                              <motion.div 
+                                animate={{ y: [0, 6, 0] }}
+                                transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
+                                className="bg-zinc-950 border border-zinc-900 p-3.5 rounded-xl space-y-2.5 flex flex-col justify-between text-left shadow-lg hover:border-brand-teal/45 transition duration-300 group cursor-pointer h-[135px]"
+                              >
+                                <div className="space-y-1">
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex space-x-0.5 text-amber-400 text-[8px]">
+                                      {Array.from({ length: 5 }).map((_, i) => (
+                                        <Star key={i} className="w-2 h-2 fill-current" />
+                                      ))}
+                                    </div>
+                                    <span className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 text-[6px] font-black uppercase px-1 py-0.2 rounded">
+                                      Video
+                                    </span>
+                                  </div>
+                                  <p className="text-[10px] leading-relaxed text-slate-300 italic group-hover:text-white transition line-clamp-3">
+                                    "We increased conversion rates by 18% for our clients in week 1."
+                                  </p>
+                                </div>
+                                <div className="flex items-center space-x-2 pt-1.5 border-t border-zinc-900/60">
+                                  <img 
+                                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50" 
+                                    alt="James Cole"
+                                    className="w-5 h-5 rounded-full object-cover border border-zinc-800"
+                                  />
+                                  <div className="text-left leading-none">
+                                    <span className="text-[9px] font-bold text-white block">James Cole</span>
+                                    <span className="text-[7px] text-zinc-500 block mt-0.5">Agency Owner</span>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
 
                       </div>
 
@@ -1444,16 +1673,256 @@ export default function LandingPage() {
                   <X className="w-4 h-4" />
                 </button>
               </div>
-              <div className="aspect-video bg-black">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src="https://www.youtube.com/embed/cFdCzN7RYbw?autoplay=1"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+              <div className="aspect-video bg-black relative overflow-hidden flex flex-col justify-between select-none group/player">
+                {/* VIDEO DISPLAY AREA */}
+                <div className="flex-1 w-full h-full flex flex-col justify-center items-center p-6 relative">
+                  
+                  {/* Phase 1: Collect Testimonials (0s to 15s) */}
+                  {videoTime >= 0 && videoTime < 15 && (
+                    <motion.div 
+                      key="video-collect"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="w-full max-w-lg bg-[#09090B] border border-zinc-800 rounded-xl p-4 space-y-3 flex flex-col justify-between h-[230px] relative shadow-2xl"
+                    >
+                      {/* Top Header */}
+                      <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                        <span className="text-[10px] font-black text-brand-emerald bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase tracking-wider">
+                          🎥 Phase 1: Collect Testimonials
+                        </span>
+                        <div className="flex items-center space-x-1.5 text-[8px] font-mono text-zinc-500">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
+                          <span>WEBCAM ACTIVE</span>
+                        </div>
+                      </div>
+
+                      {/* Mockup Webcam split view */}
+                      <div className="grid grid-cols-2 gap-4 flex-1 items-stretch">
+                        {/* Simulated webcam feed overlay */}
+                        <div className="bg-[#0c0d12] border border-zinc-800 rounded-lg flex flex-col justify-between p-2 relative overflow-hidden">
+                          <div className="flex items-center justify-between text-[7px] text-zinc-500 font-mono z-10">
+                            <span className="text-red-500 font-black">REC: 00:08</span>
+                            <span>1080p HD</span>
+                          </div>
+                          
+                          {/* Face avatar placeholder */}
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+                              <Smile className="w-5 h-5 text-zinc-600 animate-bounce" />
+                            </div>
+                          </div>
+
+                          <div className="w-full flex justify-center z-10">
+                            <span className="text-[7px] font-bold text-slate-400 bg-black/60 px-2 py-0.5 rounded">Sarah Jenkins</span>
+                          </div>
+                        </div>
+
+                        {/* Customer Form Overlay */}
+                        <div className="space-y-2 flex flex-col justify-center text-left">
+                          <div className="space-y-1">
+                            <label className="text-[7px] font-bold text-zinc-500 uppercase">Reviewer Name</label>
+                            <div className="bg-zinc-950 border border-zinc-850 px-2 py-1 rounded text-[9px] text-white">
+                              Sarah Jenkins
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[7px] font-bold text-zinc-500 uppercase">Reviewer Email</label>
+                            <div className="bg-zinc-950 border border-zinc-850 px-2 py-1 rounded text-[9px] text-white truncate">
+                              sarah@devflow.io
+                            </div>
+                          </div>
+                          <div className="bg-brand-emerald/10 border border-brand-emerald/20 p-1.5 rounded text-[8px] text-slate-300">
+                            💡 <strong>Question:</strong> How fast was the setup?
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Caption */}
+                      <div className="text-[9px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2">
+                        "Collect video or text testimonials in under 60 seconds."
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Phase 2: Manage Inbox (15s to 30s) */}
+                  {videoTime >= 15 && videoTime < 30 && (
+                    <motion.div 
+                      key="video-manage"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="w-full max-w-lg bg-[#09090B] border border-zinc-800 rounded-xl p-4 space-y-3 flex flex-col justify-between h-[230px] relative shadow-2xl"
+                    >
+                      {/* Top Header */}
+                      <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                        <span className="text-[10px] font-black text-brand-teal bg-brand-teal/10 border border-brand-teal/20 px-2 py-0.5 rounded uppercase tracking-wider">
+                          📊 Phase 2: AI Management Dashboard
+                        </span>
+                        <span className="text-[8px] font-mono text-zinc-500">SENTIMENT: 99.4% POSITIVE</span>
+                      </div>
+
+                      {/* Inbox detail card */}
+                      <div className="bg-zinc-950 border border-zinc-850 p-3 rounded-lg space-y-2 flex-1 flex flex-col justify-center">
+                        <div className="flex items-center justify-between text-[9px] font-bold">
+                          <span className="text-white">Review from Sarah Jenkins (DevFlow)</span>
+                          <span className="text-brand-emerald uppercase text-[7px] border border-brand-emerald/20 bg-brand-emerald/10 px-1.5 py-0.5 rounded">AI Tagged</span>
+                        </div>
+                        
+                        {/* Auto summary typing effect */}
+                        <div className="bg-black border border-zinc-900 p-2 rounded text-[9px] font-mono text-slate-300 min-h-[36px]">
+                          {videoTime >= 18 ? "Sarah details the fast 15-minute onboarding configuration..." : "Analyzing review sentiment..."}
+                        </div>
+
+                        {/* Social Draft auto-generated */}
+                        <div className="bg-zinc-900/60 p-1.5 rounded flex items-center justify-between">
+                          <div className="text-[8px] text-zinc-400 font-mono truncate max-w-xs">
+                            𝕏 Draft: "Onboarding setup took under 15 minutes! Onboarding speed doubled..."
+                          </div>
+                          <span className="bg-brand-teal text-white text-[7px] font-black uppercase px-2 py-0.5 rounded shadow cursor-pointer">
+                            Copy Draft
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Caption */}
+                      <div className="text-[9px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2">
+                        "Organize every testimonial and discover customer insights powered by AI."
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Phase 3: Showcase Widgets (30s to 45s) */}
+                  {videoTime >= 30 && videoTime <= 45 && (
+                    <motion.div 
+                      key="video-showcase"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="w-full max-w-lg bg-[#09090B] border border-zinc-800 rounded-xl p-4 space-y-3 flex flex-col justify-between h-[230px] relative shadow-2xl overflow-hidden"
+                    >
+                      {/* Floating hearts animation */}
+                      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl z-20">
+                        {[...Array(5)].map((_, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ y: 200, opacity: 0 }}
+                            animate={{ y: 20, opacity: [0, 0.9, 0], x: Math.sin(idx) * 20 }}
+                            transition={{ repeat: Infinity, duration: 2.2 + idx * 0.4, delay: idx * 0.5 }}
+                            className="absolute text-brand-teal text-xs"
+                            style={{ left: `${20 + idx * 15}%` }}
+                          >
+                            ❤️
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Top Header */}
+                      <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                        <span className="text-[10px] font-black text-brand-emerald bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase tracking-wider">
+                          💖 Phase 3: Wall of Love Embedded Widget
+                        </span>
+                        <span className="text-[8px] font-mono text-[#8677FF] border border-[#8677FF]/20 bg-[#8677FF]/10 px-1.5 py-0.5 rounded">+24% CONVERSION LIFT</span>
+                      </div>
+
+                      {/* Mini Wall of Love grid */}
+                      <div className="grid grid-cols-2 gap-3 flex-1 items-center">
+                        <div className="bg-zinc-950 border border-zinc-850 p-2.5 rounded-lg space-y-1.5 text-left h-[100px] flex flex-col justify-between">
+                          <p className="text-[9px] leading-relaxed text-slate-300 italic">
+                            "Setup took under 15 minutes. Onboarding speed doubled!"
+                          </p>
+                          <div className="flex items-center space-x-1.5">
+                            <span className="text-[8px] font-bold text-white">Sarah Jenkins</span>
+                            <span className="text-[7px] text-zinc-500 font-mono">SaaS Founder</span>
+                          </div>
+                        </div>
+
+                        <div className="bg-zinc-950 border border-zinc-850 p-2.5 rounded-lg space-y-1.5 text-left h-[100px] flex flex-col justify-between">
+                          <p className="text-[9px] leading-relaxed text-slate-300 italic">
+                            "We increased conversion rates by 18% in our first week!"
+                          </p>
+                          <div className="flex items-center space-x-1.5">
+                            <span className="text-[8px] font-bold text-white">James Cole</span>
+                            <span className="text-[7px] text-zinc-500 font-mono">Agency Owner</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Caption */}
+                      <div className="text-[9px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2 z-10 relative">
+                        "Turn customer proof into trust that drives more conversions."
+                      </div>
+                    </motion.div>
+                  )}
+
+                </div>
+
+                {/* VIDEO PLAYER BOTTOM CONTROL BAR */}
+                <div className="bg-gradient-to-t from-black via-black/90 to-transparent p-4 pt-10 space-y-3 z-30">
+                  
+                  {/* Timeline Scrubber */}
+                  <div 
+                    onClick={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const clickX = e.clientX - rect.left;
+                      const width = rect.width;
+                      const clickPercent = clickX / width;
+                      setVideoTime(Math.min(Math.max(Math.round(clickPercent * 45), 0), 45));
+                      setVideoPlaying(false); // Pause auto clock on manual scrub
+                    }}
+                    className="w-full h-1 bg-zinc-700/80 cursor-pointer rounded-full relative group/scrub hover:h-1.5 transition-all duration-200"
+                  >
+                    {/* Active Progress */}
+                    <div 
+                      className="absolute inset-y-0 left-0 bg-brand-emerald rounded-full"
+                      style={{ width: `${(videoTime / 45) * 100}%` }}
+                    />
+                    
+                    {/* Handle */}
+                    <div 
+                      className="absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white border border-brand-emerald rounded-full opacity-0 group-hover/scrub:opacity-100 transition-opacity duration-150"
+                      style={{ left: `calc(${(videoTime / 45) * 100}% - 5px)` }}
+                    />
+                  </div>
+
+                  {/* Playback Controls Row */}
+                  <div className="flex items-center justify-between text-white">
+                    {/* Play/Pause/Volume */}
+                    <div className="flex items-center space-x-4">
+                      <button 
+                        onClick={() => setVideoPlaying(!videoPlaying)} 
+                        className="text-white hover:text-brand-emerald transition cursor-pointer focus:outline-none"
+                      >
+                        {videoPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
+                      </button>
+                      
+                      <div className="flex items-center space-x-1">
+                        <Volume2 className="w-4 h-4 text-zinc-400" />
+                        <span className="text-[10px] font-mono text-zinc-500">Muted</span>
+                      </div>
+
+                      {/* Current timer */}
+                      <span className="text-[10px] font-mono text-zinc-400">
+                        0:{videoTime < 10 ? `0${videoTime}` : videoTime} / 0:45
+                      </span>
+                    </div>
+
+                    {/* Active phase indicator tag */}
+                    <div className="hidden sm:flex items-center space-x-1.5 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-wider text-slate-300">
+                      <span>Status:</span>
+                      <span className="text-brand-emerald">
+                        {videoTime < 15 ? "Collecting Feedback" : videoTime < 30 ? "Processing Insights" : "Displaying Widgets"}
+                      </span>
+                    </div>
+
+                    {/* Quality / Fullscreen */}
+                    <div className="flex items-center space-x-3 text-zinc-400 text-[10px]">
+                      <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 px-1 py-0.5 rounded text-[8px] font-black tracking-widest font-mono">1080p HD</span>
+                      <Maximize2 className="w-3.5 h-3.5 hover:text-white cursor-pointer transition" />
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </motion.div>
           </div>
