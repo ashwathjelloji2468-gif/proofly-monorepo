@@ -581,39 +581,43 @@ export default function LandingPage() {
                   <div className="w-3 h-3 rounded-full bg-green-500" />
                 </div>
                 
-                {/* Product Navigation Tabs - Premium Rounded Pills with smooth sliding underline */}
-                <div className="bg-[#09090B] border border-border-primary/80 p-1.5 rounded-full flex items-center space-x-1 shadow-inner relative z-10">
+                {/* Product Navigation Tabs - Premium Rounded Pills with smooth sliding underline & workflow progress indicators */}
+                <div className="bg-[#09090B] border border-border-primary/80 p-1.5 rounded-full flex items-center space-x-1 sm:space-x-1.5 shadow-inner relative z-10">
                   {[
-                    { id: 'recorder', label: '🎥 Collect' },
-                    { id: 'dashboard', label: '📊 Manage' },
-                    { id: 'widget', label: '💖 Showcase' }
-                  ].map((tab) => (
-                    <motion.button
-                      key={tab.id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => handleHeroTabChange(tab.id as any)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          handleHeroTabChange(tab.id as any);
-                        }
-                      }}
-                      className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-colors duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-emerald/50 ${
-                        heroTab === tab.id
-                          ? 'text-white'
-                          : 'text-zinc-500 hover:text-zinc-300'
-                      }`}
-                      aria-label={`Show ${tab.label}`}
-                    >
-                      {heroTab === tab.id && (
-                        <motion.span
-                          layoutId="heroTabActive"
-                          className="absolute inset-0 bg-gradient-to-r from-brand-emerald to-brand-teal rounded-full -z-10 shadow-[0_0_15px_rgba(16,185,129,0.45)]"
-                          transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                        />
+                    { id: 'recorder', label: '① Collect' },
+                    { id: 'dashboard', label: '② Manage' },
+                    { id: 'widget', label: '③ Showcase' }
+                  ].map((tab, idx) => (
+                    <React.Fragment key={tab.id}>
+                      {idx > 0 && (
+                        <span className="text-zinc-700 text-[10px] select-none font-bold">→</span>
                       )}
-                      <span>{tab.label}</span>
-                    </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleHeroTabChange(tab.id as any)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            handleHeroTabChange(tab.id as any);
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-colors duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-emerald/50 ${
+                          heroTab === tab.id
+                            ? 'text-white'
+                            : 'text-zinc-500 hover:text-zinc-300'
+                        }`}
+                        aria-label={`Show ${tab.label}`}
+                      >
+                        {heroTab === tab.id && (
+                          <motion.span
+                            layoutId="heroTabActive"
+                            className="absolute inset-0 bg-gradient-to-r from-brand-emerald to-brand-teal rounded-full -z-10 shadow-[0_0_15px_rgba(16,185,129,0.45)]"
+                            transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                          />
+                        )}
+                        <span>{tab.label}</span>
+                      </motion.button>
+                    </React.Fragment>
                   ))}
                 </div>
               </div>
@@ -742,7 +746,7 @@ export default function LandingPage() {
                       </div>
 
                       <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
-                        Collect video or text testimonials in under 60 seconds.
+                        "Capture testimonials in under 60 seconds."
                       </p>
                     </motion.div>
                   )}
@@ -855,7 +859,7 @@ export default function LandingPage() {
                       </div>
 
                       <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
-                        Organize every testimonial and uncover customer insights powered by AI.
+                        "AI automatically summarizes customer feedback."
                       </p>
                     </motion.div>
                   )}
@@ -1021,7 +1025,7 @@ export default function LandingPage() {
                       </div>
 
                       <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
-                        Turn customer proof into trust that drives more conversions.
+                        "Publish beautiful testimonial walls anywhere."
                       </p>
                     </motion.div>
                   )}
