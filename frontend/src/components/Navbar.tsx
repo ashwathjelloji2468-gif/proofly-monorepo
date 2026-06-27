@@ -430,11 +430,11 @@ export function Navbar() {
                     className="absolute top-10 left-1/2 -translate-x-1/2 bg-[#0d0e19]/95 backdrop-blur-xl border border-white/[0.08] p-3 rounded-2xl w-[260px] shadow-[0_15px_40px_rgba(0,0,0,0.6)] flex flex-col gap-1 text-left"
                   >
                     {[
-                      { icon: <Info className="w-3.5 h-3.5" />, title: 'About Us', path: '/about' },
-                      { icon: <Users className="w-3.5 h-3.5" />, title: 'Careers', path: '/careers' },
-                      { icon: <Mail className="w-3.5 h-3.5" />, title: 'Contact Sales', path: '/contact' },
+                      { icon: <Info className="w-3.5 h-3.5" />, title: 'About Us', path: '/company/about' },
+                      { icon: <Users className="w-3.5 h-3.5" />, title: 'Careers', path: '/company/careers' },
+                      { icon: <Mail className="w-3.5 h-3.5" />, title: 'Contact Sales', path: '/company/contact-sales' },
                       { icon: <ShieldCheck className="w-3.5 h-3.5" />, title: 'GDPR & Privacy', path: '/privacy' }
-                    ].map((item, idx) => (
+                    ].map((item: any, idx) => (
                       <Link 
                         key={idx}
                         href={item.path}
