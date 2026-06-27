@@ -297,18 +297,17 @@ export function Navbar() {
                     transition={{ duration: 0.18 }}
                     className="absolute top-10 left-1/2 -translate-x-1/2 bg-[#0d0e19]/95 backdrop-blur-xl border border-white/[0.08] p-4 rounded-2xl w-[460px] grid grid-cols-2 gap-3 shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
                   >
-                    {[
-                      { icon: <Cloud className="w-4 h-4 text-blue-400" />, title: 'For SaaS', desc: 'Accelerate recurring conversion.' },
-                      { icon: <Briefcase className="w-4 h-4 text-emerald-400" />, title: 'For Agencies', desc: 'Build client verification pages.' },
-                      { icon: <Rocket className="w-4 h-4 text-brand-teal" />, title: 'For Startups', desc: 'Gather initial user trust faster.' },
-                      { icon: <User className="w-4 h-4 text-purple-400" />, title: 'For Creators', desc: 'Monetize validation assets.' },
-                      { icon: <ShoppingBag className="w-4 h-4 text-rose-400" />, title: 'For E-commerce', desc: 'Reduce customer checkout dropoff.' },
-                      { icon: <Megaphone className="w-4 h-4 text-amber-400" />, title: 'For Marketing Teams', desc: 'Deploy assets across advertising.' }
-                    ].map((item, idx) => (
+                     {[
+                      { icon: <Cloud className="w-4 h-4 text-blue-400" />, title: 'For SaaS', desc: 'Accelerate recurring conversion.', path: '/solutions/saas' },
+                      { icon: <Briefcase className="w-4 h-4 text-emerald-400" />, title: 'For Agencies', desc: 'Build client verification pages.', path: '/solutions/agencies' },
+                      { icon: <Rocket className="w-4 h-4 text-brand-teal" />, title: 'For Startups', desc: 'Gather initial user trust faster.', path: '/solutions/startups' },
+                      { icon: <User className="w-4 h-4 text-purple-400" />, title: 'For Creators', desc: 'Monetize validation assets.', path: '/solutions/creators' },
+                      { icon: <ShoppingBag className="w-4 h-4 text-rose-400" />, title: 'For E-commerce', desc: 'Reduce customer checkout dropoff.', path: '/solutions/ecommerce' },
+                      { icon: <Megaphone className="w-4 h-4 text-amber-400" />, title: 'For Marketing Teams', desc: 'Deploy assets across advertising.', path: '/solutions/marketing' }
+                    ].map((item: any, idx) => (
                       <Link 
                         key={idx}
-                        href="/#pricing"
-                        onClick={(e) => handleScrollToId(e, 'pricing')}
+                        href={item.path}
                         className="flex items-start space-x-3 p-2.5 rounded-xl transition duration-200 hover:bg-white/[0.04] hover:scale-[1.02] border border-transparent hover:border-white/[0.02]"
                       >
                         <div className="p-1.5 rounded-lg bg-white/5 border border-white/5">
