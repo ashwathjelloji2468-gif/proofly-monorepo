@@ -407,7 +407,7 @@ export default function CollectTestimonialPage() {
                     required
                     value={reviewerName}
                     onChange={(e) => setReviewerName(e.target.value)}
-                    placeholder="e.g. John Doe"
+                    placeholder="e.g. J. Ashwath Doe"
                     className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs text-slate-100 placeholder:text-zinc-600 transition"
                   />
                 </div>

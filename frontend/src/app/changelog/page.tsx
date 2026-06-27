@@ -71,14 +71,14 @@ export default function ChangelogPage() {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-8 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/15 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#6366F1]/15 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
           Product Changelog
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           See what we've newly <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             built & optimized
           </span>
         </h1>
@@ -99,7 +99,7 @@ export default function ChangelogPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search features, fixes, versions..."
-              className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-white transition duration-200"
+              className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-white transition duration-200"
             />
             <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
           </div>
@@ -116,7 +116,7 @@ export default function ChangelogPage() {
               {/* Header version details */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/5 pb-4 gap-2">
                 <div className="flex items-center space-x-3">
-                  <span className="text-[11px] font-black font-mono bg-[#8677FF]/10 border border-[#8677FF]/20 text-[#8677FF] px-3 py-1 rounded-full">
+                  <span className="text-[11px] font-black font-mono bg-[#6366F1]/10 border border-[#6366F1]/20 text-[#6366F1] px-3 py-1 rounded-full">
                     {release.version}
                   </span>
                   <h2 className="text-sm sm:text-base font-extrabold text-white tracking-wide">

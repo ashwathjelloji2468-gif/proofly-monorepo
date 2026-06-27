@@ -261,7 +261,7 @@ export default function ImportsPage() {
                       required
                       value={linkedinAuthor}
                       onChange={(e) => setLinkedinAuthor(e.target.value)}
-                      placeholder="e.g. Johnathan Miller"
+                      placeholder="e.g. J. Ashwathathan Miller"
                       className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs text-slate-100 placeholder:text-zinc-600 transition"
                     />
                   </div>
@@ -273,7 +273,7 @@ export default function ImportsPage() {
                       value={linkedinText}
                       onChange={(e) => setLinkedinText(e.target.value)}
                       rows={5}
-                      placeholder="e.g. Johnathan was an exceptional architect who helped us migrate our APIs..."
+                      placeholder="e.g. J. Ashwathathan was an exceptional architect who helped us migrate our APIs..."
                       className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs text-slate-100 placeholder:text-zinc-600 transition"
                     />
                   </div>
@@ -338,7 +338,7 @@ export default function ImportsPage() {
                     value={csvContent}
                     onChange={(e) => setCsvContent(e.target.value)}
                     rows={6}
-                    placeholder="e.g. John Doe, Acme Corp, Extremely satisfied with performance, 5"
+                    placeholder="e.g. J. Ashwath Doe, Acme Corp, Extremely satisfied with performance, 5"
                     className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs font-mono text-slate-100 placeholder:text-zinc-600 transition"
                   />
                 </div>

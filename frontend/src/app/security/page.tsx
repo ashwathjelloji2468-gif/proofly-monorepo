@@ -12,7 +12,7 @@ export default function SecurityPage() {
 
       <section className="max-w-4xl mx-auto px-6 pt-32 pb-24 w-full flex-1 space-y-6 text-left">
         <div className="space-y-2">
-          <span className="text-[10px] font-black text-[#8677FF] uppercase tracking-widest block">Data Protection</span>
+          <span className="text-[10px] font-black text-[#6366F1] uppercase tracking-widest block">Data Protection</span>
           <h1 className="text-xl sm:text-2xl font-black text-white">Security & Encryption</h1>
         </div>
 

@@ -277,7 +277,7 @@ export default function InsightsPage() {
               {/* Column 1: Reviewer & Persuasive Hooks (4 cols) */}
               <div className="lg:col-span-4 bg-[#09090B] border border-border-primary/60 p-5 rounded-xl flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
-                  <span className="text-[9px] font-extrabold text-[#8677FF] uppercase tracking-widest block text-left">Review Details & Hooks</span>
+                  <span className="text-[9px] font-extrabold text-[#6366F1] uppercase tracking-widest block text-left">Review Details & Hooks</span>
                   
                   {/* Review Box */}
                   <div className="bg-[#12161D]/40 border border-border-primary/50 p-3.5 rounded-lg text-xs leading-relaxed italic text-slate-300 text-left">
@@ -316,7 +316,7 @@ export default function InsightsPage() {
               {/* Column 2: Social Media Autopilot (4 cols) */}
               <div className="lg:col-span-4 bg-[#09090B] border border-border-primary/60 p-5 rounded-xl flex flex-col justify-between space-y-4">
                 <div className="space-y-4">
-                  <span className="text-[9px] font-extrabold text-[#8677FF] uppercase tracking-widest block text-left">Social Media Autopilot</span>
+                  <span className="text-[9px] font-extrabold text-[#6366F1] uppercase tracking-widest block text-left">Social Media Autopilot</span>
                   
                   {/* Twitter Copy */}
                   <div className="space-y-2 text-left">
@@ -358,8 +358,8 @@ export default function InsightsPage() {
               <div className="lg:col-span-4 bg-[#09090B] border border-border-primary/60 p-5 rounded-xl flex flex-col justify-between space-y-4">
                 <div className="space-y-4 text-left">
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-extrabold text-[#8677FF] uppercase tracking-widest block">Placement Recommendation</span>
-                    <span className="bg-brand-teal/15 border border-brand-teal/30 text-brand-teal text-[10px] font-extrabold px-2.5 py-0.5 rounded-full shadow-[0_0_12px_rgba(20,184,166,0.2)] animate-pulse">
+                    <span className="text-[9px] font-extrabold text-[#6366F1] uppercase tracking-widest block">Placement Recommendation</span>
+                    <span className="bg-brand-teal/15 border border-brand-teal/30 text-brand-teal text-[10px] font-extrabold px-2.5 py-0.5 rounded-full shadow-[0_0_12px_rgba(99,102,241,0.2)] animate-pulse">
                       {aiAmplified.lift}
                     </span>
                   </div>
@@ -385,7 +385,7 @@ export default function InsightsPage() {
                 </div>
 
                 <Link href="/dashboard/widgets" className="w-full">
-                  <button className="w-full bg-[#18181B] hover:bg-[#222836] border border-border-primary text-slate-300 hover:text-white font-bold text-xs py-2.5 rounded-lg flex items-center justify-center space-x-2 transition cursor-pointer">
+                  <button className="w-full bg-[#18181B] hover:bg-[#2E3445] border border-border-primary text-slate-300 hover:text-white font-bold text-xs py-2.5 rounded-lg flex items-center justify-center space-x-2 transition cursor-pointer">
                     <span>Configure Widgets</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>

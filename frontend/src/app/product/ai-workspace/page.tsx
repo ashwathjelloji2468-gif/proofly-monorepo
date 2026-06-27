@@ -23,7 +23,7 @@ export default function AIWorkspacePage() {
   const mockTestimonials = [
     {
       id: 't-1',
-      name: 'Sarah Jenkins',
+      name: 'J. Ashwath',
       role: 'SaaS Founder',
       company: 'DevFlow Inc.',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100',
@@ -31,13 +31,13 @@ export default function AIWorkspacePage() {
       sentiment: 'POSITIVE',
       score: 99.4,
       tags: ['onboarding', 'rest-api', 'fast-setup'],
-      aiSummary: 'Sarah integrated the platform in under 15 minutes, noting that developer integration speed doubled and documentation was top-tier.',
+      aiSummary: 'J. Ashwath integrated the platform in under 15 minutes, noting that developer integration speed doubled and documentation was top-tier.',
       socialTwitter: '🚀 Just migrated to Proofly! Onboarding speed doubled instantly, setup took less than 15 minutes. Highly recommended for SaaS founders.',
       socialLinkedIn: 'Integrating social proof usually takes hours of developer configuration. With Proofly, we got the REST APIs running in under 30 minutes. The results? Double the onboarding pipeline speed.'
     },
     {
       id: 't-2',
-      name: 'James Cole',
+      name: 'Ateeqhulla Khan',
       role: 'Product Lead',
       company: 'TaskGrid',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
@@ -51,7 +51,7 @@ export default function AIWorkspacePage() {
     },
     {
       id: 't-3',
-      name: 'Marcus Brody',
+      name: 'Ateeqhulla Khan',
       role: 'Growth Hacker',
       company: 'LaunchPad',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100',
@@ -59,7 +59,7 @@ export default function AIWorkspacePage() {
       sentiment: 'POSITIVE',
       score: 96.8,
       tags: ['video-reviews', 'mobile', 'enterprise-deals'],
-      aiSummary: 'Marcus notes that customers can record video feedback from mobile devices without app installs, which directly helped secure 3 enterprise accounts.',
+      aiSummary: 'Ateeqhulla Khan notes that customers can record video feedback from mobile devices without app installs, which directly helped secure 3 enterprise accounts.',
       socialTwitter: 'Collected video reviews from mobile customers with 0 friction. Closed 3 enterprise clients this week using video proof! 🎥',
       socialLinkedIn: 'Customer video reviews are the ultimate validation asset. Proofly lets customers record directly from any mobile browser. It already helped our team secure 3 new enterprise contracts.'
     }
@@ -99,7 +99,7 @@ export default function AIWorkspacePage() {
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           AI-powered testimonial <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             curation & analysis
           </span>
         </h1>
@@ -225,7 +225,7 @@ export default function AIWorkspacePage() {
                   {activeTestimonial.tags.map((tag, idx) => (
                     <span 
                       key={idx}
-                      className="text-[8px] font-bold bg-[#8677FF]/10 text-[#8677FF] border border-[#8677FF]/20 px-2 py-0.5 rounded-full"
+                      className="text-[8px] font-bold bg-[#6366F1]/10 text-[#6366F1] border border-[#6366F1]/20 px-2 py-0.5 rounded-full"
                     >
                       #{tag}
                     </span>

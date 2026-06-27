@@ -14,9 +14,9 @@ interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
 export function SpotlightCard({ 
   children, 
   className = '', 
-  glowColor = 'rgba(16, 185, 129, 0.08)', 
-  borderColor = 'radial-gradient(220px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(16, 185, 129, 0.65) 0%, rgba(20, 184, 166, 0.35) 40%, rgba(108, 92, 255, 0.25) 75%, transparent 100%)',
-  hoverScale = 1.03,
+  glowColor = 'rgba(99, 102, 241, 0.08)', 
+  borderColor = 'radial-gradient(220px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(99, 102, 241, 0.65) 0%, rgba(99, 102, 241, 0.25) 75%, transparent 100%)',
+  hoverScale = 1.015,
   tiltMax = 5, // subtle tilt is premium (Apple style)
   enableTilt = true,
   ...props 
@@ -74,28 +74,28 @@ export function SpotlightCard({
       onMouseLeave={handleMouseLeave}
       onTouchStart={() => setIsHovered(true)}
       onTouchEnd={handleMouseLeave}
-      className={`relative overflow-hidden border border-border-primary bg-[#18181B] group/spotlight rounded-xl ${className}`}
+      className={`relative overflow-hidden border border-[#2E3445] bg-[#1F2937] group/spotlight rounded-xl ${className}`}
       style={{
         '--mouse-x': `${coords.x}px`,
         '--mouse-y': `${coords.y}px`,
         '--mouse-px': `${percent.x}%`,
         '--mouse-py': `${percent.y}%`,
         transform: isHovered 
-          ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-4px) scale(${hoverScale})`
+          ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-6px) scale(${hoverScale})`
           : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)',
         boxShadow: isHovered 
-          ? '0 25px 50px -12px rgba(16, 185, 129, 0.25), 0 0 35px -5px rgba(20, 184, 166, 0.15)'
+          ? '0 12px 40px rgba(67, 56, 202, 0.12), 0 0 0 1px rgba(67, 56, 202, 0.10)'
           : 'none',
         willChange: 'transform, box-shadow',
         transition: isHovered
-          ? 'transform 150ms cubic-bezier(0.03, 0.98, 0.52, 0.99), box-shadow 400ms ease'
-          : 'transform 500ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 500ms ease',
+          ? 'transform 300ms cubic-bezier(0.03, 0.98, 0.52, 0.99), box-shadow 300ms ease'
+          : 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 300ms ease',
       } as React.CSSProperties}
       {...props}
     >
       {/* Background Spotlight Glow */}
       <div 
-        className="absolute pointer-events-none rounded-full blur-[110px] transition-opacity duration-500 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover/spotlight:opacity-100"
+        className="absolute pointer-events-none rounded-full blur-[110px] transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover/spotlight:opacity-100"
         style={{
           left: 'var(--mouse-x)',
           top: 'var(--mouse-y)',
@@ -103,25 +103,6 @@ export function SpotlightCard({
           height: '280px',
           background: glowColor,
           zIndex: 0,
-        }}
-      />
-
-      {/* Dynamic Iridescent / Holographic Foil Reflection Sheen */}
-      <div 
-        className="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-0 group-hover/spotlight:opacity-20 z-10 mix-blend-color-dodge"
-        style={{
-          background: `linear-gradient(
-            ${135 + (percent.x - 50) * 0.8}deg,
-            rgba(255, 0, 128, 0.3) 0%,
-            rgba(128, 0, 255, 0.3) 25%,
-            rgba(0, 255, 255, 0.3) 50%,
-            rgba(255, 255, 0, 0.3) 75%,
-            rgba(255, 0, 128, 0.3) 100%
-          )`,
-          backgroundSize: '250% 250%',
-          backgroundPosition: `${percent.x}% ${percent.y}%`,
-          willChange: 'background-position',
-          filter: 'blur(4px)',
         }}
       />
 
@@ -137,7 +118,7 @@ export function SpotlightCard({
         }}
       />
 
-      {/* Radiant Glowing Border outline overlay (Emerald Animated Border) */}
+      {/* Radiant Glowing Border outline overlay */}
       <div 
         className="absolute inset-0 pointer-events-none transition-opacity duration-300 opacity-0 group-hover/spotlight:opacity-100"
         style={{

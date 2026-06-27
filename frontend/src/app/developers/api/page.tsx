@@ -69,7 +69,7 @@ export default function ApiDeveloperPage() {
               type: 'TEXT',
               rating: 5,
               textContent: 'Proofly integrated in less than 30 minutes! Onboarding pipeline speed doubled immediately.',
-              reviewerName: 'Sarah Jenkins',
+              reviewerName: 'J. Ashwath',
               reviewerTitle: 'SaaS Founder',
               createdAt: '2026-06-25T10:00:00Z'
             },
@@ -78,7 +78,7 @@ export default function ApiDeveloperPage() {
               type: 'VIDEO',
               rating: 5,
               videoUrl: 'https://cdn.proofly.co/videos/james-grid.mp4',
-              reviewerName: 'James Cole',
+              reviewerName: 'Ateeqhulla Khan',
               reviewerTitle: 'Product Lead',
               createdAt: '2026-06-26T04:00:00Z'
             }
@@ -98,7 +98,7 @@ export default function ApiDeveloperPage() {
         spaceId: 'acme-saas',
         rating: 5,
         textContent: 'The analytics reports are visual, comprehensive, and load instantly.',
-        reviewerName: 'Marcus Brody',
+        reviewerName: 'Ateeqhulla Khan',
         reviewerEmail: 'marcus@launchpad.io',
         reviewerTitle: 'Growth Hacker'
       },
@@ -110,7 +110,7 @@ export default function ApiDeveloperPage() {
           spaceId: 'acme-saas',
           rating: 5,
           textContent: 'The analytics reports are visual, comprehensive, and load instantly.',
-          reviewerName: 'Marcus Brody',
+          reviewerName: 'Ateeqhulla Khan',
           reviewerTitle: 'Growth Hacker',
           isApproved: false,
           sentiment: 'POSITIVE',
@@ -164,14 +164,14 @@ export default function ApiDeveloperPage() {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-8 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/15 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#6366F1]/15 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
           REST API Developer reference
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           Programmatic access to <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             your social proof
           </span>
         </h1>
@@ -187,7 +187,7 @@ export default function ApiDeveloperPage() {
         <div className="lg:col-span-6 bg-[#0c0d16] border border-white/[0.05] rounded-2xl p-6 space-y-6 shadow-xl text-left">
           
           <div className="flex items-center space-x-2 border-b border-white/5 pb-3">
-            <Layers className="w-4 h-4 text-[#8677FF]" />
+            <Layers className="w-4 h-4 text-[#6366F1]" />
             <h2 className="text-sm font-black uppercase tracking-wider text-slate-200">API Endpoint Catalog</h2>
           </div>
 
@@ -203,7 +203,7 @@ export default function ApiDeveloperPage() {
                 }}
                 className={`w-full text-left p-3.5 rounded-xl border transition-all duration-200 cursor-pointer ${
                   selectedIdx === idx 
-                    ? 'bg-zinc-950 border-[#8677FF]/40 shadow-lg shadow-[#8677FF]/5' 
+                    ? 'bg-zinc-950 border-[#6366F1]/40 shadow-lg shadow-[#6366F1]/5' 
                     : 'bg-zinc-950 border-white/[0.04] hover:bg-white/[0.02]'
                 }`}
               >
@@ -233,7 +233,7 @@ export default function ApiDeveloperPage() {
                   type="text" 
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
-                  className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-slate-200 transition duration-200"
+                  className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-slate-200 transition duration-200"
                   placeholder="Insert pr_live_key..."
                 />
                 <Key className="w-3.5 h-3.5 text-zinc-650 absolute left-3 top-1/2 -translate-y-1/2" />

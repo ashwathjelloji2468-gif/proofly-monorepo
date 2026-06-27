@@ -38,7 +38,7 @@ export default function CollectionsPage() {
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [editLogoUrl, setEditLogoUrl] = useState('');
-  const [editTheme, setEditTheme] = useState('#6C5CFF');
+  const [editTheme, setEditTheme] = useState('#4338CA');
   const [editCollectVideo, setEditCollectVideo] = useState(true);
   const [editCollectText, setEditCollectText] = useState(true);
 
@@ -75,7 +75,7 @@ export default function CollectionsPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
-  const [theme, setTheme] = useState('#6C5CFF'); // Purple default
+  const [theme, setTheme] = useState('#4338CA'); // Purple default
   const [collectType, setCollectType] = useState<'both' | 'video' | 'text'>('both');
   const [questions, setQuestions] = useState<string[]>(['']);
 
@@ -135,7 +135,7 @@ export default function CollectionsPage() {
     setTitle('');
     setDescription('');
     setLogoUrl('');
-    setTheme('#6C5CFF');
+    setTheme('#4338CA');
     setCollectType('both');
     setQuestions(['']);
     setIsModalOpen(false);
@@ -334,8 +334,8 @@ export default function CollectionsPage() {
                     value={theme}
                     onChange={(e) => setTheme(e.target.value)}
                   >
-                    <option value="#6C5CFF">Sleek Purple</option>
-                    <option value="#8677FF">Hover Purple</option>
+                    <option value="#4338CA">Sleek Purple</option>
+                    <option value="#6366F1">Hover Purple</option>
                     <option value="#3B82F6">Royal Blue</option>
                     <option value="#EC4899">Hot Pink</option>
                   </select>

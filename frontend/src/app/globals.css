@@ -9,30 +9,30 @@ html {
   --background: #0A0B14;
   --foreground: #F8FAFC;
   
-  --card: #1A1F2B;
-  --card-foreground: #F8FAFC;
+  --card: #1F2937;
+  --card-foreground: #CBD5E1;
   
-  --popover: #12161D;
+  --popover: #1F2937;
   --popover-foreground: #F8FAFC;
   
-  --primary: #6C5CFF;
+  --primary: #4338CA;
   --primary-foreground: #FFFFFF;
   
-  --secondary: #8677FF;
+  --secondary: #6366F1;
   --secondary-foreground: #FFFFFF;
   
-  --muted: #12161D;
-  --muted-foreground: #A1A8B5;
+  --muted: #151A24;
+  --muted-foreground: #94A3B8;
   
-  --accent: #6C5CFF;
+  --accent: #4338CA;
   --accent-foreground: #FFFFFF;
   
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
   
-  --border: #222836;
-  --input: #12161D;
-  --ring: #6C5CFF;
+  --border: #2E3445;
+  --input: #151A24;
+  --ring: #4338CA;
   --radius: 0.75rem;
 }
 
@@ -40,19 +40,19 @@ html {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   
-  --color-brand-emerald: #6C5CFF;
-  --color-brand-emerald-hover: #8677FF;
-  --color-brand-emerald-dark: #5346cc;
+  --color-brand-emerald: #4338CA;
+  --color-brand-emerald-hover: #3730A3;
+  --color-brand-emerald-dark: #3730A3;
   
-  --color-brand-teal: #8677FF;
-  --color-brand-teal-hover: #a397ff;
-  --color-brand-teal-dark: #675bbf;
+  --color-brand-teal: #6366F1;
+  --color-brand-teal-hover: #4338CA;
+  --color-brand-teal-dark: #3730A3;
 
-  --color-card-bg: #1A1F2B;
-  --color-card-bg-elevated: #222836;
+  --color-card-bg: #1F2937;
+  --color-card-bg-elevated: #232B3A;
   
-  --color-border-primary: #222836;
-  --color-border-secondary: #2d3448;
+  --color-border-primary: #2E3445;
+  --color-border-secondary: #1F2937;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
@@ -68,9 +68,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Selection color matching brand purple */
+/* Selection color matching brand Indigo */
 ::selection {
-  background-color: rgba(108, 92, 255, 0.35);
+  background-color: rgba(99, 102, 241, 0.35);
   color: #FFFFFF;
 }
 
@@ -83,11 +83,11 @@ body {
   background: #0A0B14;
 }
 ::-webkit-scrollbar-thumb {
-  background: #222836;
+  background: #2E3445;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2d3448;
+  background: #4338CA;
 }
 
 /* Wavy Floating Animation */
@@ -98,7 +98,7 @@ body {
   }
   50% {
     transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(108, 92, 255, 0.2);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
   }
 }
 
@@ -129,15 +129,15 @@ body {
   perspective: 1000px;
 }
 
-/* Card Border Glow Pulsing Animation - Purple Glow */
+/* Card Border Glow Pulsing Animation - Indigo Glow */
 @keyframes borderGlowPulse {
   0%, 100% {
     opacity: 0.85;
-    filter: drop-shadow(0 0 1px rgba(108, 92, 255, 0.35));
+    filter: drop-shadow(0 0 1px rgba(99, 102, 241, 0.35));
   }
   50% {
     opacity: 1;
-    filter: drop-shadow(0 0 8px rgba(134, 119, 255, 0.65));
+    filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.65));
   }
 }
 
@@ -147,7 +147,7 @@ body {
 
 /* Glow Shadow Utility Class */
 .shadow-purple-glow {
-  box-shadow: 0 0 30px rgba(108, 92, 255, 0.35);
+  box-shadow: 0 0 30px rgba(99, 102, 241, 0.35);
 }
 
 /* Focus-visible utility: brand-colored ring for keyboard navigation */
@@ -170,11 +170,11 @@ body {
 .bg-shimmer {
   background: linear-gradient(
     90deg,
-    #12161D 0%,
-    #222836 40%,
-    #2d3448 50%,
-    #222836 60%,
-    #12161D 100%
+    #151A24 0%,
+    #1F2937 40%,
+    #232B3A 50%,
+    #1F2937 60%,
+    #151A24 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;

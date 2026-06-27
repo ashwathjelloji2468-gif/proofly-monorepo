@@ -80,14 +80,14 @@ export default function RoadmapPage() {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-8 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/15 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3.5 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#6366F1]/15 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3.5 py-1 rounded-full inline-block mb-3.5">
           Product Roadmap
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           Shape the future of <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             social validation
           </span>
         </h1>
@@ -120,7 +120,7 @@ export default function RoadmapPage() {
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-3 py-1.5 rounded-lg text-[9.5px] font-black transition duration-250 cursor-pointer ${
-                    selectedCategory === cat ? 'bg-[#8677FF] text-white' : 'text-slate-400 hover:text-white'
+                    selectedCategory === cat ? 'bg-[#6366F1] text-white' : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   {cat.toUpperCase()}
@@ -135,7 +135,7 @@ export default function RoadmapPage() {
                   key={prio}
                   onClick={() => setSelectedPriority(prio)}
                   className={`px-3 py-1.5 rounded-lg text-[9.5px] font-black transition duration-250 cursor-pointer ${
-                    selectedPriority === prio ? 'bg-[#8677FF] text-white' : 'text-slate-400 hover:text-white'
+                    selectedPriority === prio ? 'bg-[#6366F1] text-white' : 'text-slate-400 hover:text-white'
                   }`}
                 >
                   {prio}
@@ -150,7 +150,7 @@ export default function RoadmapPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search features..."
-              className="w-full bg-[#0c0d16] border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-white transition duration-200"
+              className="w-full bg-[#0c0d16] border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-white transition duration-200"
             />
             <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
           </div>
@@ -183,12 +183,12 @@ export default function RoadmapPage() {
                     <div 
                       key={item.id}
                       onClick={() => setActiveItem(item)}
-                      className="bg-[#0c0d16] border border-white/[0.05] p-3.5 rounded-xl hover:border-[#8677FF]/20 cursor-pointer transition duration-200 text-left space-y-3 relative group"
+                      className="bg-[#0c0d16] border border-white/[0.05] p-3.5 rounded-xl hover:border-[#6366F1]/20 cursor-pointer transition duration-200 text-left space-y-3 relative group"
                     >
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
                           <span className={`text-[8px] font-black px-1.5 py-0.2 rounded uppercase ${
-                            item.category === 'AI' ? 'bg-[#8677FF]/10 text-[#8677FF]' : item.category === 'Core' ? 'bg-brand-teal/10 text-brand-teal' : 'bg-blue-500/10 text-blue-400'
+                            item.category === 'AI' ? 'bg-[#6366F1]/10 text-[#6366F1]' : item.category === 'Core' ? 'bg-brand-teal/10 text-brand-teal' : 'bg-blue-500/10 text-blue-400'
                           }`}>
                             {item.category}
                           </span>
@@ -198,7 +198,7 @@ export default function RoadmapPage() {
                             {item.priority}
                           </span>
                         </div>
-                        <h4 className="text-xs font-bold text-white group-hover:text-[#8677FF] transition leading-tight">
+                        <h4 className="text-xs font-bold text-white group-hover:text-[#6366F1] transition leading-tight">
                           {item.title}
                         </h4>
                         <p className="text-[9.5px] text-slate-450 line-clamp-2 leading-relaxed">
@@ -263,7 +263,7 @@ export default function RoadmapPage() {
               </button>
 
               <h3 className="text-sm font-black text-white flex items-center space-x-2">
-                <Map className="w-4 h-4 text-[#8677FF]" />
+                <Map className="w-4 h-4 text-[#6366F1]" />
                 <span>Suggest Product Feature</span>
               </h3>
 
@@ -275,7 +275,7 @@ export default function RoadmapPage() {
                     required
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
-                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
+                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
                     placeholder="e.g. Single Sign-On integrations"
                   />
                 </div>
@@ -286,7 +286,7 @@ export default function RoadmapPage() {
                     required
                     value={newDesc}
                     onChange={(e) => setNewDesc(e.target.value)}
-                    className="w-full h-20 bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white resize-none"
+                    className="w-full h-20 bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white resize-none"
                     placeholder="Explain what value this feature creates for developers..."
                   />
                 </div>
@@ -297,7 +297,7 @@ export default function RoadmapPage() {
                     <select
                       value={newCategory}
                       onChange={(e: any) => setNewCategory(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3 py-2 text-xs text-white cursor-pointer"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3 py-2 text-xs text-white cursor-pointer"
                     >
                       <option value="Core">Core features</option>
                       <option value="AI">AI Analysis</option>
@@ -310,7 +310,7 @@ export default function RoadmapPage() {
                     <select
                       value={newPriority}
                       onChange={(e: any) => setNewPriority(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3 py-2 text-xs text-white cursor-pointer"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3 py-2 text-xs text-white cursor-pointer"
                     >
                       <option value="HIGH">HIGH priority</option>
                       <option value="MEDIUM">MEDIUM priority</option>
@@ -325,7 +325,7 @@ export default function RoadmapPage() {
                     type="text" 
                     value={newRelease}
                     onChange={(e) => setNewRelease(e.target.value)}
-                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
+                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
                     placeholder="e.g. Q4 2026"
                   />
                 </div>
@@ -373,7 +373,7 @@ export default function RoadmapPage() {
                 <span>/</span>
                 <span>{activeItem.status}</span>
                 <span>/</span>
-                <span className="text-[#8677FF]">{activeItem.category}</span>
+                <span className="text-[#6366F1]">{activeItem.category}</span>
               </div>
 
               <h2 className="text-sm sm:text-base font-black text-white tracking-tight">

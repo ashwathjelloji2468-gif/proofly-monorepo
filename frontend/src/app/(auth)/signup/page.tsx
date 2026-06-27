@@ -75,7 +75,7 @@ export default function SignupPage() {
               <input
                 id="name"
                 type="text"
-                placeholder="Jane Doe"
+                placeholder="Ateeqhulla Khan Doe"
                 className="w-full bg-[#09090B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
                 {...register('name')}
               />

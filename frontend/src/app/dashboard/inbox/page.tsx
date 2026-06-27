@@ -45,7 +45,7 @@ export default function InboxPage() {
 
   // AI Avatar Synthesis states
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
-  const [avatarName, setAvatarName] = useState('Sarah Jenkins');
+  const [avatarName, setAvatarName] = useState('J. Ashwath');
   const [avatarRole, setAvatarRole] = useState('Growth Lead');
   const [avatarCompany, setAvatarCompany] = useState('Stripe');
   const [avatarScript, setAvatarScript] = useState('The checkout speed has skyrocketed. Highly recommended for all developer workspaces!');

@@ -54,7 +54,7 @@ export function Footer() {
     <footer className="border-t border-white/[0.08] bg-[#0A0B14] py-16 relative text-left select-none overflow-hidden">
       
       {/* Background Glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#8677FF]/5 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#6366F1]/5 rounded-full blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10">
         
@@ -73,10 +73,10 @@ export function Footer() {
             AI-powered social proof dashboard to collect, process, and embed verifiable video reviews into SaaS frameworks with zero page overhead.
           </p>
           <div className="text-[9.5px] text-zinc-500 space-y-1">
-            <p>Contact: <span className="text-[#8677FF] font-medium">support@useproofly.co</span></p>
+            <p>Contact: <span className="text-[#6366F1] font-medium">support@useproofly.co</span></p>
             <p>&copy; {new Date().getFullYear()} Proofly. All rights reserved.</p>
             <p className="pt-2 border-t border-white/5">
-              Built with ❤️ by <span className="font-semibold text-slate-400">J. Ashwath</span> & <span className="font-semibold text-slate-400">Athik</span>.
+              Built with ❤️ by <span className="font-semibold text-slate-400">J. Ashwath</span> & <span className="font-semibold text-slate-400">Ateeqhulla Khan</span>.
             </p>
           </div>
         </div>
@@ -166,7 +166,7 @@ export function Footer() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"
-              className="flex-1 bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3 py-2 text-[10px] text-white"
+              className="flex-1 bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3 py-2 text-[10px] text-white"
             />
             <button 
               type="submit"
@@ -226,7 +226,7 @@ export function Footer() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 z-40 bg-[#0c0d16] border border-white/[0.08] text-white p-3 rounded-full hover:border-[#8677FF]/25 shadow-2xl transition hover:scale-105 cursor-pointer focus:outline-none flex items-center justify-center"
+            className="fixed bottom-6 right-6 z-40 bg-[#0c0d16] border border-white/[0.08] text-white p-3 rounded-full hover:border-[#6366F1]/25 shadow-2xl transition hover:scale-105 cursor-pointer focus:outline-none flex items-center justify-center"
             title="Back to Top"
           >
             <ArrowUp className="w-4 h-4" />

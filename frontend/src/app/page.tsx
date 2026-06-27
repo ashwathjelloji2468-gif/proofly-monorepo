@@ -202,7 +202,7 @@ export default function LandingPage() {
   }, [heroTab]);
 
   // 4. Typewriter text simulation for Dashboard AI summary
-  const fullSummaryText = "Sarah details the fast 15-minute onboarding configuration and the quality of developer integrations.";
+  const fullSummaryText = "J. Ashwath details the fast 15-minute onboarding configuration and the quality of developer integrations.";
   useEffect(() => {
     if (heroTab !== 'dashboard') {
       setTypedText("");
@@ -382,7 +382,7 @@ export default function LandingPage() {
           <SpotlightCard
             className="bg-[#18181B]/80 backdrop-blur p-3.5 rounded-xl shadow-2xl flex items-center space-x-3 max-w-[240px]"
             hoverScale={1.05}
-            glowColor="rgba(108, 92, 255, 0.12)"
+            glowColor="rgba(99, 102, 241, 0.12)"
           >
             <div className="w-8 h-8 rounded-full bg-brand-emerald/20 text-brand-emerald flex items-center justify-center font-bold text-xs shrink-0">J</div>
             <div className="text-left">
@@ -404,7 +404,7 @@ export default function LandingPage() {
           <SpotlightCard
             className="bg-[#18181B]/80 backdrop-blur p-3.5 rounded-xl shadow-2xl flex items-center space-x-3 max-w-[260px]"
             hoverScale={1.05}
-            glowColor="rgba(134, 119, 255, 0.12)"
+            glowColor="rgba(99, 102, 241, 0.12)"
           >
             <div className="w-8 h-8 rounded-full bg-brand-teal/20 text-brand-teal flex items-center justify-center font-bold text-xs shrink-0">C</div>
             <div className="text-left">
@@ -426,7 +426,7 @@ export default function LandingPage() {
           <SpotlightCard
             className="bg-[#18181B]/80 backdrop-blur p-3.5 rounded-xl shadow-2xl flex items-center space-x-3 max-w-[240px]"
             hoverScale={1.05}
-            glowColor="rgba(108, 92, 255, 0.12)"
+            glowColor="rgba(99, 102, 241, 0.12)"
           >
             <div className="w-8 h-8 rounded-full bg-brand-emerald/20 text-brand-emerald flex items-center justify-center font-bold text-xs shrink-0">D</div>
             <div className="text-left">
@@ -480,7 +480,7 @@ export default function LandingPage() {
                 </button>
               </Link>
               <Link href="/live-demo">
-                <button className="bg-[#18181B] hover:bg-[#27272A] border border-border-primary text-[#8677FF] text-sm font-bold py-4 px-8 rounded-lg flex items-center justify-center space-x-2 cursor-pointer transition hover:scale-103 duration-200">
+                <button className="bg-[#18181B] hover:bg-[#27272A] border border-border-primary text-[#6366F1] text-sm font-bold py-4 px-8 rounded-lg flex items-center justify-center space-x-2 cursor-pointer transition hover:scale-103 duration-200">
                   <Sparkles className="w-4 h-4 text-brand-emerald" />
                   <span>Try Live Demo</span>
                 </button>
@@ -522,7 +522,7 @@ export default function LandingPage() {
             className="lg:col-span-5 relative z-10"
           >
             {/* Glowing background highlights behind the mockups */}
-            <div className="absolute -inset-4 bg-[#6C5CFF]/10 rounded-full blur-[80px] pointer-events-none -z-10" />
+            <div className="absolute -inset-4 bg-[#4338CA]/10 rounded-full blur-[80px] pointer-events-none -z-10" />
             <div className="absolute -inset-10 bg-brand-emerald/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
             {/* Floating Glassmorphic AI Classifier Card */}
@@ -536,7 +536,7 @@ export default function LandingPage() {
                   SJ
                 </div>
                 <div className="text-left">
-                  <h4 className="text-[10px] font-black text-white">Sarah Jenkins</h4>
+                  <h4 className="text-[10px] font-black text-white">J. Ashwath</h4>
                   <span className="text-[8px] text-slate-400">DevFlow Inc.</span>
                 </div>
               </div>
@@ -554,11 +554,11 @@ export default function LandingPage() {
             <motion.div 
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 7, ease: "easeInOut", delay: 1.5 }}
-              className="absolute -bottom-10 -right-10 bg-[#12161D]/90 backdrop-blur-md border border-[#8677FF]/30 p-4 rounded-xl shadow-2xl text-left z-20 w-60 flex flex-col gap-2.5 select-none"
+              className="absolute -bottom-10 -right-10 bg-[#12161D]/90 backdrop-blur-md border border-[#6366F1]/30 p-4 rounded-xl shadow-2xl text-left z-20 w-60 flex flex-col gap-2.5 select-none"
             >
               <div className="flex items-center justify-between text-[9px]">
                 <span className="font-extrabold text-white flex items-center space-x-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#8677FF] animate-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#6366F1] animate-pulse" />
                   <span>AI Video Intelligence</span>
                 </span>
                 <span className="text-zinc-500 font-mono text-[7px]">transcribing...</span>
@@ -569,7 +569,7 @@ export default function LandingPage() {
                     key={i}
                     animate={{ height: [`${h*12}%`, `${h*12 + 40}%`, `${h*12}%`] }}
                     transition={{ repeat: Infinity, duration: 1.2 + (i % 3) * 0.2, ease: "easeInOut" }}
-                    className="w-1 bg-gradient-to-t from-brand-emerald to-[#8677FF] rounded-full shrink-0"
+                    className="w-1 bg-gradient-to-t from-brand-emerald to-[#6366F1] rounded-full shrink-0"
                     style={{ height: `${h*12}%` }}
                   />
                 ))}
@@ -580,12 +580,12 @@ export default function LandingPage() {
             </motion.div>
             
             {/* Product demo subtitle indicator */}
-            <div className="text-center sm:text-right text-[10px] font-black uppercase tracking-widest text-[#8677FF] mb-2 animate-pulse flex items-center justify-center sm:justify-end space-x-1.5 select-none">
+            <div className="text-center sm:text-right text-[10px] font-black uppercase tracking-widest text-[#6366F1] mb-2 animate-pulse flex items-center justify-center sm:justify-end space-x-1.5 select-none">
               <span>Explore the product in 15 seconds</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#8677FF] animate-ping" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#6366F1] animate-ping" />
             </div>
 
-            <SpotlightCard className="p-6 rounded-2xl shadow-2xl flex flex-col gap-6 relative min-h-[460px]" glowColor="rgba(108, 92, 255, 0.1)">
+            <SpotlightCard className="p-6 rounded-2xl shadow-2xl flex flex-col gap-6 relative min-h-[460px]" glowColor="rgba(99, 102, 241, 0.1)">
               <div className="absolute top-0 right-0 w-24 h-24 bg-brand-emerald/5 rounded-full blur-xl pointer-events-none" />
               
               {/* Window Header: Window Controls & Premium Connected Workflow Indicator */}
@@ -631,7 +631,7 @@ export default function LandingPage() {
                                 <defs>
                                   <linearGradient id="connectorGlow" x1="0%" y1="0%" x2="100%" y2="0%">
                                     <stop offset="0%" stopColor="transparent" />
-                                    <stop offset="50%" stopColor="#8677FF" />
+                                    <stop offset="50%" stopColor="#6366F1" />
                                     <stop offset="100%" stopColor="transparent" />
                                   </linearGradient>
                                 </defs>
@@ -648,9 +648,9 @@ export default function LandingPage() {
                               handleHeroTabChange(tab.id as any);
                             }
                           }}
-                          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8677FF]/50 ${
+                          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1]/50 ${
                             heroTab === tab.id
-                              ? 'bg-gradient-to-r from-[#6C5CFF] to-[#8677FF] border border-[#8677FF]/40 text-white shadow-[0_0_15px_rgba(108,92,255,0.45)] scale-[1.03]'
+                              ? 'bg-gradient-to-r from-[#4338CA] to-[#6366F1] border border-[#6366F1]/40 text-white shadow-[0_0_15px_rgba(108,92,255,0.45)] scale-[1.03]'
                               : 'bg-white/5 border border-white/10 text-white/70 hover:text-white backdrop-blur-md'
                           }`}
                           aria-label={`Show step ${idx + 1}`}
@@ -784,7 +784,7 @@ export default function LandingPage() {
                             <div className="space-y-0.5">
                               <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-wider block">Customer Name</span>
                               <div className="w-full bg-[#18181B] border border-border-primary px-2.5 py-1.5 rounded text-[10px] text-white font-mono">
-                                Sarah Jenkins
+                                J. Ashwath
                               </div>
                             </div>
                             <div className="space-y-0.5">
@@ -823,7 +823,7 @@ export default function LandingPage() {
                       <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
                         <span className="text-zinc-500 font-bold uppercase tracking-wider">Fast. Simple. Frictionless.</span>
                         <Link href="/demo">
-                          <span className="text-[#8677FF] hover:text-[#9c8fff] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
+                          <span className="text-[#6366F1] hover:text-[#4338CA] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
                             <span>Learn More</span>
                             <span>→</span>
                           </span>
@@ -888,11 +888,11 @@ export default function LandingPage() {
                           {/* Small list items */}
                           <div className="space-y-1.5 flex-1 overflow-y-auto">
                             <div className="bg-brand-emerald/5 border border-brand-emerald/30 p-1.5 rounded text-[8px] flex items-center justify-between">
-                              <span className="font-bold text-white truncate">Sarah Jenkins</span>
+                              <span className="font-bold text-white truncate">J. Ashwath</span>
                               <span className="text-[6px] text-brand-emerald font-black uppercase bg-brand-emerald/10 border border-brand-emerald/20 px-1 py-0.2 rounded">Positive</span>
                             </div>
                             <div className="bg-zinc-950 border border-border-primary/50 p-1.5 rounded text-[8px] flex items-center justify-between opacity-60">
-                              <span className="font-bold text-slate-400 truncate">James Cole</span>
+                              <span className="font-bold text-slate-400 truncate">Ateeqhulla Khan</span>
                               <span className="text-[6px] text-brand-teal font-black uppercase bg-brand-teal/10 border border-brand-teal/20 px-1 py-0.2 rounded">Video</span>
                             </div>
                           </div>
@@ -902,7 +902,7 @@ export default function LandingPage() {
                         <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-2 flex flex-col justify-between sm:col-span-1 text-left">
                           <div className="space-y-1 relative">
                             <div className="flex items-center justify-between">
-                              <span className="text-[8px] font-black text-[#8677FF] uppercase tracking-wider block">AI Analysis Summary</span>
+                              <span className="text-[8px] font-black text-[#6366F1] uppercase tracking-wider block">AI Analysis Summary</span>
                               {showSparkle && (
                                 <motion.span
                                   initial={{ scale: 0, opacity: 0 }}
@@ -947,7 +947,7 @@ export default function LandingPage() {
                               <defs>
                                 <linearGradient id="chartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                                   <stop offset="0%" stopColor="#10B981" />
-                                  <stop offset="100%" stopColor="#8677FF" />
+                                  <stop offset="100%" stopColor="#6366F1" />
                                 </linearGradient>
                               </defs>
                             </svg>
@@ -965,7 +965,7 @@ export default function LandingPage() {
                       <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
                         <span className="text-zinc-500 font-bold uppercase tracking-wider">Organized. Intelligent. Time-saving.</span>
                         <Link href="/demo">
-                          <span className="text-[#8677FF] hover:text-[#9c8fff] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
+                          <span className="text-[#6366F1] hover:text-[#4338CA] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
                             <span>Learn More</span>
                             <span>→</span>
                           </span>
@@ -1110,7 +1110,7 @@ export default function LandingPage() {
                                    initial={{ opacity: 0.9 }}
                                    animate={{ opacity: 0 }}
                                    transition={{ delay: 1.3, duration: 1.0 }}
-                                   className="absolute inset-0 rounded-xl border border-[#8677FF] pointer-events-none shadow-[0_0_15px_rgba(108,92,255,0.45)] z-10"
+                                   className="absolute inset-0 rounded-xl border border-[#6366F1] pointer-events-none shadow-[0_0_15px_rgba(108,92,255,0.45)] z-10"
                                  />
                                  <div className="space-y-1">
                                    <div className="flex items-center justify-between">
@@ -1130,11 +1130,11 @@ export default function LandingPage() {
                                  <div className="flex items-center space-x-2 pt-1.5 border-t border-zinc-900/60">
                                    <img 
                                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50" 
-                                     alt="Sarah Jenkins"
+                                     alt="J. Ashwath"
                                      className="w-5 h-5 rounded-full object-cover border border-zinc-800"
                                    />
                                    <div className="text-left leading-none">
-                                     <span className="text-[9px] font-bold text-white block">Sarah Jenkins</span>
+                                     <span className="text-[9px] font-bold text-white block">J. Ashwath</span>
                                      <span className="text-[7px] text-zinc-500 block mt-0.5">SaaS Founder</span>
                                    </div>
                                  </div>
@@ -1165,11 +1165,11 @@ export default function LandingPage() {
                                 <div className="flex items-center space-x-2 pt-1.5 border-t border-zinc-900/60">
                                   <img 
                                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50" 
-                                    alt="James Cole"
+                                    alt="Ateeqhulla Khan"
                                     className="w-5 h-5 rounded-full object-cover border border-zinc-800"
                                   />
                                   <div className="text-left leading-none">
-                                    <span className="text-[9px] font-bold text-white block">James Cole</span>
+                                    <span className="text-[9px] font-bold text-white block">Ateeqhulla Khan</span>
                                     <span className="text-[7px] text-zinc-500 block mt-0.5">Agency Owner</span>
                                   </div>
                                 </div>
@@ -1184,7 +1184,7 @@ export default function LandingPage() {
                       <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
                         <span className="text-zinc-500 font-bold uppercase tracking-wider">Trust. Credibility. Growth.</span>
                         <Link href="/demo">
-                          <span className="text-[#8677FF] hover:text-[#9c8fff] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
+                          <span className="text-[#6366F1] hover:text-[#4338CA] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
                             <span>Learn More</span>
                             <span>→</span>
                           </span>
@@ -1201,7 +1201,7 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      <section className="bg-[#111827]/40 border-y border-border-primary py-8 overflow-hidden relative">
+      <section className="bg-[#151A24]/40 border-y border-border-primary py-8 overflow-hidden relative">
         <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#09090B] to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#09090B] to-transparent z-10 pointer-events-none" />
 
@@ -1312,7 +1312,7 @@ export default function LandingPage() {
           
           {/* Text panel left */}
           <div className="lg:col-span-5 space-y-6 text-left">
-            <div className="inline-flex items-center space-x-2 bg-brand-teal/10 border border-brand-teal/20 text-[#2DD4BF] text-xs font-semibold px-3 py-1 rounded-full">
+            <div className="inline-flex items-center space-x-2 bg-brand-teal/10 border border-brand-teal/20 text-[#6366F1] text-xs font-semibold px-3 py-1 rounded-full">
               <Sparkles className="w-3.5 h-3.5 animate-pulse" />
               <span>Deep Performance Intelligence</span>
             </div>
@@ -1336,7 +1336,7 @@ export default function LandingPage() {
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6 relative">
             
             {/* Box 1: Sentiment */}
-            <SpotlightCard className="p-6 space-y-4 text-left" glowColor="rgba(108, 92, 255, 0.08)">
+            <SpotlightCard className="p-6 space-y-4 text-left" glowColor="rgba(99, 102, 241, 0.08)">
               <h4 className="text-xs font-extrabold text-white uppercase tracking-wider flex items-center space-x-1.5">
                 <Smile className="w-4 h-4 text-brand-emerald" />
                 <span>Customer Sentiment Trends</span>
@@ -1354,7 +1354,7 @@ export default function LandingPage() {
             </SpotlightCard>
 
             {/* Box 2: Keyword clouds */}
-            <SpotlightCard className="p-6 space-y-3 text-left flex flex-col justify-between" glowColor="rgba(134, 119, 255, 0.08)">
+            <SpotlightCard className="p-6 space-y-3 text-left flex flex-col justify-between" glowColor="rgba(99, 102, 241, 0.08)">
               <h4 className="text-xs font-extrabold text-white uppercase tracking-wider flex items-center space-x-1.5">
                 <Tag className="w-4 h-4 text-brand-teal" />
                 <span>Extracted Keywords</span>
@@ -1371,7 +1371,7 @@ export default function LandingPage() {
             </SpotlightCard>
 
             {/* Box 3: Praise and complaints */}
-            <SpotlightCard className="p-6 space-y-3 text-left sm:col-span-2" glowColor="rgba(108, 92, 255, 0.08)">
+            <SpotlightCard className="p-6 space-y-3 text-left sm:col-span-2" glowColor="rgba(99, 102, 241, 0.08)">
               <h4 className="text-xs font-extrabold text-white uppercase tracking-wider flex items-center space-x-1.5">
                 <Activity className="w-4 h-4 text-brand-emerald" />
                 <span>AI Detected Praise & Issues</span>
@@ -1498,7 +1498,7 @@ export default function LandingPage() {
 
             {/* Sandbox alert/badge */}
             <div className="pt-2">
-              <div className="text-[10px] font-extrabold text-[#2DD4BF] uppercase tracking-widest bg-brand-teal/10 border border-brand-teal/30 px-5 py-2.5 rounded-full inline-block shadow-lg">
+              <div className="text-[10px] font-extrabold text-[#6366F1] uppercase tracking-widest bg-brand-teal/10 border border-brand-teal/30 px-5 py-2.5 rounded-full inline-block shadow-lg">
                 ✨ Interactive Sandbox Showcase — Preview the Proofly Wall of Love widget live
               </div>
             </div>
@@ -1530,7 +1530,7 @@ export default function LandingPage() {
                         damping: 17, 
                         mass: 0.85 
                       }}
-                      className="absolute inset-0 bg-gradient-to-r from-[#6C5CFF] to-[#8677FF] rounded-lg -z-10 shadow-[0_0_18px_rgba(108,92,255,0.35)] border border-white/10"
+                      className="absolute inset-0 bg-gradient-to-r from-[#4338CA] to-[#6366F1] rounded-lg -z-10 shadow-[0_0_18px_rgba(108,92,255,0.35)] border border-white/10"
                     />
                   )}
                   {tab.label}
@@ -1618,7 +1618,7 @@ export default function LandingPage() {
                     ? 'border-brand-emerald ring-1 ring-brand-emerald/40 shadow-xl shadow-brand-emerald/5 scale-105 z-10' 
                     : 'border-border-primary'
                 }`}
-                glowColor={tier.accent ? 'rgba(108, 92, 255, 0.15)' : 'rgba(134, 119, 255, 0.08)'}
+                glowColor={tier.accent ? 'rgba(99, 102, 241, 0.15)' : 'rgba(99, 102, 241, 0.08)'}
               >
                 {tier.accent && (
                   <span className="absolute top-0 right-0 bg-brand-emerald text-white text-[9px] font-black tracking-widest uppercase px-3 py-1 rounded-bl-lg rounded-tr-lg">
@@ -1685,7 +1685,7 @@ export default function LandingPage() {
         className="max-w-6xl mx-auto px-6 py-24 text-center space-y-16 border-t border-border-primary/50"
       >
         <div className="space-y-4">
-          <div className="bg-[#6C5CFF]/15 text-[#8677FF] px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest inline-block border border-[#6C5CFF]/25">
+          <div className="bg-[#4338CA]/15 text-[#6366F1] px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest inline-block border border-[#4338CA]/25">
             ⚡ simple 3-step workflow
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
@@ -1703,7 +1703,7 @@ export default function LandingPage() {
           <div className="hidden lg:block absolute top-1/2 left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-brand-emerald/40 via-brand-teal/40 to-brand-emerald/40 -translate-y-1/2 z-0" />
 
           {/* Step 1 */}
-          <SpotlightCard className="p-8 space-y-6 flex flex-col justify-between items-center text-center relative z-10" glowColor="rgba(108, 92, 255, 0.08)">
+          <SpotlightCard className="p-8 space-y-6 flex flex-col justify-between items-center text-center relative z-10" glowColor="rgba(99, 102, 241, 0.08)">
             <div className="w-16 h-16 rounded-full bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center text-brand-emerald shadow-lg">
               <span className="text-xl font-black">01</span>
             </div>
@@ -1720,7 +1720,7 @@ export default function LandingPage() {
           </SpotlightCard>
 
           {/* Step 2 */}
-          <SpotlightCard className="p-8 space-y-6 flex flex-col justify-between items-center text-center relative z-10" glowColor="rgba(134, 119, 255, 0.08)">
+          <SpotlightCard className="p-8 space-y-6 flex flex-col justify-between items-center text-center relative z-10" glowColor="rgba(99, 102, 241, 0.08)">
             <div className="w-16 h-16 rounded-full bg-brand-teal/10 border border-brand-teal/30 flex items-center justify-center text-brand-teal shadow-lg">
               <span className="text-xl font-black">02</span>
             </div>
@@ -1742,7 +1742,7 @@ export default function LandingPage() {
           </SpotlightCard>
 
           {/* Step 3 */}
-          <SpotlightCard className="p-8 space-y-6 flex flex-col justify-between items-center text-center relative z-10" glowColor="rgba(108, 92, 255, 0.08)">
+          <SpotlightCard className="p-8 space-y-6 flex flex-col justify-between items-center text-center relative z-10" glowColor="rgba(99, 102, 241, 0.08)">
             <div className="w-16 h-16 rounded-full bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center text-brand-emerald shadow-lg">
               <span className="text-xl font-black">03</span>
             </div>
@@ -1881,7 +1881,7 @@ export default function LandingPage() {
                           </div>
 
                           <div className="w-full flex justify-center z-10">
-                            <span className="text-[7px] font-bold text-slate-400 bg-black/60 px-2 py-0.5 rounded">Sarah Jenkins</span>
+                            <span className="text-[7px] font-bold text-slate-400 bg-black/60 px-2 py-0.5 rounded">J. Ashwath</span>
                           </div>
                         </div>
 
@@ -1890,7 +1890,7 @@ export default function LandingPage() {
                           <div className="space-y-1">
                             <label className="text-[7px] font-bold text-zinc-500 uppercase">Reviewer Name</label>
                             <div className="bg-zinc-950 border border-zinc-850 px-2 py-1 rounded text-[9px] text-white">
-                              Sarah Jenkins
+                              J. Ashwath
                             </div>
                           </div>
                           <div className="space-y-1">
@@ -1932,13 +1932,13 @@ export default function LandingPage() {
                       {/* Inbox detail card */}
                       <div className="bg-zinc-950 border border-zinc-850 p-3 rounded-lg space-y-2 flex-1 flex flex-col justify-center">
                         <div className="flex items-center justify-between text-[9px] font-bold">
-                          <span className="text-white">Review from Sarah Jenkins (DevFlow)</span>
+                          <span className="text-white">Review from J. Ashwath (DevFlow)</span>
                           <span className="text-brand-emerald uppercase text-[7px] border border-brand-emerald/20 bg-brand-emerald/10 px-1.5 py-0.5 rounded">AI Tagged</span>
                         </div>
                         
                         {/* Auto summary typing effect */}
                         <div className="bg-black border border-zinc-900 p-2 rounded text-[9px] font-mono text-slate-300 min-h-[36px]">
-                          {videoTime >= 18 ? "Sarah details the fast 15-minute onboarding configuration..." : "Analyzing review sentiment..."}
+                          {videoTime >= 18 ? "J. Ashwath details the fast 15-minute onboarding configuration..." : "Analyzing review sentiment..."}
                         </div>
 
                         {/* Social Draft auto-generated */}
@@ -1989,7 +1989,7 @@ export default function LandingPage() {
                         <span className="text-[10px] font-black text-brand-emerald bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase tracking-wider">
                           💖 Phase 3: Wall of Love Embedded Widget
                         </span>
-                        <span className="text-[8px] font-mono text-[#8677FF] border border-[#8677FF]/20 bg-[#8677FF]/10 px-1.5 py-0.5 rounded">+24% CONVERSION LIFT</span>
+                        <span className="text-[8px] font-mono text-[#6366F1] border border-[#6366F1]/20 bg-[#6366F1]/10 px-1.5 py-0.5 rounded">+24% CONVERSION LIFT</span>
                       </div>
 
                       {/* Mini Wall of Love grid */}
@@ -1999,7 +1999,7 @@ export default function LandingPage() {
                             "Setup took under 15 minutes. Onboarding speed doubled!"
                           </p>
                           <div className="flex items-center space-x-1.5">
-                            <span className="text-[8px] font-bold text-white">Sarah Jenkins</span>
+                            <span className="text-[8px] font-bold text-white">J. Ashwath</span>
                             <span className="text-[7px] text-zinc-500 font-mono">SaaS Founder</span>
                           </div>
                         </div>
@@ -2009,7 +2009,7 @@ export default function LandingPage() {
                             "We increased conversion rates by 18% in our first week!"
                           </p>
                           <div className="flex items-center space-x-1.5">
-                            <span className="text-[8px] font-bold text-white">James Cole</span>
+                            <span className="text-[8px] font-bold text-white">Ateeqhulla Khan</span>
                             <span className="text-[7px] text-zinc-500 font-mono">Agency Owner</span>
                           </div>
                         </div>

@@ -52,7 +52,7 @@ export function CookieConsent() {
 
           {/* Description */}
           <p className="text-[10px] text-slate-400 leading-relaxed">
-            Proofly uses cookies to secure session sessions, track conversion lift analytics, and cache widget styling configurations. Read our <a href="/privacy" className="text-[#8677FF] hover:underline">Privacy Policy</a>.
+            Proofly uses cookies to secure session sessions, track conversion lift analytics, and cache widget styling configurations. Read our <a href="/privacy" className="text-[#6366F1] hover:underline">Privacy Policy</a>.
           </p>
 
           {/* Actions */}

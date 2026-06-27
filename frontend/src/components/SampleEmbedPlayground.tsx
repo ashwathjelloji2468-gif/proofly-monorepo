@@ -39,8 +39,8 @@ export function SampleEmbedPlayground() {
 
 .testimonial-card:hover {
   transform: translateY(-8px) scale(1.02);
-  border-color: rgba(20, 184, 166, 0.4);
-  box-shadow: 0 20px 40px rgba(20, 184, 166, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
 }
 
 .glow {
@@ -65,7 +65,7 @@ export function SampleEmbedPlayground() {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 2px solid #6C5CFF;
+  border: 2px solid #4338CA;
   object-fit: cover;
 }
 
@@ -102,7 +102,7 @@ card.addEventListener('mousemove', (e) => {
   const rect = card.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
-  glow.style.background = \`radial-gradient(circle at \${x}px \${y}px, rgba(20, 184, 166, 0.25) 0%, transparent 60%)\`;
+  glow.style.background = \`radial-gradient(circle at \${x}px \${y}px, rgba(99, 102, 241, 0.25) 0%, transparent 60%)\`;
 });
 
 card.addEventListener('mouseleave', () => {
@@ -156,7 +156,7 @@ card.addEventListener('mouseleave', () => {
       
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-border-primary/50">
         <div className="text-left space-y-2">
-          <div className="inline-flex items-center space-x-2 bg-brand-emerald/10 border border-brand-emerald/20 text-[#8677FF] text-xs font-semibold px-3 py-1 rounded-full">
+          <div className="inline-flex items-center space-x-2 bg-brand-emerald/10 border border-brand-emerald/20 text-[#6366F1] text-xs font-semibold px-3 py-1 rounded-full">
             <Code className="w-3.5 h-3.5" />
             <span>Try Our Sample Embed Code</span>
           </div>

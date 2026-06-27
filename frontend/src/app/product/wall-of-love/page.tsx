@@ -20,7 +20,7 @@ export default function WallOfLovePage() {
   const testimonials = [
     {
       id: 't-1',
-      name: 'Sarah Jenkins',
+      name: 'J. Ashwath',
       role: 'SaaS Founder',
       company: 'DevFlow Inc.',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100',
@@ -29,7 +29,7 @@ export default function WallOfLovePage() {
     },
     {
       id: 't-2',
-      name: 'James Cole',
+      name: 'Ateeqhulla Khan',
       role: 'Product Lead',
       company: 'TaskGrid',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100',
@@ -38,7 +38,7 @@ export default function WallOfLovePage() {
     },
     {
       id: 't-3',
-      name: 'Marcus Brody',
+      name: 'Ateeqhulla Khan',
       role: 'Growth Hacker',
       company: 'LaunchPad',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100',
@@ -65,7 +65,7 @@ export default function WallOfLovePage() {
   const themeClass = {
     glass: 'bg-[#0c0d16]/75 backdrop-blur-xl border border-white/5 shadow-2xl',
     dark: 'bg-zinc-950 border border-zinc-800/80 shadow-md',
-    neon: 'bg-[#030303] border border-[#8677FF]/20 shadow-[0_0_15px_rgba(134,119,255,0.06)]'
+    neon: 'bg-[#030303] border border-[#6366F1]/20 shadow-[0_0_15px_rgba(134,119,255,0.06)]'
   };
 
   const handleCopyCode = () => {
@@ -81,14 +81,14 @@ export default function WallOfLovePage() {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-8 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/15 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5 animate-pulse">
+        <span className="bg-[#6366F1]/15 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5 animate-pulse">
           Wall of Love Builder
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           Display social proof <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             with absolute elegance
           </span>
         </h1>
@@ -103,7 +103,7 @@ export default function WallOfLovePage() {
         {/* Left Side: Configurator Controls (4 Columns) */}
         <div className="lg:col-span-4 bg-[#0c0d16] border border-white/[0.06] rounded-2xl p-6 space-y-6 shadow-2xl text-left relative">
           <div className="flex items-center space-x-2 border-b border-white/5 pb-3">
-            <Sliders className="w-4 h-4 text-[#8677FF]" />
+            <Sliders className="w-4 h-4 text-[#6366F1]" />
             <h2 className="text-sm font-black uppercase tracking-wider text-slate-200">Wall Configurator</h2>
           </div>
 
@@ -114,7 +114,7 @@ export default function WallOfLovePage() {
               <button
                 onClick={() => setLayoutMode('grid')}
                 className={`py-1.5 rounded-lg flex flex-col items-center justify-center space-y-1 transition duration-200 cursor-pointer ${
-                  layoutMode === 'grid' ? 'bg-[#8677FF] text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                  layoutMode === 'grid' ? 'bg-[#6366F1] text-white shadow-lg' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <GridIcon className="w-3.5 h-3.5" />
@@ -123,7 +123,7 @@ export default function WallOfLovePage() {
               <button
                 onClick={() => setLayoutMode('masonry')}
                 className={`py-1.5 rounded-lg flex flex-col items-center justify-center space-y-1 transition duration-200 cursor-pointer ${
-                  layoutMode === 'masonry' ? 'bg-[#8677FF] text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                  layoutMode === 'masonry' ? 'bg-[#6366F1] text-white shadow-lg' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <Columns className="w-3.5 h-3.5" />
@@ -132,7 +132,7 @@ export default function WallOfLovePage() {
               <button
                 onClick={() => setLayoutMode('carousel')}
                 className={`py-1.5 rounded-lg flex flex-col items-center justify-center space-y-1 transition duration-200 cursor-pointer ${
-                  layoutMode === 'carousel' ? 'bg-[#8677FF] text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                  layoutMode === 'carousel' ? 'bg-[#6366F1] text-white shadow-lg' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <LayoutList className="w-3.5 h-3.5" />
@@ -151,7 +151,7 @@ export default function WallOfLovePage() {
                   onClick={() => setCardTheme(themeName as any)}
                   className={`py-2 text-[10px] font-bold rounded-xl border transition duration-200 cursor-pointer uppercase ${
                     cardTheme === themeName 
-                      ? 'border-[#8677FF] bg-[#8677FF]/10 text-white font-black' 
+                      ? 'border-[#6366F1] bg-[#6366F1]/10 text-white font-black' 
                       : 'border-white/[0.06] bg-zinc-950 text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -171,7 +171,7 @@ export default function WallOfLovePage() {
                   onClick={() => setBorderRadius(radiusName as any)}
                   className={`py-2 text-[10px] font-bold rounded-xl border transition duration-200 cursor-pointer uppercase ${
                     borderRadius === radiusName 
-                      ? 'border-[#8677FF] bg-[#8677FF]/10 text-white font-black' 
+                      ? 'border-[#6366F1] bg-[#6366F1]/10 text-white font-black' 
                       : 'border-white/[0.06] bg-zinc-950 text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -188,7 +188,7 @@ export default function WallOfLovePage() {
               type="checkbox" 
               checked={showStars} 
               onChange={(e) => setShowStars(e.target.checked)}
-              className="w-4 h-4 rounded text-[#8677FF] accent-[#8677FF] cursor-pointer"
+              className="w-4 h-4 rounded text-[#6366F1] accent-[#6366F1] cursor-pointer"
             />
           </div>
 
@@ -197,7 +197,7 @@ export default function WallOfLovePage() {
             <div className="space-y-2">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Star Accent Color</label>
               <div className="flex items-center space-x-3">
-                {['#F59E0B', '#EF4444', '#10B981', '#6C5CFF'].map((colorHex, idx) => (
+                {['#F59E0B', '#EF4444', '#10B981', '#4338CA'].map((colorHex, idx) => (
                   <button
                     key={idx}
                     onClick={() => setStarColor(colorHex)}
@@ -220,7 +220,7 @@ export default function WallOfLovePage() {
           <div className="bg-zinc-950/60 border border-white/[0.06] rounded-3xl p-6 min-h-[350px] flex flex-col justify-center relative overflow-hidden">
             
             {/* Background decorative glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#8677FF]/5 rounded-full blur-[90px] pointer-events-none -z-10" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#6366F1]/5 rounded-full blur-[90px] pointer-events-none -z-10" />
 
             <div className={`w-full gap-4 transition-all duration-300 ${
               layoutMode === 'grid' 

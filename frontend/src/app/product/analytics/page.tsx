@@ -23,7 +23,7 @@ export default function AnalyticsProductPage() {
   // Metrics database
   const metrics = [
     { name: 'Total Views', value: '45,280', change: '+12.4%', icon: <Users className="w-4 h-4 text-brand-teal" /> },
-    { name: 'Testimonial Clicks', value: '12,940', change: '+8.6%', icon: <MousePointerClick className="w-4 h-4 text-[#8677FF]" /> },
+    { name: 'Testimonial Clicks', value: '12,940', change: '+8.6%', icon: <MousePointerClick className="w-4 h-4 text-[#6366F1]" /> },
     { name: 'Avg Watch Time', value: '42.5s', change: '+5.2%', icon: <BarChart3 className="w-4 h-4 text-brand-emerald" /> },
     { name: 'Conversion Lift', value: '18.4%', change: '+4.1%', icon: <Percent className="w-4 h-4 text-orange-500" /> }
   ];
@@ -55,7 +55,7 @@ export default function AnalyticsProductPage() {
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           Deep conversions & <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             attribution analytics
           </span>
         </h1>
@@ -88,7 +88,7 @@ export default function AnalyticsProductPage() {
                       setSelectedSpace(space);
                       setIsOpenSpace(false);
                     }}
-                    className="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-[#8677FF]/10 hover:text-white transition cursor-pointer"
+                    className="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-[#6366F1]/10 hover:text-white transition cursor-pointer"
                   >
                     {space}
                   </button>
@@ -143,8 +143,8 @@ export default function AnalyticsProductPage() {
                 {/* Shading/gradient area under line */}
                 <defs>
                   <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#14B8A6" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="#14B8A6" stopOpacity="0.0" />
+                    <stop offset="0%" stopColor="#4338CA" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#4338CA" stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
                 <path 
@@ -156,14 +156,14 @@ export default function AnalyticsProductPage() {
                 <path 
                   d="M0,120 L100,105 L200,90 L300,50 L400,35 L500,15" 
                   fill="none" 
-                  stroke="#14B8A6" 
+                  stroke="#4338CA" 
                   strokeWidth="2.5" 
                   strokeLinecap="round"
                 />
 
                 {/* Data point glowing dots */}
-                <circle cx="300" cy="50" r="4.5" fill="#14B8A6" stroke="#09090B" strokeWidth="1.5" />
-                <circle cx="500" cy="15" r="4.5" fill="#14B8A6" stroke="#09090B" strokeWidth="1.5" />
+                <circle cx="300" cy="50" r="4.5" fill="#4338CA" stroke="#09090B" strokeWidth="1.5" />
+                <circle cx="500" cy="15" r="4.5" fill="#4338CA" stroke="#09090B" strokeWidth="1.5" />
               </svg>
             </div>
 
@@ -185,7 +185,7 @@ export default function AnalyticsProductPage() {
             {/* Geographic panel */}
             <div className="space-y-3.5 text-left">
               <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest flex items-center space-x-1.5 border-b border-white/5 pb-2.5">
-                <Globe className="w-3.5 h-3.5 text-[#8677FF]" />
+                <Globe className="w-3.5 h-3.5 text-[#6366F1]" />
                 <span>Geographic Attributions</span>
               </span>
               <div className="space-y-2.5">

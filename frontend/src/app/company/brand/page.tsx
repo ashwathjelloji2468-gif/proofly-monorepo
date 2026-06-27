@@ -41,9 +41,9 @@ export default function BrandAssetsPage() {
               <h4 className="text-xs font-bold text-white">Color Palette</h4>
             </div>
             <div className="flex space-x-2 pt-2">
-              <div className="flex-1 h-8 rounded bg-[#8677FF]" title="#8677FF Accent" />
+              <div className="flex-1 h-8 rounded bg-[#6366F1]" title="#6366F1 Accent" />
               <div className="flex-1 h-8 rounded bg-[#10B981]" title="#10B981 Emerald" />
-              <div className="flex-1 h-8 rounded bg-[#14B8A6]" title="#14B8A6 Teal" />
+              <div className="flex-1 h-8 rounded bg-[#4338CA]" title="#4338CA Teal" />
               <div className="flex-1 h-8 rounded bg-[#0A0B14]" title="#0A0B14 Dark" />
             </div>
           </div>

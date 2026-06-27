@@ -27,15 +27,15 @@ export default function EmbedsProductPage() {
   // States
   const [selectedFramework, setSelectedFramework] = useState('html');
   const [embedTheme, setEmbedTheme] = useState<'dark' | 'light'>('dark');
-  const [accentColor, setAccentColor] = useState('#8677FF'); // violet
+  const [accentColor, setAccentColor] = useState('#6366F1'); // violet
   const [copied, setCopied] = useState(false);
 
   // Styling maps
   const colorSwatches = [
-    { name: 'Violet', value: '#8677FF' },
+    { name: 'Violet', value: '#6366F1' },
     { name: 'Emerald', value: '#10B981' },
-    { name: 'Teal', value: '#14B8A6' },
-    { name: 'Indigo', value: '#6366F1' },
+    { name: 'Teal', value: '#4338CA' },
+    { name: 'Indigo', value: '#4338CA' },
     { name: 'Orange', value: '#F97316' }
   ];
 
@@ -73,14 +73,14 @@ export default function EmbedsProductPage() {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-8 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#14B8A6]/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#4338CA]/5 rounded-full blur-[120px] pointer-events-none -z-10" />
         
-        <span className="bg-[#14B8A6]/10 text-brand-teal border border-brand-teal/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#4338CA]/10 text-brand-teal border border-brand-teal/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
           Embed Integrations
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           One line of code. <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             Embed anywhere.
           </span>
         </h1>
@@ -111,7 +111,7 @@ export default function EmbedsProductPage() {
                 }}
                 className={`flex items-center space-x-3 p-3.5 rounded-xl border text-left transition duration-200 cursor-pointer ${
                   selectedFramework === f.id 
-                    ? 'bg-brand-teal/5 border-brand-teal/30 text-white font-bold shadow-[0_0_12px_rgba(20,184,166,0.08)]' 
+                    ? 'bg-brand-teal/5 border-brand-teal/30 text-white font-bold shadow-[0_0_12px_rgba(99,102,241,0.08)]' 
                     : 'bg-zinc-950 border-white/[0.04] text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -128,7 +128,7 @@ export default function EmbedsProductPage() {
               <button
                 onClick={() => setEmbedTheme('dark')}
                 className={`py-2 text-[10px] font-bold rounded-lg transition duration-200 cursor-pointer ${
-                  embedTheme === 'dark' ? 'bg-[#8677FF] text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'
+                  embedTheme === 'dark' ? 'bg-[#6366F1] text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
                 DARK THEME
@@ -189,7 +189,7 @@ export default function EmbedsProductPage() {
                   S
                 </div>
                 <div className="leading-none text-left">
-                  <span className={`text-[10px] font-bold block ${embedTheme === 'dark' ? 'text-white' : 'text-zinc-950'}`}>Sarah Jenkins</span>
+                  <span className={`text-[10px] font-bold block ${embedTheme === 'dark' ? 'text-white' : 'text-zinc-950'}`}>J. Ashwath</span>
                   <span className="text-[7.5px] text-zinc-500 block mt-0.5">SaaS Founder</span>
                 </div>
               </div>

@@ -44,7 +44,7 @@ export default function StatusPage() {
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           All systems are <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             fully operational
           </span>
         </h1>
@@ -114,7 +114,7 @@ export default function StatusPage() {
         {/* Incident History Feed */}
         <div className="bg-[#0c0d16] border border-white/[0.05] p-6 rounded-3xl shadow-xl space-y-5">
           <div className="flex items-center space-x-2 border-b border-white/5 pb-3">
-            <Globe className="w-4 h-4 text-[#8677FF]" />
+            <Globe className="w-4 h-4 text-[#6366F1]" />
             <h3 className="text-xs font-black uppercase tracking-wider text-slate-200">Incident History Registry</h3>
           </div>
 
@@ -123,7 +123,7 @@ export default function StatusPage() {
               <div key={idx} className="relative pl-5 border-l border-white/5 space-y-1.5 text-left">
                 {/* indicator dot */}
                 <div className={`w-2.5 h-2.5 rounded-full absolute -left-1.5 top-1 border-2 border-[#0c0d16] ${
-                  inc.type === 'MAINTENANCE' ? 'bg-[#8677FF]' : 'bg-brand-teal'
+                  inc.type === 'MAINTENANCE' ? 'bg-[#6366F1]' : 'bg-brand-teal'
                 }`} />
                 
                 <div className="flex items-center space-x-2">
@@ -131,7 +131,7 @@ export default function StatusPage() {
                     {inc.date}
                   </span>
                   <span className={`text-[8px] font-black uppercase px-1.5 rounded ${
-                    inc.type === 'MAINTENANCE' ? 'bg-[#8677FF]/10 border border-[#8677FF]/20 text-[#8677FF]' : 'bg-brand-teal/10 border border-brand-teal/20 text-brand-teal'
+                    inc.type === 'MAINTENANCE' ? 'bg-[#6366F1]/10 border border-[#6366F1]/20 text-[#6366F1]' : 'bg-brand-teal/10 border border-brand-teal/20 text-brand-teal'
                   }`}>
                     {inc.type}
                   </span>

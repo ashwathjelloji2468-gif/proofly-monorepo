@@ -23,9 +23,8 @@ export default function AboutPage() {
   ];
 
   const team = [
-    { name: 'Jelloji Ashwath', role: 'Founder & CEO', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Ashwath' },
-    { name: 'Sarah Jenkins', role: 'Head of Growth', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Sarah' },
-    { name: 'Marcus Brody', role: 'Lead Architect', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Marcus' }
+    { name: 'J. Ashwath', role: 'Founder', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Ashwath' },
+    { name: 'Ateeqhulla Khan', role: 'Co-Founder', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Ateeq' }
   ];
 
   const timeline = [
@@ -40,14 +39,14 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-12 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/10 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#6366F1]/10 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
           Our Company Mission
         </span>
         <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           We organize the world's <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             customer love
           </span>
         </h1>
@@ -69,8 +68,8 @@ export default function AboutPage() {
         </div>
         
         <div className="bg-[#0c0d16] border border-white/[0.05] p-6 rounded-2xl space-y-3 relative shadow-xl">
-          <div className="w-8 h-8 rounded-lg bg-[#8677FF]/10 border border-[#8677FF]/20 flex items-center justify-center">
-            <Compass className="w-4 h-4 text-[#8677FF]" />
+          <div className="w-8 h-8 rounded-lg bg-[#6366F1]/10 border border-[#6366F1]/20 flex items-center justify-center">
+            <Compass className="w-4 h-4 text-[#6366F1]" />
           </div>
           <h3 className="text-sm font-black uppercase tracking-wider text-white">Our Vision</h3>
           <p className="text-xs text-slate-400 leading-relaxed">
@@ -89,9 +88,9 @@ export default function AboutPage() {
           {timeline.map((item, idx) => (
             <div key={idx} className="relative space-y-1.5">
               {/* Dot marker */}
-              <div className="w-3.5 h-3.5 rounded-full bg-[#8677FF] border-2 border-[#09090B] absolute -left-[33px] top-0.5 shadow-lg" />
+              <div className="w-3.5 h-3.5 rounded-full bg-[#6366F1] border-2 border-[#09090B] absolute -left-[33px] top-0.5 shadow-lg" />
               <div className="flex items-center space-x-2">
-                <span className="text-[10px] font-black uppercase bg-[#8677FF]/10 border border-[#8677FF]/20 text-[#8677FF] px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-black uppercase bg-[#6366F1]/10 border border-[#6366F1]/20 text-[#6366F1] px-2 py-0.5 rounded-full">
                   {item.year}
                 </span>
                 <h4 className="text-xs font-bold text-white tracking-wide">{item.title}</h4>

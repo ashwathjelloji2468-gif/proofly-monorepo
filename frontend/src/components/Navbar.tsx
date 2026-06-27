@@ -196,10 +196,10 @@ export function Navbar() {
         }`}
       >
         <div 
-          className={`max-w-7xl mx-auto w-[92%] sm:w-[94%] rounded-full border border-white/[0.08] transition-all duration-300 ${
+          className={`max-w-7xl mx-auto w-[92%] sm:w-[94%] rounded-full border border-[#2E3445] transition-all duration-300 ${
             isScrolled 
-              ? 'h-14 bg-[#0a0b14]/75 backdrop-blur-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.4)] px-5' 
-              : 'h-16 bg-[#0a0b14]/60 backdrop-blur-[18px] shadow-[0_8px_20px_rgba(0,0,0,0.2)] px-6'
+              ? 'h-14 bg-[rgba(10,11,20,0.80)] backdrop-blur-[20px] shadow-[0_10px_30px_rgba(0,0,0,0.4)] px-5' 
+              : 'h-16 bg-[rgba(10,11,20,0.80)] backdrop-blur-[20px] shadow-[0_8px_20px_rgba(0,0,0,0.2)] px-6'
           } flex items-center justify-between`}
         >
           {/* Left: Logo */}
@@ -212,7 +212,7 @@ export function Navbar() {
               whileHover={{ 
                 scale: 1.03, 
                 rotate: 2.5,
-                filter: 'drop-shadow(0 0 8px rgba(108, 92, 255, 0.4))'
+                filter: 'drop-shadow(0 0 8px rgba(99, 102, 241, 0.4))'
               }}
               transition={{ type: 'spring', stiffness: 350, damping: 15 }}
             >
@@ -248,7 +248,7 @@ export function Navbar() {
                     className="absolute top-10 left-1/2 -translate-x-1/2 bg-[#0d0e19]/95 backdrop-blur-xl border border-white/[0.08] p-4 rounded-2xl w-[480px] grid grid-cols-2 gap-3 shadow-[0_15px_40px_rgba(0,0,0,0.6)]"
                   >
                     {[
-                      { icon: <Video className="w-4 h-4 text-[#8677FF]" />, title: '🎥 Collect Testimonials', desc: 'Gather rich feedback easily.', path: '/product/collect' },
+                      { icon: <Video className="w-4 h-4 text-[#6366F1]" />, title: '🎥 Collect Testimonials', desc: 'Gather rich feedback easily.', path: '/product/collect' },
                       { icon: <LayoutDashboard className="w-4 h-4 text-brand-emerald" />, title: '📊 AI Workspace', desc: 'AI summary curation suite.', path: '/product/ai-workspace' },
                       { icon: <Heart className="w-4 h-4 text-red-500" />, title: '💖 Wall of Love', desc: 'Beautiful social proof grids.', path: '/product/wall-of-love' },
                       { icon: <Sparkles className="w-4 h-4 text-brand-teal" />, title: '🤖 AI Insights', desc: 'Autodetect feedback sentiment.', path: '/product/ai-workspace' },
@@ -336,7 +336,7 @@ export function Navbar() {
               {activeSection === 'pricing' && (
                 <motion.div 
                   layoutId="nav-underline"
-                  className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#8677FF]"
+                  className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#6366F1]"
                   transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                 />
               )}
@@ -354,7 +354,7 @@ export function Navbar() {
               {activeSection === 'showcase' && (
                 <motion.div 
                   layoutId="nav-underline"
-                  className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#8677FF]"
+                  className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#6366F1]"
                   transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                 />
               )}
@@ -494,7 +494,7 @@ export function Navbar() {
                   <motion.button 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="bg-gradient-to-r from-[#6C5CFF] to-[#8677FF] text-white font-bold text-xs py-2 px-4.5 rounded-full cursor-pointer transition-all duration-200 flex items-center space-x-1 shadow-[0_4px_15px_rgba(108,92,255,0.35)] hover:shadow-[0_4px_20px_rgba(108,92,255,0.5)] focus:outline-none group"
+                    className="bg-gradient-to-r from-[#4338CA] to-[#6366F1] text-white font-bold text-xs py-2 px-4.5 rounded-full cursor-pointer transition-all duration-200 flex items-center space-x-1 shadow-[0_4px_15px_rgba(99,102,241,0.3)] hover:shadow-[0_4px_20px_rgba(99,102,241,0.4)] focus:outline-none group"
                   >
                     <span>Start Free</span>
                     <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -576,7 +576,7 @@ export function Navbar() {
 
               <div className="pt-6 border-t border-white/5">
                 <Link href="/signup" onClick={() => setIsOpen(false)}>
-                  <button className="w-full bg-gradient-to-r from-[#6C5CFF] to-[#8677FF] text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center space-x-1.5 shadow-[0_4px_15px_rgba(108,92,255,0.35)]">
+                  <button className="w-full bg-gradient-to-r from-[#4338CA] to-[#6366F1] text-white font-bold text-xs py-3 rounded-xl flex items-center justify-center space-x-1.5 shadow-[0_4px_15px_rgba(99,102,241,0.3)]">
                     <span>Start Free</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
@@ -638,7 +638,7 @@ export function Navbar() {
                       onMouseEnter={() => setSelectedIndex(idx)}
                       className={`w-full text-left p-2.5 rounded-xl flex items-center justify-between transition-all border border-transparent ${
                         idx === selectedIndex 
-                          ? 'bg-[#8677FF]/10 text-white border-[#8677FF]/20 shadow-[0_0_12px_rgba(108,92,255,0.1)]' 
+                          ? 'bg-[#6366F1]/10 text-white border-[#6366F1]/20 shadow-[0_0_12px_rgba(99,102,241,0.1)]' 
                           : 'text-slate-350 hover:bg-white/[0.02]'
                       }`}
                     >
@@ -648,7 +648,7 @@ export function Navbar() {
                       </div>
                       
                       {idx === selectedIndex && (
-                        <span className="text-[8px] uppercase font-black text-[#8677FF] bg-[#8677FF]/10 border border-[#8677FF]/20 px-2 py-0.5 rounded tracking-widest flex items-center space-x-0.5">
+                        <span className="text-[8px] uppercase font-black text-[#6366F1] bg-[#6366F1]/10 border border-[#6366F1]/20 px-2 py-0.5 rounded tracking-widest flex items-center space-x-0.5">
                           <span>Select</span>
                           <span>↵</span>
                         </span>

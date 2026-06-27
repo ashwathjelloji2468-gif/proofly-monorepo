@@ -44,7 +44,7 @@ export function CandyHeart3D() {
     if (!isInView) return;
 
     const interval = setInterval(() => {
-      const colors = ['#6C5CFF', '#8677FF', '#b4a7ff', '#a397ff', '#ffffff'];
+      const colors = ['#4338CA', '#6366F1', '#4338CA', '#3730A3', '#ffffff'];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
       
       const newSparkle: Sparkle = {
@@ -81,7 +81,7 @@ export function CandyHeart3D() {
             width: `${sp.size}px`,
             height: `${sp.size}px`,
             backgroundColor: sp.color,
-            boxShadow: `0 0 8px 2px ${sp.color === '#ffffff' ? '#8677FF' : sp.color}`,
+            boxShadow: `0 0 8px 2px ${sp.color === '#ffffff' ? '#6366F1' : sp.color}`,
             zIndex: 5,
           }}
         />
@@ -113,8 +113,8 @@ export function CandyHeart3D() {
           <defs>
             {/* Main Gradient */}
             <linearGradient id="candyHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#6C5CFF" />
-              <stop offset="100%" stopColor="#8677FF" />
+              <stop offset="0%" stopColor="#4338CA" />
+              <stop offset="100%" stopColor="#6366F1" />
             </linearGradient>
 
             {/* Light Specular/Bevel Gradient */}
@@ -126,15 +126,15 @@ export function CandyHeart3D() {
 
             {/* Bottom Inner Shadow Bevel */}
             <linearGradient id="bevelShadowGrad" x1="0%" y1="100%" x2="0%" y2="0%">
-              <stop offset="0%" stopColor="#2e257a" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#2e257a" stopOpacity="0" />
+              <stop offset="0%" stopColor="#4338CA" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#4338CA" stopOpacity="0" />
             </linearGradient>
           </defs>
 
           {/* 3D Extrusion Side shadow */}
           <path
             d="M60 112 C48 101 8 70 8 42 C8 22 23 8 42 8 C51 8 57 13 60 18 C63 13 69 8 78 8 C97 8 112 22 112 42 C112 70 72 101 60 112 Z"
-            fill="#3c30ab"
+            fill="#4338CA"
             className="transform translate-y-[3px]"
           />
 

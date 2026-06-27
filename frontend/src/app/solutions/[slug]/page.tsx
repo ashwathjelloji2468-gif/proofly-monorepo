@@ -37,8 +37,8 @@ const solutionsData: Record<string, {
     title: 'SaaS',
     heading: 'Turn customer success into your highest-converting growth loop',
     description: 'Reduce onboarding churn, drive premium tier expansions, and automate social proof distribution with frictionless integrations.',
-    accentColor: '#8677FF',
-    glowColor: 'rgba(134, 119, 255, 0.15)',
+    accentColor: '#6366F1',
+    glowColor: 'rgba(99, 102, 241, 0.15)',
     painPoints: [
       'High engineering customization overhead for review pages.',
       'Text reviews on landing pages feel fake or low trust to enterprise buyers.',
@@ -55,7 +55,7 @@ const solutionsData: Record<string, {
       { title: 'Reward Coupons', desc: 'Offer coupons or discount keys post-submission to increase collection rates.' }
     ],
     testimonial: {
-      name: 'Sarah Jenkins',
+      name: 'J. Ashwath',
       role: 'Founder',
       company: 'DevFlow Inc.',
       quote: 'Proofly integrated in less than 30 minutes! Onboarding pipeline speed doubled immediately, and our checkout conversions went up by 18%. Highly recommended.',
@@ -105,8 +105,8 @@ const solutionsData: Record<string, {
     title: 'Startups',
     heading: 'Build instant user trust on day one of your product launch',
     description: 'Acquire early testimonials, showcase validation widgets, and convert launch traffic into recurring users without setup friction.',
-    accentColor: '#14B8A6',
-    glowColor: 'rgba(20, 184, 166, 0.15)',
+    accentColor: '#4338CA',
+    glowColor: 'rgba(99, 102, 241, 0.15)',
     painPoints: [
       'Zero initial social proof results in high visitor bounce rates.',
       'Spent launch day manually compiling feedback screenshots from Twitter.',
@@ -123,7 +123,7 @@ const solutionsData: Record<string, {
       { title: 'Frictionless setup', desc: 'No complex database tables required—plug and play.' }
     ],
     testimonial: {
-      name: 'Marcus Brody',
+      name: 'Ateeqhulla Khan',
       role: 'Growth Hacker',
       company: 'LaunchPad',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100',
@@ -139,8 +139,8 @@ const solutionsData: Record<string, {
     title: 'Creators',
     heading: 'Monetize validation assets and scale your brand authority',
     description: 'Capture video reviews from your audience, compile them on your link-in-bio, and command higher sponsor rates.',
-    accentColor: '#8677FF',
-    glowColor: 'rgba(134, 119, 255, 0.15)',
+    accentColor: '#6366F1',
+    glowColor: 'rgba(99, 102, 241, 0.15)',
     painPoints: [
       'Social screenshots look disorganized and messy on personal portfolios.',
       'Awkward review instructions result in generic comments from audience.',
@@ -225,7 +225,7 @@ const solutionsData: Record<string, {
       { title: 'Ad Asset Builders', desc: 'Export high-res testimonial graphics in standard ratios.' }
     ],
     testimonial: {
-      name: 'James Cole',
+      name: 'Ateeqhulla Khan',
       role: 'Product Lead',
       company: 'TaskGrid',
       quote: 'The ad generator has cut asset creation time in half. Proofly is an essential growth tool for modern marketing teams.',
@@ -402,7 +402,7 @@ export default function SolutionsDetailPage() {
               key={idx}
               className="bg-[#0c0d16] border border-white/[0.05] p-5 rounded-2xl text-left space-y-2"
             >
-              <div className="flex items-center space-x-2 text-[#8677FF]">
+              <div className="flex items-center space-x-2 text-[#6366F1]">
                 <HelpCircle className="w-4 h-4 shrink-0" style={{ color: data.accentColor }} />
                 <h4 className="text-xs font-black text-white">{faq.q}</h4>
               </div>

@@ -25,7 +25,7 @@ export default function BlogPage() {
       category: 'Conversion',
       readTime: '5 min read',
       date: 'June 25, 2026',
-      author: 'Sarah Jenkins',
+      author: 'J. Ashwath',
       authorRole: 'Growth Lead',
       desc: 'An in-depth study of how real-time video validation and frictionless widgets accelerated onboarding pipelines.',
       content: `### Introduction
@@ -42,7 +42,7 @@ By allowing users to record video testimonials natively in their mobile browser 
 
 ### Conclusion
 Authentic customer success assets represent the highest ROI growth loops for modern SaaS platforms.`,
-      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Sarah',
+      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=J. Ashwath',
       isFeatured: true
     },
     {
@@ -51,7 +51,7 @@ Authentic customer success assets represent the highest ROI growth loops for mod
       category: 'Guides',
       readTime: '7 min read',
       date: 'June 20, 2026',
-      author: 'Marcus Brody',
+      author: 'Ateeqhulla Khan',
       authorRole: 'Lead Architect',
       desc: 'Secure your API pipelines, prevent token leaks, and set up client headers limits properly.',
       content: `### API Key Best Practices
@@ -67,7 +67,7 @@ Authorization: Bearer pr_live_key_51N...
 \`\`\`
 
 Protecting endpoints prevents malicious script injections while ensuring high availability systems.`,
-      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Marcus'
+      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Ateeqhulla Khan'
     },
     {
       id: 'post-3',
@@ -111,14 +111,14 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
 
       {/* Hero Header */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-8 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/15 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#6366F1]/15 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
           Platform Blog & Guides
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           Insights on growth, trust <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             & developer design
           </span>
         </h1>
@@ -138,7 +138,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3 py-1.5 rounded-lg text-[10.5px] font-bold transition duration-200 cursor-pointer ${
-                  selectedCategory === cat ? 'bg-[#8677FF] text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                  selectedCategory === cat ? 'bg-[#6366F1] text-white shadow-lg' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 {cat.toUpperCase()}
@@ -152,7 +152,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search posts..."
-              className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-white transition duration-200"
+              className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-white transition duration-200"
             />
             <Search className="w-3.5 h-3.5 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2" />
           </div>
@@ -203,7 +203,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
             <div 
               key={post.id}
               onClick={() => setActivePostId(post.id)}
-              className="bg-[#0c0d16] border border-white/[0.05] p-5 rounded-2xl space-y-4 shadow-xl cursor-pointer hover:scale-[1.01] hover:border-[#8677FF]/20 transition-all duration-300 flex flex-col justify-between text-left"
+              className="bg-[#0c0d16] border border-white/[0.05] p-5 rounded-2xl space-y-4 shadow-xl cursor-pointer hover:scale-[1.01] hover:border-[#6366F1]/20 transition-all duration-300 flex flex-col justify-between text-left"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -266,7 +266,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
                 <span>/</span>
                 <span>{activePost.category}</span>
                 <span>/</span>
-                <span className="text-[#8677FF]">{activePost.readTime}</span>
+                <span className="text-[#6366F1]">{activePost.readTime}</span>
               </div>
 
               <h2 className="text-lg sm:text-xl font-black text-white tracking-tight leading-snug">

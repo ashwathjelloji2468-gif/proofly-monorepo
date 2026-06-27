@@ -21,7 +21,7 @@ export default function CollectProductPage() {
   const [spaceName, setSpaceName] = useState('Acme Tech Labs');
   const [headerTitle, setHeaderTitle] = useState('Love our product?');
   const [customMessage, setCustomMessage] = useState('Share your experience with us! It takes less than 60 seconds.');
-  const [themeColor, setThemeColor] = useState('#8677FF'); // Violet accent
+  const [themeColor, setThemeColor] = useState('#6366F1'); // Violet accent
   const [collectVideo, setCollectVideo] = useState(true);
   const [collectText, setCollectText] = useState(true);
   const [questions, setQuestions] = useState([
@@ -34,10 +34,10 @@ export default function CollectProductPage() {
   
   // Custom swatches
   const colorSwatches = [
-    { name: 'Violet', value: '#8677FF' },
+    { name: 'Violet', value: '#6366F1' },
     { name: 'Emerald', value: '#10B981' },
-    { name: 'Teal', value: '#14B8A6' },
-    { name: 'Indigo', value: '#6366F1' },
+    { name: 'Teal', value: '#4338CA' },
+    { name: 'Indigo', value: '#4338CA' },
     { name: 'Orange', value: '#F97316' }
   ];
 
@@ -58,14 +58,14 @@ export default function CollectProductPage() {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-12 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/10 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#6366F1]/10 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
           Collection Forms
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           Capture customer love <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             without the friction
           </span>
         </h1>
@@ -80,7 +80,7 @@ export default function CollectProductPage() {
         {/* Left Side: Form Configurator (7 Columns) */}
         <div className="lg:col-span-6 bg-[#0c0d16] border border-white/[0.06] rounded-2xl p-6 space-y-6 shadow-2xl relative">
           <div className="flex items-center space-x-2 border-b border-white/5 pb-3">
-            <Settings className="w-4 h-4 text-[#8677FF]" />
+            <Settings className="w-4 h-4 text-[#6366F1]" />
             <h2 className="text-sm font-black uppercase tracking-wider text-slate-200">Form Configurator</h2>
           </div>
 
@@ -91,7 +91,7 @@ export default function CollectProductPage() {
               type="text" 
               value={spaceName}
               onChange={(e) => setSpaceName(e.target.value)}
-              className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-4 py-2.5 text-xs text-white transition duration-200"
+              className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-4 py-2.5 text-xs text-white transition duration-200"
               placeholder="e.g. Acme Tech Labs"
             />
           </div>
@@ -103,7 +103,7 @@ export default function CollectProductPage() {
               type="text" 
               value={headerTitle}
               onChange={(e) => setHeaderTitle(e.target.value)}
-              className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-4 py-2.5 text-xs text-white transition duration-200"
+              className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-4 py-2.5 text-xs text-white transition duration-200"
               placeholder="e.g. Love our product?"
             />
           </div>
@@ -114,7 +114,7 @@ export default function CollectProductPage() {
             <textarea 
               value={customMessage}
               onChange={(e) => setCustomMessage(e.target.value)}
-              className="w-full h-18 bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-4 py-2.5 text-xs text-white transition duration-200 resize-none leading-relaxed"
+              className="w-full h-18 bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-4 py-2.5 text-xs text-white transition duration-200 resize-none leading-relaxed"
               placeholder="Share details about what makes us special..."
             />
           </div>
@@ -148,7 +148,7 @@ export default function CollectProductPage() {
                 type="checkbox" 
                 checked={collectVideo} 
                 onChange={(e) => setCollectVideo(e.target.checked)}
-                className="w-4 h-4 rounded text-[#8677FF] accent-[#8677FF] cursor-pointer"
+                className="w-4 h-4 rounded text-[#6366F1] accent-[#6366F1] cursor-pointer"
               />
             </div>
             <div className="bg-zinc-950 border border-white/[0.06] p-3 rounded-xl flex items-center justify-between">
@@ -160,7 +160,7 @@ export default function CollectProductPage() {
                 type="checkbox" 
                 checked={collectText} 
                 onChange={(e) => setCollectText(e.target.checked)}
-                className="w-4 h-4 rounded text-[#8677FF] accent-[#8677FF] cursor-pointer"
+                className="w-4 h-4 rounded text-[#6366F1] accent-[#6366F1] cursor-pointer"
               />
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function CollectProductPage() {
                 value={newQuestionText}
                 onChange={(e) => setNewQuestionText(e.target.value)}
                 placeholder="Ask reviewer about onboarding, APIs, support..."
-                className="flex-1 bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
+                className="flex-1 bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
                 onKeyDown={(e) => e.key === 'Enter' && handleAddQuestion()}
               />
               <button 
@@ -220,7 +220,7 @@ export default function CollectProductPage() {
             <button
               onClick={() => setPreviewDevice('mobile')}
               className={`p-1.5 rounded-full transition-all duration-200 ${
-                previewDevice === 'mobile' ? 'bg-[#8677FF] text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                previewDevice === 'mobile' ? 'bg-[#6366F1] text-white shadow-lg' : 'text-slate-400 hover:text-white'
               }`}
             >
               <Smartphone className="w-4 h-4" />
@@ -228,7 +228,7 @@ export default function CollectProductPage() {
             <button
               onClick={() => setPreviewDevice('desktop')}
               className={`p-1.5 rounded-full transition-all duration-200 ${
-                previewDevice === 'desktop' ? 'bg-[#8677FF] text-white shadow-lg' : 'text-slate-400 hover:text-white'
+                previewDevice === 'desktop' ? 'bg-[#6366F1] text-white shadow-lg' : 'text-slate-400 hover:text-white'
               }`}
             >
               <Monitor className="w-4 h-4" />
@@ -332,7 +332,7 @@ export default function CollectProductPage() {
           <div className="pt-4 text-center">
             <Link href="/signup">
               <button 
-                className="bg-gradient-to-r from-[#6C5CFF] to-[#8677FF] text-white font-bold text-xs py-3 px-6 rounded-full flex items-center space-x-1.5 shadow-[0_4px_15px_rgba(108,92,255,0.35)] hover:scale-102 cursor-pointer focus:outline-none"
+                className="bg-gradient-to-r from-[#4338CA] to-[#6366F1] text-white font-bold text-xs py-3 px-6 rounded-full flex items-center space-x-1.5 shadow-[0_4px_15px_rgba(99,102,241,0.3)] hover:scale-102 cursor-pointer focus:outline-none"
               >
                 <span>Save Space & Deploy Form</span>
                 <ArrowRight className="w-3.5 h-3.5" />

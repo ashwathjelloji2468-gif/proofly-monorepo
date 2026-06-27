@@ -70,7 +70,7 @@ All wrapper components support built-in fallback skeleton loaders while review r
 - **Accent Styling**: Select accent theme colors to align button states and checkboxes.
 - **Custom Prompts**: Provide guiding questions (e.g. "What did you think of the REST API onboarding?") to help reviewers write high-quality testimonials.
 - **Reward System**: Set up post-submission incentives, such as dynamic coupon codes or reward discounts, to increase collection rates.`,
-      code: `// API Space configuration schema\n{\n  "name": "Acme Tech Labs",\n  "headerTitle": "Love our product?",\n  "customMessage": "It takes less than 60 seconds!",\n  "theme": "#8677FF",\n  "collectVideo": true\n}`
+      code: `// API Space configuration schema\n{\n  "name": "Acme Tech Labs",\n  "headerTitle": "Love our product?",\n  "customMessage": "It takes less than 60 seconds!",\n  "theme": "#6366F1",\n  "collectVideo": true\n}`
     },
     {
       category: 'Core Features',
@@ -132,7 +132,7 @@ All layouts are fully responsive, aligning to mobile grids automatically.`,
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search quickstart, installation..."
-                className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl pl-8 pr-3.5 py-1.5 text-[11px] text-white transition duration-200"
+                className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl pl-8 pr-3.5 py-1.5 text-[11px] text-white transition duration-200"
               />
               <Search className="w-3 h-3 text-zinc-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
             </div>
@@ -158,12 +158,12 @@ All layouts are fully responsive, aligning to mobile grids automatically.`,
                         onClick={() => setSelectedDocId(doc.id)}
                         className={`w-full text-left px-3 py-2 rounded-lg text-[10.5px] font-semibold transition duration-250 flex items-center justify-between cursor-pointer ${
                           selectedDocId === doc.id 
-                            ? 'bg-[#8677FF]/10 text-white font-bold border-l-2 border-[#8677FF]' 
+                            ? 'bg-[#6366F1]/10 text-white font-bold border-l-2 border-[#6366F1]' 
                             : 'text-slate-400 hover:text-white hover:bg-white/[0.02]'
                         }`}
                       >
                         <span>{doc.title}</span>
-                        <ChevronRight className={`w-3 h-3 transition-transform ${selectedDocId === doc.id ? 'translate-x-0.5 text-[#8677FF]' : 'text-zinc-600'}`} />
+                        <ChevronRight className={`w-3 h-3 transition-transform ${selectedDocId === doc.id ? 'translate-x-0.5 text-[#6366F1]' : 'text-zinc-600'}`} />
                       </button>
                     ))}
                   </div>
@@ -184,7 +184,7 @@ All layouts are fully responsive, aligning to mobile grids automatically.`,
             <span>/</span>
             <span>{activeDoc.category}</span>
             <span>/</span>
-            <span className="text-[#8677FF]">{activeDoc.title}</span>
+            <span className="text-[#6366F1]">{activeDoc.title}</span>
           </div>
 
           {/* Title & description */}
@@ -206,7 +206,7 @@ All layouts are fully responsive, aligning to mobile grids automatically.`,
           {activeDoc.code && (
             <div className="space-y-2.5 pt-2">
               <div className="flex items-center space-x-1.5">
-                <Terminal className="w-3.5 h-3.5 text-[#8677FF]" />
+                <Terminal className="w-3.5 h-3.5 text-[#6366F1]" />
                 <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Example Configuration Code</span>
               </div>
               <pre className="w-full bg-[#030303] border border-white/[0.05] p-4 rounded-xl text-[9.5px] font-mono text-zinc-400 overflow-x-auto whitespace-pre-wrap leading-relaxed">

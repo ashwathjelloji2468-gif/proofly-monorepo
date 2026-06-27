@@ -17,8 +17,8 @@ interface Ribbon {
 }
 
 const colors = [
-  '#6C5CFF', // Purple
-  '#8677FF', // Lavender
+  '#4338CA', // Purple
+  '#6366F1', // Lavender
   '#F59E0B', // Amber
   '#EF4444', // Red
   '#3B82F6', // Blue

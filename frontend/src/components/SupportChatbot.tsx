@@ -209,8 +209,8 @@ export function SupportChatbot() {
                 />
                 <defs>
                   <linearGradient id="finLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#6C5CFF" />
-                    <stop offset="50%" stopColor="#8677FF" />
+                    <stop offset="0%" stopColor="#4338CA" />
+                    <stop offset="50%" stopColor="#6366F1" />
                     <stop offset="100%" stopColor="#A855F7" />
                   </linearGradient>
                 </defs>

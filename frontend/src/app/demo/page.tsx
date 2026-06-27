@@ -55,19 +55,19 @@ export default function DemoPlayground() {
   // Color Mapping
   const colorMap = {
     emerald: {
-      primary: '#6C5CFF',
-      secondary: '#8677FF',
-      glow: 'rgba(108, 92, 255, 0.08)',
-      borderColor: (x: string, y: string) => `radial-gradient(180px circle at ${x} ${y}, rgba(108, 92, 255, 0.45) 0%, rgba(134, 119, 255, 0.25) 50%, transparent 100%)`
+      primary: '#4338CA',
+      secondary: '#6366F1',
+      glow: 'rgba(99, 102, 241, 0.08)',
+      borderColor: (x: string, y: string) => `radial-gradient(180px circle at ${x} ${y}, rgba(99, 102, 241, 0.45) 0%, rgba(99, 102, 241, 0.25) 50%, transparent 100%)`
     },
     teal: {
-      primary: '#8677FF',
-      secondary: '#6C5CFF',
-      glow: 'rgba(134, 119, 255, 0.08)',
-      borderColor: (x: string, y: string) => `radial-gradient(180px circle at ${x} ${y}, rgba(134, 119, 255, 0.45) 0%, rgba(108, 92, 255, 0.25) 50%, transparent 100%)`
+      primary: '#6366F1',
+      secondary: '#4338CA',
+      glow: 'rgba(99, 102, 241, 0.08)',
+      borderColor: (x: string, y: string) => `radial-gradient(180px circle at ${x} ${y}, rgba(99, 102, 241, 0.45) 0%, rgba(99, 102, 241, 0.25) 50%, transparent 100%)`
     },
     indigo: {
-      primary: '#6366F1',
+      primary: '#4338CA',
       secondary: '#8B5CF6',
       glow: 'rgba(99, 102, 241, 0.08)',
       borderColor: (x: string, y: string) => `radial-gradient(180px circle at ${x} ${y}, rgba(99, 102, 241, 0.45) 0%, rgba(139, 92, 246, 0.25) 50%, transparent 100%)`
@@ -180,9 +180,9 @@ export default function DemoPlayground() {
             <div className="grid grid-cols-4 gap-2">
               {(['emerald', 'teal', 'indigo', 'slate'] as const).map(color => {
                 const colors = {
-                  emerald: 'bg-[#6C5CFF]',
-                  teal: 'bg-[#8677FF]',
-                  indigo: 'bg-[#6366F1]',
+                  emerald: 'bg-[#4338CA]',
+                  teal: 'bg-[#6366F1]',
+                  indigo: 'bg-[#4338CA]',
                   slate: 'bg-[#64748B]'
                 };
                 return (

@@ -93,8 +93,8 @@ export function GlobalBackground() {
             width: `${p.size}px`,
             height: `${p.size}px`,
             borderRadius: '50%',
-            backgroundColor: p.id % 2 === 0 ? '#6C5CFF' : '#8677FF',
-            boxShadow: `0 0 8px ${p.id % 2 === 0 ? '#6C5CFF' : '#8677FF'}`,
+            backgroundColor: p.id % 2 === 0 ? '#4338CA' : '#6366F1',
+            boxShadow: `0 0 8px ${p.id % 2 === 0 ? '#4338CA' : '#6366F1'}`,
             willChange: 'transform, opacity',
           }}
         />

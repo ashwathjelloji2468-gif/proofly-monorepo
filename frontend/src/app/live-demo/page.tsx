@@ -74,7 +74,7 @@ export default function LiveDemoPage() {
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-16 text-center space-y-6 relative w-full">
         <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[250px] bg-brand-teal/5 rounded-full blur-[140px] pointer-events-none" />
         
-        <div className="inline-flex items-center space-x-2 bg-brand-teal/10 border border-brand-teal/20 text-[#2DD4BF] text-xs font-semibold px-4 py-1.5 rounded-full">
+        <div className="inline-flex items-center space-x-2 bg-brand-teal/10 border border-brand-teal/20 text-[#6366F1] text-xs font-semibold px-4 py-1.5 rounded-full">
           <Sparkles className="w-3.5 h-3.5 animate-pulse" />
           <span>Interactive Playground - No Sign Up Required</span>
         </div>
@@ -103,9 +103,9 @@ export default function LiveDemoPage() {
           
           {/* Left panel: Filters & AI Search */}
           <div className="lg:col-span-4 space-y-6">
-            <SpotlightCard className="p-6 space-y-5 text-left" glowColor="rgba(108, 92, 255, 0.08)">
+            <SpotlightCard className="p-6 space-y-5 text-left" glowColor="rgba(99, 102, 241, 0.08)">
               <div className="space-y-1">
-                <span className="text-[10px] font-black text-[#8677FF] uppercase tracking-widest block">AI Semantic Engine</span>
+                <span className="text-[10px] font-black text-[#6366F1] uppercase tracking-widest block">AI Semantic Engine</span>
                 <h3 className="text-white text-base font-extrabold">Instant Database Search</h3>
               </div>
 
@@ -151,9 +151,9 @@ export default function LiveDemoPage() {
               </div>
             </SpotlightCard>
 
-            <SpotlightCard className="p-6 space-y-4 text-left" glowColor="rgba(20, 184, 166, 0.08)">
+            <SpotlightCard className="p-6 space-y-4 text-left" glowColor="rgba(99, 102, 241, 0.08)">
               <div className="space-y-1">
-                <span className="text-[10px] font-black text-[#2DD4BF] uppercase tracking-widest block">Sentiment Filters</span>
+                <span className="text-[10px] font-black text-[#6366F1] uppercase tracking-widest block">Sentiment Filters</span>
                 <h3 className="text-white text-base font-extrabold">Filter by Emotional Tone</h3>
               </div>
               
@@ -249,7 +249,7 @@ export default function LiveDemoPage() {
       <section className="max-w-7xl mx-auto px-6 py-12 w-full border-t border-border-primary">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5 text-left space-y-4">
-            <div className="inline-flex items-center space-x-2 bg-brand-emerald/10 border border-brand-emerald/20 text-[#8677FF] text-xs font-semibold px-3 py-1 rounded-full">
+            <div className="inline-flex items-center space-x-2 bg-brand-emerald/10 border border-brand-emerald/20 text-[#6366F1] text-xs font-semibold px-3 py-1 rounded-full">
               <Code className="w-3.5 h-3.5" />
               <span>Embed configuration</span>
             </div>
@@ -296,7 +296,7 @@ export default function LiveDemoPage() {
           </div>
 
           <div className="lg:col-span-7">
-            <SpotlightCard className="p-6 space-y-4 text-left" glowColor="rgba(20, 184, 166, 0.1)">
+            <SpotlightCard className="p-6 space-y-4 text-left" glowColor="rgba(99, 102, 241, 0.1)">
               <div className="flex items-center justify-between border-b border-border-primary/50 pb-3">
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">Iframe Code Snippet</span>
                 <span className="text-[9px] font-mono text-zinc-500">HTML embed code</span>

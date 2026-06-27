@@ -196,7 +196,7 @@ const initialCollections: Collection[] = [
     title: 'Acme SaaS Suite',
     description: 'Feedback for our primary web dashboard and developer APIs.',
     logoUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=acme',
-    theme: '#6C5CFF',
+    theme: '#4338CA',
     collectVideo: true,
     collectText: true,
     customQuestions: [
@@ -219,7 +219,7 @@ const initialCollections: Collection[] = [
     title: 'Mobile App Launch',
     description: 'iOS and Android client beta testers feedback.',
     logoUrl: 'https://api.dicebear.com/7.x/identicon/svg?seed=mobile',
-    theme: '#8677FF',
+    theme: '#6366F1',
     collectVideo: true,
     collectText: true,
     customQuestions: [
@@ -243,7 +243,7 @@ const initialTestimonials: Testimonial[] = [
   {
     id: 'vid-1',
     collection_id: 'col-1',
-    name: 'Sarah Jenkins',
+    name: 'J. Ashwath',
     company: 'DevFlow Inc',
     role: 'SaaS Founder',
     review: 'Setup took less than 15 minutes. We integrated the REST APIs in less than 30 minutes, and our onboarding pipeline speed immediately doubled. The developer documentation is state-of-the-art.',
@@ -255,7 +255,7 @@ const initialTestimonials: Testimonial[] = [
     reviewerAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
     sentiment: 'POSITIVE',
     keywords: ['API', 'speed', 'setup', 'onboarding'],
-    aiSummary: 'Sarah details the fast 15-minute onboarding configuration and the quality of developer integrations.',
+    aiSummary: 'J. Ashwath details the fast 15-minute onboarding configuration and the quality of developer integrations.',
     aiHighlights: ['15-minute setup', 'Double onboarding speed', 'Clear APIs'],
     aiQuotes: ['Setup took less than 15 minutes', 'REST APIs integrated in under 30 minutes'],
     createdAt: new Date(Date.now() - 3600000 * 24 * 5).toISOString(),
@@ -268,7 +268,7 @@ const initialTestimonials: Testimonial[] = [
   {
     id: 'vid-2',
     collection_id: 'col-1',
-    name: 'James Cole',
+    name: 'Ateeqhulla Khan',
     company: 'Vortex Studio',
     role: 'Agency Owner',
     review: 'We increased conversion rates by 18% for our clients within the first week of adding Proofly widgets. The custom branding makes it blend beautifully into any SaaS layout.',
@@ -293,7 +293,7 @@ const initialTestimonials: Testimonial[] = [
   {
     id: 'vid-3',
     collection_id: 'col-1',
-    name: 'Alex Rivera',
+    name: 'J. Ashwath',
     company: 'SaaSify Group',
     role: 'Startup Founder',
     review: 'Customers trust us much more now. Seeing real face-to-face feedback right next to our signup form has reduced bounce rates by nearly 30%. Embedding was dead simple.',
@@ -305,7 +305,7 @@ const initialTestimonials: Testimonial[] = [
     reviewerAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
     sentiment: 'POSITIVE',
     keywords: ['trust', 'signup', 'bounce rates', 'embed'],
-    aiSummary: 'Alex explains how social proof placed near signup buttons cut page bounce rates by 30%.',
+    aiSummary: 'J. Ashwath explains how social proof placed near signup buttons cut page bounce rates by 30%.',
     aiHighlights: ['Reduced bounce by 30%', 'Greater visitor trust', 'Simple embed script'],
     aiQuotes: ['Customers trust us much more now', 'Reduced bounce rates by nearly 30%'],
     createdAt: new Date(Date.now() - 3600000 * 24 * 3).toISOString(),
@@ -366,7 +366,7 @@ const initialTestimonials: Testimonial[] = [
   {
     id: 'vid-6',
     collection_id: 'col-1',
-    name: 'Marcus Vance',
+    name: 'Ateeqhulla Khan',
     company: 'AuthCore Security',
     role: 'Marketing Lead',
     review: 'Wall of Love became our highest-performing section. It is the emotional center of our product site, and our developers are mesmerized by the interactive 3D coordinate bulge hovering effects.',
@@ -377,7 +377,7 @@ const initialTestimonials: Testimonial[] = [
     reviewerAvatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150',
     sentiment: 'POSITIVE',
     keywords: ['marketing section', 'emotional proof', '3D tilt', 'engagement'],
-    aiSummary: 'Marcus notes that adding the interactive 3D Wall of Love created their highest-performing landing page asset.',
+    aiSummary: 'Ateeqhulla Khan notes that adding the interactive 3D Wall of Love created their highest-performing landing page asset.',
     aiHighlights: ['Highest converting section', 'Stunning 3D coordinates', 'Emotional customer center'],
     aiQuotes: ['Wall of Love became our highest-performing section'],
     createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
@@ -870,7 +870,7 @@ export const useStore = create<AppState>((set, get) => ({
           logoUrl: collection.logoUrl || null,
           collectVideo: collection.collectVideo,
           collectText: collection.collectText,
-          theme: collection.theme || '#6C5CFF'
+          theme: collection.theme || '#4338CA'
         }
       });
 
@@ -905,7 +905,7 @@ export const useStore = create<AppState>((set, get) => ({
         title: collection.title,
         description: collection.description,
         logoUrl: collection.logoUrl || undefined,
-        theme: collection.theme || '#6C5CFF',
+        theme: collection.theme || '#4338CA',
         collectVideo: collection.collectVideo,
         collectText: collection.collectText,
         customQuestions: collection.description ? [collection.description] : [],

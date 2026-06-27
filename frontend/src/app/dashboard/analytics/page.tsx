@@ -208,8 +208,8 @@ export default function AnalyticsPage() {
               <svg className="w-full h-full" viewBox="0 0 400 150">
                 <defs>
                   <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#6C5CFF" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="#6C5CFF" stopOpacity="0" />
+                    <stop offset="0%" stopColor="#4338CA" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#4338CA" stopOpacity="0" />
                   </linearGradient>
                 </defs>
                 <path 
@@ -219,7 +219,7 @@ export default function AnalyticsPage() {
                 <path 
                   d={calculateSvgPath(viewsTrendData, 120, 390)} 
                   fill="none" 
-                  stroke="#6C5CFF" 
+                  stroke="#4338CA" 
                   strokeWidth="3.5" 
                   strokeLinecap="round"
                 />
@@ -249,8 +249,8 @@ export default function AnalyticsPage() {
               <svg className="w-full h-full" viewBox="0 0 400 150">
                 <defs>
                   <linearGradient id="tealGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#8677FF" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="#8677FF" stopOpacity="0" />
+                    <stop offset="0%" stopColor="#6366F1" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#6366F1" stopOpacity="0" />
                   </linearGradient>
                 </defs>
                 <path 
@@ -260,7 +260,7 @@ export default function AnalyticsPage() {
                 <path 
                   d={calculateSvgPath(clicksTrendData, 120, 390)} 
                   fill="none" 
-                  stroke="#8677FF" 
+                  stroke="#6366F1" 
                   strokeWidth="3.5" 
                   strokeLinecap="round"
                 />

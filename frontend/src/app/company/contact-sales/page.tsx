@@ -35,14 +35,14 @@ export default function ContactSalesPage() {
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-12 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/15 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#6366F1]/15 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full inline-block mb-3.5">
           Connect with Enterprise sales
         </span>
         <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           Scale your enterprise <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             social proof loop
           </span>
         </h1>
@@ -77,8 +77,8 @@ export default function ContactSalesPage() {
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
-                    placeholder="e.g. Jane Doe"
+                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
+                    placeholder="e.g. Ateeqhulla Khan Doe"
                   />
                 </div>
                 <div className="space-y-1 text-left">
@@ -88,7 +88,7 @@ export default function ContactSalesPage() {
                     required
                     value={businessEmail}
                     onChange={(e) => setBusinessEmail(e.target.value)}
-                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
+                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
                     placeholder="e.g. jane@company.com"
                   />
                 </div>
@@ -104,7 +104,7 @@ export default function ContactSalesPage() {
                       required
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-white transition duration-200"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl pl-8 pr-4 py-2 text-xs text-white transition duration-200"
                       placeholder="e.g. Stripe Inc."
                     />
                     <Building className="w-3.5 h-3.5 text-zinc-650 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -117,7 +117,7 @@ export default function ContactSalesPage() {
                     <select
                       value={teamSize}
                       onChange={(e) => setTeamSize(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl pl-8 pr-4 py-2.5 text-xs text-white transition duration-200 appearance-none cursor-pointer"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl pl-8 pr-4 py-2.5 text-xs text-white transition duration-200 appearance-none cursor-pointer"
                     >
                       <option value="1-10">1 - 10 members</option>
                       <option value="11-50">11 - 50 members</option>
@@ -137,7 +137,7 @@ export default function ContactSalesPage() {
                   required
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full h-24 bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200 resize-none leading-relaxed"
+                  className="w-full h-24 bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200 resize-none leading-relaxed"
                   placeholder="Tell us about your active space traffic, volume of video reviews, and target custom domains..."
                 />
               </div>

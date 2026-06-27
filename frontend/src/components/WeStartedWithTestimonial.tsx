@@ -128,23 +128,23 @@ export function WeStartedWithTestimonial() {
   // 5. Social Import State
   const [importSource, setImportSource] = useState<'twitter' | 'google' | 'linkedin'>('twitter');
   const [importText, setImportText] = useState('Proofly is absolutely game-changing! We set up our reviews collector in under 15 minutes.');
-  const [importAuthor, setImportAuthor] = useState('Marcus Vance');
+  const [importAuthor, setImportAuthor] = useState('Ateeqhulla Khan');
   const [isImporting, setIsImporting] = useState(false);
   const [importSuccess, setImportSuccess] = useState(false);
 
   // Clickable mock feed items to populate inputs
   const mockFeed = {
     twitter: [
-      { author: 'Jonathan Mercer', handle: '@jonathan_saas', content: 'Proofly is next level. Our conversion rates went up by 18% in the first week!', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' },
-      { author: 'Alex Rivera', handle: '@alex_m_dev', content: 'Just imported all our Google reviews into our landing page in under 5 minutes. Brilliant UX.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100' }
+      { author: 'J. Ashwath', handle: '@jonathan_saas', content: 'Proofly is next level. Our conversion rates went up by 18% in the first week!', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100' },
+      { author: 'J. Ashwath', handle: '@alex_m_dev', content: 'Just imported all our Google reviews into our landing page in under 5 minutes. Brilliant UX.', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100' }
     ],
     google: [
-      { author: 'Sarah Connor', handle: 'Google Local Guide', content: 'Incredibly easy to gather video feedback. The webcam recorder works flawlessly on mobile browsers.', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100' },
-      { author: 'David Kim', handle: 'Verified Reviewer', content: 'The Wall of Love widget load speeds are blazing fast compared to testimonials.to. Excellent product.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100' }
+      { author: 'J. Ashwath', handle: 'Google Local Guide', content: 'Incredibly easy to gather video feedback. The webcam recorder works flawlessly on mobile browsers.', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100' },
+      { author: 'J. Ashwath', handle: 'Verified Reviewer', content: 'The Wall of Love widget load speeds are blazing fast compared to testimonials.to. Excellent product.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100' }
     ],
     linkedin: [
-      { author: 'Emma Watson', handle: 'VP of Growth @ ScaleUp', content: 'We swapped testimonials.to for Proofly. The AI transcription and sentiment analysis tools save our marketing team hours of manual sorting.', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' },
-      { author: 'Robert Chen', handle: 'Founder @ CloudStack', content: 'The developer APIs are well documented. We built a custom testimonial card layout using the JSON endpoints in less than an hour.', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100' }
+      { author: 'Ateeqhulla Khan', handle: 'VP of Growth @ ScaleUp', content: 'We swapped testimonials.to for Proofly. The AI transcription and sentiment analysis tools save our marketing team hours of manual sorting.', avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100' },
+      { author: 'Ateeqhulla Khan', handle: 'Founder @ CloudStack', content: 'The developer APIs are well documented. We built a custom testimonial card layout using the JSON endpoints in less than an hour.', avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100' }
     ]
   };
 
@@ -243,7 +243,7 @@ export function WeStartedWithTestimonial() {
       </div>
 
       {/* Main Interactive Grid - Deep Indigo Navy Theme Gradient */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch bg-gradient-to-br from-[#0c0d1b] to-[#07080f] border border-[#2b2c4e] p-5 md:p-8 rounded-3xl backdrop-blur-md shadow-[0_15px_50px_rgba(99,102,241,0.06)] relative overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch bg-gradient-to-br from-[#0c0d1b] to-[#07080f] border border-[#2E3445] p-5 md:p-8 rounded-3xl backdrop-blur-md shadow-[0_15px_50px_rgba(99,102,241,0.06)] relative overflow-hidden">
         
         {/* Left Navigation Menu */}
         <div className="lg:col-span-5 flex flex-col justify-between text-left space-y-6">
@@ -259,12 +259,12 @@ export function WeStartedWithTestimonial() {
                     onClick={() => setActiveTab('testimonial')}
                     className={`w-full p-5 rounded-2xl border text-left transition duration-300 flex items-start space-x-4 cursor-pointer relative overflow-hidden ${
                       isActive
-                        ? 'bg-[#181635]/50 border-[#4f46e5]/60 shadow-[0_0_20px_rgba(99,102,241,0.12)] ring-1 ring-[#6366f1]/20'
-                        : 'bg-transparent border-transparent hover:bg-[#15162a]/40 hover:border-[#383a69]/40'
+                        ? 'bg-[#181635]/50 border-[#4338CA]/60 shadow-[0_0_20px_rgba(99,102,241,0.12)] ring-1 ring-[#4338CA]/20'
+                        : 'bg-transparent border-transparent hover:bg-[#15162a]/40 hover:border-[#1F2937]/40'
                     }`}
                   >
                     {/* Testimonial Heart Icon Block (Purple box, Blue heart icon) */}
-                    <div className="w-10 h-10 rounded-xl bg-[#4f46e5] flex items-center justify-center border border-[#6366f1]/30 shrink-0 shadow-[0_0_12px_rgba(99,102,241,0.25)]">
+                    <div className="w-10 h-10 rounded-xl bg-[#4338CA] flex items-center justify-center border border-[#4338CA]/30 shrink-0 shadow-[0_0_12px_rgba(99,102,241,0.25)]">
                       <Heart className="w-5 h-5 text-[#38bdf8] fill-[#38bdf8]" />
                     </div>
                     <div className="space-y-1">
@@ -290,8 +290,8 @@ export function WeStartedWithTestimonial() {
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`w-full p-4 rounded-xl border text-left transition duration-300 flex items-start space-x-3 cursor-pointer ${
                     isActive
-                      ? 'bg-[#181635]/50 border-[#4f46e5]/60 shadow-[0_0_20px_rgba(99,102,241,0.12)] ring-1 ring-[#6366f1]/20'
-                      : 'bg-transparent border-transparent hover:bg-[#15162a]/40 hover:border-[#383a69]/40'
+                      ? 'bg-[#181635]/50 border-[#4338CA]/60 shadow-[0_0_20px_rgba(99,102,241,0.12)] ring-1 ring-[#4338CA]/20'
+                      : 'bg-transparent border-transparent hover:bg-[#15162a]/40 hover:border-[#1F2937]/40'
                   }`}
                 >
                   <span className={`w-1.5 h-1.5 rounded-full mt-2 shrink-0 ${
@@ -328,13 +328,13 @@ export function WeStartedWithTestimonial() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl" />
 
           {/* Title / Windows Bar */}
-          <div className="flex items-center justify-between border-b border-[#1f213a] px-4 py-3 bg-[#131424]">
+          <div className="flex items-center justify-between border-b border-[#1F2937] px-4 py-3 bg-[#131424]">
             <div className="flex items-center space-x-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
               <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
               <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
             </div>
-            <span className="text-[9px] font-mono text-[#818cf8] uppercase tracking-widest flex items-center space-x-1.5">
+            <span className="text-[9px] font-mono text-[#4338CA] uppercase tracking-widest flex items-center space-x-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
               <span>Interactive Simulator</span>
             </span>
@@ -355,7 +355,7 @@ export function WeStartedWithTestimonial() {
                   className="grid grid-cols-12 gap-4 h-full text-left"
                 >
                   {/* Mock Sidebar Navigation */}
-                  <div className="col-span-4 border-r border-[#1f213a] pr-3 space-y-4 select-none">
+                  <div className="col-span-4 border-r border-[#1F2937] pr-3 space-y-4 select-none">
                     <div>
                       <span className="text-[8px] font-bold text-zinc-500 tracking-wider block mb-1.5">INBOX</span>
                       <div className="space-y-1">
@@ -380,17 +380,17 @@ export function WeStartedWithTestimonial() {
                         <div className="space-y-1">
                           <span className="text-[8px] text-zinc-600 block font-semibold">Social Media</span>
                           <div className="flex space-x-1.5">
-                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1f213a]">
+                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1F2937]">
                               <svg className="w-2.5 h-2.5 text-[#1DA1F2]" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                               </svg>
                             </div>
-                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1f213a]">
+                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1F2937]">
                               <svg className="w-2.5 h-2.5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M22.23 0H1.77C.8 0 0 .77 0 1.72v20.56C0 23.23.8 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.43c-1.14 0-2.06-.92-2.06-2.06 0-1.14.92-2.06 2.06-2.06 1.14 0 2.06.92 2.06 2.06 0 1.14-.92 2.06-2.06 2.06zm15.11 13.02h-3.56V14.9c0-1.32-.03-3.01-1.84-3.01-1.84 0-2.12 1.43-2.12 2.91v5.65h-3.56V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29z"/>
                               </svg>
                             </div>
-                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1f213a]">
+                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1F2937]">
                               <svg className="w-2.5 h-2.5 text-pink-500" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -403,12 +403,12 @@ export function WeStartedWithTestimonial() {
                         <div className="space-y-1">
                           <span className="text-[8px] text-zinc-600 block font-semibold">External Videos</span>
                           <div className="flex space-x-1.5">
-                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1f213a]">
+                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1F2937]">
                               <svg className="w-2.5 h-2.5 text-red-650" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.507a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11C4.483 20.455 12 20.455 12 20.455s7.517 0 9.388-.507a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
                               </svg>
                             </div>
-                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1f213a]">
+                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1F2937]">
                               <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.86-.74-3.99-1.72a6.7 6.7 0 0 1-1.9-2.88v7.41a6.72 6.72 0 0 1-1.37 4.09A6.71 6.71 0 0 1 5.9 19.34a6.73 6.73 0 0 1-1.44-4.78 6.73 6.73 0 0 1 6.72-6.68c.24.01.47.03.71.07V12.1a2.68 2.68 0 0 0-.71-.1 2.69 2.69 0 0 0-2.69 2.69 2.68 2.68 0 0 0 2.69 2.69 2.69 2.69 0 0 0 2.69-2.69V0h-1.35z"/>
                               </svg>
@@ -419,12 +419,12 @@ export function WeStartedWithTestimonial() {
                         <div className="space-y-1">
                           <span className="text-[8px] text-zinc-600 block font-semibold">Other Reviews</span>
                           <div className="flex space-x-1.5">
-                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1f213a]">
+                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1F2937]">
                               <svg className="w-2.5 h-2.5 text-[#4285F4]" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.859-3.579-7.859-8s3.529-8 7.859-8c2.46 0 4.105 1.025 5.047 1.926l3.227-3.103C18.28 1.845 15.547 1 12.24 1 5.866 1 .693 6.173.693 12.5s5.173 11.5 11.547 11.5c6.657 0 11.08-4.681 11.08-11.275 0-.765-.082-1.35-.18-1.94H12.24z"/>
                               </svg>
                             </div>
-                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1f213a]">
+                            <div className="w-5 h-5 rounded bg-[#090912] flex items-center justify-center border border-[#1F2937]">
                               <svg className="w-2.5 h-2.5 text-[#DA552F]" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M13.6 8.4h-3.4v3.2h3.4c.9 0 1.6-.7 1.6-1.6s-.7-1.6-1.6-1.6zm.4 8h-4v-3.2h4c.9 0 1.6-.7 1.6-1.6s-.7-1.6-1.6-1.6zm-4.4-11.6h5.8c2.8 0 5 2.2 5 5s-2.2 5-5 5H9.6v6H5.6V4.8h4zm0 0"/>
                               </svg>
@@ -438,7 +438,7 @@ export function WeStartedWithTestimonial() {
                   {/* Mock Main Pane */}
                   <div className="col-span-8 space-y-4 flex flex-col justify-between">
                     <div className="space-y-3.5">
-                      <div className="flex items-center justify-between border-b border-[#1f213a] pb-2">
+                      <div className="flex items-center justify-between border-b border-[#1F2937] pb-2">
                         <span className="text-[10px] font-black text-white uppercase tracking-wider">Video Testimonials</span>
                         <span className="text-[8px] text-zinc-550 font-bold uppercase">Updated 2m ago</span>
                       </div>
@@ -465,7 +465,7 @@ export function WeStartedWithTestimonial() {
                               </div>
                             </div>
                             <div className="absolute bottom-2 left-2 right-2 truncate text-left">
-                              <span className="text-[9px] font-black text-white block truncate">Sarah Jenkins</span>
+                              <span className="text-[9px] font-black text-white block truncate">J. Ashwath</span>
                               <span className="text-[7px] text-zinc-400 truncate block">DevFlow Inc · SaaS Founder</span>
                             </div>
                           </div>
@@ -492,7 +492,7 @@ export function WeStartedWithTestimonial() {
                               </div>
                             </div>
                             <div className="absolute bottom-2 left-2 right-2 truncate text-left">
-                              <span className="text-[9px] font-black text-white block truncate">Amelia Ross</span>
+                              <span className="text-[9px] font-black text-white block truncate">J. Ashwath</span>
                               <span className="text-[7px] text-zinc-400 truncate block">HypeDesign · Studio Lead</span>
                             </div>
                           </div>
@@ -522,7 +522,7 @@ export function WeStartedWithTestimonial() {
                   className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left h-full"
                 >
                   {/* Editor Side */}
-                  <div className="space-y-4 border-r border-[#1f213a] pr-4 select-none">
+                  <div className="space-y-4 border-r border-[#1F2937] pr-4 select-none">
                     <span className="text-[9px] font-black text-indigo-400 uppercase tracking-wider block">Space Settings</span>
                     
                     <div className="space-y-1">
@@ -531,7 +531,7 @@ export function WeStartedWithTestimonial() {
                         type="text"
                         value={spaceTitle}
                         onChange={(e) => setSpaceTitle(e.target.value)}
-                        className="w-full bg-[#080911] border border-[#1f213a] p-2.5 text-xs text-white rounded-lg outline-none focus:border-[#4f46e5] transition"
+                        className="w-full bg-[#080911] border border-[#1F2937] p-2.5 text-xs text-white rounded-lg outline-none focus:border-[#4338CA] transition"
                       />
                     </div>
 
@@ -543,7 +543,7 @@ export function WeStartedWithTestimonial() {
                             key={col}
                             onClick={() => setSpaceTheme(col)}
                             className={`w-4 h-4 rounded-full border border-white/20 capitalize cursor-pointer transition ${
-                              col === 'purple' ? 'bg-[#6C5CFF]' : col === 'lavender' ? 'bg-[#8677FF]' : 'bg-indigo-500'
+                              col === 'purple' ? 'bg-[#4338CA]' : col === 'lavender' ? 'bg-[#6366F1]' : 'bg-indigo-500'
                             } ${spaceTheme === col ? 'ring-2 ring-white/60 scale-110 shadow-[0_0_10px_rgba(255,255,255,0.2)]' : ''}`}
                           />
                         ))}
@@ -553,7 +553,7 @@ export function WeStartedWithTestimonial() {
 
                   {/* Preview Side */}
                   <HoverHeartWrapper className="h-full">
-                    <div className="bg-[#080911] p-4 rounded-xl border border-[#1f213a] flex flex-col justify-between h-full min-h-[180px] shadow-lg">
+                    <div className="bg-[#080911] p-4 rounded-xl border border-[#1F2937] flex flex-col justify-between h-full min-h-[180px] shadow-lg">
                       <div>
                         <div className="w-8 h-8 rounded-lg bg-[#16172a] border border-[#2d305d] flex items-center justify-center mb-3">
                           <Globe className="w-4 h-4 text-indigo-400" />
@@ -565,7 +565,7 @@ export function WeStartedWithTestimonial() {
                       <div className="space-y-2 mt-4">
                         <button 
                           className={`w-full py-2 rounded-lg text-[9px] font-black text-white uppercase tracking-wider transition ${
-                            spaceTheme === 'purple' ? 'bg-brand-emerald shadow-[0_0_15px_rgba(108,92,255,0.25)] hover:bg-[#8677FF]' : spaceTheme === 'lavender' ? 'bg-brand-teal shadow-[0_0_15px_rgba(134,119,255,0.25)] hover:bg-brand-teal-hover' : 'bg-indigo-650 shadow-[0_0_15px_rgba(99,102,241,0.25)] hover:bg-indigo-600'
+                            spaceTheme === 'purple' ? 'bg-brand-emerald shadow-[0_0_15px_rgba(108,92,255,0.25)] hover:bg-[#6366F1]' : spaceTheme === 'lavender' ? 'bg-brand-teal shadow-[0_0_15px_rgba(134,119,255,0.25)] hover:bg-brand-teal-hover' : 'bg-indigo-650 shadow-[0_0_15px_rgba(99,102,241,0.25)] hover:bg-indigo-600'
                           }`}
                         >
                           Record Video
@@ -589,7 +589,7 @@ export function WeStartedWithTestimonial() {
                   transition={{ duration: 0.25 }}
                   className="space-y-3.5 text-left h-full flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-between border-b border-[#1f213a] pb-1.5">
+                  <div className="flex items-center justify-between border-b border-[#1F2937] pb-1.5">
                     <span className="text-[9px] font-black text-indigo-400 uppercase tracking-wider">Inbox Approvals Queue</span>
                     <span className="bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald text-[8px] font-bold px-1.5 py-0.5 rounded">
                       Zustand Database Connected
@@ -647,7 +647,7 @@ export function WeStartedWithTestimonial() {
                   transition={{ duration: 0.25 }}
                   className="space-y-4 text-left h-full"
                 >
-                  <div className="flex items-center justify-between border-b border-[#1f213a] pb-2">
+                  <div className="flex items-center justify-between border-b border-[#1F2937] pb-2">
                     <span className="text-[9px] font-black text-indigo-400 uppercase tracking-wider">Widget Theme Preview</span>
                     
                     <div className="flex space-x-1">
@@ -670,14 +670,14 @@ export function WeStartedWithTestimonial() {
                   {/* Render 2 Mock Card Previews side by side */}
                   <div className="grid grid-cols-2 gap-3.5">
                     {[
-                      { name: 'Sarah Jenkins', role: 'SaaS Founder', review: 'REST APIs are extremely simple and fast.' },
-                      { name: 'James Cole', role: 'Agency Owner', review: 'Increased our landing conversions by 24%.' }
+                      { name: 'J. Ashwath', role: 'SaaS Founder', review: 'REST APIs are extremely simple and fast.' },
+                      { name: 'Ateeqhulla Khan', role: 'Agency Owner', review: 'Increased our landing conversions by 24%.' }
                     ].map((mock, idx) => (
                       <HoverHeartWrapper key={idx}>
                         <div 
                           className={`p-3.5 rounded-xl border text-left space-y-2.5 transition duration-350 min-h-[100px] flex flex-col justify-between ${
                             embedTheme === 'dark' 
-                              ? 'bg-[#0a0a14] border-[#1f213a] text-white shadow-md' 
+                              ? 'bg-[#0a0a14] border-[#1F2937] text-white shadow-md' 
                               : 'bg-white border-zinc-200 text-zinc-900 shadow-sm'
                           }`}
                         >
@@ -714,15 +714,15 @@ export function WeStartedWithTestimonial() {
                     
                     <div className="grid grid-cols-3 gap-3">
                       <div className="bg-[#131526] border border-[#23264c] p-2.5 rounded-lg text-center shadow-inner">
-                        <span className="text-[7.5px] text-[#818cf8] font-extrabold block uppercase tracking-wider">Impressions</span>
+                        <span className="text-[7.5px] text-[#4338CA] font-extrabold block uppercase tracking-wider">Impressions</span>
                         <span className="text-xs font-black text-white font-mono">{totalViews.toLocaleString()}</span>
                       </div>
                       <div className="bg-[#131526] border border-[#23264c] p-2.5 rounded-lg text-center shadow-inner">
-                        <span className="text-[7.5px] text-[#818cf8] font-extrabold block uppercase tracking-wider">Interactions</span>
+                        <span className="text-[7.5px] text-[#4338CA] font-extrabold block uppercase tracking-wider">Interactions</span>
                         <span className="text-xs font-black text-white font-mono">{totalClicks.toLocaleString()}</span>
                       </div>
                       <div className="bg-[#131526] border border-[#23264c] p-2.5 rounded-lg text-center shadow-inner">
-                        <span className="text-[7.5px] text-[#818cf8] font-extrabold block uppercase tracking-wider">Average CTR</span>
+                        <span className="text-[7.5px] text-[#4338CA] font-extrabold block uppercase tracking-wider">Average CTR</span>
                         <span className="text-xs font-black text-indigo-400 font-mono">
                           {totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(1) : '6.4'}%
                         </span>
@@ -773,13 +773,13 @@ export function WeStartedWithTestimonial() {
                     <span className="text-[9px] font-black text-indigo-400 uppercase tracking-wider block">Simulated Reviews Importing</span>
 
                     {/* Source Toggle Headers */}
-                    <div className="flex space-x-2 border-b border-[#1f213a] pb-2 select-none">
+                    <div className="flex space-x-2 border-b border-[#1F2937] pb-2 select-none">
                       <button
                         onClick={() => setImportSource('twitter')}
                         className={`px-3 py-1.5 rounded-lg text-[9.5px] font-bold flex items-center space-x-1.5 border transition cursor-pointer ${
                           importSource === 'twitter' 
-                            ? 'bg-[#181635] border-[#4f46e5]/50 text-white shadow' 
-                            : 'bg-transparent border-[#1f213a] text-zinc-500'
+                            ? 'bg-[#181635] border-[#4338CA]/50 text-white shadow' 
+                            : 'bg-transparent border-[#1F2937] text-zinc-500'
                         }`}
                       >
                         <svg className="w-3 h-3 text-[#1DA1F2]" fill="currentColor" viewBox="0 0 24 24">
@@ -791,8 +791,8 @@ export function WeStartedWithTestimonial() {
                         onClick={() => setImportSource('google')}
                         className={`px-3 py-1.5 rounded-lg text-[9.5px] font-bold flex items-center space-x-1.5 border transition cursor-pointer ${
                           importSource === 'google' 
-                            ? 'bg-[#181635] border-[#4f46e5]/50 text-white shadow' 
-                            : 'bg-transparent border-[#1f213a] text-zinc-500'
+                            ? 'bg-[#181635] border-[#4338CA]/50 text-white shadow' 
+                            : 'bg-transparent border-[#1F2937] text-zinc-500'
                         }`}
                       >
                         <svg className="w-3 h-3 text-[#4285F4]" fill="currentColor" viewBox="0 0 24 24">
@@ -804,8 +804,8 @@ export function WeStartedWithTestimonial() {
                         onClick={() => setImportSource('linkedin')}
                         className={`px-3 py-1.5 rounded-lg text-[9.5px] font-bold flex items-center space-x-1.5 border transition cursor-pointer ${
                           importSource === 'linkedin' 
-                            ? 'bg-[#181635] border-[#4f46e5]/50 text-white shadow' 
-                            : 'bg-transparent border-[#1f213a] text-zinc-500'
+                            ? 'bg-[#181635] border-[#4338CA]/50 text-white shadow' 
+                            : 'bg-transparent border-[#1F2937] text-zinc-500'
                         }`}
                       >
                         <svg className="w-3 h-3 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
@@ -844,21 +844,21 @@ export function WeStartedWithTestimonial() {
                   </div>
 
                   {/* Manual Importer Form fields at bottom */}
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center w-full border-t border-[#1f213a]/50 pt-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center w-full border-t border-[#1F2937]/50 pt-2.5">
                     <div className="sm:col-span-8 space-y-2 select-text">
                       <input
                         type="text"
-                        placeholder="Author (e.g. Marcus Vance)"
+                        placeholder="Author (e.g. Ateeqhulla Khan)"
                         value={importAuthor}
                         onChange={(e) => setImportAuthor(e.target.value)}
-                        className="w-full bg-[#080911] border border-[#1f213a] p-2 text-xs text-white rounded-lg outline-none focus:border-[#4f46e5] transition placeholder-zinc-650"
+                        className="w-full bg-[#080911] border border-[#1F2937] p-2 text-xs text-white rounded-lg outline-none focus:border-[#4338CA] transition placeholder-zinc-650"
                       />
                       <input
                         type="text"
                         placeholder="Import review content..."
                         value={importText}
                         onChange={(e) => setImportText(e.target.value)}
-                        className="w-full bg-[#080911] border border-[#1f213a] p-2 text-xs text-white rounded-lg outline-none focus:border-[#4f46e5] transition placeholder-zinc-650"
+                        className="w-full bg-[#080911] border border-[#1F2937] p-2 text-xs text-white rounded-lg outline-none focus:border-[#4338CA] transition placeholder-zinc-650"
                       />
                     </div>
 
@@ -888,7 +888,7 @@ export function WeStartedWithTestimonial() {
           </div>
 
           {/* Pagination Indicators Bottom */}
-          <div className="flex justify-center space-x-2 border-t border-[#1f213a] py-4 bg-[#131424] select-none">
+          <div className="flex justify-center space-x-2 border-t border-[#1F2937] py-4 bg-[#131424] select-none">
             {['testimonial', 'collection', 'inbox', 'wall', 'analytics', 'import'].map((item) => (
               <button
                 key={item}

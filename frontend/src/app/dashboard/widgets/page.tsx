@@ -56,7 +56,7 @@ export default function WidgetsPage() {
   };
 
   const sampleTestimonial = testimonials[0] || {
-    name: 'Sarah Jenkins',
+    name: 'J. Ashwath',
     company: 'DevFlow Inc',
     role: 'CTO & Co-founder',
     review: 'Setting up Acme was incredibly fast. We integrated the REST APIs in less than 30 minutes, and our onboarding pipeline speed immediately doubled.',
@@ -256,7 +256,7 @@ export default function WidgetsPage() {
                           JD
                         </div>
                         <div>
-                          <span className="text-[10px] font-bold block">John Doe</span>
+                          <span className="text-[10px] font-bold block">J. Ashwath Doe</span>
                           <span className="text-[8px] text-zinc-500 block">Founder at SaaSify</span>
                         </div>
                       </div>
@@ -309,7 +309,7 @@ export default function WidgetsPage() {
                       <div className="w-6 h-6 rounded-full bg-brand-teal/20 text-brand-teal flex items-center justify-center text-[9px] font-black">
                         MJ
                       </div>
-                      <span className="text-[10px] font-bold">Marcus Jenkins</span>
+                      <span className="text-[10px] font-bold">Ateeqhulla Khan</span>
                     </div>
                     {showRating && (
                       <div className="flex space-x-0.5 text-amber-400">
@@ -334,7 +334,7 @@ export default function WidgetsPage() {
                     </p>
                     <div className="flex items-center space-x-1.5">
                       <div className="w-5 h-5 rounded-full bg-brand-emerald text-white text-[8px] font-black flex items-center justify-center">S</div>
-                      <span className="text-[9px] font-bold">Sarah, CTO</span>
+                      <span className="text-[9px] font-bold">J. Ashwath, CTO</span>
                     </div>
                   </div>
                 </div>

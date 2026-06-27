@@ -47,7 +47,7 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
     <WallOfLoveCard>
       <SpotlightCard 
         className="p-6 flex flex-col justify-between space-y-4 h-full cursor-pointer select-none"
-        glowColor={isVideo ? 'rgba(134, 119, 255, 0.12)' : 'rgba(108, 92, 255, 0.08)'}
+        glowColor={isVideo ? 'rgba(99, 102, 241, 0.12)' : 'rgba(99, 102, 241, 0.08)'}
         hoverScale={isVideo ? 1.05 : 1.03}
         tiltMax={isVideo ? 4 : 5}
         onMouseEnter={() => setIsHovered(true)}
@@ -97,7 +97,7 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
 
           {/* AI Quote Highlight tag */}
           {t.bestQuoteHighlight && (
-            <div className="w-full text-[10px] font-bold text-brand-teal bg-brand-teal/5 border border-brand-teal/15 px-2.5 py-1.5 rounded-lg flex items-center space-x-2 shadow-[0_2px_8px_rgba(20,184,166,0.05)] transition duration-300">
+            <div className="w-full text-[10px] font-bold text-brand-teal bg-brand-teal/5 border border-brand-teal/15 px-2.5 py-1.5 rounded-lg flex items-center space-x-2 shadow-[0_2px_8px_rgba(99,102,241,0.05)] transition duration-300">
               <Sparkles className="w-3.5 h-3.5 text-brand-teal shrink-0 animate-pulse" />
               <span className="italic leading-snug">"{t.bestQuoteHighlight}"</span>
             </div>
@@ -135,7 +135,7 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
 
               {isPlaying && (
                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-                  <div className="bg-[#8677FF] text-white px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center space-x-2 shadow-[0_0_20px_rgba(108,92,255,0.6)] transform scale-100 transition duration-300">
+                  <div className="bg-[#6366F1] text-white px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center space-x-2 shadow-[0_0_20px_rgba(108,92,255,0.6)] transform scale-100 transition duration-300">
                     <Play className="w-3 h-3 fill-current text-white animate-pulse" />
                     <span>Playing Preview</span>
                   </div>
@@ -402,15 +402,15 @@ export function WallOfLoveShowcase({ testimonials, layout }: WallOfLoveProps) {
               <svg viewBox="0 0 120 120" className="w-full h-full">
                 <defs>
                   <linearGradient id="largeHeartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#6C5CFF" />
-                    <stop offset="100%" stopColor="#8677FF" />
+                    <stop offset="0%" stopColor="#4338CA" />
+                    <stop offset="100%" stopColor="#6366F1" />
                   </linearGradient>
                   <linearGradient id="largeSpecular" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stopColor="#ffffff" stopOpacity="0.65" />
                     <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
                   </linearGradient>
                 </defs>
-                <path d="M60 112 C48 101 8 70 8 42 C8 22 23 8 42 8 C51 8 57 13 60 18 C63 13 69 8 78 8 C97 8 112 22 112 42 C112 70 72 101 60 112 Z" fill="#3c30ab" transform="translate(0, 4)" />
+                <path d="M60 112 C48 101 8 70 8 42 C8 22 23 8 42 8 C51 8 57 13 60 18 C63 13 69 8 78 8 C97 8 112 22 112 42 C112 70 72 101 60 112 Z" fill="#4338CA" transform="translate(0, 4)" />
                 <path d="M60 110 C49 99 9 69 9 41 C9 21 24 7 42 7 C51 7 57 12 60 17 C63 12 69 7 78 7 C96 7 111 21 111 41 C111 69 71 99 60 110 Z" fill="url(#largeHeartGrad)" />
                 <path d="M42 9 C25 9 11 23 11 41 C11 51 18 63 28 73 C25 65 21 55 21 44 C21 28 32 15 48 15 C54 15 58 18 60 22 C62 18 66 15 72 15 C88 15 99 28 99 44 C99 55 95 65 92 73 C102 63 109 51 109 41 C109 23 95 9 78 9 C69 9 63 14 60 19 C57 14 51 9 42 9 Z" fill="url(#largeSpecular)" />
                 <circle cx="38" cy="28" r="8" fill="#fff" opacity="0.32" />
@@ -445,8 +445,8 @@ export function WallOfLoveShowcase({ testimonials, layout }: WallOfLoveProps) {
               className="absolute text-lg sm:text-xl font-bold select-none pointer-events-none"
               style={{
                 left: `${item.left}%`,
-                color: item.id % 3 === 0 ? '#6C5CFF' : item.id % 3 === 1 ? '#8677FF' : '#FFFFFF',
-                textShadow: `0 0 10px ${item.id % 3 === 0 ? 'rgba(108, 92, 255, 0.3)' : item.id % 3 === 1 ? 'rgba(134, 119, 255, 0.3)' : 'rgba(255,255,255,0.2)'}`,
+                color: item.id % 3 === 0 ? '#4338CA' : item.id % 3 === 1 ? '#6366F1' : '#FFFFFF',
+                textShadow: `0 0 10px ${item.id % 3 === 0 ? 'rgba(99, 102, 241, 0.3)' : item.id % 3 === 1 ? 'rgba(99, 102, 241, 0.3)' : 'rgba(255,255,255,0.2)'}`,
               }}
             >
               {item.emoji}

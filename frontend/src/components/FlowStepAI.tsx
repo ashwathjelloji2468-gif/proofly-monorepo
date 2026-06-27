@@ -228,12 +228,12 @@ const review = await Proofly.process(reviewId, {
       </div>
 
       {/* Main visual panel layout grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch bg-gradient-to-br from-[#0c0d1b] to-[#07080f] border border-[#2b2c4e] p-5 md:p-8 rounded-3xl backdrop-blur-md shadow-[0_15px_50px_rgba(99,102,241,0.06)] relative overflow-hidden text-left">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch bg-gradient-to-br from-[#0c0d1b] to-[#07080f] border border-[#2E3445] p-5 md:p-8 rounded-3xl backdrop-blur-md shadow-[0_15px_50px_rgba(99,102,241,0.06)] relative overflow-hidden text-left">
         
         {/* Prompts Input Panel (Left column) */}
         <div className="lg:col-span-4 flex flex-col justify-between space-y-6">
           <div className="space-y-4">
-            <span className="text-[10px] font-black uppercase text-[#818cf8] tracking-widest block">AI Flow Generator</span>
+            <span className="text-[10px] font-black uppercase text-[#4338CA] tracking-widest block">AI Flow Generator</span>
             
             {/* Custom Input Form */}
             <form onSubmit={handleCustomPromptSubmit} className="relative">
@@ -242,7 +242,7 @@ const review = await Proofly.process(reviewId, {
                 placeholder="Describe your review flow query..."
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                className="w-full bg-[#080911]/90 border border-[#1f213a] p-3 text-xs text-white rounded-xl outline-none focus:border-[#4f46e5] pr-10 placeholder-zinc-650 transition"
+                className="w-full bg-[#080911]/90 border border-[#1F2937] p-3 text-xs text-white rounded-xl outline-none focus:border-[#4338CA] pr-10 placeholder-zinc-650 transition"
               />
               <button 
                 type="submit"
@@ -263,8 +263,8 @@ const review = await Proofly.process(reviewId, {
                     onClick={() => handleTriggerFlow(p.id as any, p.prompt)}
                     className={`w-full p-4 rounded-xl border text-left cursor-pointer transition ${
                       isActive 
-                        ? 'bg-[#181635]/40 border-[#4f46e5]/60 shadow-[0_0_15px_rgba(99,102,241,0.1)] ring-1 ring-[#6366f1]/20'
-                        : 'bg-transparent border-[#1f213a]/30 hover:bg-[#15162a]/30 hover:border-[#383a69]/40'
+                        ? 'bg-[#181635]/40 border-[#4338CA]/60 shadow-[0_0_15px_rgba(99,102,241,0.1)] ring-1 ring-[#4338CA]/20'
+                        : 'bg-transparent border-[#1F2937]/30 hover:bg-[#15162a]/30 hover:border-[#1F2937]/40'
                     }`}
                   >
                     <span className="text-xs font-black text-white block">{p.title}</span>
@@ -276,7 +276,7 @@ const review = await Proofly.process(reviewId, {
           </div>
 
           {/* Real-time telemetry console */}
-          <div className="bg-[#05060b] border border-[#1f213a] rounded-xl p-3.5 font-mono text-[9px] text-slate-400 space-y-2 select-none">
+          <div className="bg-[#05060b] border border-[#1F2937] rounded-xl p-3.5 font-mono text-[9px] text-slate-400 space-y-2 select-none">
             <span className="text-indigo-400 font-extrabold uppercase text-[8px] tracking-widest block mb-1">Telemetry Console</span>
             <div className="space-y-1 max-h-[85px] overflow-y-auto">
               {logs.map((log, idx) => (
@@ -290,16 +290,16 @@ const review = await Proofly.process(reviewId, {
         </div>
 
         {/* Node Canvas Viewport (Right column) */}
-        <div className="lg:col-span-8 bg-[#090912]/80 border border-[#1f213a] rounded-2xl flex flex-col justify-between overflow-hidden shadow-2xl relative min-h-[460px]">
+        <div className="lg:col-span-8 bg-[#090912]/80 border border-[#1F2937] rounded-2xl flex flex-col justify-between overflow-hidden shadow-2xl relative min-h-[460px]">
           
           {/* Canvas Header bar */}
-          <div className="flex items-center justify-between border-b border-[#1f213a] px-4 py-3 bg-[#0d0e1b]">
+          <div className="flex items-center justify-between border-b border-[#1F2937] px-4 py-3 bg-[#0d0e1b]">
             <div className="flex items-center space-x-1.5">
               <div className="w-2 h-2 rounded-full bg-red-500/80" />
               <div className="w-2 h-2 rounded-full bg-yellow-500/80" />
               <div className="w-2 h-2 rounded-full bg-green-500/80" />
             </div>
-            <span className="text-[8px] font-mono text-[#818cf8] uppercase tracking-widest flex items-center space-x-1.5">
+            <span className="text-[8px] font-mono text-[#4338CA] uppercase tracking-widest flex items-center space-x-1.5">
               <Activity className="w-3.5 h-3.5 animate-pulse text-indigo-400" />
               <span>Interactive flow steps canvas</span>
             </span>
@@ -334,8 +334,8 @@ const review = await Proofly.process(reviewId, {
                     {/* Neon Indigo to Teal Gradients */}
                     <defs>
                       <linearGradient id="neonLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#6C5CFF" />
-                        <stop offset="50%" stopColor="#8677FF" />
+                        <stop offset="0%" stopColor="#4338CA" />
+                        <stop offset="50%" stopColor="#6366F1" />
                         <stop offset="100%" stopColor="#F59E0B" />
                       </linearGradient>
                     </defs>
@@ -375,8 +375,8 @@ const review = await Proofly.process(reviewId, {
                     onClick={() => { setSelectedNodeId('trigger'); addLog('Inspecting Trigger webhook settings'); }}
                     className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
                       selectedNodeId === 'trigger'
-                        ? 'bg-[#181635] border-[#4f46e5]/60 ring-2 ring-[#6366f1]/20 scale-105'
-                        : 'bg-[#0c0d1b] border-[#1f213a] hover:border-indigo-500/30'
+                        ? 'bg-[#181635] border-[#4338CA]/60 ring-2 ring-[#4338CA]/20 scale-105'
+                        : 'bg-[#0c0d1b] border-[#1F2937] hover:border-indigo-500/30'
                     }`}
                   >
                     <Database className="w-5 h-5 text-indigo-400" />
@@ -391,8 +391,8 @@ const review = await Proofly.process(reviewId, {
                     onClick={() => { setSelectedNodeId('collector'); addLog('Inspecting Review Collector parameters'); }}
                     className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
                       selectedNodeId === 'collector'
-                        ? 'bg-brand-teal/10 border-[#8677FF]/60 ring-2 ring-[#8677FF]/20 scale-105'
-                        : 'bg-[#0c0d1b] border-[#1f213a] hover:border-brand-teal/30'
+                        ? 'bg-brand-teal/10 border-[#6366F1]/60 ring-2 ring-[#6366F1]/20 scale-105'
+                        : 'bg-[#0c0d1b] border-[#1F2937] hover:border-brand-teal/30'
                     }`}
                   >
                     <Video className="w-5 h-5 text-brand-teal" />
@@ -408,7 +408,7 @@ const review = await Proofly.process(reviewId, {
                     className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
                       selectedNodeId === 'ai'
                         ? 'bg-[#153523] border-brand-emerald/60 ring-2 ring-brand-emerald/20 scale-105'
-                        : 'bg-[#0c0d1b] border-[#1f213a] hover:border-brand-emerald/30'
+                        : 'bg-[#0c0d1b] border-[#1F2937] hover:border-brand-emerald/30'
                     }`}
                   >
                     <Cpu className="w-5 h-5 text-brand-emerald" />
@@ -424,7 +424,7 @@ const review = await Proofly.process(reviewId, {
                     className={`p-3.5 rounded-xl border text-center flex flex-col items-center space-y-2 cursor-pointer w-24 h-24 justify-center shadow-lg transition duration-300 ${
                       selectedNodeId === 'showcase'
                         ? 'bg-[#352515] border-[#f59e0b]/60 ring-2 ring-[#f59e0b]/20 scale-105'
-                        : 'bg-[#0c0d1b] border-[#1f213a] hover:border-amber-500/30'
+                        : 'bg-[#0c0d1b] border-[#1F2937] hover:border-amber-500/30'
                     }`}
                   >
                     <Layout className="w-5 h-5 text-amber-400" />
@@ -437,10 +437,10 @@ const review = await Proofly.process(reviewId, {
             </div>
 
             {/* Config details & developer code section at bottom */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 border-t border-[#1f213a] pt-4 items-stretch select-none z-10 bg-[#090912]/95 rounded-b-xl">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 border-t border-[#1F2937] pt-4 items-stretch select-none z-10 bg-[#090912]/95 rounded-b-xl">
               
               {/* Form settings controls (col 5) */}
-              <div className="md:col-span-5 space-y-3 pr-2 border-r border-[#1f213a]/50">
+              <div className="md:col-span-5 space-y-3 pr-2 border-r border-[#1F2937]/50">
                 <div className="flex items-center space-x-1.5">
                   <Settings className="w-3.5 h-3.5 text-indigo-400" />
                   <span className="text-[9px] font-black uppercase text-indigo-300 tracking-wider">Node parameters</span>
@@ -523,7 +523,7 @@ const review = await Proofly.process(reviewId, {
                             setNodeSettings(prev => ({ ...prev, ai: { ...prev.ai, language: val } }));
                             addLog(`AI language filter set: ${val}`);
                           }}
-                          className="w-full bg-[#080911] border border-[#1f213a] text-xs text-white p-1 rounded outline-none"
+                          className="w-full bg-[#080911] border border-[#1F2937] text-xs text-white p-1 rounded outline-none"
                         >
                           <option value="en">English (default)</option>
                           <option value="es">Spanish</option>
@@ -564,7 +564,7 @@ const review = await Proofly.process(reviewId, {
                             setNodeSettings(prev => ({ ...prev, showcase: { ...prev.showcase, layout: val } }));
                             addLog(`Showcase layout set: ${val}`);
                           }}
-                          className="w-full bg-[#080911] border border-[#1f213a] text-xs text-white p-1 rounded outline-none"
+                          className="w-full bg-[#080911] border border-[#1F2937] text-xs text-white p-1 rounded outline-none"
                         >
                           <option value="masonry">Masonry Grid</option>
                           <option value="grid">Aligned Grid</option>
@@ -614,7 +614,7 @@ const review = await Proofly.process(reviewId, {
                   </button>
                 </div>
 
-                <div className="bg-[#05060b] border border-[#1f213a] rounded-lg p-2.5 font-mono text-[8px] text-zinc-300 overflow-x-auto whitespace-pre h-[90px] relative">
+                <div className="bg-[#05060b] border border-[#1F2937] rounded-lg p-2.5 font-mono text-[8px] text-zinc-300 overflow-x-auto whitespace-pre h-[90px] relative">
                   {getCodeSnippet()}
                 </div>
               </div>
@@ -624,7 +624,7 @@ const review = await Proofly.process(reviewId, {
           </div>
 
           {/* Deploy Action Bar */}
-          <div className="border-t border-[#1f213a] px-4 py-3 bg-[#0d0e1b] flex items-center justify-between">
+          <div className="border-t border-[#1F2937] px-4 py-3 bg-[#0d0e1b] flex items-center justify-between">
             <span className="text-[9.5px] text-slate-450 font-bold block">
               Customize nodes, then deploy to active environment
             </span>

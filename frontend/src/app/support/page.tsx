@@ -95,14 +95,14 @@ export default function SupportPage() {
 
       {/* Hero Search Section */}
       <section className="max-w-7xl mx-auto px-6 pt-32 pb-8 w-full text-center relative">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8677FF]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#6366F1]/10 rounded-full blur-[100px] pointer-events-none -z-10" />
         
-        <span className="bg-[#8677FF]/15 text-[#8677FF] border border-[#8677FF]/20 text-[10px] font-black uppercase tracking-widest px-3.5 py-1 rounded-full inline-block mb-3.5">
+        <span className="bg-[#6366F1]/15 text-[#6366F1] border border-[#6366F1]/20 text-[10px] font-black uppercase tracking-widest px-3.5 py-1 rounded-full inline-block mb-3.5">
           Support Desk
         </span>
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           How can we help you <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             today?
           </span>
         </h1>
@@ -114,7 +114,7 @@ export default function SupportPage() {
             value={kbQuery}
             onChange={(e) => setKbQuery(e.target.value)}
             placeholder="Search help topics (e.g. 'webflow', 'SSO', 'API')..."
-            className="w-full bg-[#0c0d16] border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-white transition duration-200 shadow-xl"
+            className="w-full bg-[#0c0d16] border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-white transition duration-200 shadow-xl"
           />
           <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
         </div>
@@ -130,7 +130,7 @@ export default function SupportPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredKb.map((art, idx) => (
                 <div key={idx} className="bg-zinc-950/60 p-4 border border-white/[0.04] rounded-2xl text-left space-y-2">
-                  <span className="text-[8px] font-black uppercase text-[#8677FF] tracking-wider block">{art.category}</span>
+                  <span className="text-[8px] font-black uppercase text-[#6366F1] tracking-wider block">{art.category}</span>
                   <h4 className="text-xs font-bold text-white leading-tight">{art.title}</h4>
                   <p className="text-[10px] text-slate-400 leading-relaxed">{art.content}</p>
                 </div>
@@ -155,7 +155,7 @@ export default function SupportPage() {
               <div 
                 key={idx}
                 onClick={() => setKbQuery(cat)}
-                className="bg-[#0c0d16] border border-white/[0.05] hover:border-[#8677FF]/25 hover:scale-102 p-4 rounded-2xl cursor-pointer text-center space-y-2 transition duration-200"
+                className="bg-[#0c0d16] border border-white/[0.05] hover:border-[#6366F1]/25 hover:scale-102 p-4 rounded-2xl cursor-pointer text-center space-y-2 transition duration-200"
               >
                 <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center mx-auto text-slate-450">
                   <BookOpen className="w-4 h-4 text-brand-teal" />
@@ -172,7 +172,7 @@ export default function SupportPage() {
           {/* Support Ticket Intake Form */}
           <div className="lg:col-span-7 bg-[#0c0d16] border border-white/[0.05] p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl relative">
             <div className="flex items-center justify-between border-b border-white/5 pb-3">
-              <span className="text-xs font-black uppercase tracking-widest text-[#8677FF] block">Contact Support Desk</span>
+              <span className="text-xs font-black uppercase tracking-widest text-[#6366F1] block">Contact Support Desk</span>
               <span className="text-[9px] text-zinc-500 font-bold uppercase">Average response: 4 hrs</span>
             </div>
 
@@ -197,8 +197,8 @@ export default function SupportPage() {
                       required
                       value={contactName}
                       onChange={(e) => setContactName(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
-                      placeholder="Jane Doe"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
+                      placeholder="Ateeqhulla Khan Doe"
                     />
                   </div>
                   <div className="space-y-1">
@@ -208,7 +208,7 @@ export default function SupportPage() {
                       required
                       value={contactEmail}
                       onChange={(e) => setContactEmail(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
                       placeholder="jane@domain.com"
                     />
                   </div>
@@ -222,7 +222,7 @@ export default function SupportPage() {
                       required
                       value={contactSubject}
                       onChange={(e) => setContactSubject(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
                       placeholder="e.g. Wall of love widgets alignment broken"
                     />
                   </div>
@@ -232,7 +232,7 @@ export default function SupportPage() {
                     <select
                       value={contactPriority}
                       onChange={(e: any) => setContactPriority(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white cursor-pointer"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white cursor-pointer"
                     >
                       <option value="HIGH">HIGH priority</option>
                       <option value="MEDIUM">MEDIUM priority</option>
@@ -247,7 +247,7 @@ export default function SupportPage() {
                     <select
                       value={contactCategory}
                       onChange={(e) => setContactCategory(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white cursor-pointer"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white cursor-pointer"
                     >
                       <option value="Getting Started">Getting Started</option>
                       <option value="Billing & Pricing">Billing & Pricing</option>
@@ -263,7 +263,7 @@ export default function SupportPage() {
                       type="text" 
                       value={contactCompany}
                       onChange={(e) => setContactCompany(e.target.value)}
-                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
+                      className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white"
                       placeholder="e.g. Stripe Inc."
                     />
                   </div>
@@ -275,7 +275,7 @@ export default function SupportPage() {
                     required
                     value={contactMessage}
                     onChange={(e) => setContactMessage(e.target.value)}
-                    className="w-full h-24 bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white resize-none"
+                    className="w-full h-24 bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white resize-none"
                     placeholder="Provide screenshot links or developer logs if available..."
                   />
                 </div>
@@ -323,7 +323,7 @@ export default function SupportPage() {
                 <div 
                   key={t.id}
                   onClick={() => setActiveTicketId(t.id)}
-                  className="bg-zinc-950/60 border border-white/[0.04] p-3.5 rounded-xl hover:border-[#8677FF]/25 cursor-pointer transition duration-200 space-y-2 text-left"
+                  className="bg-zinc-950/60 border border-white/[0.04] p-3.5 rounded-xl hover:border-[#6366F1]/25 cursor-pointer transition duration-200 space-y-2 text-left"
                 >
                   <div className="flex items-center justify-between">
                     <span className={`text-[8px] font-black px-1.5 py-0.2 rounded uppercase ${
@@ -381,7 +381,7 @@ export default function SupportPage() {
                 <span>/</span>
                 <span>{activeTicket.category}</span>
                 <span>/</span>
-                <span className="text-[#8677FF]">{activeTicket.priority}</span>
+                <span className="text-[#6366F1]">{activeTicket.priority}</span>
               </div>
 
               <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
@@ -413,11 +413,11 @@ export default function SupportPage() {
                   <div 
                     key={rep.id} 
                     className={`p-3 border rounded-xl space-y-1 text-left ${
-                      rep.author === 'You' ? 'bg-[#8677FF]/5 border-[#8677FF]/15' : 'bg-brand-teal/5 border-brand-teal/15'
+                      rep.author === 'You' ? 'bg-[#6366F1]/5 border-[#6366F1]/15' : 'bg-brand-teal/5 border-brand-teal/15'
                     }`}
                   >
                     <div className="flex justify-between items-center text-[9px] font-bold text-slate-400">
-                      <span className={rep.author !== 'You' ? 'text-brand-teal' : 'text-[#8677FF]'}>{rep.author}</span>
+                      <span className={rep.author !== 'You' ? 'text-brand-teal' : 'text-[#6366F1]'}>{rep.author}</span>
                       <span className="font-mono">{rep.createdAt.slice(11,16)}</span>
                     </div>
                     <p className="text-[10px] text-slate-200">{rep.message}</p>
@@ -434,11 +434,11 @@ export default function SupportPage() {
                     onChange={(e) => setReplyMessage(e.target.value)}
                     required
                     placeholder="Type your response update here..."
-                    className="flex-1 bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2.5 text-xs text-white"
+                    className="flex-1 bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2.5 text-xs text-white"
                   />
                   <button 
                     type="submit"
-                    className="bg-[#8677FF] hover:bg-[#7263EB] text-white font-bold text-[10px] px-4 rounded-xl cursor-pointer"
+                    className="bg-[#6366F1] hover:bg-[#7263EB] text-white font-bold text-[10px] px-4 rounded-xl cursor-pointer"
                   >
                     Send
                   </button>

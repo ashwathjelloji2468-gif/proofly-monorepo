@@ -30,14 +30,14 @@ export function ProoflyLogo({
       >
         <defs>
           <linearGradient id="proofly-ribbon" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#4f46e5" />
-            <stop offset="45%" stopColor="#7c3aed" />
-            <stop offset="70%" stopColor="#8b5cf6" />
+            <stop offset="0%" stopColor="#4338CA" />
+            <stop offset="45%" stopColor="#4338CA" />
+            <stop offset="70%" stopColor="#4338CA" />
             <stop offset="100%" stopColor="#3b82f6" />
           </linearGradient>
           <linearGradient id="proofly-arrow" x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#38bdf8" />
-            <stop offset="100%" stopColor="#4f46e5" />
+            <stop offset="100%" stopColor="#4338CA" />
           </linearGradient>
         </defs>
 

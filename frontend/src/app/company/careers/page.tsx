@@ -57,7 +57,7 @@ export default function CareersPage() {
         </span>
         <h1 className="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-none max-w-3xl mx-auto">
           Help us build the trust <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#8677FF] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-teal via-brand-emerald to-[#6366F1] bg-clip-text text-transparent">
             layer of the web
           </span>
         </h1>
@@ -76,7 +76,7 @@ export default function CareersPage() {
           {benefits.map((b, idx) => (
             <div key={idx} className="bg-[#0c0d16] border border-white/[0.05] p-5 rounded-2xl space-y-2.5 text-left relative">
               <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center">
-                {idx === 0 ? <Coffee className="w-3.5 h-3.5 text-brand-teal" /> : idx === 1 ? <Award className="w-3.5 h-3.5 text-[#8677FF]" /> : <Heart className="w-3.5 h-3.5 text-rose-400" />}
+                {idx === 0 ? <Coffee className="w-3.5 h-3.5 text-brand-teal" /> : idx === 1 ? <Award className="w-3.5 h-3.5 text-[#6366F1]" /> : <Heart className="w-3.5 h-3.5 text-rose-400" />}
               </div>
               <h4 className="text-xs font-bold text-white tracking-wide">{b.title}</h4>
               <p className="text-[10px] text-slate-400 leading-relaxed">{b.desc}</p>
@@ -115,7 +115,7 @@ export default function CareersPage() {
               </div>
 
               <a href="#apply" className="w-full sm:w-auto">
-                <button className="w-full sm:w-auto bg-[#8677FF] hover:bg-[#7263EB] text-white font-bold text-[10px] px-4 py-2 rounded-xl transition cursor-pointer">
+                <button className="w-full sm:w-auto bg-[#6366F1] hover:bg-[#7263EB] text-white font-bold text-[10px] px-4 py-2 rounded-xl transition cursor-pointer">
                   Apply Now
                 </button>
               </a>
@@ -153,8 +153,8 @@ export default function CareersPage() {
                     required
                     value={candidateName}
                     onChange={(e) => setCandidateName(e.target.value)}
-                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
-                    placeholder="e.g. Jane Doe"
+                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
+                    placeholder="e.g. Ateeqhulla Khan Doe"
                   />
                 </div>
                 <div className="space-y-1 text-left">
@@ -164,7 +164,7 @@ export default function CareersPage() {
                     required
                     value={candidateEmail}
                     onChange={(e) => setCandidateEmail(e.target.value)}
-                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
+                    className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
                     placeholder="e.g. jane@gmail.com"
                   />
                 </div>
@@ -177,7 +177,7 @@ export default function CareersPage() {
                   required
                   value={resumeLink}
                   onChange={(e) => setResumeLink(e.target.value)}
-                  className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
+                  className="w-full bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200"
                   placeholder="e.g. https://linkedin.com/in/janedoe"
                 />
               </div>
@@ -187,7 +187,7 @@ export default function CareersPage() {
                 <textarea 
                   value={candidateNote}
                   onChange={(e) => setCandidateNote(e.target.value)}
-                  className="w-full h-24 bg-zinc-950 border border-white/[0.08] focus:border-[#8677FF] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200 resize-none leading-relaxed"
+                  className="w-full h-24 bg-zinc-950 border border-white/[0.08] focus:border-[#6366F1] outline-none rounded-xl px-3.5 py-2 text-xs text-white transition duration-200 resize-none leading-relaxed"
                   placeholder="Tell us what excites you about Proofly..."
                 />
               </div>
