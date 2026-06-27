@@ -30,7 +30,7 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border-primary bg-background/90 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border-primary bg-background/90 backdrop-blur-md [transform:translateZ(0)]">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="group hover:opacity-90 transition-opacity">
@@ -55,8 +55,6 @@ export function Navbar() {
             Wall of Love
           </Link>
           
-
-          
           <Link 
             href="/#pricing" 
             onClick={(e) => handleScroll(e, 'pricing')}
@@ -78,7 +76,7 @@ export function Navbar() {
         <div className="flex items-center space-x-4">
           {mounted && user ? (
             <Link href="/dashboard">
-              <button className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 font-bold text-xs py-2 px-4 rounded-lg flex items-center space-x-1 shadow-md shadow-brand-emerald/10 cursor-pointer transition">
+              <button className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 font-bold text-xs py-2 px-4 rounded-lg flex items-center space-x-1 shadow-md shadow-brand-emerald/10 cursor-pointer transition-all duration-200">
                 <span>Dashboard</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -89,7 +87,7 @@ export function Navbar() {
                 Log in
               </Link>
               <Link href="/signup">
-                <button className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 font-bold text-xs py-2 px-4 rounded-lg shadow-md shadow-brand-emerald/10 cursor-pointer transition">
+                <button className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 font-bold text-xs py-2 px-4 rounded-lg shadow-md shadow-brand-emerald/10 cursor-pointer transition-all duration-200">
                   Start Free
                 </button>
               </Link>

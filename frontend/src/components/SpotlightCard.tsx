@@ -81,13 +81,14 @@ export function SpotlightCard({
         '--mouse-px': `${percent.x}%`,
         '--mouse-py': `${percent.y}%`,
         transform: isHovered 
-          ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-10px) scale(${hoverScale})`
+          ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(-4px) scale(${hoverScale})`
           : 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1)',
         boxShadow: isHovered 
           ? '0 25px 50px -12px rgba(16, 185, 129, 0.25), 0 0 35px -5px rgba(20, 184, 166, 0.15)'
           : 'none',
+        willChange: 'transform, box-shadow',
         transition: isHovered
-          ? 'transform 100ms cubic-bezier(0.03, 0.98, 0.52, 0.99), box-shadow 400ms ease'
+          ? 'transform 150ms cubic-bezier(0.03, 0.98, 0.52, 0.99), box-shadow 400ms ease'
           : 'transform 500ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 500ms ease',
       } as React.CSSProperties}
       {...props}
@@ -119,6 +120,7 @@ export function SpotlightCard({
           )`,
           backgroundSize: '250% 250%',
           backgroundPosition: `${percent.x}% ${percent.y}%`,
+          willChange: 'background-position',
           filter: 'blur(4px)',
         }}
       />

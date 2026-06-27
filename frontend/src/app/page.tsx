@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -14,11 +14,9 @@ import {
   Search, 
   Layers, 
   Terminal,
-  HelpCircle,
-  X,
   ChevronDown,
+  X,
   Star,
-  Quote,
   Smile,
   Activity,
   Tag
@@ -170,7 +168,11 @@ export default function LandingPage() {
             <motion.img
               key={avatar.id}
               src={avatar.src}
-              alt="customer avatar"
+              alt=""
+              loading="lazy"
+              width={avatar.size}
+              height={avatar.size}
+              fetchPriority="low"
               initial={{ scale: 0.6, opacity: 0, y: 15 }}
               animate={{
                 scale: [0.8, 1, 0.8],
@@ -441,6 +443,8 @@ export default function LandingPage() {
                 <img 
                   src="/ai_social_proof_mockup.png" 
                   alt="Sentient AI Social Proof dashboard network" 
+                  width={640}
+                  height={360}
                   className="w-full h-full object-cover opacity-90 group-hover/img:scale-102 transition duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
@@ -864,7 +868,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-stretch max-w-3xl mx-auto">
           {pricingTiers.map((tier, idx) => {
             const isCurrent = user?.tier === tier.id;
             return (
@@ -939,7 +943,7 @@ export default function LandingPage() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={revealOnScrollVariants}
-        className="max-w-6xl mx-auto px-6 py-28 text-center space-y-16 border-t border-border-primary/50"
+        className="max-w-6xl mx-auto px-6 py-24 text-center space-y-16 border-t border-border-primary/50"
       >
         <div className="space-y-4">
           <div className="bg-[#6C5CFF]/15 text-[#8677FF] px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest inline-block border border-[#6C5CFF]/25">
@@ -1046,7 +1050,7 @@ export default function LandingPage() {
                   className="w-full px-6 py-5 flex items-center justify-between text-white font-bold text-xs sm:text-sm cursor-pointer select-none"
                 >
                   <span>{faq.q}</span>
-                  <HelpCircle className={`w-4 h-4 text-brand-teal transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 text-brand-teal transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
                 </button>
                 <AnimatePresence initial={false}>
                   {isOpen && (

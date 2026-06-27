@@ -90,7 +90,7 @@ export function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 pt-12 mt-12 border-t border-border-primary text-center text-xs text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} Proofly. All rights reserved. Powered by Supabase & Mux.</p>
+        <p>&copy; {new Date().getFullYear()} Proofly. All rights reserved.</p>
       </div>
     </footer>
   );
