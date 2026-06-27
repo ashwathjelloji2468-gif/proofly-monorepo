@@ -49,6 +49,85 @@ export default function LandingPage() {
   // FAQ Active State
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
+  // Interactive Hero tabbed showcase states
+  const [heroTab, setHeroTab] = useState<'dashboard' | 'recorder' | 'widget'>('recorder');
+  const [autoPlay, setAutoPlay] = useState(true);
+  const [recordingSeconds, setRecordingSeconds] = useState(14);
+  const [sentimentScore, setSentimentScore] = useState(0);
+  const [reviewsCount, setReviewsCount] = useState(0);
+  const [inboxCount, setInboxCount] = useState(0);
+  const [typedText, setTypedText] = useState("");
+
+  // 1. Auto-play loop to cycle tabs every 4.5 seconds
+  useEffect(() => {
+    if (!autoPlay) return;
+    const interval = setInterval(() => {
+      setHeroTab((prev) => {
+        if (prev === 'dashboard') return 'recorder';
+        if (prev === 'recorder') return 'widget';
+        return 'dashboard';
+      });
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [autoPlay]);
+
+  // 2. Count up timer for Recorder UI
+  useEffect(() => {
+    if (heroTab !== 'recorder') {
+      setRecordingSeconds(14);
+      return;
+    }
+    const interval = setInterval(() => {
+      setRecordingSeconds((prev) => prev + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [heroTab]);
+
+  // 3. Count up animation for Dashboard numbers
+  useEffect(() => {
+    if (heroTab !== 'dashboard') {
+      setSentimentScore(0);
+      setReviewsCount(0);
+      setInboxCount(0);
+      return;
+    }
+    const duration = 1000;
+    const startTime = performance.now();
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeProgress = progress * (2 - progress); // easeOutQuad
+      setSentimentScore(Math.round(easeProgress * 84));
+      setReviewsCount(Math.round(easeProgress * 12));
+      setInboxCount(Math.round(easeProgress * 48));
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    requestAnimationFrame(animate);
+  }, [heroTab]);
+
+  // 4. Typewriter text simulation for Dashboard AI summary
+  const fullSummaryText = "Sarah details the fast 15-minute onboarding configuration and the quality of developer integrations.";
+  useEffect(() => {
+    if (heroTab !== 'dashboard') {
+      setTypedText("");
+      return;
+    }
+    let currentText = "";
+    let charIndex = 0;
+    const interval = setInterval(() => {
+      if (charIndex < fullSummaryText.length) {
+        currentText += fullSummaryText.charAt(charIndex);
+        setTypedText(currentText);
+        charIndex++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 20);
+    return () => clearInterval(interval);
+  }, [heroTab]);
+
   // Filter approved testimonials
   const approvedTestimonials = testimonials.filter(t => t.status === 'approved');
 
@@ -403,57 +482,322 @@ export default function LandingPage() {
                 " SETUP TOOK LESS THAN 15 MINUTES. WE INTEGRATED THE REST APIS... "
               </p>
             </motion.div>
+            
+            {/* Product demo subtitle indicator */}
+            <div className="text-center sm:text-right text-[10px] font-black uppercase tracking-widest text-[#8677FF] mb-2 animate-pulse flex items-center justify-center sm:justify-end space-x-1.5 select-none">
+              <span>Explore the product in 15 seconds</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#8677FF] animate-ping" />
+            </div>
 
-            <SpotlightCard className="p-6 rounded-2xl shadow-2xl flex flex-col gap-6" glowColor="rgba(108, 92, 255, 0.1)">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-brand-emerald/5 rounded-full blur-xl" />
+            <SpotlightCard className="p-6 rounded-2xl shadow-2xl flex flex-col gap-6 relative min-h-[460px]" glowColor="rgba(108, 92, 255, 0.1)">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-brand-emerald/5 rounded-full blur-xl pointer-events-none" />
               
-              {/* Window buttons */}
-              <div className="flex items-center justify-between border-b border-border-primary/50 pb-4">
+              {/* Window Header: Window Controls & Interactive Pills */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border-primary/50 pb-4">
+                {/* Window Dots */}
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 rounded-full bg-red-500" />
                   <div className="w-3 h-3 rounded-full bg-yellow-500" />
                   <div className="w-3 h-3 rounded-full bg-green-500" />
                 </div>
-                <span className="text-[9px] font-mono text-muted-foreground uppercase tracking-widest bg-zinc-900 px-2.5 py-0.5 rounded border border-border-primary flex items-center space-x-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse" />
-                  <span>AI Monitor Active</span>
-                </span>
-              </div>
-
-              {/* Dashboard demo counters */}
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
-                  <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Sentiment</span>
-                  <span className="text-sm font-black text-white flex items-center justify-center space-x-1">
-                    <span className="bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent">84%</span>
-                  </span>
-                </div>
-                <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
-                  <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Webcam Reviews</span>
-                  <span className="text-sm font-black text-white">12</span>
-                </div>
-                <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
-                  <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Total Inbox</span>
-                  <span className="text-sm font-black text-white">48</span>
-                </div>
-              </div>
-
-              {/* Cinematic AIsentient Map Mockup */}
-              <div className="bg-[#09090B] border border-border-primary rounded-xl overflow-hidden relative group/img cursor-zoom-in aspect-square sm:aspect-video flex items-center justify-center">
-                <img 
-                  src="/ai_social_proof_mockup.png" 
-                  alt="Sentient AI Social Proof dashboard network" 
-                  width={640}
-                  height={360}
-                  className="w-full h-full object-cover opacity-90 group-hover/img:scale-102 transition duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
                 
-                {/* Floating HUD status indicator overlay */}
-                <div className="absolute top-4 right-4 bg-[#09090B]/90 backdrop-blur border border-border-primary/50 py-1 px-2.5 rounded-lg text-[9px] font-mono text-[#8677FF] flex items-center space-x-1 select-none">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#8677FF] animate-pulse" />
-                  <span>PROJECTION: ACTIVE</span>
+                {/* Product Navigation Tabs - Rounded Pills with smooth sliding underline */}
+                <div className="bg-[#09090B] border border-border-primary/80 p-1 rounded-full flex items-center space-x-1">
+                  {[
+                    { id: 'recorder', label: '🎥 Collect' },
+                    { id: 'dashboard', label: '📊 Manage' },
+                    { id: 'widget', label: '💖 Showcase' }
+                  ].map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setHeroTab(tab.id as any);
+                        setAutoPlay(false); // Pause auto-play on click
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          setHeroTab(tab.id as any);
+                          setAutoPlay(false);
+                        }
+                      }}
+                      className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-colors duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-emerald/50 ${
+                        heroTab === tab.id
+                          ? 'text-white'
+                          : 'text-zinc-500 hover:text-zinc-300'
+                      }`}
+                      aria-label={`Show ${tab.label}`}
+                    >
+                      {heroTab === tab.id && (
+                        <motion.span
+                          layoutId="heroTabActive"
+                          className="absolute inset-0 bg-brand-emerald rounded-full -z-10 shadow-md shadow-brand-emerald/20"
+                          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                        />
+                      )}
+                      <span>{tab.label}</span>
+                    </button>
+                  ))}
                 </div>
+              </div>
+
+              {/* FIXED WRAPPER WITH FADE + SLIGHT SCALE TRANSITIONS */}
+              <div className="relative flex-1 flex flex-col justify-center min-h-[340px]">
+                <AnimatePresence mode="wait">
+                  
+                  {/* TAB 1: Collect (🎥 Recorder UI) */}
+                  {heroTab === 'recorder' && (
+                    <motion.div 
+                      key="recorder"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-4 text-left"
+                    >
+                      {/* Simulated Recorder Viewport */}
+                      <div className="bg-[#09090B] border border-border-primary rounded-xl overflow-hidden aspect-square sm:aspect-video flex flex-col justify-between p-4 relative">
+                        {/* Pulsing REC Indicator Overlay */}
+                        <div className="flex items-center justify-between w-full z-10">
+                          <div className="bg-black/60 border border-zinc-800/80 backdrop-blur py-1 px-2.5 rounded-lg text-[9px] font-mono text-red-500 flex items-center space-x-1.5 select-none font-bold">
+                            <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
+                            <span>REC: 00:{recordingSeconds < 10 ? `0${recordingSeconds}` : recordingSeconds}</span>
+                          </div>
+                          
+                          {/* Animating Waveform */}
+                          <div className="flex items-center space-x-1.5 bg-black/60 border border-zinc-800/80 px-2 py-1 rounded-lg backdrop-blur select-none">
+                            <span className="text-[7px] text-zinc-400 font-mono">AUDIO</span>
+                            <div className="flex items-end gap-0.5 h-3 overflow-hidden">
+                              {[3, 5, 2, 4, 6, 3, 5].map((h, idx) => (
+                                <motion.div
+                                  key={idx}
+                                  animate={{ height: [`${h*15}%`, `${h*15 + 40}%`, `${h*15}%`] }}
+                                  transition={{ repeat: Infinity, duration: 0.8 + (idx % 2) * 0.2, ease: "easeInOut" }}
+                                  className="w-0.5 bg-brand-emerald rounded-full"
+                                  style={{ height: `${h*15}%` }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Guiding Questions HUD Overlay */}
+                        <div className="absolute inset-x-4 top-14 bg-gradient-to-r from-brand-emerald/20 to-brand-teal/20 backdrop-blur-md border border-brand-emerald/30 p-3 rounded-lg z-10 text-left space-y-1.5 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+                          <div className="flex items-center justify-between text-[8px] font-black text-brand-emerald uppercase tracking-wider">
+                            <span>Guiding Question 1 of 3</span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-ping" />
+                          </div>
+                          <p className="text-[10px] sm:text-xs font-bold text-white leading-normal">
+                            ❓ How does Proofly help your startup build conversion trust?
+                          </p>
+                          {/* Progress bar */}
+                          <div className="w-full h-1 bg-zinc-950 rounded-full overflow-hidden">
+                            <div className="w-1/3 h-full bg-brand-emerald" />
+                          </div>
+                        </div>
+
+                        {/* Camera stream placeholder image */}
+                        <div className="absolute inset-0 bg-[#0c0d12] flex items-center justify-center z-0">
+                          <div className="w-20 h-20 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center shadow-inner opacity-75">
+                            <Video className="w-8 h-8 text-zinc-700 animate-pulse" />
+                          </div>
+                        </div>
+
+                        {/* Recording Action HUD bottom row */}
+                        <div className="flex items-center justify-center w-full z-10">
+                          <div className="bg-black/60 border border-zinc-800/80 backdrop-blur p-2 rounded-full flex items-center space-x-3">
+                            <div className="w-8 h-8 rounded-full bg-red-600 hover:bg-red-700 cursor-pointer flex items-center justify-center transition border border-red-500 shadow shadow-red-900/30">
+                              <span className="w-3.5 h-3.5 bg-white rounded-sm" />
+                            </div>
+                            <span className="text-[10px] font-bold text-slate-300 pr-2">Stop Recording</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
+                        Collect video or text testimonials in under 60 seconds.
+                      </p>
+                    </motion.div>
+                  )}
+
+                  {/* TAB 2: Manage (📊 Dashboard) */}
+                  {heroTab === 'dashboard' && (
+                    <motion.div 
+                      key="dashboard"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-4 text-left"
+                    >
+                      {/* Dashboard demo counters with count-up animation */}
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
+                          <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Sentiment</span>
+                          <span className="text-sm font-black text-white flex items-center justify-center space-x-1">
+                            <span className="bg-gradient-to-r from-brand-emerald to-brand-teal bg-clip-text text-transparent">
+                              {sentimentScore}%
+                            </span>
+                          </span>
+                        </div>
+                        <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
+                          <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Webcam Reviews</span>
+                          <span className="text-sm font-black text-white">{reviewsCount}</span>
+                        </div>
+                        <div className="bg-[#09090B] border border-border-primary p-3 rounded-xl space-y-1 text-center">
+                          <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Total Inbox</span>
+                          <span className="text-sm font-black text-white">{inboxCount}</span>
+                        </div>
+                      </div>
+
+                      {/* Inbox simulation card with typing effect */}
+                      <div className="bg-[#09090B] border border-border-primary rounded-xl p-4 space-y-3 relative overflow-hidden">
+                        <div className="flex items-center justify-between border-b border-border-primary/50 pb-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="w-2 h-2 rounded-full bg-brand-emerald" />
+                            <span className="text-[9px] font-bold text-white uppercase tracking-wider">AI Analysis summary</span>
+                          </div>
+                          <span className="text-[8px] text-brand-emerald font-black bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase">
+                            Approved
+                          </span>
+                        </div>
+                        
+                        {/* Typing animation effect container */}
+                        <div className="min-h-[44px]">
+                          <p className="text-xs text-slate-300 leading-relaxed font-mono">
+                            {typedText}
+                            <span className="w-1.5 h-3 bg-brand-teal inline-block ml-0.5 animate-pulse" />
+                          </p>
+                        </div>
+
+                        {/* Keyword Cloud */}
+                        <div className="flex items-center gap-1.5 flex-wrap pt-2">
+                          <span className="text-[8px] bg-zinc-900 border border-border-primary px-2 py-0.5 rounded text-slate-400">#onboarding</span>
+                          <span className="text-[8px] bg-zinc-900 border border-border-primary px-2 py-0.5 rounded text-slate-400">#rest-api</span>
+                          <span className="text-[8px] bg-zinc-900 border border-border-primary px-2 py-0.5 rounded text-slate-400">#speed</span>
+                        </div>
+                      </div>
+
+                      <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
+                        Organize every testimonial and uncover customer insights with AI.
+                      </p>
+                    </motion.div>
+                  )}
+
+                  {/* TAB 3: Showcase (💖 Wall of Love) */}
+                  {heroTab === 'widget' && (
+                    <motion.div 
+                      key="widget"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-4 text-left relative"
+                    >
+                      {/* Rising hearts simulation */}
+                      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl z-20">
+                        {[...Array(6)].map((_, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ y: 220, opacity: 0, scale: 0.6 }}
+                            animate={{ 
+                              y: [220, 20], 
+                              opacity: [0, 0.8, 0], 
+                              x: [Math.sin(i) * 20, Math.sin(i + 2) * 30] 
+                            }}
+                            transition={{ 
+                              repeat: Infinity, 
+                              duration: 3 + (i % 2) * 1.5, 
+                              delay: i * 0.7, 
+                              ease: "easeOut" 
+                            }}
+                            className="absolute text-brand-teal text-xs"
+                            style={{ left: `${15 + i * 15}%`, bottom: '0px' }}
+                          >
+                            ❤️
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Mini Wall of Love grid with floating animation */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        {/* Testimonial Card 1 with subtle float */}
+                        <motion.div 
+                          animate={{ y: [0, -6, 0] }}
+                          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+                          className="bg-[#09090B] border border-border-primary p-4 rounded-xl space-y-3 flex flex-col justify-between text-left shadow-lg hover:border-brand-emerald/40 transition duration-300 group cursor-pointer"
+                        >
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex space-x-0.5 text-amber-400 text-[10px]">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star key={i} className="w-2.5 h-2.5 fill-current" />
+                                ))}
+                              </div>
+                              <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[8px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider">
+                                Positive
+                              </span>
+                            </div>
+                            <p className="text-[11px] leading-relaxed text-slate-300 italic group-hover:text-white transition">
+                              "Setup took under 15 minutes. Our onboarding speed doubled instantly!"
+                            </p>
+                          </div>
+                          <div className="flex items-center space-x-2 pt-2 border-t border-border-primary/40">
+                            <img 
+                              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50" 
+                              alt="Sarah Jenkins"
+                              className="w-6 h-6 rounded-full object-cover border border-border-primary"
+                            />
+                            <div className="text-left leading-none">
+                              <span className="text-[10px] font-bold text-white block">Sarah Jenkins</span>
+                              <span className="text-[8px] text-zinc-500 block mt-0.5">SaaS Founder</span>
+                            </div>
+                          </div>
+                        </motion.div>
+
+                        {/* Testimonial Card 2 with offset float */}
+                        <motion.div 
+                          animate={{ y: [0, 6, 0] }}
+                          transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
+                          className="bg-[#09090B] border border-border-primary p-4 rounded-xl space-y-3 flex flex-col justify-between text-left shadow-lg hover:border-brand-teal/40 transition duration-300 group cursor-pointer"
+                        >
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex space-x-0.5 text-amber-400 text-[10px]">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star key={i} className="w-2.5 h-2.5 fill-current" />
+                                ))}
+                              </div>
+                              <span className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 text-[8px] font-black uppercase px-1.5 py-0.5 rounded tracking-wider">
+                                Video
+                              </span>
+                            </div>
+                            <p className="text-[11px] leading-relaxed text-slate-300 italic group-hover:text-white transition">
+                              "We increased conversion rates by 18% for our clients in week 1."
+                            </p>
+                          </div>
+                          <div className="flex items-center space-x-2 pt-2 border-t border-border-primary/40">
+                            <img 
+                              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50" 
+                              alt="James Cole"
+                              className="w-6 h-6 rounded-full object-cover border border-border-primary"
+                            />
+                            <div className="text-left leading-none">
+                              <span className="text-[10px] font-bold text-white block">James Cole</span>
+                              <span className="text-[8px] text-zinc-500 block mt-0.5">Agency Owner</span>
+                            </div>
+                          </div>
+                        </motion.div>
+
+                      </div>
+
+                      <p className="text-[10px] text-muted-foreground italic text-center font-semibold">
+                        Turn customer proof into trust that drives more conversions.
+                      </p>
+                    </motion.div>
+                  )}
+
+                </AnimatePresence>
               </div>
 
             </SpotlightCard>
@@ -461,7 +805,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* INFINITE TRUST LOGOS MARQUEE */}
       <section className="bg-[#111827]/40 border-y border-border-primary py-8 overflow-hidden relative">
         <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#09090B] to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#09090B] to-transparent z-10 pointer-events-none" />
