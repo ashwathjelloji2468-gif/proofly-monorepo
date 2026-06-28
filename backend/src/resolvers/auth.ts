@@ -34,21 +34,21 @@ export const authResolvers = {
       const ipAddress = context.req.ip || null;
       const { accessToken, refreshToken, user } = await context.services.user.login(args.email, args.password, userAgent, ipAddress);
       setAuthCookies(context.res, accessToken, refreshToken);
-      return { token: '', user };
+      return { user };
     },
     githubLogin: async (_parent: any, args: { code: string }, context: GraphQLContext) => {
       const userAgent = context.req.headers['user-agent'] || null;
       const ipAddress = context.req.ip || null;
       const { accessToken, refreshToken, user } = await context.services.oauth.githubLogin(args.code, userAgent, ipAddress);
       setAuthCookies(context.res, accessToken, refreshToken);
-      return { token: '', user };
+      return { user };
     },
     googleLogin: async (_parent: any, args: { code: string }, context: GraphQLContext) => {
       const userAgent = context.req.headers['user-agent'] || null;
       const ipAddress = context.req.ip || null;
       const { accessToken, refreshToken, user } = await context.services.oauth.googleLogin(args.code, userAgent, ipAddress);
       setAuthCookies(context.res, accessToken, refreshToken);
-      return { token: '', user };
+      return { user };
     },
     logout: async (_parent: any, _args: any, context: GraphQLContext) => {
       if (context.currentSession) {
@@ -70,7 +70,7 @@ export const authResolvers = {
       const ipAddress = context.req.ip || null;
       const { accessToken, refreshToken, user } = await context.services.user.verifyEmail(args.token, userAgent, ipAddress);
       setAuthCookies(context.res, accessToken, refreshToken);
-      return { token: '', user };
+      return { user };
     },
     resendVerificationEmail: async (_parent: any, args: { email: string }, context: GraphQLContext) => {
       return context.services.user.resendVerificationEmail(args.email);

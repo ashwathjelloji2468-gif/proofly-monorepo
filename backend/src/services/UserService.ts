@@ -95,7 +95,8 @@ export class UserService extends BaseService {
     const { passwordHash: _, ...userWithoutPassword } = user;
 
     return {
-      token: '', // Do not log in until verified
+      // No token returned — user must verify email before logging in.
+      // Authentication uses cookies set at login time.
       user: userWithoutPassword
     };
   }

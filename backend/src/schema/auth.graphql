@@ -42,7 +42,7 @@ type User {
 }
 
 type AuthPayload {
-  token: String!
+  # token is intentionally omitted — auth uses secure HttpOnly cookies, never JS-accessible tokens
   user: User!
 }
 

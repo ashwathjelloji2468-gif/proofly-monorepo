@@ -6,13 +6,7 @@ async function gqlRequest(query: string, variables: any = {}) {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
-  
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
+  // Auth is fully cookie-based (HttpOnly). No tokens in localStorage or headers.
 
   try {
     const res = await fetch(GRAPHQL_URL, {
@@ -30,9 +24,7 @@ async function gqlRequest(query: string, variables: any = {}) {
     const body = await res.json();
     if (body.errors && body.errors.length > 0) {
       if (body.errors.some((e: any) => e.message?.toLowerCase().includes('unauthenticated') || e.extensions?.code === 'UNAUTHENTICATED')) {
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('token');
-        }
+        // Cookie-based auth: no localStorage token to clear. State reset handled by fetchUser().
       }
       throw new Error(body.errors[0].message);
     }
@@ -641,7 +633,6 @@ export const useStore = create<AppState>((set, get) => ({
       const data = await gqlRequest(`
         mutation Login($email: String!, $password: String!) {
           login(email: $email, password: $password) {
-            token
             user {
               id
               email
@@ -653,9 +644,7 @@ export const useStore = create<AppState>((set, get) => ({
       `, { email, password: password || '' });
 
       if (data && data.login) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('token', data.login.token);
-        }
+        // Token set as HttpOnly cookie by backend — no localStorage
         await get().fetchUser();
         return true;
       }
@@ -673,7 +662,6 @@ export const useStore = create<AppState>((set, get) => ({
       const data = await gqlRequest(`
         mutation Signup($email: String!, $name: String!, $password: String!) {
           signup(email: $email, name: $name, password: $password) {
-            token
             user {
               id
               email
@@ -685,9 +673,7 @@ export const useStore = create<AppState>((set, get) => ({
       `, { email, name, password: password || '' });
 
       if (data && data.signup) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('token', data.signup.token);
-        }
+        // Token set as HttpOnly cookie by backend — no localStorage
         await get().fetchUser();
         return true;
       }
@@ -699,74 +685,23 @@ export const useStore = create<AppState>((set, get) => ({
     }
   },
 
-  githubLogin: async (code: string) => {
-    set({ isLoading: true });
-    try {
-      const data = await gqlRequest(`
-        mutation GithubLogin($code: String!) {
-          githubLogin(code: $code) {
-            token
-            user {
-              id
-              email
-              name
-              tier
-            }
-          }
-        }
-      `, { code });
-
-      if (data && data.githubLogin) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('token', data.githubLogin.token);
-        }
-        await get().fetchUser();
-        return true;
-      }
-      set({ isLoading: false });
-      return false;
-    } catch (err: any) {
-      set({ isLoading: false });
-      throw err;
-    }
+  // githubLogin is no longer called from the frontend.
+  // GitHub OAuth is now handled server-side via GET /auth/github → backend callback → redirect.
+  // Keeping stub for backwards compatibility only.
+  githubLogin: async (_code: string) => {
+    return false;
   },
 
-  googleLogin: async (code: string) => {
-    set({ isLoading: true });
-    try {
-      const data = await gqlRequest(`
-        mutation GoogleLogin($code: String!) {
-          googleLogin(code: $code) {
-            token
-            user {
-              id
-              email
-              name
-              tier
-            }
-          }
-        }
-      `, { code });
-
-      if (data && data.googleLogin) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('token', data.googleLogin.token);
-        }
-        await get().fetchUser();
-        return true;
-      }
-      set({ isLoading: false });
-      return false;
-    } catch (err: any) {
-      set({ isLoading: false });
-      throw err;
-    }
+  // googleLogin is no longer called from the frontend.
+  // Google OAuth is now handled server-side via GET /auth/google → backend callback → redirect.
+  // Keeping stub for backwards compatibility only.
+  googleLogin: async (_code: string) => {
+    return false;
   },
 
   logout: () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('token');
-    }
+    // Cookies are cleared by the backend logout mutation.
+    // Just reset local state.
     set({ user: null, collections: [], testimonials: [] });
   },
 
@@ -1566,9 +1501,7 @@ export const useStore = create<AppState>((set, get) => ({
       }
     } catch (err) {
       console.error('Fetch user API failed:', err);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
-      }
+      // Cookie-based auth: session cleared server-side. Reset local state only.
       set({ user: null, isLoading: false });
     }
   },
@@ -1700,7 +1633,6 @@ export const useStore = create<AppState>((set, get) => ({
       const data = await gqlRequest(`
         mutation VerifyEmail($token: String!) {
           verifyEmail(token: $token) {
-            token
             user {
               id
               email
@@ -1712,9 +1644,7 @@ export const useStore = create<AppState>((set, get) => ({
       `, { token });
 
       if (data && data.verifyEmail) {
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('token', data.verifyEmail.token);
-        }
+        // Token set as HttpOnly cookie by backend — no localStorage
         await get().fetchUser();
         return true;
       }
