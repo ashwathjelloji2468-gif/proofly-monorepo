@@ -31,36 +31,152 @@ enum ImportedFrom {
   PRODUCTHUNT
 }
 
+enum SpaceRole {
+  OWNER
+  ADMIN
+  MANAGER
+  MEMBER
+  VIEWER
+}
+
 model User {
-  id           String      @id @default(uuid())
-  email        String      @unique
-  passwordHash String
-  name         String
-  tier         BillingTier @default(FREE)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  spaces       Space[]
+  id                   String                @id @default(uuid())
+  email                String                @unique
+  passwordHash         String
+  name                 String
+  tier                 BillingTier           @default(FREE)
+  isVerified           Boolean               @default(false)
+  status               String                @default("ACTIVE") // ACTIVE, DISABLED
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  spaces               Space[]
+  memberships          SpaceMember[]
+  invitations          WorkspaceInvitation[] @relation("invitedBy")
+  passwordResetTokens  PasswordResetToken[]
+  otpTokens            OTPToken[]
+  emailChangeRequest   EmailChangeRequest?
+  sessions             UserSession[]
+  auditLogs            AuditLog[]
 }
 
 model Space {
-  id               String        @id @default(uuid())
+  id               String                @id @default(uuid())
   name             String
-  slug             String        @unique
+  slug             String                @unique
   headerTitle      String
   customMessage    String
   logoUrl          String?
-  collectVideo     Boolean       @default(true)
-  collectText      Boolean       @default(true)
-  theme            String        @default("light")
+  collectVideo     Boolean               @default(true)
+  collectText      Boolean               @default(true)
+  theme            String                @default("light")
   customDomain     String?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
   userId           String
-  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   testimonials     Testimonial[]
   campaigns        Campaign[]
   webhooks         Webhook[]
   reward           Reward?
+  members          SpaceMember[]
+  invitations      WorkspaceInvitation[]
+}
+
+model SpaceMember {
+  id        String    @id @default(uuid())
+  spaceId   String
+  userId    String
+  role      SpaceRole @default(MEMBER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  space     Space     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([spaceId, userId])
+}
+
+model WorkspaceInvitation {
+  id         String    @id @default(uuid())
+  spaceId    String
+  email      String
+  role       SpaceRole @default(MEMBER)
+  token      String    @unique
+  invitedBy  String
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+
+  space      Space     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  inviter    User      @relation("invitedBy", fields: [invitedBy], references: [id], onDelete: Cascade)
+
+  @@unique([spaceId, email])
+}
+
+model VerificationToken {
+  id        String   @id @default(uuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OTPToken {
+  id        String   @id @default(uuid())
+  userId    String
+  otpHash   String
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model EmailChangeRequest {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  oldEmail    String
+  newEmail    String
+  oldToken    String   @unique
+  newToken    String   @unique
+  oldVerified Boolean  @default(false)
+  newVerified Boolean  @default(false)
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSession {
+  id         String   @id @default(uuid())
+  userId     String
+  token      String   @unique
+  ipAddress  String?
+  deviceInfo String?
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  action     String
+  ipAddress  String?
+  deviceInfo String?
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Testimonial {

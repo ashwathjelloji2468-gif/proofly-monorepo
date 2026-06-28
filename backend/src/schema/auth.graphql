@@ -1,8 +1,39 @@
+enum SpaceRole {
+  OWNER
+  ADMIN
+  MANAGER
+  MEMBER
+  VIEWER
+}
+
+type SpaceMember {
+  id: ID!
+  spaceId: ID!
+  userId: ID!
+  role: SpaceRole!
+  user: User!
+}
+
+type WorkspaceInvitation {
+  id: ID!
+  spaceId: ID!
+  email: String!
+  role: SpaceRole!
+  expiresAt: String!
+}
+
+type OTPPayload {
+  email: String!
+  message: String!
+}
+
 type User {
   id: ID!
   email: String!
   name: String!
   tier: BillingTier!
+  isVerified: Boolean!
+  status: String!
   createdAt: String!
   updatedAt: String!
   spaces: [Space!]!
@@ -15,6 +46,8 @@ type AuthPayload {
 
 extend type Query {
   me: User
+  getWorkspaceInvitations(spaceId: ID!): [WorkspaceInvitation!]!
+  getWorkspaceMembers(spaceId: ID!): [SpaceMember!]!
 }
 
 extend type Mutation {
@@ -23,4 +56,15 @@ extend type Mutation {
   githubLogin(code: String!): AuthPayload!
   googleLogin(code: String!, redirectUri: String!): AuthPayload!
   updateBillingTier(tier: BillingTier!): User!
+  
+  verifyEmail(token: String!): AuthPayload!
+  resendVerificationEmail(email: String!): Boolean!
+  requestPasswordReset(email: String!): OTPPayload!
+  verifyOTP(email: String!, otp: String!): String!
+  resetPassword(email: String!, token: String!, newPassword: String!): Boolean!
+  requestEmailChange(newEmail: String!): Boolean!
+  verifyEmailChangeToken(token: String!): Boolean!
+  inviteToWorkspace(spaceId: ID!, email: String!, role: SpaceRole!): Boolean!
+  acceptWorkspaceInvitation(token: String!): Boolean!
+  removeWorkspaceMember(memberId: ID!): Boolean!
 }

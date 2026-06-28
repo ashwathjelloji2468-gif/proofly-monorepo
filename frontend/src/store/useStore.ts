@@ -154,6 +154,18 @@ interface AppState {
   googleLogin: (code: string, redirectUri: string) => Promise<boolean>;
   logout: () => void;
   updateProfile: (name: string, avatarUrl: string) => void;
+  verifyEmail: (token: string) => Promise<boolean>;
+  resendVerificationEmail: (email: string) => Promise<boolean>;
+  requestPasswordReset: (email: string) => Promise<{ email: string; message: string }>;
+  verifyOTP: (email: string, otp: string) => Promise<string>;
+  resetPassword: (email: string, token: string, passwordHashRaw: string) => Promise<boolean>;
+  requestEmailChange: (newEmail: string) => Promise<boolean>;
+  verifyEmailChange: (token: string) => Promise<boolean>;
+  inviteTeammate: (spaceId: string, email: string, role: string) => Promise<boolean>;
+  acceptWorkspaceInvitation: (token: string) => Promise<boolean>;
+  getWorkspaceInvitations: (spaceId: string) => Promise<any[]>;
+  getWorkspaceMembers: (spaceId: string) => Promise<any[]>;
+  removeWorkspaceMember: (memberId: string) => Promise<boolean>;
   
   // Billing action
   updateBillingTier: (tier: 'FREE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE') => Promise<void>;
@@ -1668,5 +1680,204 @@ export const useStore = create<AppState>((set, get) => ({
         t.id === ticketId ? { ...t, status: 'CLOSED' as const } : t
       )
     }));
+  },
+
+  verifyEmail: async (token: string) => {
+    set({ isLoading: true });
+    try {
+      const data = await gqlRequest(`
+        mutation VerifyEmail($token: String!) {
+          verifyEmail(token: $token) {
+            token
+            user {
+              id
+              email
+              name
+              tier
+            }
+          }
+        }
+      `, { token });
+
+      if (data && data.verifyEmail) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', data.verifyEmail.token);
+        }
+        await get().fetchUser();
+        return true;
+      }
+      set({ isLoading: false });
+      return false;
+    } catch (err: any) {
+      set({ isLoading: false });
+      throw err;
+    }
+  },
+
+  resendVerificationEmail: async (email: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation ResendVerificationEmail($email: String!) {
+          resendVerificationEmail(email: $email)
+        }
+      `, { email });
+      return !!data?.resendVerificationEmail;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  requestPasswordReset: async (email: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation RequestPasswordReset($email: String!) {
+          requestPasswordReset(email: $email) {
+            email
+            message
+          }
+        }
+      `, { email });
+      return data.requestPasswordReset;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  verifyOTP: async (email: string, otp: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation VerifyOTP($email: String!, $otp: String!) {
+          verifyOTP(email: $email, otp: $otp)
+        }
+      `, { email, otp });
+      return data.verifyOTP;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  resetPassword: async (email: string, token: string, passwordHashRaw: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation ResetPassword($email: String!, $token: String!, $newPassword: String!) {
+          resetPassword(email: $email, token: $token, newPassword: $newPassword)
+        }
+      `, { email, token, newPassword: passwordHashRaw });
+      return !!data?.resetPassword;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  requestEmailChange: async (newEmail: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation RequestEmailChange($newEmail: String!) {
+          requestEmailChange(newEmail: $newEmail)
+        }
+      `, { newEmail });
+      return !!data?.requestEmailChange;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  verifyEmailChange: async (token: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation VerifyEmailChangeToken($token: String!) {
+          verifyEmailChangeToken(token: $token)
+        }
+      `, { token });
+      if (data?.verifyEmailChangeToken) {
+        await get().fetchUser();
+      }
+      return !!data?.verifyEmailChangeToken;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  inviteTeammate: async (spaceId: string, email: string, role: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation InviteToWorkspace($spaceId: ID!, $email: String!, $role: SpaceRole!) {
+          inviteToWorkspace(spaceId: $spaceId, email: $email, role: $role)
+        }
+      `, { spaceId, email, role });
+      return !!data?.inviteToWorkspace;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  acceptWorkspaceInvitation: async (token: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation AcceptWorkspaceInvitation($token: String!) {
+          acceptWorkspaceInvitation(token: $token)
+        }
+      `, { token });
+      return !!data?.acceptWorkspaceInvitation;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getWorkspaceInvitations: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query GetWorkspaceInvitations($spaceId: ID!) {
+          getWorkspaceInvitations(spaceId: $spaceId) {
+            id
+            spaceId
+            email
+            role
+            expiresAt
+          }
+        }
+      `, { spaceId });
+      return data?.getWorkspaceInvitations || [];
+    } catch (err: any) {
+      console.error(err);
+      return [];
+    }
+  },
+
+  getWorkspaceMembers: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query GetWorkspaceMembers($spaceId: ID!) {
+          getWorkspaceMembers(spaceId: $spaceId) {
+            id
+            spaceId
+            userId
+            role
+            user {
+              id
+              email
+              name
+            }
+          }
+        }
+      `, { spaceId });
+      return data?.getWorkspaceMembers || [];
+    } catch (err: any) {
+      console.error(err);
+      return [];
+    }
+  },
+
+  removeWorkspaceMember: async (memberId: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation RemoveWorkspaceMember($memberId: ID!) {
+          removeWorkspaceMember(memberId: $memberId)
+        }
+      `, { memberId });
+      return !!data?.removeWorkspaceMember;
+    } catch (err: any) {
+      throw err;
+    }
   }
 }));

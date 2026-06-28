@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
@@ -18,16 +18,23 @@ const loginSchema = zod.object({
 
 type LoginFormValues = zod.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+import { Suspense } from 'react';
+
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const login = useStore(state => state.login);
-  const signup = useStore(state => state.signup);
   const isLoading = useStore(state => state.isLoading);
+  const resendVerification = useStore(state => state.resendVerificationEmail);
+  
   const [authError, setAuthError] = useState('');
+  const [showResend, setShowResend] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState('');
 
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -36,12 +43,35 @@ export default function LoginPage() {
   const onSubmit = async (values: LoginFormValues) => {
     try {
       setAuthError('');
+      setResendSuccess('');
+      setShowResend(false);
       const success = await login(values.email, values.password);
       if (success) {
-        router.push('/dashboard?confetti=true');
+        const inviteToken = searchParams.get('inviteToken');
+        if (inviteToken) {
+          router.push(`/auth/accept-invite?token=${inviteToken}`);
+        } else {
+          router.push('/dashboard?confetti=true');
+        }
       }
     } catch (err: any) {
       setAuthError(err.message || 'Authentication failed. Please check credentials.');
+      if (err.message?.includes('EMAIL_NOT_VERIFIED')) {
+        setShowResend(true);
+      }
+    }
+  };
+
+  const handleResend = async () => {
+    const emailVal = getValues('email');
+    if (!emailVal) return;
+    try {
+      setAuthError('');
+      await resendVerification(emailVal);
+      setResendSuccess('Verification email resent successfully! Check your inbox.');
+      setShowResend(false);
+    } catch (err: any) {
+      setAuthError(err.message || 'Failed to resend verification email.');
     }
   };
 
@@ -65,8 +95,23 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {authError && (
-              <div className="p-3 text-xs rounded bg-red-950/40 border border-red-900/50 text-red-400">
-                {authError}
+              <div className="p-3 text-xs rounded bg-red-950/40 border border-red-900/50 text-red-400 space-y-2">
+                <div>{authError}</div>
+                {showResend && (
+                  <button
+                    type="button"
+                    onClick={handleResend}
+                    className="text-brand-emerald hover:underline text-[10px] font-bold block"
+                  >
+                    Resend verification link
+                  </button>
+                )}
+              </div>
+            )}
+
+            {resendSuccess && (
+              <div className="p-3 text-xs rounded bg-brand-emerald/10 border border-brand-emerald/30 text-brand-emerald">
+                {resendSuccess}
               </div>
             )}
 
@@ -164,5 +209,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen px-4 bg-[#09090B] relative overflow-hidden font-sans">
+        <Loader className="w-10 h-10 text-brand-emerald animate-spin" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

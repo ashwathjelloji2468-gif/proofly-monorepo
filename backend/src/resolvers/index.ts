@@ -25,6 +25,7 @@ export const resolvers = {
     ...staticPageResolvers.Mutation
   },
   User: authResolvers.User,
+  SpaceMember: authResolvers.SpaceMember,
   Space: spaceResolvers.Space,
   Testimonial: testimonialResolvers.Testimonial,
   Campaign: campaignResolvers.Campaign,
