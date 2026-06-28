@@ -20,17 +20,29 @@ import { resolvers } from './resolvers';
 import { createContext } from './context';
 import { authMiddleware } from './middleware/auth';
 import { rateLimiter } from './security/rateLimiter';
+import oauthRouter from './controllers/oauthController';
 
 async function startServer() {
   const app = express();
   
-  // Configure security headers, trust proxy, cookieParser, and compression
+  // Configure security headers, trust proxy, signed cookieParser, and compression
   app.set('trust proxy', 1);
   app.use(helmet({ contentSecurityPolicy: false }));
   app.use(compression());
-  app.use(cookieParser());
+  // Use COOKIE_SECRET so oauth_state cookies are signed and tamper-proof
+  app.use(cookieParser(process.env.COOKIE_SECRET || 'fallback-dev-secret'));
   app.use(express.json());
-  
+
+  // ─── OAuth REST Routes (before Apollo, before auth middleware) ────────────────
+  const oauthCors = cors<cors.CorsRequest>({
+    origin: [
+      'http://localhost:3000',
+      'https://useproofly.vercel.app',
+    ],
+    credentials: true,
+  });
+  app.use('/auth', oauthCors, rateLimiter(30, 10 * 60 * 1000), oauthRouter);
+
   // Global authentication & token rotation middleware
   app.use(authMiddleware);
 
