@@ -61,7 +61,7 @@ export async function authMiddleware(req: AuthenticatedRequest, res: Response, n
   // 2. If Access Token was expired/invalid but Refresh Token is present, try silent refresh
   if (refreshToken) {
     try {
-      const payload = verifyRefreshToken(refreshToken);
+      verifyRefreshToken(refreshToken);
       const tokenHash = hashToken(refreshToken);
 
       // Check if this refresh token exists and is valid in DB

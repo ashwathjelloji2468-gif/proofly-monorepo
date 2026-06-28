@@ -201,7 +201,7 @@ async function startServer() {
 
       if (userId) {
         try {
-          const ctx = await createContext();
+          const ctx = await createContext({ req: req as any, res });
           const user = await ctx.prisma.user.update({
             where: { id: userId },
             data: { tier: tier as any }
@@ -226,7 +226,7 @@ async function startServer() {
       }
 
       const assignedTier = tier || 'PRO';
-      const user = await createContext().then(ctx => ctx.prisma.user.update({
+      const user = await createContext({ req: req as any, res }).then(ctx => ctx.prisma.user.update({
         where: { id: userId },
         data: { tier: assignedTier as any }
       }));

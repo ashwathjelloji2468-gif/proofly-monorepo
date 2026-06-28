@@ -1,4 +1,4 @@
-import { PrismaClient, User, BillingTier } from '@prisma/client';
+import { PrismaClient, BillingTier } from '@prisma/client';
 import { SessionService } from './SessionService';
 import bcrypt from 'bcrypt';
 
@@ -86,7 +86,7 @@ export class OAuthService {
     }
 
     // Check if user has an OAuthAccount mapping for GOOGLE already
-    const oauthMap = await this.prisma.oauthAccount.findUnique({
+    const oauthMap = await this.prisma.oAuthAccount.findUnique({
       where: {
         provider_providerUserId: {
           provider: 'GOOGLE',
@@ -97,7 +97,7 @@ export class OAuthService {
 
     if (!oauthMap) {
       // Link Google account mapping
-      await this.prisma.oauthAccount.create({
+      await this.prisma.oAuthAccount.create({
         data: {
           userId: user.id,
           provider: 'GOOGLE',
@@ -229,7 +229,7 @@ export class OAuthService {
     }
 
     // Check if user has an OAuthAccount mapping for GITHUB already
-    const oauthMap = await this.prisma.oauthAccount.findUnique({
+    const oauthMap = await this.prisma.oAuthAccount.findUnique({
       where: {
         provider_providerUserId: {
           provider: 'GITHUB',
@@ -240,7 +240,7 @@ export class OAuthService {
 
     if (!oauthMap) {
       // Link GitHub account mapping
-      await this.prisma.oauthAccount.create({
+      await this.prisma.oAuthAccount.create({
         data: {
           userId: user.id,
           provider: 'GITHUB',
