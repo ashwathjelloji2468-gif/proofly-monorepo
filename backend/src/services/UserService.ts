@@ -103,6 +103,10 @@ export class UserService extends BaseService {
       throw new Error('INVALID_CREDENTIALS: User not found or password incorrect.');
     }
 
+    if (!user.hasPassword) {
+      throw new Error(`OAUTH_ACCOUNT: This account was created using ${user.provider}. Please continue with ${user.provider} or set a password first.`);
+    }
+
     if (user.status === 'DISABLED') {
       throw new Error('ACCOUNT_DISABLED: Your account has been disabled. Please contact support.');
     }
@@ -559,7 +563,9 @@ export class UserService extends BaseService {
           name,
           passwordHash,
           tier: BillingTier.FREE,
-          isVerified: true // OAuth users auto verified
+          isVerified: true,
+          provider: 'GITHUB',
+          hasPassword: false
         }
       });
     }
@@ -647,7 +653,9 @@ export class UserService extends BaseService {
           name,
           passwordHash,
           tier: BillingTier.FREE,
-          isVerified: true // OAuth users auto verified
+          isVerified: true,
+          provider: 'GOOGLE',
+          hasPassword: false
         }
       });
     }
@@ -690,5 +698,32 @@ export class UserService extends BaseService {
     });
     const { passwordHash: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
+  }
+
+  async setPassword(passwordHashRaw: string) {
+    const currentUser = this.ensureAuthenticated();
+    
+    if (passwordHashRaw.length < 6) {
+      throw new Error('WEAK_PASSWORD: Password must be at least 6 characters.');
+    }
+
+    const passwordHash = await bcrypt.hash(passwordHashRaw, 12);
+
+    await this.prisma.user.update({
+      where: { id: currentUser.id },
+      data: {
+        passwordHash,
+        hasPassword: true
+      }
+    });
+
+    await this.prisma.auditLog.create({
+      data: {
+        userId: currentUser.id,
+        action: 'SET_PASSWORD'
+      }
+    });
+
+    return true;
   }
 }

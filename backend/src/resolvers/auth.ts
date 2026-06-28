@@ -62,6 +62,9 @@ export const authResolvers = {
     },
     removeWorkspaceMember: async (_parent: any, args: { memberId: string }, context: GraphQLContext) => {
       return context.services.space.removeWorkspaceMember(args.memberId);
+    },
+    setPassword: async (_parent: any, args: { password: string }, context: GraphQLContext) => {
+      return context.services.user.setPassword(args.password);
     }
   },
   User: {

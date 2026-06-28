@@ -47,6 +47,8 @@ model User {
   tier                 BillingTier           @default(FREE)
   isVerified           Boolean               @default(false)
   status               String                @default("ACTIVE") // ACTIVE, DISABLED
+  provider             String                @default("EMAIL") // EMAIL, GOOGLE, GITHUB
+  hasPassword          Boolean               @default(true)
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
   spaces               Space[]

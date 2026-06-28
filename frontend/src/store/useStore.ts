@@ -48,6 +48,8 @@ export interface User {
   name: string;
   avatar: string;
   tier: 'FREE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE';
+  provider: string;
+  hasPassword: boolean;
 }
 
 export interface Collection {
@@ -166,6 +168,7 @@ interface AppState {
   getWorkspaceInvitations: (spaceId: string) => Promise<any[]>;
   getWorkspaceMembers: (spaceId: string) => Promise<any[]>;
   removeWorkspaceMember: (memberId: string) => Promise<boolean>;
+  setPassword: (password: string) => Promise<boolean>;
   
   // Billing action
   updateBillingTier: (tier: 'FREE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE') => Promise<void>;
@@ -1461,6 +1464,8 @@ export const useStore = create<AppState>((set, get) => ({
             email
             name
             tier
+            provider
+            hasPassword
             spaces {
               id
               name
@@ -1543,7 +1548,9 @@ export const useStore = create<AppState>((set, get) => ({
             email: u.email,
             name: u.name,
             avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(u.name)}`,
-            tier: u.tier
+            tier: u.tier,
+            provider: u.provider,
+            hasPassword: u.hasPassword
           },
           collections: mappedCollections,
           testimonials: mappedTestimonials.length > 0 ? mappedTestimonials : initialTestimonials,
@@ -1876,6 +1883,27 @@ export const useStore = create<AppState>((set, get) => ({
         }
       `, { memberId });
       return !!data?.removeWorkspaceMember;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  setPassword: async (password: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation SetPassword($password: String!) {
+          setPassword(password: $password)
+        }
+      `, { password });
+      
+      const isSet = !!data?.setPassword;
+      if (isSet) {
+        const currentUser = get().user;
+        if (currentUser) {
+          set({ user: { ...currentUser, hasPassword: true } });
+        }
+      }
+      return isSet;
     } catch (err: any) {
       throw err;
     }

@@ -34,6 +34,8 @@ type User {
   tier: BillingTier!
   isVerified: Boolean!
   status: String!
+  provider: String!
+  hasPassword: Boolean!
   createdAt: String!
   updatedAt: String!
   spaces: [Space!]!
@@ -67,4 +69,5 @@ extend type Mutation {
   inviteToWorkspace(spaceId: ID!, email: String!, role: SpaceRole!): Boolean!
   acceptWorkspaceInvitation(token: String!): Boolean!
   removeWorkspaceMember(memberId: ID!): Boolean!
+  setPassword(password: String!): Boolean!
 }

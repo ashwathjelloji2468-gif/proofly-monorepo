@@ -31,6 +31,7 @@ export default function SettingsPage() {
   const removeWorkspaceMember = useStore(state => state.removeWorkspaceMember);
   const requestEmailChange = useStore(state => state.requestEmailChange);
   const updateProfile = useStore(state => state.updateProfile);
+  const setPasswordAction = useStore(state => state.setPassword);
 
   // States
   const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'billing' | 'domains' | 'team'>('profile');
@@ -41,6 +42,9 @@ export default function SettingsPage() {
   const [newEmail, setNewEmail] = useState('');
   const [emailChangeStatus, setEmailChangeStatus] = useState<'idle' | 'requested' | 'error'>('idle');
   const [profileSuccess, setProfileSuccess] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
 
   // Domains
   const [domains, setDomains] = useState<string[]>(['reviews.acmesaas.io']);
@@ -117,6 +121,32 @@ export default function SettingsPage() {
       }
     } catch (err: any) {
       setFeedbackError(err.message || 'An error occurred while requesting email change.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPassword.trim()) return;
+    if (newPassword !== confirmPassword) {
+      setFeedbackError("Passwords don't match.");
+      return;
+    }
+    setIsSubmitting(true);
+    setFeedbackError('');
+    setPasswordSuccess('');
+    try {
+      const success = await setPasswordAction(newPassword);
+      if (success) {
+        setPasswordSuccess('Password established successfully. You can now log in using email/password.');
+        setNewPassword('');
+        setConfirmPassword('');
+      } else {
+        setFeedbackError('Failed to establish password.');
+      }
+    } catch (err: any) {
+      setFeedbackError(err.message || 'Error occurred while setting password.');
     } finally {
       setIsSubmitting(false);
     }
@@ -355,6 +385,59 @@ export default function SettingsPage() {
                     </form>
                   )}
                 </div>
+
+                {!user.hasPassword && (
+                  <div className="space-y-4 bg-[#09090B] border border-border-primary p-5 rounded-xl">
+                    <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wide">Establish Login Password</h4>
+                    
+                    <div className="p-3 text-[10px] text-brand-teal bg-brand-teal/5 border border-brand-teal/20 rounded-lg flex items-start space-x-2 leading-relaxed">
+                      <AlertCircle className="w-4 h-4 shrink-0 text-brand-teal mt-0.5" />
+                      <span>
+                        You are currently signed in via <strong>{user.provider}</strong> and do not have a local login password. Establish a password below to enable logging in via email/password later.
+                      </span>
+                    </div>
+
+                    {passwordSuccess && (
+                      <div className="p-3 text-xs rounded bg-brand-emerald/10 border border-brand-emerald/30 text-brand-emerald">
+                        {passwordSuccess}
+                      </div>
+                    )}
+
+                    <form onSubmit={handleSetPassword} className="space-y-4 max-w-md">
+                      <div className="space-y-1.5">
+                        <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">New Password</label>
+                        <input
+                          type="password"
+                          required
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          placeholder="Min 6 characters"
+                          className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">Confirm Password</label>
+                        <input
+                          type="password"
+                          required
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder="Re-enter password"
+                          className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="bg-brand-emerald/10 border border-brand-emerald/20 hover:bg-brand-emerald/20 text-brand-emerald font-bold text-[10px] uppercase tracking-widest py-2 px-6 rounded-lg transition cursor-pointer disabled:opacity-50"
+                      >
+                        {isSubmitting ? 'Establishing...' : 'Set Password'}
+                      </button>
+                    </form>
+                  </div>
+                )}
               </div>
             )}
 
