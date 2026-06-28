@@ -73,4 +73,71 @@ export class AuthorizationService {
 
     return true;
   }
+
+  async canPerformAction(userId: string, spaceId: string, action: string): Promise<boolean> {
+    const space = await this.prisma.space.findUnique({
+      where: { id: spaceId }
+    });
+
+    if (!space) {
+      return false;
+    }
+
+    if (space.userId === userId) {
+      return true;
+    }
+
+    const member = await this.prisma.spaceMember.findUnique({
+      where: {
+        spaceId_userId: {
+          spaceId,
+          userId
+        }
+      }
+    });
+
+    if (!member) {
+      return false;
+    }
+
+    const role = member.role;
+
+    const ROLE_HIERARCHY: Record<SpaceRole, number> = {
+      [SpaceRole.OWNER]: 5,
+      [SpaceRole.ADMIN]: 4,
+      [SpaceRole.MANAGER]: 3,
+      [SpaceRole.MEMBER]: 2,
+      [SpaceRole.VIEWER]: 1
+    };
+
+    switch (action) {
+      case 'UPDATE_SPACE':
+      case 'DELETE_SPACE':
+      case 'MANAGE_INTEGRATIONS':
+      case 'REMOVE_MEMBER':
+        return ROLE_HIERARCHY[role] >= ROLE_HIERARCHY[SpaceRole.ADMIN];
+
+      case 'INVITE_MEMBER':
+      case 'CREATE_CAMPAIGN':
+      case 'MANAGE_REWARDS':
+      case 'UPDATE_TESTIMONIAL':
+      case 'DELETE_TESTIMONIAL':
+      case 'TOGGLE_APPROVE_TESTIMONIAL':
+      case 'TOGGLE_PIN_TESTIMONIAL':
+      case 'TOGGLE_ARCHIVE_TESTIMONIAL':
+        return ROLE_HIERARCHY[role] >= ROLE_HIERARCHY[SpaceRole.MANAGER];
+
+      case 'CREATE_TESTIMONIAL':
+      case 'ADD_TESTIMONIAL_MANUALLY':
+        return ROLE_HIERARCHY[role] >= ROLE_HIERARCHY[SpaceRole.MEMBER];
+
+      case 'VIEW_SPACE':
+      case 'VIEW_TESTIMONIALS':
+      case 'VIEW_MEMBERS':
+        return ROLE_HIERARCHY[role] >= ROLE_HIERARCHY[SpaceRole.VIEWER];
+
+      default:
+        return false;
+    }
+  }
 }

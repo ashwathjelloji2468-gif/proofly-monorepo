@@ -11,11 +11,10 @@ export function requireUser(context: GraphQLContext) {
 export async function requireSpaceRole(
   context: GraphQLContext,
   spaceId: string,
-  allowedRoles: SpaceRole[]
+  minRole: SpaceRole
 ): Promise<SpaceMember> {
   const currentUser = requireUser(context);
 
-  // Check if user is space owner (creator) or space member
   const space = await context.prisma.space.findUnique({
     where: { id: spaceId }
   });
@@ -24,9 +23,8 @@ export async function requireSpaceRole(
     throw new Error('NOT_FOUND: Space not found.');
   }
 
-  // If user is owner of space, they have OWNER permissions implicitly
+  // Owner implicitly has OWNER role
   if (space.userId === currentUser.id) {
-    // Return a mock SpaceMember matching OWNER role
     return {
       id: 'owner-implicit',
       spaceId,
@@ -37,7 +35,6 @@ export async function requireSpaceRole(
     };
   }
 
-  // Look up space member record
   const member = await context.prisma.spaceMember.findUnique({
     where: {
       spaceId_userId: {
@@ -47,8 +44,16 @@ export async function requireSpaceRole(
     }
   });
 
-  if (!member || !allowedRoles.includes(member.role)) {
-    throw new Error('UNAUTHORIZED: You do not have permission to access this workspace.');
+  const ROLE_HIERARCHY: Record<SpaceRole, number> = {
+    [SpaceRole.OWNER]: 5,
+    [SpaceRole.ADMIN]: 4,
+    [SpaceRole.MANAGER]: 3,
+    [SpaceRole.MEMBER]: 2,
+    [SpaceRole.VIEWER]: 1
+  };
+
+  if (!member || ROLE_HIERARCHY[member.role] < ROLE_HIERARCHY[minRole]) {
+    throw new Error(`FORBIDDEN: You do not have sufficient permissions. Required role: ${minRole}, your role: ${member?.role || 'NONE'}`);
   }
 
   return member;
