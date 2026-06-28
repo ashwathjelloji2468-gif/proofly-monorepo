@@ -2,6 +2,7 @@ import { GraphQLContext } from '../context';
 import { BillingTier, SpaceRole } from '@prisma/client';
 import { setAuthCookies, clearAuthCookies } from '../security/cookies';
 import { checkRateLimit } from '../security/rateLimiter';
+import { requireSpaceRole } from '../middleware/roles';
 
 export const authResolvers = {
   Query: {
@@ -104,12 +105,18 @@ export const authResolvers = {
       return context.services.user.verifyEmailChangeToken(args.token);
     },
     inviteToWorkspace: async (_parent: any, args: { spaceId: string, email: string, role: SpaceRole }, context: GraphQLContext) => {
+      await requireSpaceRole(context, args.spaceId, SpaceRole.ADMIN);
       return context.services.space.inviteToWorkspace(args.spaceId, args.email, args.role);
     },
     acceptWorkspaceInvitation: async (_parent: any, args: { token: string }, context: GraphQLContext) => {
       return context.services.space.acceptWorkspaceInvitation(args.token);
     },
     removeWorkspaceMember: async (_parent: any, args: { memberId: string }, context: GraphQLContext) => {
+      const member = await context.prisma.spaceMember.findUnique({ where: { id: args.memberId } });
+      if (!member) {
+        throw new Error('NOT_FOUND: Workspace member not found.');
+      }
+      await requireSpaceRole(context, member.spaceId, SpaceRole.ADMIN);
       return context.services.space.removeWorkspaceMember(args.memberId);
     },
     setPassword: async (_parent: any, args: { password: string }, context: GraphQLContext) => {
