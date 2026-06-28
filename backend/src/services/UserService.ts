@@ -38,6 +38,29 @@ export class UserService extends BaseService {
     return process.env.CLIENT_URL || 'http://localhost:3000';
   }
 
+  private async checkPasswordReuse(userId: string, currentPasswordHash: string | null, newPasswordRaw: string) {
+    if (currentPasswordHash) {
+      const match = await bcrypt.compare(newPasswordRaw, currentPasswordHash);
+      if (match) {
+        throw new Error('PASSWORD_REUSE: You cannot reuse your current password or a recently used password.');
+      }
+    }
+
+    const history = await this.prisma.passwordHistory.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    for (const entry of history) {
+      const match = await bcrypt.compare(newPasswordRaw, entry.passwordHash);
+      if (match) {
+        throw new Error('PASSWORD_REUSE: You cannot reuse a recently used password. Please choose a different one.');
+      }
+    }
+
+    return history;
+  }
+
   async signup(email: string, name: string, passwordHashRaw: string) {
     if (!email || !name || !passwordHashRaw) {
       throw new Error('MISSING_FIELDS: All fields (email, name, password) are required.');
@@ -67,6 +90,14 @@ export class UserService extends BaseService {
         isVerified: false, // Must verify email
         provider: 'EMAIL',
         hasPassword: true
+      }
+    });
+
+    // Add to password history
+    await this.prisma.passwordHistory.create({
+      data: {
+        userId: user.id,
+        passwordHash
       }
     });
 
@@ -365,6 +396,9 @@ export class UserService extends BaseService {
       throw new Error('EXPIRED_TOKEN: Password reset token has expired.');
     }
 
+    // Check reuse
+    const history = await this.checkPasswordReuse(user.id, user.passwordHash, passwordHashRaw);
+
     const newPasswordHash = await bcrypt.hash(passwordHashRaw, 12);
 
     await this.prisma.$transaction([
@@ -378,7 +412,18 @@ export class UserService extends BaseService {
         where: { userId: user.id },
         data: { isValid: false }
       }),
-      this.prisma.refreshToken.deleteMany({ where: { userId: user.id } })
+      this.prisma.refreshToken.deleteMany({ where: { userId: user.id } }),
+      this.prisma.passwordHistory.create({
+        data: {
+          userId: user.id,
+          passwordHash: newPasswordHash
+        }
+      }),
+      ...(history.length >= 5 ? [
+        this.prisma.passwordHistory.deleteMany({
+          where: { id: { in: history.slice(4).map(e => e.id) } }
+        })
+      ] : [])
     ]);
 
     await this.emailService.sendPasswordChangedEmail(sanitizedEmail, user.name);
@@ -398,13 +443,44 @@ export class UserService extends BaseService {
     
     validatePasswordStrength(passwordHashRaw);
 
+    const user = await this.prisma.user.findUnique({
+      where: { id: currentUser.id }
+    });
+
+    if (!user) {
+      throw new Error('USER_NOT_FOUND: User not found.');
+    }
+
+    // Check reuse if they already have a password set
+    let history: any[] = [];
+    if (user.hasPassword && user.passwordHash) {
+      history = await this.checkPasswordReuse(user.id, user.passwordHash, passwordHashRaw);
+    }
+
     const passwordHash = await bcrypt.hash(passwordHashRaw, 12);
 
-    await this.prisma.user.update({
-      where: { id: currentUser.id },
-      data: {
-        passwordHash,
-        hasPassword: true
+    await this.prisma.$transaction(async (tx) => {
+      await tx.user.update({
+        where: { id: user.id },
+        data: {
+          passwordHash,
+          hasPassword: true
+        }
+      });
+
+      await tx.passwordHistory.create({
+        data: {
+          userId: user.id,
+          passwordHash
+        }
+      });
+
+      if (history.length >= 5) {
+        const toDelete = history.slice(4);
+        const idsToDelete = toDelete.map(e => e.id);
+        await tx.passwordHistory.deleteMany({
+          where: { id: { in: idsToDelete } }
+        });
       }
     });
 

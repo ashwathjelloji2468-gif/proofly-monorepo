@@ -1,6 +1,7 @@
 import { GraphQLContext } from '../context';
 import { BillingTier, SpaceRole } from '@prisma/client';
 import { setAuthCookies, clearAuthCookies } from '../security/cookies';
+import { checkRateLimit } from '../security/rateLimiter';
 
 export const authResolvers = {
   Query: {
@@ -27,9 +28,13 @@ export const authResolvers = {
   },
   Mutation: {
     signup: async (_parent: any, args: any, context: GraphQLContext) => {
+      const ip = context.req.ip || context.req.headers['x-forwarded-for']?.toString() || 'unknown';
+      checkRateLimit(ip, 'signup', 3, 60 * 1000); // 3 per minute
       return context.services.user.signup(args.email, args.name, args.password);
     },
     login: async (_parent: any, args: any, context: GraphQLContext) => {
+      const ip = context.req.ip || context.req.headers['x-forwarded-for']?.toString() || 'unknown';
+      checkRateLimit(ip, 'login', 5, 60 * 1000); // 5 per minute
       const userAgent = context.req.headers['user-agent'] || null;
       const ipAddress = context.req.ip || null;
       const { accessToken, refreshToken, user } = await context.services.user.login(args.email, args.password, userAgent, ipAddress);
@@ -76,9 +81,13 @@ export const authResolvers = {
       return context.services.user.resendVerificationEmail(args.email);
     },
     requestPasswordReset: async (_parent: any, args: { email: string }, context: GraphQLContext) => {
+      const ip = context.req.ip || context.req.headers['x-forwarded-for']?.toString() || 'unknown';
+      checkRateLimit(ip, 'forgot-password', 3, 60 * 1000); // 3 per minute
       return context.services.user.requestPasswordReset(args.email);
     },
     verifyOTP: async (_parent: any, args: { email: string, otp: string }, context: GraphQLContext) => {
+      const ip = context.req.ip || context.req.headers['x-forwarded-for']?.toString() || 'unknown';
+      checkRateLimit(ip, 'otp', 5, 15 * 60 * 1000); // 5 per 15 minutes
       return context.services.user.verifyOTP(args.email, args.otp);
     },
     resetPassword: async (_parent: any, args: any, context: GraphQLContext) => {

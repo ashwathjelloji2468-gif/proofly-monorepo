@@ -35,7 +35,6 @@ export async function authMiddleware(req: AuthenticatedRequest, res: Response, n
       });
       if (user && user.status !== 'DISABLED') {
         const { passwordHash: _, ...userWithoutPassword } = user;
-        req.user = userWithoutPassword;
         
         // Also fetch active session if we can match it
         if (refreshToken) {
@@ -44,10 +43,26 @@ export async function authMiddleware(req: AuthenticatedRequest, res: Response, n
             where: { tokenHash },
             include: { session: true }
           });
-          if (dbToken && dbToken.session.isValid) {
+          if (dbToken && dbToken.session.isValid && dbToken.session.expiresAt > new Date()) {
+            req.user = userWithoutPassword;
             req.session = dbToken.session;
+            
+            // Update lastActivity on session (async, non-blocking to keep requests fast)
+            prisma.session.update({
+              where: { id: dbToken.session.id },
+              data: { lastActivity: new Date() }
+            }).catch(err => console.error('Failed to update session lastActivity:', err));
+            
+            return next();
+          } else {
+            // Reject if session is invalid or expired
+            req.user = null;
+            req.session = null;
+            return next();
           }
         }
+        
+        req.user = userWithoutPassword;
         return next();
       }
     } catch (err: any) {
@@ -76,7 +91,13 @@ export async function authMiddleware(req: AuthenticatedRequest, res: Response, n
         }
       });
 
-      if (dbToken && dbToken.session.isValid && dbToken.expiresAt > new Date() && dbToken.session.user.status !== 'DISABLED') {
+      if (
+        dbToken && 
+        dbToken.session.isValid && 
+        dbToken.expiresAt > new Date() && 
+        dbToken.session.expiresAt > new Date() && 
+        dbToken.session.user.status !== 'DISABLED'
+      ) {
         const user = dbToken.session.user;
         const session = dbToken.session;
 

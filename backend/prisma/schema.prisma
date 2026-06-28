@@ -65,6 +65,18 @@ model User {
   oauthAccounts        OAuthAccount[]
   loginHistories       LoginHistory[]
   auditLogs            AuditLog[]
+  passwordHistories    PasswordHistory[]
+}
+
+model PasswordHistory {
+  id           String   @id @default(uuid())
+  userId       String
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Space {
@@ -174,6 +186,7 @@ model Session {
   isValid      Boolean        @default(true)
   createdAt    DateTime       @default(now())
   expiresAt    DateTime
+  lastActivity DateTime       @default(now())
   refreshTokens RefreshToken[]
 
   @@index([userId])
