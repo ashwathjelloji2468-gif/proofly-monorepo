@@ -1,26 +1,37 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { BaseService } from './BaseService';
 import { BillingTier, PrismaClient, User } from '@prisma/client';
 import { EmailService } from './EmailService';
+import { SessionService } from './SessionService';
 import crypto from 'crypto';
+
+function validatePasswordStrength(password: string) {
+  if (password.length < 8) {
+    throw new Error('WEAK_PASSWORD: Password must be at least 8 characters long.');
+  }
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+  if (!hasUppercase || !hasLowercase || !hasNumber || !hasSpecial) {
+    throw new Error('WEAK_PASSWORD: Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.');
+  }
+}
 
 export class UserService extends BaseService {
   private emailService: EmailService;
+  private sessionService: SessionService;
 
-  constructor(prisma: PrismaClient, currentUser: Omit<User, 'passwordHash'> | null, emailService: EmailService) {
+  constructor(
+    prisma: PrismaClient,
+    currentUser: Omit<User, 'passwordHash'> | null,
+    emailService: EmailService,
+    sessionService: SessionService
+  ) {
     super(prisma, currentUser);
     this.emailService = emailService;
-  }
-
-  private getJwtSecret(): string {
-    return process.env.JWT_SECRET || 'super-secret-key-change-in-production';
-  }
-
-  private generateToken(userId: string, email: string): string {
-    return jwt.sign({ id: userId, email }, this.getJwtSecret(), {
-      expiresIn: '7d'
-    });
+    this.sessionService = sessionService;
   }
 
   private getClientUrl(): string {
@@ -38,31 +49,30 @@ export class UserService extends BaseService {
       throw new Error('INVALID_EMAIL_FORMAT: Please provide a valid email address.');
     }
 
-    if (passwordHashRaw.length < 6) {
-      throw new Error('WEAK_PASSWORD: Password must be at least 6 characters.');
-    }
+    validatePasswordStrength(passwordHashRaw);
 
     const existing = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
     if (existing) {
-      throw new Error('USER_EXISTS: An account with this email already exists.');
+      throw new Error('EMAIL_TAKEN: An account with this email already exists.');
     }
 
     const passwordHash = await bcrypt.hash(passwordHashRaw, 12);
-    
-    // Create unverified user
+
     const user = await this.prisma.user.create({
       data: {
         email: sanitizedEmail,
         name,
         passwordHash,
         tier: BillingTier.FREE,
-        isVerified: false
+        isVerified: false, // Must verify email
+        provider: 'EMAIL',
+        hasPassword: true
       }
     });
 
     // Create verification token
     const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours expiry
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
     await this.prisma.verificationToken.create({
       data: {
         email: sanitizedEmail,
@@ -71,28 +81,26 @@ export class UserService extends BaseService {
       }
     });
 
-    // Send Verification Email
+    // Send verification email
     await this.emailService.sendVerificationEmail(sanitizedEmail, name, token, this.getClientUrl());
 
     // Write audit log
     await this.prisma.auditLog.create({
       data: {
         userId: user.id,
-        action: 'REGISTER_USER',
-        ipAddress: 'local',
-        deviceInfo: 'web'
+        action: 'SIGNUP_USER'
       }
     });
 
     const { passwordHash: _, ...userWithoutPassword } = user;
 
     return {
-      token: '', // No token generated until they verify
+      token: '', // Do not log in until verified
       user: userWithoutPassword
     };
   }
 
-  async login(email: string, passwordHashRaw: string) {
+  async login(email: string, passwordHashRaw: string, userAgent: string | null = null, ipAddress: string | null = null) {
     if (!email || !passwordHashRaw) {
       throw new Error('MISSING_FIELDS: Email and password are required.');
     }
@@ -103,93 +111,109 @@ export class UserService extends BaseService {
       throw new Error('INVALID_CREDENTIALS: User not found or password incorrect.');
     }
 
-    if (!user.hasPassword) {
-      throw new Error(`OAUTH_ACCOUNT: This account was created using ${user.provider}. Please continue with ${user.provider} or set a password first.`);
+    // Check account Lockout
+    if (user.lockoutUntil && user.lockoutUntil > new Date()) {
+      throw new Error('ACCOUNT_LOCKED: Too many failed login attempts. Your account is locked for 15 minutes.');
     }
 
     if (user.status === 'DISABLED') {
       throw new Error('ACCOUNT_DISABLED: Your account has been disabled. Please contact support.');
     }
 
+    if (!user.hasPassword) {
+      throw new Error(`OAUTH_ACCOUNT: This account was created using ${user.provider}. Please continue with ${user.provider} or set a password first.`);
+    }
+
     const valid = await bcrypt.compare(passwordHashRaw, user.passwordHash);
     if (!valid) {
-      throw new Error('INVALID_CREDENTIALS: User not found or password incorrect.');
+      // Increment failed attempts
+      const attempts = user.failedLoginAttempts + 1;
+      const lockoutUntil = attempts >= 5 ? new Date(Date.now() + 15 * 60 * 1000) : null;
+      
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          failedLoginAttempts: attempts,
+          lockoutUntil
+        }
+      });
+
+      await this.prisma.loginHistory.create({
+        data: {
+          userId: user.id,
+          ipAddress,
+          userAgent,
+          status: attempts >= 5 ? 'FAIL_LOCKED' : 'FAIL_PASSWORD'
+        }
+      });
+
+      if (attempts >= 5) {
+        throw new Error('ACCOUNT_LOCKED: Too many failed login attempts. Your account has been locked for 15 minutes.');
+      } else {
+        throw new Error('INVALID_CREDENTIALS: User not found or password incorrect.');
+      }
     }
 
     if (!user.isVerified) {
       throw new Error('EMAIL_NOT_VERIFIED: Please verify your email to log in.');
     }
 
-    const token = this.generateToken(user.id, user.email);
+    // Reset failed login attempts and create active session
+    const { accessToken, refreshToken } = await this.sessionService.createSession(
+      user.id,
+      userAgent,
+      ipAddress
+    );
 
-    // Track user session
-    await this.prisma.userSession.create({
+    // Write login history log
+    await this.prisma.loginHistory.create({
       data: {
         userId: user.id,
-        token,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
-      }
-    });
-
-    // Write audit log
-    await this.prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        action: 'LOGIN_USER'
+        ipAddress,
+        userAgent,
+        status: 'SUCCESS'
       }
     });
 
     const { passwordHash: _, ...userWithoutPassword } = user;
 
     return {
-      token,
+      accessToken,
+      refreshToken,
       user: userWithoutPassword
     };
   }
 
-  async verifyEmail(token: string) {
-    const record = await this.prisma.verificationToken.findUnique({
-      where: { token }
-    });
-
+  async verifyEmail(token: string, userAgent: string | null = null, ipAddress: string | null = null) {
+    const record = await this.prisma.verificationToken.findUnique({ where: { token } });
     if (!record) {
-      throw new Error('INVALID_TOKEN: The verification link is invalid or has already been used.');
+      throw new Error('INVALID_TOKEN: Verification token is invalid.');
     }
 
     if (record.expiresAt < new Date()) {
-      await this.prisma.verificationToken.delete({ where: { id: record.id } });
-      throw new Error('EXPIRED_TOKEN: The verification link has expired.');
+      await this.prisma.verificationToken.delete({ where: { token } });
+      throw new Error('EXPIRED_TOKEN: Verification token has expired.');
     }
 
-    const user = await this.prisma.user.findUnique({
-      where: { email: record.email }
-    });
-
+    const user = await this.prisma.user.findUnique({ where: { email: record.email } });
     if (!user) {
-      throw new Error('USER_NOT_FOUND: User associated with this token does not exist.');
+      throw new Error('USER_NOT_FOUND: User no longer exists.');
     }
 
-    // Update user verified state
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: { isVerified: true }
     });
 
-    // Send Welcome Email
     await this.emailService.sendWelcomeEmail(record.email, user.name);
+    await this.prisma.verificationToken.delete({ where: { token } });
 
-    // Invalidate verification token
-    await this.prisma.verificationToken.delete({ where: { id: record.id } });
-
-    // Track Session & Log audit
-    const sessionToken = this.generateToken(user.id, user.email);
-    await this.prisma.userSession.create({
-      data: {
-        userId: user.id,
-        token: sessionToken,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-      }
-    });
+    // Establish secure session
+    const { accessToken, refreshToken } = await this.sessionService.createSession(
+      user.id,
+      userAgent,
+      ipAddress
+    );
 
     await this.prisma.auditLog.create({
       data: {
@@ -201,7 +225,8 @@ export class UserService extends BaseService {
     const { passwordHash: _, ...userWithoutPassword } = updatedUser;
 
     return {
-      token: sessionToken,
+      accessToken,
+      refreshToken,
       user: userWithoutPassword
     };
   }
@@ -217,7 +242,6 @@ export class UserService extends BaseService {
       throw new Error('ALREADY_VERIFIED: Your account email is already verified.');
     }
 
-    // Clean old tokens
     await this.prisma.verificationToken.deleteMany({ where: { email: sanitizedEmail } });
 
     const token = crypto.randomBytes(32).toString('hex');
@@ -238,8 +262,6 @@ export class UserService extends BaseService {
     const sanitizedEmail = email.toLowerCase().trim();
     const user = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
     
-    // Safety check to prevent user enumeration attacks:
-    // If user is not found, return success dummy but do not send email
     if (!user) {
       return {
         email: sanitizedEmail,
@@ -251,7 +273,6 @@ export class UserService extends BaseService {
     const otpHash = await bcrypt.hash(otp, 10);
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-    // Delete old OTPs
     await this.prisma.oTPToken.deleteMany({ where: { userId: user.id } });
 
     await this.prisma.oTPToken.create({
@@ -322,9 +343,7 @@ export class UserService extends BaseService {
   }
 
   async resetPassword(email: string, token: string, passwordHashRaw: string) {
-    if (passwordHashRaw.length < 6) {
-      throw new Error('WEAK_PASSWORD: Password must be at least 6 characters.');
-    }
+    validatePasswordStrength(passwordHashRaw);
 
     const sanitizedEmail = email.toLowerCase().trim();
     const user = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
@@ -353,8 +372,12 @@ export class UserService extends BaseService {
         data: { passwordHash: newPasswordHash }
       }),
       this.prisma.passwordResetToken.delete({ where: { token } }),
-      // Force logout of all active sessions
-      this.prisma.userSession.deleteMany({ where: { userId: user.id } })
+      // Force logout of all active sessions across all devices
+      this.prisma.session.updateMany({
+        where: { userId: user.id },
+        data: { isValid: false }
+      }),
+      this.prisma.refreshToken.deleteMany({ where: { userId: user.id } })
     ]);
 
     await this.emailService.sendPasswordChangedEmail(sanitizedEmail, user.name);
@@ -363,6 +386,31 @@ export class UserService extends BaseService {
       data: {
         userId: user.id,
         action: 'RESET_PASSWORD'
+      }
+    });
+
+    return true;
+  }
+
+  async setPassword(passwordHashRaw: string) {
+    const currentUser = this.ensureAuthenticated();
+    
+    validatePasswordStrength(passwordHashRaw);
+
+    const passwordHash = await bcrypt.hash(passwordHashRaw, 12);
+
+    await this.prisma.user.update({
+      where: { id: currentUser.id },
+      data: {
+        passwordHash,
+        hasPassword: true
+      }
+    });
+
+    await this.prisma.auditLog.create({
+      data: {
+        userId: currentUser.id,
+        action: 'SET_PASSWORD'
       }
     });
 
@@ -412,7 +460,6 @@ export class UserService extends BaseService {
       }
     });
 
-    // Send verification emails to both the current and the target email address
     await this.emailService.sendEmailChangeVerificationEmail(user.email, user.name, oldToken, false, this.getClientUrl());
     await this.emailService.sendEmailChangeVerificationEmail(sanitizedNewEmail, user.name, newToken, true, this.getClientUrl());
 
@@ -446,7 +493,6 @@ export class UserService extends BaseService {
     }
 
     if (updatedOldVerified && updatedNewVerified) {
-      // Check duplicate one final time before committing change
       const duplicate = await this.prisma.user.findUnique({ where: { email: request.newEmail } });
       if (duplicate) {
         throw new Error('EMAIL_TAKEN: An account with this email already exists.');
@@ -457,225 +503,28 @@ export class UserService extends BaseService {
           where: { id: user.id },
           data: { email: request.newEmail }
         }),
-        this.prisma.emailChangeRequest.delete({ where: { id: request.id } })
+        this.prisma.emailChangeRequest.delete({
+          where: { userId: user.id }
+        }),
+        // Audit log email change
+        this.prisma.auditLog.create({
+          data: {
+            userId: user.id,
+            action: 'EMAIL_CHANGED'
+          }
+        })
       ]);
-
-      await this.prisma.auditLog.create({
-        data: {
-          userId: user.id,
-          action: 'CHANGE_EMAIL'
-        }
-      });
-
       return true;
     } else {
       await this.prisma.emailChangeRequest.update({
-        where: { id: request.id },
+        where: { userId: user.id },
         data: {
           oldVerified: updatedOldVerified,
           newVerified: updatedNewVerified
         }
       });
-      return false; // Still waiting for the other confirmation
+      return false;
     }
-  }
-
-  async githubLogin(code: string) {
-    const clientId = process.env.GITHUB_CLIENT_ID;
-    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-
-    if (!clientId || !clientSecret) {
-      throw new Error('GITHUB_AUTH_NOT_CONFIGURED: GitHub Client ID or Secret is not configured in environment variables.');
-    }
-
-    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        client_id: clientId,
-        client_secret: clientSecret,
-        code
-      })
-    });
-
-    if (!tokenResponse.ok) {
-      const errText = await tokenResponse.text();
-      throw new Error(`GitHub token exchange failed: ${errText}`);
-    }
-
-    const tokenData = (await tokenResponse.json()) as any;
-    const accessToken = tokenData.access_token;
-
-    if (!accessToken) {
-      throw new Error(`GitHub token exchange response did not contain access token: ${JSON.stringify(tokenData)}`);
-    }
-
-    const profileResponse = await fetch('https://api.github.com/user', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'User-Agent': 'proofly-backend'
-      }
-    });
-
-    if (!profileResponse.ok) {
-      throw new Error('Failed to fetch user profile from GitHub');
-    }
-
-    const userProfile = (await profileResponse.json()) as any;
-
-    const emailsResponse = await fetch('https://api.github.com/user/emails', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'User-Agent': 'proofly-backend'
-      }
-    });
-
-    let email = userProfile.email;
-
-    if (emailsResponse.ok) {
-      const emails = (await emailsResponse.json()) as any[];
-      const primaryEmail = emails.find(e => e.primary && e.verified);
-      if (primaryEmail) {
-        email = primaryEmail.email;
-      } else if (emails.length > 0) {
-        email = emails[0].email;
-      }
-    }
-
-    if (!email) {
-      throw new Error('No verified email address returned from GitHub OAuth.');
-    }
-
-    const sanitizedEmail = email.toLowerCase().trim();
-    let user = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
-
-    if (!user) {
-      const name = userProfile.name || userProfile.login || 'GitHub User';
-      const randomPassword = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      const passwordHash = await bcrypt.hash(randomPassword, 12);
-
-      user = await this.prisma.user.create({
-        data: {
-          email: sanitizedEmail,
-          name,
-          passwordHash,
-          tier: BillingTier.FREE,
-          isVerified: true,
-          provider: 'GITHUB',
-          hasPassword: false
-        }
-      });
-    }
-
-    const token = this.generateToken(user.id, user.email);
-
-    await this.prisma.userSession.create({
-      data: {
-        userId: user.id,
-        token,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-      }
-    });
-
-    const { passwordHash: _, ...userWithoutPassword } = user;
-
-    return {
-      token,
-      user: userWithoutPassword
-    };
-  }
-
-  async googleLogin(code: string, redirectUri: string) {
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-
-    if (!clientId || !clientSecret) {
-      throw new Error('GOOGLE_AUTH_NOT_CONFIGURED: Google Client ID or Secret is not configured in environment variables.');
-    }
-
-    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        code,
-        client_id: clientId,
-        client_secret: clientSecret,
-        redirect_uri: redirectUri,
-        grant_type: 'authorization_code'
-      }).toString()
-    });
-
-    if (!tokenResponse.ok) {
-      const errText = await tokenResponse.text();
-      throw new Error(`Google token exchange failed: ${errText}`);
-    }
-
-    const tokenData = (await tokenResponse.json()) as any;
-    const accessToken = tokenData.access_token;
-
-    if (!accessToken) {
-      throw new Error(`Google token exchange response did not contain access token: ${JSON.stringify(tokenData)}`);
-    }
-
-    const profileResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    });
-
-    if (!profileResponse.ok) {
-      throw new Error('Failed to fetch user profile from Google');
-    }
-
-    const profile = (await profileResponse.json()) as any;
-    const email = profile.email;
-    const name = profile.name || 'Google User';
-
-    if (!email) {
-      throw new Error('No email address returned from Google OAuth.');
-    }
-
-    const sanitizedEmail = email.toLowerCase().trim();
-    let user = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
-
-    if (!user) {
-      const randomPassword = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      const passwordHash = await bcrypt.hash(randomPassword, 12);
-
-      user = await this.prisma.user.create({
-        data: {
-          email: sanitizedEmail,
-          name,
-          passwordHash,
-          tier: BillingTier.FREE,
-          isVerified: true,
-          provider: 'GOOGLE',
-          hasPassword: false
-        }
-      });
-    }
-
-    const token = this.generateToken(user.id, user.email);
-
-    await this.prisma.userSession.create({
-      data: {
-        userId: user.id,
-        token,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-      }
-    });
-
-    const { passwordHash: _, ...userWithoutPassword } = user;
-
-    return {
-      token,
-      user: userWithoutPassword
-    };
   }
 
   async getMe() {
@@ -698,32 +547,5 @@ export class UserService extends BaseService {
     });
     const { passwordHash: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
-  }
-
-  async setPassword(passwordHashRaw: string) {
-    const currentUser = this.ensureAuthenticated();
-    
-    if (passwordHashRaw.length < 6) {
-      throw new Error('WEAK_PASSWORD: Password must be at least 6 characters.');
-    }
-
-    const passwordHash = await bcrypt.hash(passwordHashRaw, 12);
-
-    await this.prisma.user.update({
-      where: { id: currentUser.id },
-      data: {
-        passwordHash,
-        hasPassword: true
-      }
-    });
-
-    await this.prisma.auditLog.create({
-      data: {
-        userId: currentUser.id,
-        action: 'SET_PASSWORD'
-      }
-    });
-
-    return true;
   }
 }

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
 import Link from 'next/link';
-import { Sparkles, Loader } from 'lucide-react';
+import { Sparkles, Loader, Eye, EyeOff } from 'lucide-react';
 import { ProoflyLogo } from '@/components/ProoflyLogo';
 
 import { useStore } from '@/store/useStore';
@@ -30,6 +30,7 @@ function LoginContent() {
   const [authError, setAuthError] = useState('');
   const [showResend, setShowResend] = useState(false);
   const [resendSuccess, setResendSuccess] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -136,13 +137,22 @@ function LoginContent() {
                   Forgot?
                 </Link>
               </div>
-              <input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                className="w-full bg-[#09090B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
-                {...register('password')}
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  className="w-full bg-[#09090B] border border-border-primary text-white text-xs px-3.5 py-3 pr-10 rounded-lg focus:outline-none focus:border-brand-emerald transition"
+                  {...register('password')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 transition"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-[10px] text-red-400 mt-1">{errors.password.message}</p>
               )}

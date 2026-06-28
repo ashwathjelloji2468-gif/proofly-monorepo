@@ -32,6 +32,9 @@ export default function SettingsPage() {
   const requestEmailChange = useStore(state => state.requestEmailChange);
   const updateProfile = useStore(state => state.updateProfile);
   const setPasswordAction = useStore(state => state.setPassword);
+  const getActiveSessions = useStore(state => state.getActiveSessions);
+  const revokeSessionAction = useStore(state => state.revokeSession);
+  const revokeAllSessionsAction = useStore(state => state.revokeAllSessions);
 
   // States
   const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'billing' | 'domains' | 'team'>('profile');
@@ -45,6 +48,8 @@ export default function SettingsPage() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [deviceSessions, setDeviceSessions] = useState<any[]>([]);
+  const [sessionsLoading, setSessionsLoading] = useState(false);
 
   // Domains
   const [domains, setDomains] = useState<string[]>(['reviews.acmesaas.io']);
@@ -149,6 +154,47 @@ export default function SettingsPage() {
       setFeedbackError(err.message || 'Error occurred while setting password.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const loadSessions = async () => {
+    setSessionsLoading(true);
+    try {
+      const data = await getActiveSessions();
+      setDeviceSessions(data);
+    } catch (err) {
+      console.error('Failed to load active sessions:', err);
+    } finally {
+      setSessionsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeSettingsTab === 'profile') {
+      loadSessions();
+    }
+  }, [activeSettingsTab]);
+
+  const handleRevokeSession = async (sessionId: string) => {
+    try {
+      await revokeSessionAction(sessionId);
+      await loadSessions();
+      setFeedbackSuccess('Session revoked successfully.');
+      setTimeout(() => setFeedbackSuccess(''), 3000);
+    } catch (err: any) {
+      setFeedbackError(err.message || 'Failed to revoke session.');
+    }
+  };
+
+  const handleRevokeAllSessions = async () => {
+    if (!confirm('Are you sure you want to log out of all other devices?')) return;
+    try {
+      await revokeAllSessionsAction();
+      await loadSessions();
+      setFeedbackSuccess('All other sessions revoked successfully.');
+      setTimeout(() => setFeedbackSuccess(''), 3000);
+    } catch (err: any) {
+      setFeedbackError(err.message || 'Failed to revoke all sessions.');
     }
   };
 
@@ -438,6 +484,68 @@ export default function SettingsPage() {
                     </form>
                   </div>
                 )}
+
+                {/* Session Management */}
+                <div className="space-y-4 bg-[#09090B] border border-border-primary p-5 rounded-xl">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wide">Active Browser Sessions</h4>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">Manage and revoke your active logins on different devices.</p>
+                    </div>
+                    {deviceSessions.filter(s => !s.isCurrent).length > 0 && (
+                      <button
+                        onClick={handleRevokeAllSessions}
+                        className="text-[10px] text-red-400 hover:text-red-300 font-bold border border-red-900/30 hover:border-red-900/50 bg-red-950/10 py-1.5 px-3 rounded-lg transition cursor-pointer"
+                      >
+                        Revoke All Other Sessions
+                      </button>
+                    )}
+                  </div>
+
+                  {sessionsLoading ? (
+                    <div className="flex items-center justify-center py-6">
+                      <Loader className="w-5 h-5 text-brand-emerald animate-spin" />
+                    </div>
+                  ) : deviceSessions.length === 0 ? (
+                    <p className="text-xs text-muted-foreground py-2">No active sessions found.</p>
+                  ) : (
+                    <div className="space-y-3.5">
+                      {deviceSessions.map((session) => (
+                        <div key={session.id} className="flex items-center justify-between p-3.5 bg-[#18181B] border border-border-primary rounded-xl">
+                          <div className="space-y-1">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs font-bold text-slate-200">
+                                {session.deviceType || 'Browser Session'}
+                              </span>
+                              {session.isCurrent && (
+                                <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20">
+                                  Current Session
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[10px] text-slate-400 space-y-0.5">
+                              <p className="truncate max-w-[250px] md:max-w-md">
+                                <span className="font-bold">User Agent:</span> {session.userAgent || 'Unknown Browser'}
+                              </p>
+                              <p>
+                                <span className="font-bold">IP Address:</span> {session.ipAddress || 'Unknown IP'} • <span className="font-bold">Logged In:</span> {new Date(parseInt(session.createdAt) || session.createdAt).toLocaleString()}
+                              </p>
+                            </div>
+                          </div>
+                          {!session.isCurrent && (
+                            <button
+                              onClick={() => handleRevokeSession(session.id)}
+                              className="text-red-400 hover:text-red-300 hover:bg-red-950/20 p-2 rounded-lg transition cursor-pointer"
+                              title="Revoke Session"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 

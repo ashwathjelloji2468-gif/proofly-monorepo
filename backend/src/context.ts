@@ -1,5 +1,5 @@
-import { PrismaClient, User } from '@prisma/client';
-import jwt from 'jsonwebtoken';
+import { PrismaClient, User, Session } from '@prisma/client';
+import { Request, Response } from 'express';
 import { Services, createServices } from './services';
 
 const prisma = new PrismaClient();
@@ -7,40 +7,30 @@ const prisma = new PrismaClient();
 export interface GraphQLContext {
   prisma: PrismaClient;
   currentUser: Omit<User, 'passwordHash'> | null;
+  currentSession: Session | null;
   services: Services;
+  req: Request;
+  res: Response;
 }
 
-export async function createContext(authHeader?: string): Promise<GraphQLContext> {
-  let currentUser: Omit<User, 'passwordHash'> | null = null;
+export interface AuthenticatedRequest extends Request {
+  user?: Omit<User, 'passwordHash'> | null;
+  session?: Session | null;
+}
 
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.substring(7);
-    try {
-      const secret = process.env.JWT_SECRET || 'super-secret-key-change-in-production';
-      const decoded = jwt.verify(token, secret) as { id: string; email: string };
-      
-      const user = await prisma.user.findUnique({
-        where: { id: decoded.id }
-      });
+export async function createContext({ req, res }: { req: AuthenticatedRequest; res: Response }): Promise<GraphQLContext> {
+  const currentUser = req.user || null;
+  const currentSession = req.session || null;
 
-      if (user) {
-        const { passwordHash, ...userWithoutPassword } = user;
-        currentUser = userWithoutPassword;
-      }
-    } catch (err) {
-      // Allow unauthenticated requests, resolvers will check currentUser if they require auth
-      console.warn('Invalid or expired token');
-    }
-  }
-
-  // Create service container passing prisma client and current user
   const services = createServices(prisma, currentUser);
 
   return {
     prisma,
     currentUser,
-    services
+    currentSession,
+    services,
+    req,
+    res
   };
 }
-
 export { prisma };

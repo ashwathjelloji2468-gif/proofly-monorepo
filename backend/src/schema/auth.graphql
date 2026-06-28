@@ -6,20 +6,20 @@ enum SpaceRole {
   VIEWER
 }
 
-type SpaceMember {
-  id: ID!
-  spaceId: ID!
-  userId: ID!
-  role: SpaceRole!
-  user: User!
-}
-
 type WorkspaceInvitation {
   id: ID!
   spaceId: ID!
   email: String!
   role: SpaceRole!
   expiresAt: String!
+}
+
+type SpaceMember {
+  id: ID!
+  spaceId: ID!
+  userId: ID!
+  role: SpaceRole!
+  user: User!
 }
 
 type OTPPayload {
@@ -46,17 +46,31 @@ type AuthPayload {
   user: User!
 }
 
+type SessionPayload {
+  id: ID!
+  userAgent: String
+  ipAddress: String
+  deviceType: String
+  createdAt: String!
+  expiresAt: String!
+  isValid: Boolean!
+  isCurrent: Boolean
+}
+
 extend type Query {
   me: User
   getWorkspaceInvitations(spaceId: ID!): [WorkspaceInvitation!]!
   getWorkspaceMembers(spaceId: ID!): [SpaceMember!]!
+  activeSessions: [SessionPayload!]!
 }
 
 extend type Mutation {
   signup(email: String!, name: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
   githubLogin(code: String!): AuthPayload!
-  googleLogin(code: String!, redirectUri: String!): AuthPayload!
+  googleLogin(code: String!): AuthPayload!
+  logout: Boolean!
+  refreshSession: Boolean!
   updateBillingTier(tier: BillingTier!): User!
   
   verifyEmail(token: String!): AuthPayload!
@@ -70,4 +84,6 @@ extend type Mutation {
   acceptWorkspaceInvitation(token: String!): Boolean!
   removeWorkspaceMember(memberId: ID!): Boolean!
   setPassword(password: String!): Boolean!
+  revokeSession(sessionId: ID!): Boolean!
+  revokeAllSessions: Boolean!
 }

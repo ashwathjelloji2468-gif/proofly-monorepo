@@ -10,13 +10,30 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import compression from 'compression';
 import Stripe from 'stripe';
+
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 import { createContext } from './context';
+import { authMiddleware } from './middleware/auth';
+import { rateLimiter } from './security/rateLimiter';
 
 async function startServer() {
   const app = express();
+  
+  // Configure security headers, trust proxy, cookieParser, and compression
+  app.set('trust proxy', 1);
+  app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(compression());
+  app.use(cookieParser());
+  app.use(express.json());
+  
+  // Global authentication & token rotation middleware
+  app.use(authMiddleware);
+
   const httpServer = http.createServer(app);
 
   const server = new ApolloServer({
@@ -30,13 +47,13 @@ async function startServer() {
   app.use(
     '/graphql',
     cors<cors.CorsRequest>({
-      origin: '*',
+      origin: ['http://localhost:3000', 'https://useproofly.vercel.app'],
+      credentials: true,
     }),
-    express.json(),
+    rateLimiter(300, 15 * 60 * 1000), // Protect entire GraphQL endpoint from brute force
     expressMiddleware(server, {
-      context: async ({ req }) => {
-        const authHeader = req.headers.authorization;
-        return createContext(authHeader);
+      context: async ({ req, res }) => {
+        return createContext({ req: req as any, res });
       },
     }),
   );

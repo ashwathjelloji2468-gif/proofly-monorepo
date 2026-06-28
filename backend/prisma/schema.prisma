@@ -49,6 +49,9 @@ model User {
   status               String                @default("ACTIVE") // ACTIVE, DISABLED
   provider             String                @default("EMAIL") // EMAIL, GOOGLE, GITHUB
   hasPassword          Boolean               @default(true)
+  failedLoginAttempts  Int                   @default(0)
+  lockoutUntil         DateTime?
+  lastLogin            DateTime?
   createdAt            DateTime              @default(now())
   updatedAt            DateTime              @updatedAt
   spaces               Space[]
@@ -57,7 +60,10 @@ model User {
   passwordResetTokens  PasswordResetToken[]
   otpTokens            OTPToken[]
   emailChangeRequest   EmailChangeRequest?
-  sessions             UserSession[]
+  sessions             Session[]
+  refreshTokens        RefreshToken[]
+  oauthAccounts        OAuthAccount[]
+  loginHistories       LoginHistory[]
   auditLogs            AuditLog[]
 }
 
@@ -158,16 +164,61 @@ model EmailChangeRequest {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model UserSession {
+model Session {
+  id           String         @id @default(uuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAgent    String?
+  ipAddress    String?
+  deviceType   String?        @default("Desktop")
+  isValid      Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  expiresAt    DateTime
+  refreshTokens RefreshToken[]
+
+  @@index([userId])
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([sessionId])
+}
+
+model OAuthAccount {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider       String   // "GOOGLE", "GITHUB"
+  providerUserId String   // unique identifier from google/github
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+}
+
+model LoginHistory {
   id         String   @id @default(uuid())
   userId     String
-  token      String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   ipAddress  String?
-  deviceInfo String?
-  expiresAt  DateTime
+  userAgent  String?
+  browser    String?
+  os         String?
+  device     String?
+  status     String   // "SUCCESS", "FAIL_PASSWORD", "FAIL_LOCKED", etc.
   createdAt  DateTime @default(now())
 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
 }
 
 model AuditLog {

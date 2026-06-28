@@ -1,5 +1,6 @@
 import { GraphQLContext } from '../context';
 import { BillingTier, SpaceRole } from '@prisma/client';
+import { setAuthCookies, clearAuthCookies } from '../security/cookies';
 
 export const authResolvers = {
   Query: {
@@ -15,6 +16,13 @@ export const authResolvers = {
     },
     getWorkspaceMembers: async (_parent: any, args: { spaceId: string }, context: GraphQLContext) => {
       return context.services.space.getWorkspaceMembers(args.spaceId);
+    },
+    activeSessions: async (_parent: any, _args: any, context: GraphQLContext) => {
+      const sessions = await context.services.session.getActiveSessions();
+      return sessions.map(session => ({
+        ...session,
+        isCurrent: session.id === context.currentSession?.id
+      }));
     }
   },
   Mutation: {
@@ -22,19 +30,47 @@ export const authResolvers = {
       return context.services.user.signup(args.email, args.name, args.password);
     },
     login: async (_parent: any, args: any, context: GraphQLContext) => {
-      return context.services.user.login(args.email, args.password);
+      const userAgent = context.req.headers['user-agent'] || null;
+      const ipAddress = context.req.ip || null;
+      const { accessToken, refreshToken, user } = await context.services.user.login(args.email, args.password, userAgent, ipAddress);
+      setAuthCookies(context.res, accessToken, refreshToken);
+      return { token: '', user };
     },
     githubLogin: async (_parent: any, args: { code: string }, context: GraphQLContext) => {
-      return context.services.user.githubLogin(args.code);
+      const userAgent = context.req.headers['user-agent'] || null;
+      const ipAddress = context.req.ip || null;
+      const { accessToken, refreshToken, user } = await context.services.oauth.githubLogin(args.code, userAgent, ipAddress);
+      setAuthCookies(context.res, accessToken, refreshToken);
+      return { token: '', user };
     },
-    googleLogin: async (_parent: any, args: { code: string, redirectUri: string }, context: GraphQLContext) => {
-      return context.services.user.googleLogin(args.code, args.redirectUri);
+    googleLogin: async (_parent: any, args: { code: string }, context: GraphQLContext) => {
+      const userAgent = context.req.headers['user-agent'] || null;
+      const ipAddress = context.req.ip || null;
+      const { accessToken, refreshToken, user } = await context.services.oauth.googleLogin(args.code, userAgent, ipAddress);
+      setAuthCookies(context.res, accessToken, refreshToken);
+      return { token: '', user };
+    },
+    logout: async (_parent: any, _args: any, context: GraphQLContext) => {
+      if (context.currentSession) {
+        await context.services.session.revokeSession(context.currentSession.id);
+      }
+      clearAuthCookies(context.res);
+      return true;
+    },
+    refreshSession: async (_parent: any, _args: any, _context: GraphQLContext) => {
+      // The authMiddleware handles automatic silent refresh on request.
+      // Simply returning true confirms that cookies have been parsed/rotated.
+      return true;
     },
     updateBillingTier: async (_parent: any, args: { tier: BillingTier }, context: GraphQLContext) => {
       return context.services.user.updateBillingTier(args.tier);
     },
     verifyEmail: async (_parent: any, args: { token: string }, context: GraphQLContext) => {
-      return context.services.user.verifyEmail(args.token);
+      const userAgent = context.req.headers['user-agent'] || null;
+      const ipAddress = context.req.ip || null;
+      const { accessToken, refreshToken, user } = await context.services.user.verifyEmail(args.token, userAgent, ipAddress);
+      setAuthCookies(context.res, accessToken, refreshToken);
+      return { token: '', user };
     },
     resendVerificationEmail: async (_parent: any, args: { email: string }, context: GraphQLContext) => {
       return context.services.user.resendVerificationEmail(args.email);
@@ -46,7 +82,11 @@ export const authResolvers = {
       return context.services.user.verifyOTP(args.email, args.otp);
     },
     resetPassword: async (_parent: any, args: any, context: GraphQLContext) => {
-      return context.services.user.resetPassword(args.email, args.token, args.newPassword);
+      const success = await context.services.user.resetPassword(args.email, args.token, args.newPassword);
+      if (success) {
+        clearAuthCookies(context.res);
+      }
+      return success;
     },
     requestEmailChange: async (_parent: any, args: { newEmail: string }, context: GraphQLContext) => {
       return context.services.user.requestEmailChange(args.newEmail);
@@ -65,6 +105,12 @@ export const authResolvers = {
     },
     setPassword: async (_parent: any, args: { password: string }, context: GraphQLContext) => {
       return context.services.user.setPassword(args.password);
+    },
+    revokeSession: async (_parent: any, args: { sessionId: string }, context: GraphQLContext) => {
+      return context.services.session.revokeSession(args.sessionId);
+    },
+    revokeAllSessions: async (_parent: any, _args: any, context: GraphQLContext) => {
+      return context.services.session.revokeAllSessions();
     }
   },
   User: {

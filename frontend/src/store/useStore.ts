@@ -18,6 +18,7 @@ async function gqlRequest(query: string, variables: any = {}) {
     const res = await fetch(GRAPHQL_URL, {
       method: 'POST',
       headers,
+      credentials: 'include',
       body: JSON.stringify({ query, variables }),
     });
 
@@ -153,7 +154,7 @@ interface AppState {
   login: (email: string, password?: string) => Promise<boolean>;
   signup: (email: string, name: string, password?: string) => Promise<boolean>;
   githubLogin: (code: string) => Promise<boolean>;
-  googleLogin: (code: string, redirectUri: string) => Promise<boolean>;
+  googleLogin: (code: string) => Promise<boolean>;
   logout: () => void;
   updateProfile: (name: string, avatarUrl: string) => void;
   verifyEmail: (token: string) => Promise<boolean>;
@@ -169,6 +170,10 @@ interface AppState {
   getWorkspaceMembers: (spaceId: string) => Promise<any[]>;
   removeWorkspaceMember: (memberId: string) => Promise<boolean>;
   setPassword: (password: string) => Promise<boolean>;
+  refreshSession: () => Promise<boolean>;
+  revokeSession: (sessionId: string) => Promise<boolean>;
+  revokeAllSessions: () => Promise<boolean>;
+  getActiveSessions: () => Promise<any[]>;
   
   // Billing action
   updateBillingTier: (tier: 'FREE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE') => Promise<void>;
@@ -726,12 +731,12 @@ export const useStore = create<AppState>((set, get) => ({
     }
   },
 
-  googleLogin: async (code: string, redirectUri: string) => {
+  googleLogin: async (code: string) => {
     set({ isLoading: true });
     try {
       const data = await gqlRequest(`
-        mutation GoogleLogin($code: String!, $redirectUri: String!) {
-          googleLogin(code: $code, redirectUri: $redirectUri) {
+        mutation GoogleLogin($code: String!) {
+          googleLogin(code: $code) {
             token
             user {
               id
@@ -741,7 +746,7 @@ export const useStore = create<AppState>((set, get) => ({
             }
           }
         }
-      `, { code, redirectUri });
+      `, { code });
 
       if (data && data.googleLogin) {
         if (typeof window !== 'undefined') {
@@ -1904,6 +1909,66 @@ export const useStore = create<AppState>((set, get) => ({
         }
       }
       return isSet;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  refreshSession: async () => {
+    try {
+      const data = await gqlRequest(`
+        mutation RefreshSession {
+          refreshSession
+        }
+      `);
+      return !!data?.refreshSession;
+    } catch {
+      return false;
+    }
+  },
+
+  revokeSession: async (sessionId: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation RevokeSession($sessionId: ID!) {
+          revokeSession(sessionId: $sessionId)
+        }
+      `, { sessionId });
+      return !!data?.revokeSession;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  revokeAllSessions: async () => {
+    try {
+      const data = await gqlRequest(`
+        mutation RevokeAllSessions {
+          revokeAllSessions
+        }
+      `);
+      return !!data?.revokeAllSessions;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getActiveSessions: async () => {
+    try {
+      const data = await gqlRequest(`
+        query ActiveSessions {
+          activeSessions {
+            id
+            userAgent
+            ipAddress
+            deviceType
+            createdAt
+            expiresAt
+            isValid
+          }
+        }
+      `);
+      return data?.activeSessions || [];
     } catch (err: any) {
       throw err;
     }

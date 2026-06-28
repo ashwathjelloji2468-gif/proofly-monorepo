@@ -7,6 +7,9 @@ import { CampaignService } from './CampaignService';
 import { AIService } from './AIService';
 import { RewardService } from './RewardService';
 import { EmailService } from './EmailService';
+import { OAuthService } from './OAuthService';
+import { SessionService } from './SessionService';
+import { AuthorizationService } from './AuthorizationService';
 
 export interface Services {
   user: UserService;
@@ -17,6 +20,9 @@ export interface Services {
   ai: AIService;
   reward: RewardService;
   email: EmailService;
+  oauth: OAuthService;
+  session: SessionService;
+  authorization: AuthorizationService;
 }
 
 const emailService = new EmailService();
@@ -25,14 +31,21 @@ export function createServices(
   prisma: PrismaClient,
   currentUser: Omit<User, 'passwordHash'> | null
 ): Services {
+  const sessionService = new SessionService(prisma, currentUser);
+  const oauthService = new OAuthService(prisma, sessionService);
+  const authorizationService = new AuthorizationService(prisma, currentUser);
+
   return {
-    user: new UserService(prisma, currentUser, emailService),
+    user: new UserService(prisma, currentUser, emailService, sessionService),
     space: new SpaceService(prisma, currentUser, emailService),
     testimonial: new TestimonialService(prisma, currentUser),
     analytics: new AnalyticsService(prisma, currentUser),
     campaign: new CampaignService(prisma, currentUser),
     ai: new AIService(),
     reward: new RewardService(prisma, currentUser),
-    email: emailService
+    email: emailService,
+    session: sessionService,
+    oauth: oauthService,
+    authorization: authorizationService
   };
 }
