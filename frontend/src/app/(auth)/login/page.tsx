@@ -131,7 +131,7 @@ export default function LoginPage() {
                   setAuthError('Google Login is not configured. Please add NEXT_PUBLIC_GOOGLE_CLIENT_ID to your environment variables.');
                   return;
                 }
-                const redirectUri = `${window.location.origin}/auth/callback`;
+                const redirectUri = `${window.location.origin}/api/auth/callback/google`;
                 window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&state=google`;
               }}
               className="bg-[#09090B] border border-border-primary hover:bg-[#18181B] text-slate-300 text-[10px] font-bold py-2.5 px-4 rounded-lg flex items-center justify-center space-x-1.5 cursor-pointer transition"

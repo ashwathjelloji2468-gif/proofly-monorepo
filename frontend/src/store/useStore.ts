@@ -630,7 +630,7 @@ export const useStore = create<AppState>((set, get) => ({
             }
           }
         }
-      `, { email, password: password || 'password123' });
+      `, { email, password: password || '' });
 
       if (data && data.login) {
         if (typeof window !== 'undefined') {
@@ -642,23 +642,8 @@ export const useStore = create<AppState>((set, get) => ({
       set({ isLoading: false });
       return false;
     } catch (err: any) {
-      console.warn('Login API connection failed. Simulating local auth session.');
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('token', 'mock-token-session');
-      }
-      set({
-        user: {
-          id: 'user-1',
-          email: email,
-          name: email.split('@')[0],
-          avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(email)}`,
-          tier: 'FREE'
-        },
-        collections: initialCollections,
-        testimonials: initialTestimonials,
-        isLoading: false
-      });
-      return true;
+      set({ isLoading: false });
+      throw err;
     }
   },
 
@@ -677,7 +662,7 @@ export const useStore = create<AppState>((set, get) => ({
             }
           }
         }
-      `, { email, name, password: password || 'password123' });
+      `, { email, name, password: password || '' });
 
       if (data && data.signup) {
         if (typeof window !== 'undefined') {
@@ -689,23 +674,8 @@ export const useStore = create<AppState>((set, get) => ({
       set({ isLoading: false });
       return false;
     } catch (err: any) {
-      console.warn('Signup API connection failed. Simulating local auth session.');
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('token', 'mock-token-session');
-      }
-      set({
-        user: {
-          id: 'user-1',
-          email: email,
-          name: name,
-          avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(name)}`,
-          tier: 'FREE'
-        },
-        collections: initialCollections,
-        testimonials: initialTestimonials,
-        isLoading: false
-      });
-      return true;
+      set({ isLoading: false });
+      throw err;
     }
   },
 
@@ -736,23 +706,8 @@ export const useStore = create<AppState>((set, get) => ({
       set({ isLoading: false });
       return false;
     } catch (err: any) {
-      console.warn('GitHub login API connection failed. Simulating local auth session.');
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('token', 'mock-token-session');
-      }
-      set({
-        user: {
-          id: 'user-1',
-          email: 'github-founder@proofly.co',
-          name: 'GitHub Member',
-          avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=GitHub',
-          tier: 'FREE'
-        },
-        collections: initialCollections,
-        testimonials: initialTestimonials,
-        isLoading: false
-      });
-      return true;
+      set({ isLoading: false });
+      throw err;
     }
   },
 
@@ -783,23 +738,8 @@ export const useStore = create<AppState>((set, get) => ({
       set({ isLoading: false });
       return false;
     } catch (err: any) {
-      console.warn('Google login API connection failed. Simulating local auth session.');
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('token', 'mock-token-session');
-      }
-      set({
-        user: {
-          id: 'user-1',
-          email: 'google-founder@proofly.co',
-          name: 'Google Member',
-          avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Google',
-          tier: 'FREE'
-        },
-        collections: initialCollections,
-        testimonials: initialTestimonials,
-        isLoading: false
-      });
-      return true;
+      set({ isLoading: false });
+      throw err;
     }
   },
 
@@ -1601,24 +1541,11 @@ export const useStore = create<AppState>((set, get) => ({
         set({ user: null, isLoading: false });
       }
     } catch (err) {
-      console.warn('Fetch user API failed. Simulating offline session.');
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-      if (token) {
-        set({
-          user: {
-            id: 'user-1',
-            email: 'ashwathjeloji2468@gmail.com',
-            name: 'Jelloji ASHWATH',
-            avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Jelloji%20ASHWATH',
-            tier: 'FREE'
-          },
-          collections: initialCollections,
-          testimonials: initialTestimonials,
-          isLoading: false
-        });
-      } else {
-        set({ user: null, isLoading: false });
+      console.error('Fetch user API failed:', err);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
       }
+      set({ user: null, isLoading: false });
     }
   },
 

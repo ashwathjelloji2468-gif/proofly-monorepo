@@ -15,13 +15,26 @@ export class UserService extends BaseService {
   }
 
   async signup(email: string, name: string, passwordHashRaw: string) {
+    if (!email || !name || !passwordHashRaw) {
+      throw new Error('MISSING_FIELDS: All fields (email, name, password) are required.');
+    }
+
     const sanitizedEmail = email.toLowerCase().trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sanitizedEmail)) {
+      throw new Error('INVALID_EMAIL_FORMAT: Please provide a valid email address.');
+    }
+
+    if (passwordHashRaw.length < 6) {
+      throw new Error('WEAK_PASSWORD: Password must be at least 6 characters.');
+    }
+
     const existing = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
     if (existing) {
       throw new Error('USER_EXISTS: An account with this email already exists.');
     }
 
-    const passwordHash = await bcrypt.hash(passwordHashRaw, 10);
+    const passwordHash = await bcrypt.hash(passwordHashRaw, 12);
     const user = await this.prisma.user.create({
       data: {
         email: sanitizedEmail,
@@ -41,7 +54,16 @@ export class UserService extends BaseService {
   }
 
   async login(email: string, passwordHashRaw: string) {
+    if (!email || !passwordHashRaw) {
+      throw new Error('MISSING_FIELDS: Email and password are required.');
+    }
+
     const sanitizedEmail = email.toLowerCase().trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(sanitizedEmail)) {
+      throw new Error('INVALID_EMAIL_FORMAT: Please provide a valid email address.');
+    }
+
     const user = await this.prisma.user.findUnique({ where: { email: sanitizedEmail } });
     if (!user) {
       throw new Error('INVALID_CREDENTIALS: User not found or password incorrect.');
@@ -161,7 +183,7 @@ export class UserService extends BaseService {
     if (!user) {
       const name = userProfile.name || userProfile.login || 'GitHub User';
       const randomPassword = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      const passwordHash = await bcrypt.hash(randomPassword, 10);
+      const passwordHash = await bcrypt.hash(randomPassword, 12);
 
       user = await this.prisma.user.create({
         data: {
@@ -239,7 +261,7 @@ export class UserService extends BaseService {
 
     if (!user) {
       const randomPassword = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      const passwordHash = await bcrypt.hash(randomPassword, 10);
+      const passwordHash = await bcrypt.hash(randomPassword, 12);
 
       user = await this.prisma.user.create({
         data: {

@@ -28,7 +28,7 @@ function CallbackContent() {
       try {
         let success = false;
         if (state === 'google') {
-          const redirectUri = `${window.location.origin}/auth/callback`;
+          const redirectUri = `${window.location.origin}/api/auth/callback/google`;
           success = await googleLogin(authCode, redirectUri);
         } else {
           success = await githubLogin(authCode);
