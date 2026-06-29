@@ -38,11 +38,12 @@ function getGithubRedirectUri(): string {
 
 async function createUserSession(
   userId: string,
+  email: string,
   userAgent: string | null,
   ipAddress: string | null
 ): Promise<{ accessToken: string; refreshToken: string }> {
-  const accessToken = generateAccessToken(userId, '');
-  const refreshToken = generateRefreshToken(userId, '');
+  const accessToken = generateAccessToken(userId, email);
+  const refreshToken = generateRefreshToken(userId, email);
   const refreshTokenHash = hashToken(refreshToken);
 
   const session = await prisma.session.create({
@@ -246,7 +247,7 @@ router.get('/google/callback', async (req: Request, res: Response) => {
       profileUrl: picture || '',
     });
 
-    const { accessToken, refreshToken } = await createUserSession(user.id, userAgent, ipAddress);
+    const { accessToken, refreshToken } = await createUserSession(user.id, user.email, userAgent, ipAddress);
     setAuthCookies(res, accessToken, refreshToken);
 
     await prisma.loginHistory.create({
@@ -400,7 +401,7 @@ router.get('/github/callback', async (req: Request, res: Response) => {
       avatarUrl: profile.avatar_url || '',
     });
 
-    const { accessToken, refreshToken } = await createUserSession(user.id, userAgent, ipAddress);
+    const { accessToken, refreshToken } = await createUserSession(user.id, user.email, userAgent, ipAddress);
     setAuthCookies(res, accessToken, refreshToken);
 
     await prisma.loginHistory.create({
