@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+
 import fs from 'fs';
 import path from 'path';
 
@@ -71,8 +74,29 @@ async function startServer() {
   );
 
   // Health check route
-  app.get('/health', (_req, res) => {
-    res.status(200).json({ status: 'ok', version: 'refactored-auth-v2', timestamp: new Date() });
+  app.get('/health', async (_req, res) => {
+    try {
+      const userCount = await prisma.user.count();
+      const sessionCount = await prisma.session.count();
+      res.status(200).json({
+        status: 'ok',
+        version: 'refactored-auth-v3',
+        database: 'connected',
+        tables: {
+          user: userCount >= 0 ? 'exists' : 'missing',
+          session: sessionCount >= 0 ? 'exists' : 'missing'
+        },
+        timestamp: new Date()
+      });
+    } catch (dbError: any) {
+      res.status(500).json({
+        status: 'error',
+        version: 'refactored-auth-v3',
+        database: 'error',
+        message: dbError.message || 'Unknown database error',
+        timestamp: new Date()
+      });
+    }
   });
 
   // Serve uploaded files statically
