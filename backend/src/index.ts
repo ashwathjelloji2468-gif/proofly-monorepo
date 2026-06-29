@@ -78,20 +78,28 @@ async function startServer() {
     try {
       const userCount = await prisma.user.count();
       const sessionCount = await prisma.session.count();
+      const oauthCount = await prisma.oAuthAccount.count();
+      const refreshCount = await prisma.refreshToken.count();
+      const auditCount = await prisma.auditLog.count();
+      const loginCount = await prisma.loginHistory.count();
       res.status(200).json({
         status: 'ok',
-        version: 'refactored-auth-v3',
+        version: 'refactored-auth-v4',
         database: 'connected',
         tables: {
           user: userCount >= 0 ? 'exists' : 'missing',
-          session: sessionCount >= 0 ? 'exists' : 'missing'
+          session: sessionCount >= 0 ? 'exists' : 'missing',
+          oAuthAccount: oauthCount >= 0 ? 'exists' : 'missing',
+          refreshToken: refreshCount >= 0 ? 'exists' : 'missing',
+          auditLog: auditCount >= 0 ? 'exists' : 'missing',
+          loginHistory: loginCount >= 0 ? 'exists' : 'missing'
         },
         timestamp: new Date()
       });
     } catch (dbError: any) {
       res.status(500).json({
         status: 'error',
-        version: 'refactored-auth-v3',
+        version: 'refactored-auth-v4',
         database: 'error',
         message: dbError.message || 'Unknown database error',
         timestamp: new Date()
