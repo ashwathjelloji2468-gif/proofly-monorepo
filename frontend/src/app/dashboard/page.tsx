@@ -19,6 +19,7 @@ import Link from 'next/link';
 export default function DashboardHome() {
   const collections = useStore(state => state.collections);
   const testimonials = useStore(state => state.testimonials);
+  const user = useStore(state => state.user);
 
   // Compute metrics
   const totalTestimonials = testimonials.length;
@@ -72,6 +73,66 @@ export default function DashboardHome() {
       {/* Main Content Dashboard */}
       <main className="p-8 space-y-8 max-w-6xl w-full text-left">
         
+        {/* Usage Card Dashboard widget for Free Users */}
+        {user?.tier === 'FREE' && (
+          <div className="bg-gradient-to-r from-slate-900 via-[#1e1b4b]/30 to-slate-900 border border-white/[0.08] rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-[10px] font-bold text-[#8B5CF6] uppercase bg-[#8B5CF6]/10 px-2.5 py-0.5 rounded-full">Free Tier Plan</span>
+                <span className="text-[10px] text-slate-400 font-medium">Resetting monthly</span>
+              </div>
+              <h3 className="text-white text-base font-black">Your Social Proof Fuel Tank</h3>
+              <p className="text-xs text-slate-400">Upgrade to Pro to unlock unlimited spaces, unlimited testimonials, priority support, and to hide branding.</p>
+            </div>
+            
+            <div className="flex items-center gap-6 w-full md:w-auto shrink-0 overflow-x-auto py-1">
+              {/* Spaces Meter */}
+              <div className="flex flex-col items-center space-y-1.5 min-w-[70px]">
+                <div className="text-[10px] font-bold text-slate-300">Spaces</div>
+                <div className="text-sm font-black text-white">{collections.length} / 1</div>
+                <div className="w-16 h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-brand-emerald animate-pulse" style={{ width: `${Math.min((collections.length / 1) * 100, 100)}%` }} />
+                </div>
+              </div>
+
+              {/* Testimonials Meter */}
+              <div className="flex flex-col items-center space-y-1.5 min-w-[70px]">
+                <div className="text-[10px] font-bold text-slate-300">Reviews</div>
+                <div className="text-sm font-black text-white">{totalTestimonials} / 25</div>
+                <div className="w-16 h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-brand-teal" style={{ width: `${Math.min((totalTestimonials / 25) * 100, 100)}%` }} />
+                </div>
+              </div>
+
+              {/* Videos Meter */}
+              <div className="flex flex-col items-center space-y-1.5 min-w-[70px]">
+                <div className="text-[10px] font-bold text-slate-300">Videos</div>
+                <div className="text-sm font-black text-white">{videoTestimonials} / 5</div>
+                <div className="w-16 h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-[#8B5CF6]" style={{ width: `${Math.min((videoTestimonials / 5) * 100, 100)}%` }} />
+                </div>
+              </div>
+
+              {/* AI Credits Meter */}
+              <div className="flex flex-col items-center space-y-1.5 min-w-[70px]">
+                <div className="text-[10px] font-bold text-slate-300">AI Credits</div>
+                <div className="text-sm font-black text-white">{user?.aiCreditsUsed || 0} / 10</div>
+                <div className="w-16 h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-[#EC4899]" style={{ width: `${Math.min(((user?.aiCreditsUsed || 0) / 10) * 100, 100)}%` }} />
+                </div>
+              </div>
+
+              {/* Upgrade Button */}
+              <Link href="/dashboard/settings" className="shrink-0">
+                <button className="bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] hover:opacity-95 text-white text-xs font-bold py-2.5 px-4 rounded-lg flex items-center space-x-1.5 shadow-lg shadow-[#6366F1]/20 cursor-pointer transition">
+                  <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
+                  <span>⭐⭐ Upgrade</span>
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
+
         {/* Metric Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {/* Card 1: Total Testimonials */}

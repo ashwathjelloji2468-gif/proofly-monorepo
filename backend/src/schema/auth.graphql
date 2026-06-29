@@ -32,6 +32,7 @@ type User {
   email: String!
   name: String!
   tier: BillingTier!
+  aiCreditsUsed: Int!
   isVerified: Boolean!
   status: String!
   provider: String!

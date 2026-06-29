@@ -29,6 +29,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const pathname = usePathname();
   const user = useStore(state => state.user);
+  const collections = useStore(state => state.collections);
+  const testimonials = useStore(state => state.testimonials);
   const logout = useStore(state => state.logout);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -136,6 +138,81 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               );
             })}
           </nav>
+          
+          {/* Sidebar Usage Card for Free Users */}
+          {!isCollapsed && user && user.tier === 'FREE' && (
+            <div className="mx-3 my-4 p-4 rounded-xl bg-slate-900/60 border border-white/[0.06] backdrop-blur space-y-3 text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Usage Limits</span>
+                <span className="text-[8px] font-bold text-brand-emerald bg-brand-emerald/10 px-2 py-0.5 rounded-full uppercase">Free Plan</span>
+              </div>
+              
+              <div className="space-y-2">
+                {/* Meter 1: Spaces */}
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between text-[9px] font-medium text-slate-300">
+                    <span>Spaces</span>
+                    <span className="font-bold">{collections.length} / 1</span>
+                  </div>
+                  <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-brand-emerald h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min((collections.length / 1) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Meter 2: Testimonials */}
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between text-[9px] font-medium text-slate-300">
+                    <span>Testimonials</span>
+                    <span className="font-bold">{testimonials.length} / 25</span>
+                  </div>
+                  <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-brand-teal h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min((testimonials.length / 25) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Meter 3: Videos */}
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between text-[9px] font-medium text-slate-300">
+                    <span>Videos</span>
+                    <span className="font-bold">{testimonials.filter(t => t.video_url).length} / 5</span>
+                  </div>
+                  <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-[#8B5CF6] h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min((testimonials.filter(t => t.video_url).length / 5) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Meter 4: AI Credits */}
+                <div className="space-y-0.5">
+                  <div className="flex items-center justify-between text-[9px] font-medium text-slate-300">
+                    <span>AI Credits</span>
+                    <span className="font-bold">{user.aiCreditsUsed} / 10</span>
+                  </div>
+                  <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div 
+                      className="bg-[#EC4899] h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min((user.aiCreditsUsed / 10) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Link href="/dashboard/settings" className="block pt-1">
+                <button className="w-full bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white hover:opacity-95 text-[9px] font-bold py-1.5 rounded-lg flex items-center justify-center space-x-1 shadow-lg shadow-[#6366F1]/20 transition cursor-pointer">
+                  <Sparkles className="w-2.5 h-2.5 text-yellow-300 animate-pulse" />
+                  <span>⭐⭐ Upgrade to Pro</span>
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* User Account Info Bottom */}

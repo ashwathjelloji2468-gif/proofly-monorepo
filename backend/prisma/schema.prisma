@@ -45,6 +45,7 @@ model User {
   passwordHash         String
   name                 String
   tier                 BillingTier           @default(FREE)
+  aiCreditsUsed        Int                   @default(0)
   isVerified           Boolean               @default(false)
   status               String                @default("ACTIVE") // ACTIVE, DISABLED
   provider             String                @default("EMAIL") // EMAIL, GOOGLE, GITHUB
@@ -89,6 +90,7 @@ model Space {
   collectVideo     Boolean               @default(true)
   collectText      Boolean               @default(true)
   theme            String                @default("light")
+  showBranding     Boolean               @default(true)
   customDomain     String?
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt

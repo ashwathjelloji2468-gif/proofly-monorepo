@@ -8,6 +8,7 @@ type Space {
   collectVideo: Boolean!
   collectText: Boolean!
   theme: String!
+  showBranding: Boolean!
   customDomain: String
   createdAt: String!
   updatedAt: String!
@@ -26,6 +27,7 @@ input CreateSpaceInput {
   collectVideo: Boolean
   collectText: Boolean
   theme: String
+  showBranding: Boolean
   customDomain: String
 }
 
@@ -37,6 +39,7 @@ input UpdateSpaceInput {
   collectVideo: Boolean
   collectText: Boolean
   theme: String
+  showBranding: Boolean
   customDomain: String
 }
 

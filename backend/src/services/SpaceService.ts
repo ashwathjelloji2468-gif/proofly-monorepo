@@ -12,6 +12,7 @@ export interface CreateSpaceInput {
   collectVideo?: boolean | null;
   collectText?: boolean | null;
   theme?: string | null;
+  showBranding?: boolean | null;
   customDomain?: string | null;
 }
 
@@ -23,6 +24,7 @@ export interface UpdateSpaceInput {
   collectVideo?: boolean | null;
   collectText?: boolean | null;
   theme?: string | null;
+  showBranding?: boolean | null;
   customDomain?: string | null;
 }
 
@@ -96,13 +98,12 @@ export class SpaceService extends BaseService {
       throw new Error(`SLUG_TAKEN: The space slug "${sanitizedSlug}" is already taken.`);
     }
 
-    if (user.tier === BillingTier.FREE || user.tier === BillingTier.PRO) {
+    if (user.tier === BillingTier.FREE) {
       const count = await this.prisma.space.count({
         where: { userId: user.id }
       });
-      const limit = user.tier === BillingTier.FREE ? 2 : 5;
-      if (count >= limit) {
-        throw new Error(`LIMIT_REACHED: Your current plan (${user.tier}) is limited to ${limit} spaces. Please upgrade to a higher tier for more spaces.`);
+      if (count >= 1) {
+        throw new Error('LIMIT_REACHED: Your Free plan is limited to 1 space. Please upgrade to Pro to unlock unlimited spaces.');
       }
     }
 
@@ -116,6 +117,7 @@ export class SpaceService extends BaseService {
         collectVideo: input.collectVideo ?? true,
         collectText: input.collectText ?? true,
         theme: input.theme ?? 'light',
+        showBranding: user.tier === BillingTier.FREE ? true : (input.showBranding ?? true),
         customDomain: input.customDomain,
         userId: user.id
       }
@@ -135,6 +137,12 @@ export class SpaceService extends BaseService {
     if (input.collectVideo !== undefined) data.collectVideo = input.collectVideo;
     if (input.collectText !== undefined) data.collectText = input.collectText;
     if (input.theme !== undefined) data.theme = input.theme;
+    if (input.showBranding !== undefined) {
+      if (user.tier === BillingTier.FREE && input.showBranding === false) {
+        throw new Error('PRO_FEATURE: Removing Proofly branding is only available on the PRO or BUSINESS plans.');
+      }
+      data.showBranding = input.showBranding ?? true;
+    }
     if (input.customDomain !== undefined) {
       if (user.tier !== BillingTier.BUSINESS && user.tier !== BillingTier.ENTERPRISE && input.customDomain) {
         throw new Error('BUSINESS_FEATURE: Custom domains are only available on the BUSINESS or ENTERPRISE plans.');

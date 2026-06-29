@@ -44,6 +44,7 @@ export interface User {
   name: string;
   avatar: string;
   tier: 'FREE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE';
+  aiCreditsUsed: number;
   provider: string;
   hasPassword: boolean;
 }
@@ -1407,6 +1408,7 @@ export const useStore = create<AppState>((set, get) => ({
             email
             name
             tier
+            aiCreditsUsed
             provider
             hasPassword
             spaces {
@@ -1492,6 +1494,7 @@ export const useStore = create<AppState>((set, get) => ({
             name: u.name,
             avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(u.name)}`,
             tier: u.tier,
+            aiCreditsUsed: u.aiCreditsUsed,
             provider: u.provider,
             hasPassword: u.hasPassword
           },

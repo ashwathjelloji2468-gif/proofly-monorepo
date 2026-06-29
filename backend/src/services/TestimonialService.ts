@@ -85,16 +85,56 @@ export class TestimonialService extends BaseService {
   async createTestimonial(input: CreateTestimonialInput) {
     const space = await this.prisma.space.findUnique({
       where: { id: input.spaceId },
-      include: { webhooks: { where: { isActive: true } } }
+      include: { 
+        webhooks: { where: { isActive: true } },
+        user: true
+      }
     });
     if (!space) {
       throw new Error('SPACE_NOT_FOUND');
     }
 
+    // Enforce limits for FREE tier
+    if (space.user.tier === 'FREE') {
+      const totalTestimonialsCount = await this.prisma.testimonial.count({
+        where: { space: { userId: space.userId } }
+      });
+      if (totalTestimonialsCount >= 25) {
+        throw new Error('LIMIT_REACHED: This workspace has reached the limit of 25 testimonials for the Free tier. Please upgrade to Pro.');
+      }
+
+      if (input.type === TestimonialType.VIDEO || input.videoUrl) {
+        const totalVideoTestimonialsCount = await this.prisma.testimonial.count({
+          where: { 
+            space: { userId: space.userId },
+            OR: [
+              { type: TestimonialType.VIDEO },
+              { videoUrl: { not: null } }
+            ]
+          }
+        });
+        if (totalVideoTestimonialsCount >= 5) {
+          throw new Error('LIMIT_REACHED: This workspace has reached the limit of 5 video testimonials for the Free tier. Please upgrade to Pro.');
+        }
+      }
+    }
+
     // Run AI Sentiment Analysis on submission if it's a text testimonial
     let sentiment: Sentiment | undefined;
     if (input.type === TestimonialType.TEXT && input.textContent) {
-      sentiment = aiService.analyzeSentiment(input.textContent);
+      if (space.user.tier === 'FREE') {
+        if (space.user.aiCreditsUsed < 10) {
+          sentiment = aiService.analyzeSentiment(input.textContent);
+          await this.prisma.user.update({
+            where: { id: space.userId },
+            data: { aiCreditsUsed: { increment: 1 } }
+          });
+        } else {
+          console.log(`⚠️ User ${space.userId} is out of AI credits. Skipping sentiment analysis.`);
+        }
+      } else {
+        sentiment = aiService.analyzeSentiment(input.textContent);
+      }
     }
 
     const testimonial = await this.prisma.testimonial.create({
