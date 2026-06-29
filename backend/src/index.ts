@@ -84,7 +84,8 @@ async function startServer() {
       const loginCount = await prisma.loginHistory.count();
       res.status(200).json({
         status: 'ok',
-        version: 'refactored-auth-v4',
+        version: 'refactored-auth-v5',
+        nodeEnv: process.env.NODE_ENV,
         database: 'connected',
         tables: {
           user: userCount >= 0 ? 'exists' : 'missing',
@@ -99,7 +100,7 @@ async function startServer() {
     } catch (dbError: any) {
       res.status(500).json({
         status: 'error',
-        version: 'refactored-auth-v4',
+        version: 'refactored-auth-v5',
         database: 'error',
         message: dbError.message || 'Unknown database error',
         timestamp: new Date()
