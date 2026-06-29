@@ -26,7 +26,10 @@ async function gqlRequest(query: string, variables: any = {}) {
       if (body.errors.some((e: any) => e.message?.toLowerCase().includes('unauthenticated') || e.extensions?.code === 'UNAUTHENTICATED')) {
         // Cookie-based auth: no localStorage token to clear. State reset handled by fetchUser().
       }
-      throw new Error(body.errors[0].message);
+      const rawMsg = body.errors[0].message || 'Request failed';
+      let cleaned = rawMsg.replace(/^(GraphQL error:|Error:|Link failed:)\s*/i, '');
+      cleaned = cleaned.replace(/^[A-Z0-9_]+:\s*/, '');
+      throw new Error(cleaned);
     }
     return body.data;
   } catch (err) {
