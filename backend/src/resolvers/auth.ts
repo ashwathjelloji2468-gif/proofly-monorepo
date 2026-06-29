@@ -89,7 +89,21 @@ export const authResolvers = {
     verifyOTP: async (_parent: any, args: { email: string, otp: string }, context: GraphQLContext) => {
       const ip = context.req.ip || context.req.headers['x-forwarded-for']?.toString() || 'unknown';
       checkRateLimit(ip, 'otp', 5, 15 * 60 * 1000); // 5 per 15 minutes
-      return context.services.user.verifyOTP(args.email, args.otp);
+      const token = await context.services.user.verifyOTP(args.email, args.otp);
+
+      const user = await context.prisma.user.findUnique({ where: { email: args.email.toLowerCase().trim() } });
+      if (user) {
+        const userAgent = context.req.headers['user-agent'] || null;
+        const ipAddress = context.req.ip || null;
+        const { accessToken, refreshToken } = await context.services.session.createSession(
+          user.id,
+          userAgent,
+          ipAddress
+        );
+        setAuthCookies(context.res, accessToken, refreshToken);
+      }
+
+      return token;
     },
     resetPassword: async (_parent: any, args: any, context: GraphQLContext) => {
       const success = await context.services.user.resetPassword(args.email, args.token, args.newPassword);

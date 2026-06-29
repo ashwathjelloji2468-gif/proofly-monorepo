@@ -68,9 +68,11 @@ export default function ForgotPasswordPage() {
     setIsLoading(true);
     setError('');
     try {
-      const token = await verifyOTP(email, otpCode);
-      setResetToken(token);
-      setStep(3);
+      await verifyOTP(email, otpCode);
+      setSuccessMsg('Verification successful! Logging you in...');
+      setTimeout(() => {
+        router.push('/dashboard?confetti=true');
+      }, 1500);
     } catch (err: any) {
       setError(err.message || 'Invalid verification code. Please try again.');
     } finally {
