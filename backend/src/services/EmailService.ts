@@ -2,21 +2,15 @@ import nodemailer from 'nodemailer';
 
 export class EmailService {
   private transporter: nodemailer.Transporter | null = null;
+  private resendApiKey: string | null = null;
 
   constructor() {
     const apiSecret = process.env.RESEND_API_KEY;
     const smtpHost = process.env.SMTP_HOST;
 
     if (apiSecret) {
-      this.transporter = nodemailer.createTransport({
-        host: 'smtp.resend.com',
-        port: 465,
-        secure: true,
-        auth: {
-          user: 'resend',
-          pass: apiSecret,
-        },
-      });
+      this.resendApiKey = apiSecret;
+      console.log('✉️ Email service initialized with Resend HTTPS REST API.');
     } else if (smtpHost) {
       this.transporter = nodemailer.createTransport({
         host: smtpHost,
@@ -27,6 +21,7 @@ export class EmailService {
           pass: process.env.SMTP_PASS,
         },
       });
+      console.log('✉️ Email service initialized with SMTP transport.');
     } else {
       console.warn('⚠️ No email provider configured (missing RESEND_API_KEY or SMTP_HOST). Emails will be logged to the console only.');
     }
@@ -35,7 +30,35 @@ export class EmailService {
   private async sendHtmlEmail(to: string, subject: string, html: string) {
     const fromAddress = process.env.EMAIL_FROM || 'Proofly <onboarding@resend.dev>';
     
-    if (this.transporter) {
+    if (this.resendApiKey) {
+      try {
+        console.log(`✉️ Sending email via Resend REST API to ${to}...`);
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.resendApiKey}`,
+          },
+          body: JSON.stringify({
+            from: fromAddress,
+            to: [to],
+            subject,
+            html,
+          }),
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`Resend API returned status ${response.status}: ${errText}`);
+        }
+
+        const data = await response.json() as { id: string };
+        console.log(`✉️ Email successfully sent via Resend REST API to ${to}: "${subject}" (ID: ${data.id})`);
+      } catch (err) {
+        console.error(`❌ Failed to send email via Resend REST API to ${to}:`, err);
+        throw err;
+      }
+    } else if (this.transporter) {
       try {
         await this.transporter.sendMail({
           from: fromAddress,
@@ -43,9 +66,9 @@ export class EmailService {
           subject,
           html,
         });
-        console.log(`✉️ Email successfully sent to ${to}: "${subject}"`);
+        console.log(`✉️ Email successfully sent via SMTP to ${to}: "${subject}"`);
       } catch (err) {
-        console.error(`❌ Failed to send email to ${to}:`, err);
+        console.error(`❌ Failed to send email via SMTP to ${to}:`, err);
         throw err;
       }
     } else {
