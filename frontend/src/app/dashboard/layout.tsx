@@ -46,16 +46,33 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, []);
 
   const fetchUser = useStore(state => state.fetchUser);
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
     setMounted(true);
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (token && !user) {
-      fetchUser();
-    } else if (!user && !token) {
+    
+    const checkAuth = async () => {
+      try {
+        await fetchUser();
+      } catch (err) {
+        console.error('Failed to fetch user in layout:', err);
+      } finally {
+        setIsChecking(false);
+      }
+    };
+
+    if (!user) {
+      checkAuth();
+    } else {
+      setIsChecking(false);
+    }
+  }, [user, fetchUser]);
+
+  useEffect(() => {
+    if (mounted && !isChecking && !user) {
       router.push('/login');
     }
-  }, [user, router, fetchUser]);
+  }, [user, isChecking, mounted, router]);
 
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <LayoutGrid className="w-4 h-4" /> },
@@ -75,7 +92,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     router.push('/login');
   };
 
-  if (!mounted) return null;
+  if (!mounted || isChecking) {
+    return (
+      <div className="min-h-screen bg-[#09090B] flex items-center justify-center font-sans">
+        <div className="w-8 h-8 border-2 border-brand-emerald border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#09090B] text-slate-100 flex flex-row relative selection:bg-brand-emerald selection:text-white font-sans">
