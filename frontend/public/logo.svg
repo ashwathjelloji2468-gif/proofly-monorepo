@@ -8,11 +8,13 @@
     </linearGradient>
   </defs>
 
+  <!-- P-shaped ribbon body -->
   <path
     d="M 22 82 L 22 35 C 22 18, 36 10, 54 10 C 72 10, 86 24, 86 42 C 86 60, 72 74, 54 74 L 38 74 C 33 74, 30 71, 30 66 L 30 58 C 30 53, 33 50, 38 50 L 54 50 C 59 50, 64 45, 64 39 C 64 33, 59 28, 54 28 L 38 28 C 29 28, 22 35, 22 45 Z"
     fill="url(#proofly-gradient)"
   />
 
+  <!-- Up-right arrow -->
   <path
     d="M 38 62 L 56 44 M 47 44 L 56 44 L 56 53"
     stroke="#FFFFFF"
@@ -21,11 +23,13 @@
     stroke-linejoin="round"
   />
 
+  <!-- Large Sparkle -->
   <path
     d="M 29 41 C 29 45, 26 47, 26 47 C 26 47, 29 49, 29 53 C 29 49, 32 47, 32 47 C 32 47, 29 45, 29 41 Z"
     fill="#FFFFFF"
   />
 
+  <!-- Small Sparkle -->
   <path
     d="M 59 24 C 59 27, 57 28, 57 28 C 57 28, 59 29, 59 32 C 59 29, 61 28, 61 28 C 61 28, 59 27, 59 24 Z"
     fill="#FFFFFF"

@@ -9,6 +9,7 @@ import {
   Check 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ProoflyLogo } from './ProoflyLogo';
 
 export function Footer() {
   // Newsletter state
@@ -60,12 +61,7 @@ export function Footer() {
         
         {/* Column 1: Brand Info */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 rounded bg-gradient-to-tr from-brand-emerald to-brand-teal flex items-center justify-center">
-              <Sparkles className="w-3.5 h-3.5 text-white" />
-            </div>
-            <span className="font-extrabold text-sm text-white tracking-wider">Proofly</span>
-          </div>
+          <ProoflyLogo iconSize={24} showText={true} showSlogan={false} />
           <p className="text-white text-xs font-black italic tracking-wide">
             "Turn customer love into growth."
           </p>
