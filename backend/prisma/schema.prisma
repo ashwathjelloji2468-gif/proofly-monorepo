@@ -102,6 +102,7 @@ model Space {
   reward           Reward?
   members          SpaceMember[]
   invitations      WorkspaceInvitation[]
+  widgets          Widget[]
 }
 
 model SpaceMember {
@@ -306,8 +307,28 @@ model AnalyticsEvent {
   id        String   @id @default(uuid())
   eventType String
   spaceId   String
+  widgetId  String?
   metadata  Json?
   createdAt DateTime @default(now())
+
+  @@index([spaceId])
+  @@index([widgetId])
+}
+
+model Widget {
+  id        String   @id @default(uuid())
+  spaceId   String
+  name      String
+  layout    String   // CAROUSEL, MASONRY, SINGLE, POPUP, FLOATING, WALL
+  theme     String   // LIGHT, DARK, CUSTOM
+  settings  Json     // styling config, filters, max testimonials
+  status    String   @default("ACTIVE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
 }
 
 model StaticPage {

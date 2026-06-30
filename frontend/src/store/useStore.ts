@@ -138,6 +138,31 @@ export interface SupportTicket {
     createdAt: string;
   }[];
 }
+export interface Widget {
+  id: string;
+  spaceId: string;
+  name: string;
+  layout: string;
+  theme: string;
+  settings: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WidgetAnalytics {
+  views: number;
+  clicks: number;
+  ctr: number;
+  conversions: number;
+  conversionRate: number;
+  videoPlays: number;
+  devices: { device: string; count: number }[];
+  browsers: { browser: string; count: number }[];
+  countries: { country: string; count: number }[];
+  traffic: string;
+  topTestimonialId?: string;
+}
 
 interface AppState {
   user: User | null;
@@ -173,6 +198,15 @@ interface AppState {
   
   // Billing action
   updateBillingTier: (tier: 'FREE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE') => Promise<void>;
+
+  // Widget actions
+  widgets: Widget[];
+  widgetAnalytics: WidgetAnalytics | null;
+  fetchWidgets: (spaceId: string) => Promise<void>;
+  createWidget: (spaceId: string, name: string, layout: string, theme: string, settings: string) => Promise<Widget | null>;
+  updateWidget: (id: string, input: { name?: string; layout?: string; theme?: string; settings?: string; status?: string }) => Promise<Widget | null>;
+  deleteWidget: (id: string) => Promise<boolean>;
+  fetchWidgetAnalytics: (widgetId: string) => Promise<WidgetAnalytics | null>;
   
   // Collections actions
   createCollection: (collection: Omit<Collection, 'id' | 'user_id' | 'createdAt' | 'slug'>) => Promise<Collection | null>;
@@ -628,6 +662,8 @@ export const useStore = create<AppState>((set, get) => ({
   roadmapItems: initialRoadmapItems,
   supportTickets: [],
   isLoading: false,
+  widgets: [],
+  widgetAnalytics: null,
 
 
 
@@ -1907,6 +1943,144 @@ export const useStore = create<AppState>((set, get) => ({
       return data?.activeSessions || [];
     } catch (err: any) {
       throw err;
+    }
+  },
+
+  fetchWidgets: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query MyWidgets($spaceId: ID!) {
+          myWidgets(spaceId: $spaceId) {
+            id
+            spaceId
+            name
+            layout
+            theme
+            settings
+            status
+            createdAt
+            updatedAt
+          }
+        }
+      `, { spaceId });
+      set({ widgets: data?.myWidgets || [] });
+    } catch (err: any) {
+      console.error('fetchWidgets error:', err);
+    }
+  },
+
+  createWidget: async (spaceId: string, name: string, layout: string, theme: string, settings: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation CreateWidget($spaceId: ID!, $name: String!, $layout: String!, $theme: String!, $settings: String!) {
+          createWidget(spaceId: $spaceId, name: $name, layout: $layout, theme: $theme, settings: $settings) {
+            id
+            spaceId
+            name
+            layout
+            theme
+            settings
+            status
+            createdAt
+            updatedAt
+          }
+        }
+      `, { spaceId, name, layout, theme, settings });
+      const newWidget = data?.createWidget;
+      if (newWidget) {
+        set(state => ({ widgets: [newWidget, ...state.widgets] }));
+      }
+      return newWidget || null;
+    } catch (err: any) {
+      console.error('createWidget error:', err);
+      return null;
+    }
+  },
+
+  updateWidget: async (id: string, input: { name?: string; layout?: string; theme?: string; settings?: string; status?: string }) => {
+    try {
+      const data = await gqlRequest(`
+        mutation UpdateWidget($id: ID!, $name: String, $layout: String, $theme: String, $settings: String, $status: String) {
+          updateWidget(id: $id, name: $name, layout: $layout, theme: $theme, settings: $settings, status: $status) {
+            id
+            spaceId
+            name
+            layout
+            theme
+            settings
+            status
+            createdAt
+            updatedAt
+          }
+        }
+      `, { id, ...input });
+      const updated = data?.updateWidget;
+      if (updated) {
+        set(state => ({
+          widgets: state.widgets.map(w => w.id === id ? updated : w)
+        }));
+      }
+      return updated || null;
+    } catch (err: any) {
+      console.error('updateWidget error:', err);
+      return null;
+    }
+  },
+
+  deleteWidget: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation DeleteWidget($id: ID!) {
+          deleteWidget(id: $id)
+        }
+      `, { id });
+      const success = !!data?.deleteWidget;
+      if (success) {
+        set(state => ({
+          widgets: state.widgets.filter(w => w.id !== id)
+        }));
+      }
+      return success;
+    } catch (err: any) {
+      console.error('deleteWidget error:', err);
+      return false;
+    }
+  },
+
+  fetchWidgetAnalytics: async (widgetId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query WidgetAnalytics($widgetId: ID!) {
+          widgetAnalytics(widgetId: $widgetId) {
+            views
+            clicks
+            ctr
+            conversions
+            conversionRate
+            videoPlays
+            devices {
+              device
+              count
+            }
+            browsers {
+              browser
+              count
+            }
+            countries {
+              country
+              count
+            }
+            traffic
+            topTestimonialId
+          }
+        }
+      `, { widgetId });
+      const analytics = data?.widgetAnalytics || null;
+      set({ widgetAnalytics: analytics });
+      return analytics;
+    } catch (err: any) {
+      console.error('fetchWidgetAnalytics error:', err);
+      return null;
     }
   }
 }));

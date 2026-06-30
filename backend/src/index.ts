@@ -162,6 +162,163 @@ async function startServer() {
     }
   });
 
+  // Serve the widget script statically
+  app.get('/widget.js', (_req, res) => {
+    res.sendFile(path.join(process.cwd(), 'public/widget.js'));
+  });
+
+  // REST API: Get Widget details (Public endpoint, CORS allowed from anywhere)
+  app.options('/api/widgets/:id', cors());
+  app.get('/api/widgets/:id', cors(), async (req, res) => {
+    try {
+      const widgetId = req.params.id;
+      const widget = await prisma.widget.findUnique({
+        where: { id: widgetId },
+        include: {
+          space: {
+            include: {
+              user: true
+            }
+          }
+        }
+      });
+
+      if (!widget || widget.status !== 'ACTIVE') {
+        return res.status(404).json({ error: 'Widget not found or inactive.' });
+      }
+
+      // Parse widget settings
+      const settings = (widget.settings as any) || {};
+      const minRating = settings.minRating || 1;
+      const onlyVideo = settings.onlyVideo || false;
+      const onlyText = settings.onlyText || false;
+      const featuredOnly = settings.featuredOnly || false;
+      const maxTestimonials = settings.maxTestimonials || 50;
+      const sortBy = settings.sortBy || 'newest';
+
+      // Query testimonials
+      const testimonials = await prisma.testimonial.findMany({
+        where: {
+          spaceId: widget.spaceId,
+          isApproved: true,
+          isArchived: false,
+          rating: { gte: minRating },
+          ...(onlyVideo ? { OR: [{ type: 'VIDEO' }, { videoUrl: { not: null } }] } : {}),
+          ...(onlyText ? { type: 'TEXT' } : {}),
+          ...(featuredOnly ? { isPinned: true } : {})
+        },
+        orderBy: {
+          createdAt: sortBy === 'oldest' ? 'asc' : 'desc'
+        }
+      });
+
+      // Free vs Pro enforcements
+      const isFree = widget.space.user.tier === 'FREE';
+      let finalTestimonials = testimonials;
+
+      // Handle Free limits: max 25 testimonials
+      if (isFree) {
+        finalTestimonials = testimonials.slice(0, 25);
+        settings.showProoflyBranding = true;
+      } else {
+        // Handle custom limit for paid users
+        finalTestimonials = testimonials.slice(0, maxTestimonials);
+      }
+
+      // Random sorting (shuffle) if requested
+      if (sortBy === 'random') {
+        finalTestimonials = finalTestimonials.sort(() => Math.random() - 0.5);
+      }
+
+      // Construct payload
+      const responseData = {
+        widget: {
+          id: widget.id,
+          name: widget.name,
+          layout: widget.layout,
+          theme: widget.theme,
+          settings: settings
+        },
+        testimonials: finalTestimonials.map(t => ({
+          id: t.id,
+          reviewerName: t.reviewerName,
+          reviewerTitle: t.reviewerTitle,
+          reviewerAvatar: t.reviewerAvatar,
+          reviewerSocial: t.reviewerSocial,
+          type: t.type,
+          textContent: t.textContent,
+          videoUrl: t.videoUrl,
+          rating: t.rating,
+          createdAt: t.createdAt
+        }))
+      };
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      return res.status(200).json(responseData);
+    } catch (err: any) {
+      console.error('REST widget fetch error:', err);
+      return res.status(500).json({ error: err.message || 'Failed to fetch widget' });
+    }
+  });
+
+  // REST API: Log widget analytics events (Public endpoint, CORS allowed from anywhere)
+  app.options('/api/widgets/analytics', cors());
+  app.post('/api/widgets/analytics', cors(), express.json(), async (req, res) => {
+    try {
+      const { widgetId, spaceId, eventType, metadata } = req.body;
+      if (!widgetId || !spaceId || !eventType) {
+        return res.status(400).json({ error: 'Missing required parameters: widgetId, spaceId, eventType.' });
+      }
+
+      // Parse browser & device from user-agent
+      const userAgent = req.headers['user-agent'] || '';
+      let device = 'Desktop';
+      let browser = 'Other';
+
+      if (/mobile/i.test(userAgent)) {
+        device = 'Mobile';
+      } else if (/tablet/i.test(userAgent) || /ipad/i.test(userAgent)) {
+        device = 'Tablet';
+      }
+
+      if (/chrome|crios/i.test(userAgent) && !/edge|opr|opios/i.test(userAgent)) {
+        browser = 'Chrome';
+      } else if (/safari/i.test(userAgent) && !/chrome|crios|opr|opios/i.test(userAgent)) {
+        browser = 'Safari';
+      } else if (/firefox|fxios/i.test(userAgent)) {
+        browser = 'Firefox';
+      } else if (/edge|edg/i.test(userAgent)) {
+        browser = 'Edge';
+      }
+
+      // Simple country geo mapping fallback (simulated using standard headers or randomizing for testing purposes, e.g. CF-IPCountry)
+      const country = (req.headers['cf-ipcountry'] as string) || (req.headers['x-appengine-country'] as string) || 'USA';
+
+      const enrichedMetadata = {
+        ...(metadata || {}),
+        device,
+        browser,
+        country,
+        ipAddress: req.ip
+      };
+
+      await prisma.analyticsEvent.create({
+        data: {
+          spaceId,
+          widgetId,
+          eventType,
+          metadata: enrichedMetadata
+        }
+      });
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      return res.status(200).json({ success: true });
+    } catch (err: any) {
+      console.error('REST widget analytics error:', err);
+      return res.status(500).json({ error: err.message || 'Failed to log analytics' });
+    }
+  });
+
   const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 
   // Stripe Checkout Session generation endpoint

@@ -1,0 +1,52 @@
+type Widget {
+  id: ID!
+  spaceId: ID!
+  name: String!
+  layout: String!
+  theme: String!
+  settings: String!
+  status: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type DeviceMetrics {
+  device: String!
+  count: Int!
+}
+
+type BrowserMetrics {
+  browser: String!
+  count: Int!
+}
+
+type CountryMetrics {
+  country: String!
+  count: Int!
+}
+
+type WidgetAnalyticsPayload {
+  views: Int!
+  clicks: Int!
+  ctr: Float!
+  conversions: Int!
+  conversionRate: Float!
+  videoPlays: Int!
+  devices: [DeviceMetrics!]!
+  browsers: [BrowserMetrics!]!
+  countries: [CountryMetrics!]!
+  traffic: String! # JSON string of day-by-day views/clicks: { date: string, views: number, clicks: number }[]
+  topTestimonialId: String
+}
+
+extend type Query {
+  widgetById(id: ID!): Widget
+  myWidgets(spaceId: ID!): [Widget!]!
+  widgetAnalytics(widgetId: ID!): WidgetAnalyticsPayload!
+}
+
+extend type Mutation {
+  createWidget(spaceId: ID!, name: String!, layout: String!, theme: String!, settings: String!): Widget!
+  updateWidget(id: ID!, name: String, layout: String, theme: String, settings: String, status: String): Widget!
+  deleteWidget(id: ID!): Boolean!
+}
