@@ -104,6 +104,9 @@ model Space {
   invitations      WorkspaceInvitation[]
   widgets          Widget[]
   collections      Collection[]
+  showcaseSettings ShowcaseSettings?
+  showcaseViews    ShowcaseView[]
+  showcaseShares   ShowcaseShare[]
 }
 
 model SpaceMember {
@@ -448,4 +451,58 @@ model CollectionShare {
   collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
 
   @@index([collectionId])
+}
+
+model ShowcaseSettings {
+  id              String   @id @default(uuid())
+  spaceId         String   @unique
+  headline        String   @default("Our Wall of Love")
+  subheadline     String   @default("See what our customers say about us.")
+  ctaText         String   @default("Leave a Review")
+  ctaUrl          String   @default("")
+  logoUrl         String?
+  coverImageUrl   String?
+  layout          String   @default("MASONRY") // CLASSIC, MODERN, MASONRY, CAROUSEL, MINIMAL
+  theme           String   @default("DARK")    // LIGHT, DARK, GLASSMORPHISM, GRADIENT
+  customCss       String?
+  showBranding    Boolean  @default(true)
+  metaTitle       String   @default("Customer Reviews & Testimonials")
+  metaDescription String   @default("Check out our customer testimonials showcasing real reviews and comments.")
+  status          String   @default("ACTIVE")  // ACTIVE, DRAFT
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  space           Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model ShowcaseView {
+  id           String   @id @default(uuid())
+  spaceId      String
+  visitorId    String
+  ipAddress    String?
+  country      String?
+  device       String?
+  browser      String?
+  os           String?
+  referrer     String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  createdAt    DateTime @default(now())
+
+  space        Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model ShowcaseShare {
+  id            String   @id @default(uuid())
+  spaceId       String
+  platform      String   // TWITTER, LINKEDIN, FACEBOOK, EMAIL, COPY
+  testimonialId String?
+  createdAt     DateTime @default(now())
+
+  space         Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
 }

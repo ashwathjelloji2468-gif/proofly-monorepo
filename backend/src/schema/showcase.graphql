@@ -1,0 +1,86 @@
+type ShowcaseSettings {
+  id: ID!
+  spaceId: ID!
+  headline: String!
+  subheadline: String!
+  ctaText: String!
+  ctaUrl: String!
+  logoUrl: String
+  coverImageUrl: String
+  layout: String! # CLASSIC, MODERN, MASONRY, CAROUSEL, MINIMAL
+  theme: String!  # LIGHT, DARK, GLASSMORPHISM, GRADIENT
+  customCss: String
+  showBranding: Boolean!
+  metaTitle: String!
+  metaDescription: String!
+  status: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input ShowcaseSettingsInput {
+  headline: String
+  subheadline: String
+  ctaText: String
+  ctaUrl: String
+  logoUrl: String
+  coverImageUrl: String
+  layout: String
+  theme: String
+  customCss: String
+  showBranding: Boolean
+  metaTitle: String
+  metaDescription: String
+  status: String
+}
+
+type ShowcaseAnalyticsPayload {
+  views: Int!
+  visitors: Int!
+  clicks: Int!
+  ctr: Float!
+  shares: Int!
+  devices: [DeviceMetrics!]!
+  browsers: [BrowserMetrics!]!
+  countries: [CountryMetrics!]!
+  traffic: String! # JSON string of views/submissions
+}
+
+type PublicShowcasePayload {
+  space: Space!
+  settings: ShowcaseSettings!
+  testimonials: [Testimonial!]!
+}
+
+extend type Space {
+  showcaseSettings: ShowcaseSettings
+}
+
+extend type Query {
+  showcaseSettings(spaceId: ID!): ShowcaseSettings
+  publicShowcase(slug: String!): PublicShowcasePayload!
+  testimonialDetail(id: ID!): Testimonial
+  showcaseAnalytics(spaceId: ID!): ShowcaseAnalyticsPayload!
+}
+
+extend type Mutation {
+  updateShowcaseSettings(
+    spaceId: ID!
+    input: ShowcaseSettingsInput!
+  ): ShowcaseSettings!
+
+  trackShowcaseView(
+    spaceId: ID!
+    visitorId: String!
+    referrer: String
+    utmSource: String
+    utmMedium: String
+    utmCampaign: String
+  ): Boolean!
+
+  trackShowcaseShare(
+    spaceId: ID!
+    platform: String!
+    testimonialId: ID
+  ): Boolean!
+}

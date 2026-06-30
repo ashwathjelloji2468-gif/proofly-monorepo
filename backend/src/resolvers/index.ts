@@ -7,6 +7,7 @@ import { rewardResolvers } from './reward';
 import { staticPageResolvers } from './staticPage';
 import { widgetResolvers } from './widget';
 import { collectionResolvers } from './collection';
+import { showcaseResolvers } from './showcase';
 
 export const resolvers = {
   Query: {
@@ -17,7 +18,8 @@ export const resolvers = {
     ...analyticsResolvers.Query,
     ...staticPageResolvers.Query,
     ...widgetResolvers.Query,
-    ...collectionResolvers.Query
+    ...collectionResolvers.Query,
+    ...showcaseResolvers.Query
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -28,13 +30,15 @@ export const resolvers = {
     ...rewardResolvers.Mutation,
     ...staticPageResolvers.Mutation,
     ...widgetResolvers.Mutation,
-    ...collectionResolvers.Mutation
+    ...collectionResolvers.Mutation,
+    ...showcaseResolvers.Mutation
   },
   User: authResolvers.User,
   SpaceMember: authResolvers.SpaceMember,
   Space: {
     ...spaceResolvers.Space,
-    ...collectionResolvers.Space
+    ...collectionResolvers.Space,
+    ...showcaseResolvers.Space
   },
   Testimonial: testimonialResolvers.Testimonial,
   Campaign: campaignResolvers.Campaign,

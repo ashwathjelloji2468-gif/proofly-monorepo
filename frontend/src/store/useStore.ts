@@ -178,6 +178,36 @@ export interface CollectionPage {
   questions: CollectionQuestion[];
 }
 
+export interface ShowcaseSettings {
+  id: string;
+  spaceId: string;
+  headline: string;
+  subheadline: string;
+  ctaText: string;
+  ctaUrl: string;
+  logoUrl?: string;
+  coverImageUrl?: string;
+  layout: string;
+  theme: string;
+  customCss?: string;
+  showBranding: boolean;
+  metaTitle: string;
+  metaDescription: string;
+  status: string;
+}
+
+export interface ShowcaseAnalytics {
+  views: number;
+  visitors: number;
+  clicks: number;
+  ctr: number;
+  shares: number;
+  devices: { device: string; count: number }[];
+  browsers: { browser: string; count: number }[];
+  countries: { country: string; count: number }[];
+  traffic: string;
+}
+
 export interface CollectionAnalytics {
   views: number;
   visitors: number;
@@ -283,6 +313,17 @@ interface AppState {
   startCollectionSubmission: (collectionId: string) => Promise<string>;
   logCollectionShare: (collectionId: string, platform: string) => Promise<void>;
   fetchCollectionAnalytics: (collectionId: string) => Promise<CollectionAnalytics | null>;
+
+  // Showcase actions
+  showcaseSettings: ShowcaseSettings | null;
+  showcaseAnalytics: ShowcaseAnalytics | null;
+  fetchShowcaseSettings: (spaceId: string) => Promise<ShowcaseSettings | null>;
+  updateShowcaseSettings: (spaceId: string, input: any) => Promise<ShowcaseSettings | null>;
+  fetchPublicShowcase: (slug: string) => Promise<any | null>;
+  fetchTestimonialDetail: (id: string) => Promise<Testimonial | null>;
+  trackShowcaseView: (input: any) => Promise<void>;
+  trackShowcaseShare: (spaceId: string, platform: string, testimonialId?: string) => Promise<void>;
+  fetchShowcaseAnalytics: (spaceId: string) => Promise<ShowcaseAnalytics | null>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -736,6 +777,8 @@ export const useStore = create<AppState>((set, get) => ({
   collectionPages: [],
   currentCollectionPage: null,
   collectionAnalytics: null,
+  showcaseSettings: null,
+  showcaseAnalytics: null,
 
 
 
@@ -2583,6 +2626,234 @@ export const useStore = create<AppState>((set, get) => ({
       return analytics;
     } catch (err: any) {
       console.error('fetchCollectionAnalytics error:', err);
+      return null;
+    }
+  },
+
+  fetchShowcaseSettings: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query ShowcaseSettings($spaceId: ID!) {
+          showcaseSettings(spaceId: $spaceId) {
+            id
+            spaceId
+            headline
+            subheadline
+            ctaText
+            ctaUrl
+            logoUrl
+            coverImageUrl
+            layout
+            theme
+            customCss
+            showBranding
+            metaTitle
+            metaDescription
+            status
+            createdAt
+            updatedAt
+          }
+        }
+      `, { spaceId });
+      const settings = data?.showcaseSettings || null;
+      set({ showcaseSettings: settings });
+      return settings;
+    } catch (err: any) {
+      console.error('fetchShowcaseSettings error:', err);
+      return null;
+    }
+  },
+
+  updateShowcaseSettings: async (spaceId: string, input: any) => {
+    try {
+      const data = await gqlRequest(`
+        mutation UpdateShowcaseSettings($spaceId: ID!, $input: ShowcaseSettingsInput!) {
+          updateShowcaseSettings(spaceId: $spaceId, input: $input) {
+            id
+            spaceId
+            headline
+            subheadline
+            ctaText
+            ctaUrl
+            logoUrl
+            coverImageUrl
+            layout
+            theme
+            customCss
+            showBranding
+            metaTitle
+            metaDescription
+            status
+            createdAt
+            updatedAt
+          }
+        }
+      `, { spaceId, input });
+      const updated = data?.updateShowcaseSettings || null;
+      if (updated) {
+        set({ showcaseSettings: updated });
+      }
+      return updated;
+    } catch (err: any) {
+      console.error('updateShowcaseSettings error:', err);
+      return null;
+    }
+  },
+
+  fetchPublicShowcase: async (slug: string) => {
+    try {
+      const data = await gqlRequest(`
+        query PublicShowcase($slug: String!) {
+          publicShowcase(slug: $slug) {
+            space {
+              id
+              name
+              slug
+              logoUrl
+              customDomain
+            }
+            settings {
+              id
+              spaceId
+              headline
+              subheadline
+              ctaText
+              ctaUrl
+              logoUrl
+              coverImageUrl
+              layout
+              theme
+              customCss
+              showBranding
+              metaTitle
+              metaDescription
+              status
+            }
+            testimonials {
+              id
+              type
+              textContent
+              videoUrl
+              rating
+              reviewerName
+              reviewerEmail
+              reviewerTitle
+              reviewerSocial
+              reviewerAvatar
+              isApproved
+              isArchived
+              sentiment
+              createdAt
+            }
+          }
+        }
+      `, { slug });
+      return data?.publicShowcase || null;
+    } catch (err: any) {
+      console.error('fetchPublicShowcase error:', err);
+      return null;
+    }
+  },
+
+  fetchTestimonialDetail: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        query TestimonialDetail($id: ID!) {
+          testimonialDetail(id: $id) {
+            id
+            type
+            textContent
+            videoUrl
+            rating
+            reviewerName
+            reviewerEmail
+            reviewerTitle
+            reviewerSocial
+            reviewerAvatar
+            isApproved
+            isArchived
+            sentiment
+            createdAt
+            spaceId
+          }
+        }
+      `, { id });
+      return data?.testimonialDetail || null;
+    } catch (err: any) {
+      console.error('fetchTestimonialDetail error:', err);
+      return null;
+    }
+  },
+
+  trackShowcaseView: async (input: any) => {
+    try {
+      await gqlRequest(`
+        mutation TrackShowcaseView(
+          $spaceId: ID!
+          $visitorId: String!
+          $referrer: String
+          $utmSource: String
+          $utmMedium: String
+          $utmCampaign: String
+        ) {
+          trackShowcaseView(
+            spaceId: $spaceId
+            visitorId: $visitorId
+            referrer: $referrer
+            utmSource: $utmSource
+            utmMedium: $utmMedium
+            utmCampaign: $utmCampaign
+          )
+        }
+      `, input);
+    } catch (err: any) {
+      console.error('trackShowcaseView error:', err);
+    }
+  },
+
+  trackShowcaseShare: async (spaceId: string, platform: string, testimonialId?: string) => {
+    try {
+      await gqlRequest(`
+        mutation TrackShowcaseShare($spaceId: ID!, $platform: String!, $testimonialId: ID) {
+          trackShowcaseShare(spaceId: $spaceId, platform: $platform, testimonialId: $testimonialId)
+        }
+      `, { spaceId, platform, testimonialId });
+    } catch (err: any) {
+      console.error('trackShowcaseShare error:', err);
+    }
+  },
+
+  fetchShowcaseAnalytics: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query ShowcaseAnalytics($spaceId: ID!) {
+          showcaseAnalytics(spaceId: $spaceId) {
+            views
+            visitors
+            clicks
+            ctr
+            shares
+            devices {
+              device
+              count
+            }
+            browsers {
+              browser
+              count
+            }
+            countries {
+              country
+              count
+            }
+            traffic
+          }
+        }
+      `, { spaceId });
+      const analytics = data?.showcaseAnalytics || null;
+      set({ showcaseAnalytics: analytics });
+      return analytics;
+    } catch (err: any) {
+      console.error('fetchShowcaseAnalytics error:', err);
       return null;
     }
   }
