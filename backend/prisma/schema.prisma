@@ -103,6 +103,7 @@ model Space {
   members          SpaceMember[]
   invitations      WorkspaceInvitation[]
   widgets          Widget[]
+  collections      Collection[]
 }
 
 model SpaceMember {
@@ -269,6 +270,8 @@ model Testimonial {
   updatedAt      DateTime        @updatedAt
   spaceId        String
   space          Space           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  collectionId   String?
+  collection     Collection?     @relation(fields: [collectionId], references: [id], onDelete: SetNull)
 }
 
 model Reward {
@@ -336,4 +339,113 @@ model StaticPage {
   title     String
   content   String
   updatedAt DateTime @updatedAt
+}
+
+model Collection {
+  id              String                 @id @default(uuid())
+  spaceId         String
+  name            String
+  slug            String                 @unique
+  headline        String
+  subheadline     String
+  logoUrl         String?
+  thankYouMessage String
+  redirectUrl     String?
+  customDomain    String?
+  status          String                 @default("ACTIVE") // ACTIVE, ARCHIVED, DRAFT
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+
+  space           Space                  @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  testimonials    Testimonial[]
+  theme           CollectionTheme?
+  questions       CollectionQuestion[]
+  views           CollectionView[]
+  submissions     CollectionSubmission[]
+  shares          CollectionShare[]
+
+  @@index([spaceId])
+}
+
+model CollectionTheme {
+  id              String     @id @default(uuid())
+  collectionId    String     @unique
+  primaryColor    String     @default("#10B981")
+  textColor       String     @default("#E4E4E7")
+  backgroundColor String     @default("#09090B")
+  borderRadius    String     @default("8px")
+  shadow          String     @default("md")
+  spacing         Int        @default(16)
+  fontFamily      String     @default("Outfit")
+  darkMode        Boolean    @default(true)
+  customCss       String?
+  removeBranding  Boolean    @default(false)
+
+  collection      Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+}
+
+model CollectionQuestion {
+  id           String     @id @default(uuid())
+  collectionId String
+  label        String
+  type         String     // SHORT_ANSWER, PARAGRAPH, DROPDOWN, CHECKBOX, RADIO, RATING, DATE
+  options      String[]   // JSON array or string values
+  required     Boolean    @default(false)
+  placeholder  String?
+  order        Int        @default(0)
+
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@index([collectionId])
+}
+
+model CollectionView {
+  id           String     @id @default(uuid())
+  collectionId String
+  visitorId    String
+  ipAddress    String?
+  country      String?
+  city         String?
+  device       String?
+  browser      String?
+  os           String?
+  referrer     String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  createdAt    DateTime   @default(now())
+
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@index([collectionId])
+}
+
+model CollectionSubmission {
+  id                String     @id @default(uuid())
+  collectionId      String
+  startedAt         DateTime
+  completedAt       DateTime?
+  testimonialId     String?
+  consentGiven      Boolean    @default(false)
+  consentTimestamp  DateTime?
+  ipAddress         String?
+  browser           String?
+  country           String?
+  isVerifiedEmail   Boolean    @default(false)
+  verificationToken String?
+
+  collection        Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@index([collectionId])
+}
+
+model CollectionShare {
+  id           String     @id @default(uuid())
+  collectionId String
+  platform     String     // TWITTER, FACEBOOK, LINKEDIN, COPY
+  createdAt    DateTime   @default(now())
+
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@index([collectionId])
 }

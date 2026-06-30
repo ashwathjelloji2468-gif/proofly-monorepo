@@ -138,6 +138,59 @@ export interface SupportTicket {
     createdAt: string;
   }[];
 }
+export interface CollectionQuestion {
+  id: string;
+  collectionId: string;
+  label: string;
+  type: string;
+  options: string[];
+  required: boolean;
+  placeholder?: string;
+  order: number;
+}
+
+export interface CollectionPage {
+  id: string;
+  spaceId: string;
+  name: string;
+  slug: string;
+  headline: string;
+  subheadline: string;
+  logoUrl?: string;
+  thankYouMessage: string;
+  redirectUrl?: string;
+  customDomain?: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  theme?: {
+    primaryColor: string;
+    textColor: string;
+    backgroundColor: string;
+    borderRadius: string;
+    shadow: string;
+    spacing: number;
+    fontFamily: string;
+    darkMode: boolean;
+    customCss?: string;
+    removeBranding: boolean;
+  };
+  questions: CollectionQuestion[];
+}
+
+export interface CollectionAnalytics {
+  views: number;
+  visitors: number;
+  starts: number;
+  completions: number;
+  completionRate: number;
+  avgTime: number;
+  devices: { device: string; count: number }[];
+  browsers: { browser: string; count: number }[];
+  countries: { country: string; count: number }[];
+  traffic: string;
+}
+
 export interface Widget {
   id: string;
   spaceId: string;
@@ -214,6 +267,22 @@ interface AppState {
   fetchCollectionBySlug: (slug: string) => Promise<Collection | null>;
   updateCollection: (id: string, collection: { title: string; description: string; logoUrl?: string | null; theme: string; collectVideo: boolean; collectText: boolean }) => Promise<Collection | null>;
   updateCollectionReward: (spaceId: string, reward: { discountCode: string; message: string } | null) => Promise<void>;
+
+  // Collection pages actions
+  collectionPages: CollectionPage[];
+  currentCollectionPage: CollectionPage | null;
+  collectionAnalytics: CollectionAnalytics | null;
+  fetchCollectionPages: (spaceId: string) => Promise<void>;
+  fetchCollectionPageBySlug: (slug: string) => Promise<CollectionPage | null>;
+  createCollectionPage: (input: any) => Promise<CollectionPage | null>;
+  updateCollectionPage: (id: string, input: any) => Promise<CollectionPage | null>;
+  deleteCollectionPage: (id: string) => Promise<boolean>;
+  duplicateCollectionPage: (id: string) => Promise<CollectionPage | null>;
+  submitCollectionTestimonial: (input: any) => Promise<boolean>;
+  trackCollectionView: (input: any) => Promise<void>;
+  startCollectionSubmission: (collectionId: string) => Promise<string>;
+  logCollectionShare: (collectionId: string, platform: string) => Promise<void>;
+  fetchCollectionAnalytics: (collectionId: string) => Promise<CollectionAnalytics | null>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -664,6 +733,9 @@ export const useStore = create<AppState>((set, get) => ({
   isLoading: false,
   widgets: [],
   widgetAnalytics: null,
+  collectionPages: [],
+  currentCollectionPage: null,
+  collectionAnalytics: null,
 
 
 
@@ -2080,6 +2152,437 @@ export const useStore = create<AppState>((set, get) => ({
       return analytics;
     } catch (err: any) {
       console.error('fetchWidgetAnalytics error:', err);
+      return null;
+    }
+  },
+
+  fetchCollectionPages: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query SpaceCollections($spaceId: ID!) {
+          spaceCollections(spaceId: $spaceId) {
+            id
+            spaceId
+            name
+            slug
+            headline
+            subheadline
+            logoUrl
+            thankYouMessage
+            redirectUrl
+            customDomain
+            status
+            createdAt
+            updatedAt
+            theme {
+              primaryColor
+              textColor
+              backgroundColor
+              borderRadius
+              shadow
+              spacing
+              fontFamily
+              darkMode
+              customCss
+              removeBranding
+            }
+            questions {
+              id
+              label
+              type
+              options
+              required
+              placeholder
+              order
+            }
+          }
+        }
+      `, { spaceId });
+      set({ collectionPages: data?.spaceCollections || [] });
+    } catch (err: any) {
+      console.error('fetchCollectionPages error:', err);
+    }
+  },
+
+  fetchCollectionPageBySlug: async (slug: string) => {
+    try {
+      const data = await gqlRequest(`
+        query CollectionBySlug($slug: String!) {
+          collectionBySlug(slug: $slug) {
+            id
+            spaceId
+            name
+            slug
+            headline
+            subheadline
+            logoUrl
+            thankYouMessage
+            redirectUrl
+            customDomain
+            status
+            createdAt
+            updatedAt
+            theme {
+              primaryColor
+              textColor
+              backgroundColor
+              borderRadius
+              shadow
+              spacing
+              fontFamily
+              darkMode
+              customCss
+              removeBranding
+            }
+            questions {
+              id
+              label
+              type
+              options
+              required
+              placeholder
+              order
+            }
+          }
+        }
+      `, { slug });
+      const page = data?.collectionBySlug || null;
+      set({ currentCollectionPage: page });
+      return page;
+    } catch (err: any) {
+      console.error('fetchCollectionPageBySlug error:', err);
+      return null;
+    }
+  },
+
+  createCollectionPage: async (input: any) => {
+    try {
+      const data = await gqlRequest(`
+        mutation CreateCollection(
+          $spaceId: ID!
+          $name: String!
+          $slug: String!
+          $headline: String!
+          $subheadline: String!
+          $logoUrl: String
+          $thankYouMessage: String!
+          $redirectUrl: String
+          $customDomain: String
+          $themeColor: String
+          $questions: [CollectionQuestionInput!]!
+        ) {
+          createCollection(
+            spaceId: $spaceId
+            name: $name
+            slug: $slug
+            headline: $headline
+            subheadline: $subheadline
+            logoUrl: $logoUrl
+            thankYouMessage: $thankYouMessage
+            redirectUrl: $redirectUrl
+            customDomain: $customDomain
+            themeColor: $themeColor
+            questions: $questions
+          ) {
+            id
+            spaceId
+            name
+            slug
+            headline
+            subheadline
+            logoUrl
+            thankYouMessage
+            redirectUrl
+            customDomain
+            status
+            createdAt
+            updatedAt
+            theme {
+              primaryColor
+            }
+            questions {
+              id
+              label
+              type
+              options
+              required
+              placeholder
+              order
+            }
+          }
+        }
+      `, input);
+      const newPage = data?.createCollection;
+      if (newPage) {
+        set(state => ({ collectionPages: [newPage, ...state.collectionPages] }));
+      }
+      return newPage || null;
+    } catch (err: any) {
+      console.error('createCollectionPage error:', err);
+      return null;
+    }
+  },
+
+  updateCollectionPage: async (id: string, input: any) => {
+    try {
+      const data = await gqlRequest(`
+        mutation UpdateCollection(
+          $id: ID!
+          $name: String
+          $headline: String
+          $subheadline: String
+          $logoUrl: String
+          $thankYouMessage: String
+          $redirectUrl: String
+          $customDomain: String
+          $themeColor: String
+          $questions: [CollectionQuestionInput!]
+          $status: String
+        ) {
+          updateCollection(
+            id: $id
+            name: $name
+            headline: $headline
+            subheadline: $subheadline
+            logoUrl: $logoUrl
+            thankYouMessage: $thankYouMessage
+            redirectUrl: $redirectUrl
+            customDomain: $customDomain
+            themeColor: $themeColor
+            questions: $questions
+            status: $status
+          ) {
+            id
+            spaceId
+            name
+            slug
+            headline
+            subheadline
+            logoUrl
+            thankYouMessage
+            redirectUrl
+            customDomain
+            status
+            createdAt
+            updatedAt
+            theme {
+              primaryColor
+            }
+            questions {
+              id
+              label
+              type
+              options
+              required
+              placeholder
+              order
+            }
+          }
+        }
+      `, { id, ...input });
+      const updated = data?.updateCollection;
+      if (updated) {
+        set(state => ({
+          collectionPages: state.collectionPages.map(p => p.id === id ? { ...p, ...updated } : p)
+        }));
+      }
+      return updated || null;
+    } catch (err: any) {
+      console.error('updateCollectionPage error:', err);
+      return null;
+    }
+  },
+
+  deleteCollectionPage: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation DeleteCollection($id: ID!) {
+          deleteCollection(id: $id)
+        }
+      `, { id });
+      const success = !!data?.deleteCollection;
+      if (success) {
+        set(state => ({
+          collectionPages: state.collectionPages.filter(p => p.id !== id)
+        }));
+      }
+      return success;
+    } catch (err: any) {
+      console.error('deleteCollectionPage error:', err);
+      return false;
+    }
+  },
+
+  duplicateCollectionPage: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation DuplicateCollection($id: ID!) {
+          duplicateCollection(id: $id) {
+            id
+            spaceId
+            name
+            slug
+            headline
+            subheadline
+            logoUrl
+            thankYouMessage
+            redirectUrl
+            customDomain
+            status
+            createdAt
+            updatedAt
+            theme {
+              primaryColor
+            }
+            questions {
+              id
+              label
+              type
+              options
+              required
+              placeholder
+              order
+            }
+          }
+        }
+      `, { id });
+      const duplicated = data?.duplicateCollection;
+      if (duplicated) {
+        set(state => ({ collectionPages: [duplicated, ...state.collectionPages] }));
+      }
+      return duplicated || null;
+    } catch (err: any) {
+      console.error('duplicateCollectionPage error:', err);
+      return null;
+    }
+  },
+
+  submitCollectionTestimonial: async (input: any) => {
+    try {
+      const data = await gqlRequest(`
+        mutation SubmitCollectionTestimonial(
+          $collectionId: ID!
+          $type: String!
+          $reviewerName: String!
+          $reviewerEmail: String!
+          $reviewerTitle: String
+          $reviewerSocial: String
+          $reviewerAvatar: String
+          $rating: Int!
+          $textContent: String
+          $videoUrl: String
+          $consentGiven: Boolean!
+          $customAnswers: String!
+        ) {
+          submitCollectionTestimonial(
+            collectionId: $collectionId
+            type: $type
+            reviewerName: $reviewerName
+            reviewerEmail: $reviewerEmail
+            reviewerTitle: $reviewerTitle
+            reviewerSocial: $reviewerSocial
+            reviewerAvatar: $reviewerAvatar
+            rating: $rating
+            textContent: $textContent
+            videoUrl: $videoUrl
+            consentGiven: $consentGiven
+            customAnswers: $customAnswers
+          ) {
+            id
+          }
+        }
+      `, input);
+      return !!data?.submitCollectionTestimonial;
+    } catch (err: any) {
+      console.error('submitCollectionTestimonial error:', err);
+      return false;
+    }
+  },
+
+  trackCollectionView: async (input: any) => {
+    try {
+      await gqlRequest(`
+        mutation TrackCollectionView(
+          $collectionId: ID!
+          $visitorId: String!
+          $referrer: String
+          $utmSource: String
+          $utmMedium: String
+          $utmCampaign: String
+        ) {
+          trackCollectionView(
+            collectionId: $collectionId
+            visitorId: $visitorId
+            referrer: $referrer
+            utmSource: $utmSource
+            utmMedium: $utmMedium
+            utmCampaign: $utmCampaign
+          )
+        }
+      `, input);
+    } catch (err: any) {
+      console.error('trackCollectionView error:', err);
+    }
+  },
+
+  startCollectionSubmission: async (collectionId: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation StartCollectionSubmission($collectionId: ID!) {
+          startCollectionSubmission(collectionId: $collectionId)
+        }
+      `, { collectionId });
+      return data?.startCollectionSubmission || '';
+    } catch (err: any) {
+      console.error('startCollectionSubmission error:', err);
+      return '';
+    }
+  },
+
+  logCollectionShare: async (collectionId: string, platform: string) => {
+    try {
+      await gqlRequest(`
+        mutation LogCollectionShare($collectionId: ID!, $platform: String!) {
+          logCollectionShare(collectionId: $collectionId, platform: $platform)
+        }
+      `, { collectionId, platform });
+    } catch (err: any) {
+      console.error('logCollectionShare error:', err);
+    }
+  },
+
+  fetchCollectionAnalytics: async (collectionId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query CollectionAnalytics($collectionId: ID!) {
+          collectionAnalytics(collectionId: $collectionId) {
+            views
+            visitors
+            starts
+            completions
+            completionRate
+            avgTime
+            devices {
+              device
+              count
+            }
+            browsers {
+              browser
+              count
+            }
+            countries {
+              country
+              count
+            }
+            traffic
+          }
+        }
+      `, { collectionId });
+      const analytics = data?.collectionAnalytics || null;
+      set({ collectionAnalytics: analytics });
+      return analytics;
+    } catch (err: any) {
+      console.error('fetchCollectionAnalytics error:', err);
       return null;
     }
   }

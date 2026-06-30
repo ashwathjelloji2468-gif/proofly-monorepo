@@ -11,6 +11,7 @@ import { OAuthService } from './OAuthService';
 import { SessionService } from './SessionService';
 import { AuthorizationService } from './AuthorizationService';
 import { WidgetService } from './WidgetService';
+import { CollectionService } from './CollectionService';
 
 export interface Services {
   user: UserService;
@@ -25,6 +26,7 @@ export interface Services {
   session: SessionService;
   authorization: AuthorizationService;
   widget: WidgetService;
+  collection: CollectionService;
 }
 
 const emailService = new EmailService();
@@ -49,6 +51,7 @@ export function createServices(
     session: sessionService,
     oauth: oauthService,
     authorization: authorizationService,
-    widget: new WidgetService(prisma, currentUser)
+    widget: new WidgetService(prisma, currentUser),
+    collection: new CollectionService(prisma, currentUser)
   };
 }

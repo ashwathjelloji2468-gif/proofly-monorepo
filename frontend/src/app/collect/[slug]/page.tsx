@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useStore } from '@/store/useStore';
 import { WebcamRecorder } from '@/components/WebcamRecorder';
@@ -17,7 +17,11 @@ import {
   ShieldCheck,
   Heart,
   Globe,
-  Upload
+  Upload,
+  Calendar,
+  Camera,
+  Check,
+  AlertCircle
 } from 'lucide-react';
 
 export default function CollectTestimonialPage() {
@@ -25,89 +29,111 @@ export default function CollectTestimonialPage() {
   const router = useRouter();
   const slug = params?.slug as string;
 
-  const collections = useStore(state => state.collections);
-  const submitTestimonial = useStore(state => state.submitTestimonial);
-  const fetchCollectionBySlug = useStore(state => state.fetchCollectionBySlug);
+  const currentCollectionPage = useStore(state => state.currentCollectionPage);
+  const fetchCollectionPageBySlug = useStore(state => state.fetchCollectionPageBySlug);
+  const submitCollectionTestimonial = useStore(state => state.submitCollectionTestimonial);
+  const trackCollectionView = useStore(state => state.trackCollectionView);
+  const startCollectionSubmission = useStore(state => state.startCollectionSubmission);
+  const logCollectionShare = useStore(state => state.logCollectionShare);
 
-  const collection = collections.find(c => c.slug === slug);
-  const [loadingCollection, setLoadingCollection] = useState(!collection);
+  const [loading, setLoading] = useState(true);
+  const [submissionId, setSubmissionId] = useState<string>('');
 
-  // Form states
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1); // 1: Welcome, 2: Record/Write, 3: Profile Info, 4: Success
+  // Form states wizard
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1); // 1: Welcome, 2: Questions, 3: Video/Text, 4: Consent & Profile, 5: Success
   const [mode, setMode] = useState<'video' | 'text' | null>(null);
   
+  // Custom Answers object
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  
+  // Reviewer assets
   const [reviewText, setReviewText] = useState('');
   const [videoBlob, setVideoBlob] = useState<Blob | null>(null);
   const [videoURL, setVideoURL] = useState<string | null>(null);
+  const [isRecordingWebcam, setIsRecordingWebcam] = useState(false);
 
-  // Reviewer details
   const [rating, setRating] = useState<number>(5);
-  const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [reviewerName, setReviewerName] = useState('');
   const [reviewerEmail, setReviewerEmail] = useState('');
-  const [reviewerCompany, setReviewerCompany] = useState('');
-  const [reviewerRole, setReviewerRole] = useState('');
+  const [reviewerTitle, setReviewerTitle] = useState('');
   const [reviewerSocial, setReviewerSocial] = useState('');
   const [reviewerAvatar, setReviewerAvatar] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [consentGiven, setConsentGiven] = useState(false);
 
-  useEffect(() => {
-    if (!collection && slug) {
-      setLoadingCollection(true);
-      fetchCollectionBySlug(slug).finally(() => {
-        setLoadingCollection(false);
-      });
-    }
-  }, [collection, slug, fetchCollectionBySlug]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
+  const [copiedShare, setCopiedShare] = useState<string | null>(null);
 
   // Generate dynamic seed avatar
   useEffect(() => {
     if (reviewerName.trim()) {
       setReviewerAvatar(`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(reviewerName)}`);
-    } else {
-      setReviewerAvatar('');
     }
   }, [reviewerName]);
 
-  if (loadingCollection) {
-    return (
-      <div className="min-h-screen bg-[#09090B] text-slate-100 flex items-center justify-center font-sans p-6 text-center">
-        <div className="w-10 h-10 border-4 border-brand-emerald/30 border-t-brand-emerald rounded-full animate-spin" />
-      </div>
-    );
-  }
+  // Load collection page config & log visitor view
+  useEffect(() => {
+    if (slug) {
+      setLoading(true);
+      fetchCollectionPageBySlug(slug).then(page => {
+        setLoading(false);
+        if (page) {
+          // Generate unique visitor ID
+          let visitorId = localStorage.getItem('proofly_visitor_id');
+          if (!visitorId) {
+            visitorId = 'v_' + Math.random().toString(36).substring(2, 11);
+            localStorage.setItem('proofly_visitor_id', visitorId);
+          }
 
-  if (!collection) {
-    return (
-      <div className="min-h-screen bg-[#09090B] text-slate-100 flex items-center justify-center font-sans p-6 text-center">
-        <div className="bg-[#18181B] border border-border-primary rounded-2xl p-8 max-w-md w-full space-y-5">
-          <div className="w-16 h-16 rounded-full bg-red-950/30 border border-red-500/30 flex items-center justify-center mx-auto">
-            <Sparkles className="w-8 h-8 text-red-500" />
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-xl font-extrabold text-white">Space Not Found</h2>
-            <p className="text-xs text-muted-foreground">
-              The testimonials collection page you are looking for does not exist or has been removed.
-            </p>
-          </div>
-          <button
-            onClick={() => router.push('/')}
-            className="w-full bg-[#18181B] hover:bg-[#27272A] border border-border-primary text-xs font-bold py-2.5 rounded-lg transition"
-          >
-            Go Back Home
-          </button>
-        </div>
-      </div>
-    );
-  }
+          // Parse UTM search params
+          const urlParams = new URLSearchParams(window.location.search);
+          const utmSource = urlParams.get('utm_source');
+          const utmMedium = urlParams.get('utm_medium');
+          const utmCampaign = urlParams.get('utm_campaign');
+
+          trackCollectionView({
+            collectionId: page.id,
+            visitorId,
+            referrer: document.referrer || null,
+            utmSource,
+            utmMedium,
+            utmCampaign
+          });
+        }
+      });
+    }
+  }, [slug, fetchCollectionPageBySlug, trackCollectionView]);
+
+  const handleStartForm = async () => {
+    if (!currentCollectionPage) return;
+    setStep(2);
+    try {
+      const subId = await startCollectionSubmission(currentCollectionPage.id);
+      setSubmissionId(subId);
+    } catch (e) {}
+  };
 
   const handleRecordComplete = (blob: Blob, url: string) => {
     setVideoBlob(blob);
     setVideoURL(url);
+    setIsRecordingWebcam(false);
   };
 
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 50 * 1024 * 1024) {
+        setErrorText('Maximum Video upload limit is 50MB. Please choose a smaller file.');
+        setTimeout(() => setErrorText(null), 4000);
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      setVideoBlob(file);
+      setVideoURL(url);
+    }
+  };
+
+  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -118,476 +144,476 @@ export default function CollectTestimonialPage() {
     }
   };
 
+  const handleNextToSub = () => {
+    // Validate required questions
+    if (currentCollectionPage) {
+      for (const q of currentCollectionPage.questions) {
+        if (q.required && !answers[q.id]?.trim()) {
+          setErrorText(`Please answer the required question: "${q.label}"`);
+          setTimeout(() => setErrorText(null), 3000);
+          return;
+        }
+      }
+    }
+    setStep(3);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!reviewerName || !reviewerEmail) return;
+    if (!reviewerName.trim() || !reviewerEmail.trim()) {
+      setErrorText('Please enter your name and email address.');
+      setTimeout(() => setErrorText(null), 3000);
+      return;
+    }
+    if (!consentGiven) {
+      setErrorText('Please check the consent box to submit your feedback.');
+      setTimeout(() => setErrorText(null), 3000);
+      return;
+    }
 
     setIsSubmitting(true);
     try {
-      await submitTestimonial(collection.id, {
-        name: reviewerName,
-        email: reviewerEmail, // wait, Omit removes 'reviewerEmail', let's check store interface
-        // Oh! Wait. The store schema testimonial parameter requires Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }
-        // Let's check keys in Testimonial:
-        // name, company, role, review, video_url, rating, reviewerEmail, reviewerSocial, reviewerAvatar
-        reviewerEmail,
-        reviewerSocial,
-        reviewerAvatar: reviewerAvatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(reviewerName)}`,
-        company: reviewerCompany,
-        role: reviewerRole,
-        review: mode === 'text' ? reviewText : 'Video Testimonial Submission',
-        rating,
-        video_url: videoURL || undefined,
-        videoBlob: videoBlob || undefined
-      } as any);
+      if (!currentCollectionPage) return;
 
-      setStep(4);
-    } catch (err) {
-      console.error(err);
+      const success = await submitCollectionTestimonial({
+        collectionId: currentCollectionPage.id,
+        type: mode === 'video' ? 'VIDEO' : 'TEXT',
+        reviewerName,
+        reviewerEmail,
+        reviewerTitle: reviewerTitle || null,
+        reviewerAvatar: reviewerAvatar || null,
+        rating,
+        textContent: mode === 'text' ? reviewText : 'Video testimonial submission',
+        videoUrl: videoURL || null,
+        consentGiven,
+        customAnswers: JSON.stringify(answers)
+      });
+
+      if (success) {
+        setStep(5);
+        // Confetti could trigger here
+        if (currentCollectionPage.redirectUrl) {
+          setTimeout(() => {
+            window.location.href = currentCollectionPage.redirectUrl!;
+          }, 3500);
+        }
+      } else {
+        setErrorText('Failed to save submission. Please try again.');
+        setTimeout(() => setErrorText(null), 4000);
+      }
+    } catch (err: any) {
+      setErrorText(err.message || 'An error occurred during submission.');
+      setTimeout(() => setErrorText(null), 4000);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const copyCouponCode = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const shareToPlatform = (platform: string) => {
+    if (!currentCollectionPage) return;
+    logCollectionShare(currentCollectionPage.id, platform);
+    
+    const text = encodeURIComponent('I just left a review for ' + currentCollectionPage.name + '! Check it out:');
+    const url = encodeURIComponent(window.location.origin);
+    
+    if (platform === 'twitter') {
+      window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    } else if (platform === 'linkedin') {
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+    } else {
+      navigator.clipboard.writeText(window.location.origin);
+      setCopiedShare('clipboard');
+      setTimeout(() => setCopiedShare(null), 2000);
+    }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#09090B] text-slate-100 flex items-center justify-center font-sans">
+        <div className="w-10 h-10 border-4 border-brand-emerald/30 border-t-brand-emerald rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!currentCollectionPage) {
+    return (
+      <div className="min-h-screen bg-[#09090B] text-slate-100 flex items-center justify-center font-sans p-6">
+        <div className="bg-[#18181B] border border-border-primary rounded-2xl p-8 max-w-md w-full text-center space-y-4 shadow-xl">
+          <AlertCircle className="w-12 h-12 text-red-400 mx-auto" />
+          <h2 className="text-lg font-black text-white">Collection Page Offline</h2>
+          <p className="text-xs text-muted-foreground">The testimonial collection form you are trying to visit is not found or has been disabled.</p>
+          <button 
+            onClick={() => router.push('/')}
+            className="w-full bg-zinc-800 hover:bg-zinc-750 border border-zinc-700 text-xs font-bold py-2.5 rounded-lg transition"
+          >
+            Go Back Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const primaryColor = currentCollectionPage.theme?.primaryColor || '#10B981';
+
   return (
-    <div className="min-h-screen bg-[#09090B] text-slate-100 flex flex-col font-sans selection:bg-brand-emerald selection:text-white pb-12">
-      {/* Top logo header */}
-      <header className="px-6 py-4 flex items-center justify-between border-b border-border-primary bg-[#09090B]/60 backdrop-blur sticky top-0 z-30">
-        <div className="flex items-center space-x-2">
-          {collection.logoUrl ? (
-            <img src={collection.logoUrl} alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
-          ) : (
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-emerald to-brand-teal flex items-center justify-center shadow-md">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
-          )}
-          <span className="font-extrabold text-sm text-white tracking-tight uppercase">{collection.title}</span>
+    <div className="min-h-screen bg-[#09090B] text-slate-200 font-sans flex flex-col items-center justify-center p-4 md:p-8 select-none">
+      
+      {/* Toast Alert */}
+      {errorText && (
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl border border-red-500/20 animate-pulse">
+          <AlertCircle className="w-4 h-4" />
+          <span>{errorText}</span>
         </div>
-        <div className="text-[10px] text-muted-foreground bg-[#18181B] px-3 py-1 rounded-full border border-border-primary flex items-center space-x-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-brand-emerald animate-pulse" />
-          <span>Powered by Proofly</span>
-        </div>
-      </header>
+      )}
 
-      {/* Main Container */}
-      <main className="flex-1 flex items-center justify-center p-6 mt-4">
-        <div className="w-full max-w-2xl bg-[#18181B] border border-border-primary rounded-2xl shadow-2xl overflow-hidden relative transition-all duration-300">
-          
-          {/* Progress Indicator */}
-          {step < 4 && (
-            <div className="h-1 bg-border-primary w-full flex">
-              <div 
-                className="bg-gradient-to-r from-brand-emerald to-brand-teal h-full transition-all duration-500" 
-                style={{ width: `${(step / 3) * 100}%` }}
-              />
+      <div className="bg-[#141417] border border-border-primary rounded-3xl p-6 md:p-10 w-full max-w-xl shadow-2xl relative text-left">
+        
+        {/* Logo indicator */}
+        {currentCollectionPage.logoUrl && (
+          <img 
+            src={currentCollectionPage.logoUrl} 
+            alt="Workspace Logo" 
+            className="w-12 h-12 rounded-xl object-cover mb-6 border border-zinc-800"
+          />
+        )}
+
+        {/* ─── STEP 1: WELCOME SCREEN ───────────────────────────────────────────── */}
+        {step === 1 && (
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <h1 className="text-3xl font-black text-white tracking-tight">{currentCollectionPage.headline}</h1>
+              <p className="text-sm text-slate-400 leading-relaxed">{currentCollectionPage.subheadline}</p>
             </div>
-          )}
+            <button 
+              onClick={handleStartForm}
+              style={{ backgroundColor: primaryColor }}
+              className="w-full text-white font-black text-xs py-3.5 rounded-xl shadow-lg hover:opacity-95 cursor-pointer flex items-center justify-center space-x-2"
+            >
+              <span>Get Started</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
-          {/* STEP 1: WELCOME SCREEN */}
-          {step === 1 && (
-            <div className="p-8 md:p-10 space-y-8 text-center md:text-left">
-              <div className="space-y-4">
-                <div className="flex justify-center md:justify-start">
-                  {collection.logoUrl ? (
-                    <img 
-                      src={collection.logoUrl} 
-                      alt="Logo" 
-                      className="w-16 h-16 rounded-2xl object-cover border border-border-primary" 
+        {/* ─── STEP 2: QUESTIONNAIRE ────────────────────────────────────────────── */}
+        {step === 2 && (
+          <div className="space-y-6">
+            <h2 className="text-lg font-black text-white border-b border-border-primary/50 pb-2">Questions</h2>
+            <div className="space-y-5">
+              {currentCollectionPage.questions.map(q => (
+                <div key={q.id} className="space-y-2">
+                  <label className="text-xs font-black text-slate-350 flex items-center space-x-1">
+                    <span>{q.label}</span>
+                    {q.required && <span className="text-brand-emerald">*</span>}
+                  </label>
+                  
+                  {q.type === 'SHORT_ANSWER' && (
+                    <input
+                      type="text"
+                      placeholder={q.placeholder || 'Your reply...'}
+                      value={answers[q.id] || ''}
+                      onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-lg text-xs py-2 px-3 text-slate-200 focus:border-brand-emerald outline-none"
                     />
-                  ) : (
-                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-emerald to-brand-teal flex items-center justify-center shadow-lg">
-                      <Sparkles className="w-8 h-8 text-white" />
+                  )}
+
+                  {q.type === 'PARAGRAPH' && (
+                    <textarea
+                      rows={3}
+                      placeholder={q.placeholder || 'Your review description...'}
+                      value={answers[q.id] || ''}
+                      onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-lg text-xs py-2.5 px-3 text-slate-200 focus:border-brand-emerald outline-none resize-none"
+                    />
+                  )}
+
+                  {q.type === 'RATING' && (
+                    <div className="flex space-x-1.5 text-2xl text-slate-650 cursor-pointer">
+                      {[1, 2, 3, 4, 5].map(val => (
+                        <span 
+                          key={val}
+                          onClick={() => setAnswers({ ...answers, [q.id]: val.toString() })}
+                          className={`hover:scale-110 transition ${parseInt(answers[q.id], 10) >= val ? 'text-yellow-400' : 'text-slate-600'}`}
+                        >
+                          ★
+                        </span>
+                      ))}
                     </div>
                   )}
-                </div>
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-black text-white leading-tight">
-                    Submit your testimonial to <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-emerald to-brand-teal">{collection.title}</span>
-                  </h1>
-                  <p className="text-sm text-muted-foreground">
-                    {collection.description}
-                  </p>
-                </div>
-              </div>
 
-              {/* Questions Helper */}
-              {collection.customQuestions && collection.customQuestions.length > 0 && (
-                <div className="bg-[#09090B] border border-border-primary rounded-xl p-5 text-left space-y-3">
-                  <h4 className="text-xs font-extrabold text-brand-teal tracking-wider uppercase flex items-center space-x-1.5">
-                    <Heart className="w-3.5 h-3.5" />
-                    <span>Questions you can answer</span>
-                  </h4>
-                  <ul className="space-y-2 text-xs text-slate-300">
-                    {collection.customQuestions.map((q, idx) => (
-                      <li key={idx} className="flex items-start space-x-2">
-                        <span className="text-brand-emerald font-black select-none mt-0.5">•</span>
-                        <span>{q}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {q.type === 'DATE' && (
+                    <input
+                      type="date"
+                      value={answers[q.id] || ''}
+                      onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
+                      className="bg-zinc-900 border border-zinc-800 rounded-lg text-xs py-2 px-3 text-slate-200 outline-none focus:border-brand-emerald"
+                    />
+                  )}
                 </div>
-              )}
-
-              {/* Action Buttons Selection */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                {collection.collectVideo && (
-                  <button
-                    onClick={() => {
-                      setMode('video');
-                      setStep(2);
-                    }}
-                    className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 font-bold py-3.5 px-6 rounded-xl flex items-center justify-center space-x-2 cursor-pointer shadow-lg shadow-brand-emerald/10 transition group"
-                  >
-                    <Video className="w-5 h-5 group-hover:scale-110 transition" />
-                    <span>Record Video Review</span>
-                  </button>
-                )}
-                {collection.collectText && (
-                  <button
-                    onClick={() => {
-                      setMode('text');
-                      setStep(2);
-                    }}
-                    className="bg-[#09090B] hover:bg-[#18181B] border border-border-primary text-slate-200 font-bold py-3.5 px-6 rounded-xl flex items-center justify-center space-x-2 cursor-pointer transition group"
-                  >
-                    <PenTool className="w-5 h-5 text-brand-teal group-hover:scale-110 transition" />
-                    <span>Write Text Review</span>
-                  </button>
-                )}
-              </div>
+              ))}
             </div>
-          )}
 
-          {/* STEP 2: RECORD / WRITE TESTIMONIAL */}
-          {step === 2 && (
-            <div className="p-8 md:p-10 space-y-6">
-              {/* Back Link */}
-              <button
-                onClick={() => {
-                  setStep(1);
-                  setMode(null);
-                  setVideoBlob(null);
-                  setVideoURL(null);
-                }}
-                className="flex items-center space-x-1.5 text-xs text-muted-foreground hover:text-white transition cursor-pointer"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Go Back</span>
-              </button>
+            <button 
+              onClick={handleNextToSub}
+              style={{ backgroundColor: primaryColor }}
+              className="w-full text-white font-black text-xs py-3.5 rounded-xl shadow-lg hover:opacity-95 cursor-pointer flex items-center justify-center space-x-2"
+            >
+              <span>Next Step</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                {/* Questions side-guideline (Visible on md+) */}
-                <div className="space-y-4 md:col-span-1 border-r border-border-primary/50 pr-4 hidden md:block text-left">
-                  <h3 className="text-xs font-bold text-slate-200">Writing Prompts</h3>
-                  <p className="text-[11px] text-muted-foreground">Keep these points in mind while preparing your testimonial:</p>
-                  <div className="space-y-3 mt-4">
-                    {collection.customQuestions.map((q, idx) => (
-                      <div key={idx} className="bg-[#09090B] border border-border-primary/60 p-2.5 rounded-lg text-[10px] text-slate-300">
-                        {q}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+        {/* ─── STEP 3: SUBMISSION MEDIA (VIDEO/TEXT) ────────────────────────────── */}
+        {step === 3 && (
+          <div className="space-y-6">
+            <h2 className="text-lg font-black text-white border-b border-border-primary/50 pb-2">Record or Write Review</h2>
+            
+            {!mode ? (
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => setMode('video')}
+                  className="bg-zinc-900 border border-zinc-800 hover:border-brand-emerald/40 p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-3 cursor-pointer transition"
+                >
+                  <Video className="w-8 h-8 text-brand-emerald" />
+                  <span className="text-xs font-bold text-slate-200">Record Video</span>
+                </button>
+                <button
+                  onClick={() => setMode('text')}
+                  className="bg-zinc-900 border border-zinc-800 hover:border-brand-teal/40 p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-3 cursor-pointer transition"
+                >
+                  <PenTool className="w-8 h-8 text-brand-teal" />
+                  <span className="text-xs font-bold text-slate-200">Write Text</span>
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <button 
+                  onClick={() => { setMode(null); setVideoURL(null); setVideoBlob(null); }}
+                  className="flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Choose Another Option</span>
+                </button>
 
-                {/* Form fields */}
-                <div className="md:col-span-2 space-y-4 text-left">
-                  {mode === 'video' ? (
-                    <div className="space-y-3">
-                      <div>
-                        <h3 className="text-sm font-bold text-white">Record Video</h3>
-                        <p className="text-xs text-muted-foreground mb-2">Record up to 60 seconds of webcam review.</p>
-                      </div>
-                      <WebcamRecorder 
-                        onRecordComplete={handleRecordComplete} 
-                        questions={collection.customQuestions}
-                        spaceName={collection.title}
-                      />
-                      {videoURL && (
-                        <div className="flex justify-end pt-3">
-                          <button
-                            onClick={() => setStep(3)}
-                            className="bg-brand-emerald text-white hover:bg-brand-emerald-hover font-bold text-xs py-2 px-4 rounded-lg flex items-center space-x-1 cursor-pointer transition"
+                {mode === 'text' && (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-black text-slate-350">Rating Score</label>
+                      <div className="flex space-x-1 text-xl cursor-pointer">
+                        {[1, 2, 3, 4, 5].map(val => (
+                          <span 
+                            key={val} 
+                            onClick={() => setRating(val)}
+                            className={val <= rating ? 'text-yellow-400' : 'text-slate-650'}
                           >
-                            <span>Next: Profile Info</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      )}
+                            ★
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-sm font-bold text-white">Write Review</h3>
-                        <p className="text-xs text-muted-foreground">Share your genuine experience with {collection.title}.</p>
-                      </div>
-                      <textarea
-                        value={reviewText}
-                        onChange={(e) => setReviewText(e.target.value)}
-                        placeholder="Write your review here... How has it helped you? What features do you like best?"
-                        rows={8}
-                        className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-xl p-4 text-xs text-slate-100 placeholder:text-zinc-600 transition"
-                      />
-                      <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-                        <span>Min. 10 characters</span>
-                        <span>{reviewText.length} characters</span>
-                      </div>
-                      <div className="flex justify-end pt-2">
+                    <textarea
+                      rows={5}
+                      placeholder="Write your testimonial here..."
+                      value={reviewText}
+                      onChange={(e) => setReviewText(e.target.value)}
+                      className="w-full bg-zinc-900 border border-zinc-800 rounded-lg text-xs py-3 px-4 text-slate-200 focus:border-brand-emerald outline-none resize-none leading-relaxed"
+                    />
+                  </div>
+                )}
+
+                {mode === 'video' && (
+                  <div className="space-y-4">
+                    {videoURL ? (
+                      <div className="relative rounded-2xl overflow-hidden bg-black border border-zinc-800">
+                        <video src={videoURL} controls className="w-full max-h-64 object-cover" />
                         <button
-                          onClick={() => setStep(3)}
-                          disabled={reviewText.trim().length < 10}
-                          className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-xs py-2.5 px-5 rounded-lg flex items-center space-x-1 cursor-pointer shadow-md transition"
+                          onClick={() => { setVideoURL(null); setVideoBlob(null); }}
+                          className="absolute top-3 right-3 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-slate-300 p-1.5 rounded-full"
+                          title="Reset video"
                         >
-                          <span>Next: Profile Info</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          ✕
                         </button>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3: PROFILE INFO */}
-          {step === 3 && (
-            <form onSubmit={handleSubmit} className="p-8 md:p-10 space-y-6 text-left">
-              {/* Back Link */}
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="flex items-center space-x-1.5 text-xs text-muted-foreground hover:text-white transition cursor-pointer"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Go Back</span>
-              </button>
-
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold text-white">Tell us about yourself</h3>
-                <p className="text-xs text-muted-foreground">This metadata will be visible alongside your testimonial.</p>
-              </div>
-
-              {/* Star Rating Selection */}
-              <div className="space-y-2 border-b border-border-primary pb-5">
-                <span className="text-xs font-semibold text-slate-300 block">Your Rating</span>
-                <div className="flex items-center space-x-1.5">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setRating(star)}
-                      onMouseEnter={() => setHoverRating(star)}
-                      onMouseLeave={() => setHoverRating(null)}
-                      className="p-1 cursor-pointer focus:outline-none transition"
-                    >
-                      <Star 
-                        className={`w-6 h-6 transition ${
-                          star <= (hoverRating ?? rating)
-                            ? 'text-yellow-400 fill-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]'
-                            : 'text-zinc-600'
-                        }`}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Grid Form Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={reviewerName}
-                    onChange={(e) => setReviewerName(e.target.value)}
-                    placeholder="e.g. J. Ashwath Doe"
-                    className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs text-slate-100 placeholder:text-zinc-600 transition"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300">Email Address *</label>
-                  <input
-                    type="email"
-                    required
-                    value={reviewerEmail}
-                    onChange={(e) => setReviewerEmail(e.target.value)}
-                    placeholder="e.g. john@company.com"
-                    className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs text-slate-100 placeholder:text-zinc-600 transition"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300">Company Name</label>
-                  <input
-                    type="text"
-                    value={reviewerCompany}
-                    onChange={(e) => setReviewerCompany(e.target.value)}
-                    placeholder="e.g. Stripe"
-                    className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs text-slate-100 placeholder:text-zinc-600 transition"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300">Job Title / Role</label>
-                  <input
-                    type="text"
-                    value={reviewerRole}
-                    onChange={(e) => setReviewerRole(e.target.value)}
-                    placeholder="e.g. Lead Engineer"
-                    className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs text-slate-100 placeholder:text-zinc-600 transition"
-                  />
-                </div>
-              </div>
-
-              {/* Avatar Selector and Social Link */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-border-primary/50">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-300">Social Link (LinkedIn/Twitter)</label>
-                  <input
-                    type="url"
-                    value={reviewerSocial}
-                    onChange={(e) => setReviewerSocial(e.target.value)}
-                    placeholder="e.g. https://linkedin.com/in/johndoe"
-                    className="w-full bg-[#09090B] border border-border-primary focus:border-brand-emerald outline-none rounded-lg px-3 py-2 text-xs text-slate-100 placeholder:text-zinc-600 transition"
-                  />
-                </div>
-
-                {/* Simulated profile avatar uploader */}
-                <div className="flex items-center space-x-3 pt-3">
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden border border-border-primary bg-[#09090B] flex items-center justify-center shrink-0">
-                    {reviewerAvatar ? (
-                      <img src={reviewerAvatar} alt="avatar" className="w-full h-full object-cover" />
+                    ) : isRecordingWebcam ? (
+                      <div className="bg-black border border-zinc-850 rounded-2xl overflow-hidden p-4 relative">
+                        <WebcamRecorder onRecordComplete={handleRecordComplete} />
+                        <button 
+                          onClick={() => setIsRecordingWebcam(false)}
+                          className="absolute top-4 right-4 text-white text-xs bg-zinc-900/80 px-2 py-1 rounded"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     ) : (
-                      <User className="w-6 h-6 text-zinc-600" />
+                      <div className="grid grid-cols-2 gap-4">
+                        <button
+                          onClick={() => setIsRecordingWebcam(true)}
+                          className="bg-zinc-900 border border-zinc-850 p-6 rounded-2xl flex flex-col items-center justify-center space-y-2.5 transition hover:border-brand-emerald/30 cursor-pointer"
+                        >
+                          <Camera className="w-7 h-7 text-brand-emerald" />
+                          <span className="text-xs font-bold text-slate-350">Use Camera</span>
+                        </button>
+                        <label className="bg-zinc-900 border border-zinc-850 p-6 rounded-2xl flex flex-col items-center justify-center space-y-2.5 transition hover:border-brand-teal/30 cursor-pointer text-center">
+                          <Upload className="w-7 h-7 text-brand-teal" />
+                          <span className="text-xs font-bold text-slate-350">Upload File</span>
+                          <input type="file" accept="video/*" onChange={handleVideoUpload} className="hidden" />
+                        </label>
+                      </div>
                     )}
                   </div>
-                  <div className="space-y-1.5">
-                    <span className="text-[11px] font-semibold text-slate-300 block">Reviewer Avatar</span>
-                    <label className="bg-[#09090B] hover:bg-[#18181B] border border-border-primary text-slate-300 font-bold text-[10px] py-1.5 px-3 rounded-lg flex items-center space-x-1 cursor-pointer transition">
-                      <Upload className="w-3.5 h-3.5 text-brand-teal" />
-                      <span>Upload Avatar</span>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handleLogoUpload} 
-                        className="hidden" 
-                      />
-                    </label>
-                  </div>
-                </div>
-              </div>
+                )}
 
-              {/* Submit Action */}
-              <div className="pt-4 flex justify-end">
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !reviewerName || !reviewerEmail}
-                  className="w-full sm:w-auto bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed font-black text-xs py-3 px-6 rounded-lg flex items-center justify-center space-x-2 cursor-pointer shadow-lg shadow-brand-emerald/10 transition"
+                <button 
+                  onClick={() => setStep(4)}
+                  style={{ backgroundColor: primaryColor }}
+                  className="w-full text-white font-black text-xs py-3.5 rounded-xl shadow-lg hover:opacity-95 cursor-pointer flex items-center justify-center space-x-2"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>AI Analysing & Submitting...</span>
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      <span>Submit Testimonial</span>
-                    </>
-                  )}
+                  <span>Continue</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-            </form>
-          )}
+            )}
+          </div>
+        )}
 
-          {/* STEP 4: SUCCESS & REWARD EMBED */}
-          {step === 4 && (
-            <div className="p-10 space-y-8 text-center">
-              <div className="space-y-3">
-                <div className="w-16 h-16 rounded-full bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center mx-auto shadow-lg shadow-brand-emerald/5">
-                  <CheckCircle2 className="w-8 h-8 text-brand-emerald animate-bounce" />
-                </div>
-                <div className="space-y-1.5">
-                  <h2 className="text-2xl font-black text-white">Thank you!</h2>
-                  <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-                    Your testimonial was successfully submitted and processed. It is currently pending approval by the space admin.
-                  </p>
+        {/* ─── STEP 4: PROFILE INFO & CONSENT ─────────────────────────────────────── */}
+        {step === 4 && (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <h2 className="text-lg font-black text-white border-b border-border-primary/50 pb-2">Profile Details</h2>
+            
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <label className="relative cursor-pointer shrink-0">
+                  <img 
+                    src={reviewerAvatar || 'https://api.dicebear.com/7.x/initials/svg?seed=user'} 
+                    alt="Reviewer Avatar" 
+                    className="w-12 h-12 rounded-full object-cover border border-zinc-800 bg-zinc-900"
+                  />
+                  <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
+                  <span className="absolute bottom-0 right-0 bg-brand-emerald text-white p-0.5 rounded-full text-[8px]">✎</span>
+                </label>
+                <div className="space-y-1.5 flex-1">
+                  <label className="text-[10px] font-black uppercase text-slate-450">Full Name *</label>
+                  <input 
+                    type="text" 
+                    required 
+                    placeholder="Jane Doe" 
+                    value={reviewerName}
+                    onChange={(e) => setReviewerName(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg text-xs py-1.5 px-3 text-slate-200 focus:border-brand-emerald outline-none"
+                  />
                 </div>
               </div>
 
-              {/* Reward Coupon Overlay */}
-              {collection.reward && collection.reward.isActive && (
-                <div className="bg-[#09090B] border border-border-primary rounded-2xl p-6 max-w-sm mx-auto space-y-4 shadow-inner relative overflow-hidden">
-                  {/* Glow orbs background decoration */}
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-brand-teal/5 rounded-full blur-2xl -z-10" />
-                  <div className="absolute bottom-0 left-0 w-24 h-24 bg-brand-emerald/5 rounded-full blur-2xl -z-10" />
-                  
-                  <div className="space-y-1">
-                    <span className="text-[10px] text-brand-teal font-extrabold uppercase tracking-widest block">Incentive Reward</span>
-                    <h4 className="text-sm font-extrabold text-white">{collection.reward.message}</h4>
-                    <p className="text-[10px] text-muted-foreground">Use this coupon code during your checkout process.</p>
-                  </div>
-
-                  <div className="bg-[#18181B] border border-border-primary/80 rounded-xl p-3 flex items-center justify-between">
-                    <code className="font-mono text-sm font-black text-brand-emerald tracking-wider pl-2">
-                      {collection.reward.discountCode}
-                    </code>
-                    <button
-                      onClick={() => copyCouponCode(collection.reward!.discountCode)}
-                      className="bg-[#09090B] hover:bg-[#18181B] text-slate-300 hover:text-white p-2 rounded-lg border border-border-primary transition flex items-center space-x-1 text-[10px] font-bold cursor-pointer"
-                    >
-                      <Copy className="w-3.5 h-3.5 text-brand-teal" />
-                      <span>{copied ? 'Copied!' : 'Copy'}</span>
-                    </button>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black uppercase text-slate-455">Email Address *</label>
+                  <input 
+                    type="email" 
+                    required 
+                    placeholder="jane@example.com" 
+                    value={reviewerEmail}
+                    onChange={(e) => setReviewerEmail(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg text-xs py-1.5 px-3 text-slate-200 focus:border-brand-emerald outline-none"
+                  />
                 </div>
-              )}
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-black uppercase text-slate-455">Title / Company</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. CTO at Acme Inc" 
+                    value={reviewerTitle}
+                    onChange={(e) => setReviewerTitle(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg text-xs py-1.5 px-3 text-slate-200 focus:border-brand-emerald outline-none"
+                  />
+                </div>
+              </div>
 
-              <div className="pt-2">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black uppercase text-slate-455">Social / Website URL</label>
+                <input 
+                  type="text" 
+                  placeholder="https://linkedin.com/in/..." 
+                  value={reviewerSocial}
+                  onChange={(e) => setReviewerSocial(e.target.value)}
+                  className="w-full bg-zinc-900 border border-zinc-800 rounded-lg text-xs py-1.5 px-3 text-slate-200 focus:border-brand-emerald outline-none"
+                />
+              </div>
+
+              {/* Consent check */}
+              <label className="flex items-start space-x-2.5 pt-4 border-t border-border-primary/50 cursor-pointer select-none">
+                <input 
+                  type="checkbox" 
+                  checked={consentGiven}
+                  onChange={(e) => setConsentGiven(e.target.checked)}
+                  className="mt-0.5 accent-brand-emerald" 
+                />
+                <div className="space-y-0.5">
+                  <span className="text-xs font-bold text-slate-200">I give permission for this testimonial to be displayed publicly.</span>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">Your email is only used for verification and will not be shared publicly.</p>
+                </div>
+              </label>
+            </div>
+
+            <button 
+              type="submit"
+              disabled={isSubmitting}
+              style={{ backgroundColor: primaryColor }}
+              className="w-full text-white font-black text-xs py-3.5 rounded-xl shadow-lg hover:opacity-95 cursor-pointer flex items-center justify-center space-x-2 disabled:opacity-50"
+            >
+              <span>{isSubmitting ? 'Submitting...' : 'Submit Testimonial'}</span>
+            </button>
+          </form>
+        )}
+
+        {/* ─── STEP 5: THANK YOU / SUCCESS SCREEN ─────────────────────────────────── */}
+        {step === 5 && (
+          <div className="text-center space-y-6 py-6 animate-pulse">
+            <div className="w-16 h-16 rounded-full bg-brand-emerald/10 border border-brand-emerald/25 flex items-center justify-center mx-auto text-brand-emerald">
+              <Check className="w-8 h-8" />
+            </div>
+
+            <div className="space-y-2">
+              <h2 className="text-2xl font-black text-white">Review Submitted!</h2>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {currentCollectionPage.thankYouMessage || 'Thank you so much for taking the time to share your feedback!'}
+              </p>
+            </div>
+
+            {/* Redirection notice */}
+            {currentCollectionPage.redirectUrl && (
+              <p className="text-[10px] text-brand-teal font-bold animate-pulse">Redirecting you to checkout coupon page in a few seconds...</p>
+            )}
+
+            {/* Share layout */}
+            <div className="pt-6 border-t border-border-primary/50 space-y-3 text-left">
+              <span className="text-[10px] font-black uppercase text-slate-400">Share your review on social media</span>
+              <div className="flex gap-2.5">
                 <button
-                  onClick={() => {
-                    setStep(1);
-                    setMode(null);
-                    setReviewText('');
-                    setVideoBlob(null);
-                    setVideoURL(null);
-                    setReviewerName('');
-                    setReviewerEmail('');
-                    setReviewerCompany('');
-                    setReviewerRole('');
-                    setReviewerSocial('');
-                    setReviewerAvatar('');
-                  }}
-                  className="bg-[#18181B] hover:bg-[#27272A] border border-border-primary text-slate-300 font-bold text-xs py-2.5 px-5 rounded-lg transition cursor-pointer"
+                  onClick={() => shareToPlatform('twitter')}
+                  className="flex-1 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-xs font-bold py-2 rounded-lg text-slate-350 hover:text-white cursor-pointer transition text-center"
                 >
-                  Submit Another Testimonial
+                  Share to Twitter
+                </button>
+                <button
+                  onClick={() => shareToPlatform('linkedin')}
+                  className="flex-1 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-xs font-bold py-2 rounded-lg text-slate-350 hover:text-white cursor-pointer transition text-center"
+                >
+                  Share to LinkedIn
+                </button>
+                <button
+                  onClick={() => shareToPlatform('copy')}
+                  className="bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 p-2.5 rounded-lg text-slate-350 hover:text-white cursor-pointer transition"
+                >
+                  {copiedShare === 'clipboard' ? <Check className="w-4 h-4 text-brand-emerald" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="mt-auto text-center text-[10px] text-muted-foreground space-y-1">
-        <p>© {new Date().getFullYear()} {collection.title}. All rights reserved.</p>
-        <p className="flex items-center justify-center space-x-1">
-          <span>Collector page powered by</span>
-          <span className="text-brand-emerald font-bold flex items-center space-x-0.5">
-            <Sparkles className="w-3 h-3 text-brand-teal" />
-            <span>Proofly</span>
-          </span>
-        </p>
-      </footer>
+      </div>
     </div>
   );
 }

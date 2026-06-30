@@ -1,0 +1,143 @@
+type Collection {
+  id: ID!
+  spaceId: ID!
+  name: String!
+  slug: String!
+  headline: String!
+  subheadline: String!
+  logoUrl: String
+  thankYouMessage: String!
+  redirectUrl: String
+  customDomain: String
+  status: String!
+  createdAt: String!
+  updatedAt: String!
+  theme: CollectionTheme
+  questions: [CollectionQuestion!]!
+  testimonials: [Testimonial!]!
+}
+
+type CollectionTheme {
+  id: ID!
+  collectionId: ID!
+  primaryColor: String!
+  textColor: String!
+  backgroundColor: String!
+  borderRadius: String!
+  shadow: String!
+  spacing: Int!
+  fontFamily: String!
+  darkMode: Boolean!
+  customCss: String
+  removeBranding: Boolean!
+}
+
+type CollectionQuestion {
+  id: ID!
+  collectionId: ID!
+  label: String!
+  type: String! # SHORT_ANSWER, PARAGRAPH, DROPDOWN, CHECKBOX, RADIO, RATING, DATE
+  options: [String!]!
+  required: Boolean!
+  placeholder: String
+  order: Int!
+}
+
+input CollectionQuestionInput {
+  label: String!
+  type: String!
+  options: [String!]
+  required: Boolean
+  placeholder: String
+  order: Int
+}
+
+type CollectionAnalyticsPayload {
+  views: Int!
+  visitors: Int!
+  starts: Int!
+  completions: Int!
+  completionRate: Float!
+  avgTime: Float!
+  devices: [DeviceMetrics!]!
+  browsers: [BrowserMetrics!]!
+  countries: [CountryMetrics!]!
+  traffic: String! # JSON string of views/submissions
+}
+
+extend type Space {
+  collections: [Collection!]!
+}
+
+extend type Query {
+  collectionById(id: ID!): Collection
+  collectionBySlug(slug: String!): Collection
+  spaceCollections(spaceId: ID!): [Collection!]!
+  collectionAnalytics(collectionId: ID!): CollectionAnalyticsPayload!
+}
+
+extend type Mutation {
+  createCollection(
+    spaceId: ID!
+    name: String!
+    slug: String!
+    headline: String!
+    subheadline: String!
+    logoUrl: String
+    thankYouMessage: String!
+    redirectUrl: String
+    customDomain: String
+    themeColor: String
+    questions: [CollectionQuestionInput!]!
+  ): Collection!
+
+  updateCollection(
+    id: ID!
+    name: String
+    headline: String
+    subheadline: String
+    logoUrl: String
+    thankYouMessage: String
+    redirectUrl: String
+    customDomain: String
+    themeColor: String
+    questions: [CollectionQuestionInput!]
+    status: String
+  ): Collection!
+
+  deleteCollection(id: ID!): Boolean!
+  duplicateCollection(id: ID!): Collection!
+
+  submitCollectionTestimonial(
+    collectionId: ID!
+    type: String! # TEXT, VIDEO
+    reviewerName: String!
+    reviewerEmail: String!
+    reviewerTitle: String
+    reviewerSocial: String
+    reviewerAvatar: String
+    rating: Int!
+    textContent: String
+    videoUrl: String
+    consentGiven: Boolean!
+    customAnswers: String! # JSON answers representation
+  ): Testimonial!
+
+  trackCollectionView(
+    collectionId: ID!
+    visitorId: String!
+    referrer: String
+    utmSource: String
+    utmMedium: String
+    utmCampaign: String
+  ): Boolean!
+
+  startCollectionSubmission(
+    collectionId: ID!
+  ): ID!
+
+  logCollectionShare(
+    collectionId: ID!
+    platform: String!
+  ): Boolean!
+}

@@ -6,6 +6,7 @@ import { analyticsResolvers } from './analytics';
 import { rewardResolvers } from './reward';
 import { staticPageResolvers } from './staticPage';
 import { widgetResolvers } from './widget';
+import { collectionResolvers } from './collection';
 
 export const resolvers = {
   Query: {
@@ -15,7 +16,8 @@ export const resolvers = {
     ...campaignResolvers.Query,
     ...analyticsResolvers.Query,
     ...staticPageResolvers.Query,
-    ...widgetResolvers.Query
+    ...widgetResolvers.Query,
+    ...collectionResolvers.Query
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -25,13 +27,18 @@ export const resolvers = {
     ...analyticsResolvers.Mutation,
     ...rewardResolvers.Mutation,
     ...staticPageResolvers.Mutation,
-    ...widgetResolvers.Mutation
+    ...widgetResolvers.Mutation,
+    ...collectionResolvers.Mutation
   },
   User: authResolvers.User,
   SpaceMember: authResolvers.SpaceMember,
-  Space: spaceResolvers.Space,
+  Space: {
+    ...spaceResolvers.Space,
+    ...collectionResolvers.Space
+  },
   Testimonial: testimonialResolvers.Testimonial,
   Campaign: campaignResolvers.Campaign,
   Reward: rewardResolvers.Reward,
-  Widget: widgetResolvers.Widget
+  Widget: widgetResolvers.Widget,
+  Collection: collectionResolvers.Collection
 };
