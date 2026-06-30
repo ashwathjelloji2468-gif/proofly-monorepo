@@ -110,6 +110,19 @@ async function startServer() {
     }
   });
 
+  app.get('/ready', async (_req, res) => {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      res.status(200).send('READY');
+    } catch {
+      res.status(503).send('NOT_READY');
+    }
+  });
+
+  app.get('/live', (_req, res) => {
+    res.status(200).send('LIVE');
+  });
+
   // Serve uploaded files statically
   app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
 
