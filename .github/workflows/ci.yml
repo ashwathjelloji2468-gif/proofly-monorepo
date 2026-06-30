@@ -27,7 +27,7 @@ jobs:
         npm ci --prefix frontend
 
     - name: Prisma Client Generate
-      run: npx prisma generate --schema=./backend/prisma/schema.prisma
+      run: npm run db:generate --prefix backend
 
     - name: TypeScript Compile Checks
       run: |
