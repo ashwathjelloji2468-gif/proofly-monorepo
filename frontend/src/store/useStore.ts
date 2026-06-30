@@ -284,6 +284,60 @@ export interface AIInsight {
   missingTags: string;
 }
 
+export interface ApiKey {
+  id: string;
+  spaceId: string;
+  name: string;
+  prefix: string;
+  scopes: string;
+  expiresAt?: string;
+  lastUsed?: string;
+  createdAt: string;
+  plainKey?: string;
+}
+
+export interface WebhookSubscription {
+  id: string;
+  spaceId: string;
+  targetUrl: string;
+  events: string;
+  secret: string;
+  status: string;
+  createdAt: string;
+  logs?: WebhookLog[];
+}
+
+export interface WebhookLog {
+  id: string;
+  subscriptionId: string;
+  event: string;
+  statusCode: number;
+  payload: string;
+  duration: number;
+  createdAt: string;
+}
+
+export interface IntegrationConnection {
+  id: string;
+  spaceId: string;
+  appId: string;
+  status: string;
+  config?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApiLog {
+  id: string;
+  spaceId: string;
+  endpoint: string;
+  method: string;
+  statusCode: number;
+  ipAddress?: string;
+  duration: number;
+  createdAt: string;
+}
+
 export interface CollectionAnalytics {
   views: number;
   visitors: number;
@@ -428,6 +482,22 @@ interface AppState {
   generateSocialContent: (testimonialId: string, platform: string) => Promise<string | null>;
   generateLandingPageContent: (spaceId: string, layoutType: string) => Promise<string | null>;
   generateCaseStudyContent: (spaceId: string, testimonialIds: string[]) => Promise<string | null>;
+
+  // Integrations actions
+  apiKeys: ApiKey[];
+  webhooks: WebhookSubscription[];
+  connections: IntegrationConnection[];
+  apiLogs: ApiLog[];
+  fetchApiKeys: (spaceId: string) => Promise<ApiKey[]>;
+  createApiKey: (spaceId: string, name: string, scopes: string) => Promise<any | null>;
+  revokeApiKey: (id: string) => Promise<boolean>;
+  fetchWebhooks: (spaceId: string) => Promise<WebhookSubscription[]>;
+  createWebhook: (spaceId: string, targetUrl: string, events: string) => Promise<WebhookSubscription | null>;
+  deleteWebhook: (id: string) => Promise<boolean>;
+  fetchConnections: (spaceId: string) => Promise<IntegrationConnection[]>;
+  connectApp: (spaceId: string, appId: string, config?: string) => Promise<any | null>;
+  disconnectApp: (spaceId: string, appId: string) => Promise<boolean>;
+  fetchApiLogs: (spaceId: string) => Promise<ApiLog[]>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -890,6 +960,10 @@ export const useStore = create<AppState>((set, get) => ({
   aiUsage: null,
   aiHistory: [],
   aiInsights: [],
+  apiKeys: [],
+  webhooks: [],
+  connections: [],
+  apiLogs: [],
 
 
 
@@ -3318,6 +3392,250 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (err: any) {
       console.error('generateCaseStudyContent error:', err);
       return null;
+    }
+  },
+
+  fetchApiKeys: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query ApiKeys($spaceId: ID!) {
+          apiKeys(spaceId: $spaceId) {
+            id
+            spaceId
+            name
+            prefix
+            scopes
+            expiresAt
+            lastUsed
+            createdAt
+          }
+        }
+      `, { spaceId });
+      const keysList = data?.apiKeys || [];
+      set({ apiKeys: keysList });
+      return keysList;
+    } catch (err: any) {
+      console.error('fetchApiKeys error:', err);
+      return [];
+    }
+  },
+
+  createApiKey: async (spaceId: string, name: string, scopes: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation CreateApiKey($spaceId: ID!, $name: String!, $scopes: String!) {
+          createApiKey(spaceId: $spaceId, name: $name, scopes: $scopes) {
+            id
+            spaceId
+            name
+            prefix
+            scopes
+            expiresAt
+            lastUsed
+            createdAt
+            plainKey
+          }
+        }
+      `, { spaceId, name, scopes });
+      const newKey = data?.createApiKey || null;
+      if (newKey) {
+        set(state => ({ apiKeys: [newKey, ...state.apiKeys] }));
+      }
+      return newKey;
+    } catch (err: any) {
+      console.error('createApiKey error:', err);
+      return null;
+    }
+  },
+
+  revokeApiKey: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation RevokeApiKey($id: ID!) {
+          revokeApiKey(id: $id)
+        }
+      `, { id });
+      const success = data?.revokeApiKey || false;
+      if (success) {
+        set(state => ({ apiKeys: state.apiKeys.filter(k => k.id !== id) }));
+      }
+      return success;
+    } catch (err: any) {
+      console.error('revokeApiKey error:', err);
+      return false;
+    }
+  },
+
+  fetchWebhooks: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query Webhooks($spaceId: ID!) {
+          webhooks(spaceId: $spaceId) {
+            id
+            spaceId
+            targetUrl
+            events
+            secret
+            status
+            createdAt
+            logs {
+              id
+              subscriptionId
+              event
+              statusCode
+              payload
+              duration
+              createdAt
+            }
+          }
+        }
+      `, { spaceId });
+      const webhooksList = data?.webhooks || [];
+      set({ webhooks: webhooksList });
+      return webhooksList;
+    } catch (err: any) {
+      console.error('fetchWebhooks error:', err);
+      return [];
+    }
+  },
+
+  createWebhook: async (spaceId: string, targetUrl: string, events: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation CreateWebhook($spaceId: ID!, $targetUrl: String!, $events: String!) {
+          createWebhook(spaceId: $spaceId, targetUrl: $targetUrl, events: $events) {
+            id
+            spaceId
+            targetUrl
+            events
+            secret
+            status
+            createdAt
+          }
+        }
+      `, { spaceId, targetUrl, events });
+      const newWebhook = data?.createWebhook || null;
+      if (newWebhook) {
+        set(state => ({ webhooks: [newWebhook, ...state.webhooks] }));
+      }
+      return newWebhook;
+    } catch (err: any) {
+      console.error('createWebhook error:', err);
+      return null;
+    }
+  },
+
+  deleteWebhook: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation DeleteWebhook($id: ID!) {
+          deleteWebhook(id: $id)
+        }
+      `, { id });
+      const success = data?.deleteWebhook || false;
+      if (success) {
+        set(state => ({ webhooks: state.webhooks.filter(w => w.id !== id) }));
+      }
+      return success;
+    } catch (err: any) {
+      console.error('deleteWebhook error:', err);
+      return false;
+    }
+  },
+
+  fetchConnections: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query Connections($spaceId: ID!) {
+          connections(spaceId: $spaceId) {
+            id
+            spaceId
+            appId
+            status
+            config
+            createdAt
+            updatedAt
+          }
+        }
+      `, { spaceId });
+      const conns = data?.connections || [];
+      set({ connections: conns });
+      return conns;
+    } catch (err: any) {
+      console.error('fetchConnections error:', err);
+      return [];
+    }
+  },
+
+  connectApp: async (spaceId: string, appId: string, config?: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation ConnectApp($spaceId: ID!, $appId: String!, $config: String) {
+          connectApp(spaceId: $spaceId, appId: $appId, config: $config) {
+            id
+            spaceId
+            appId
+            status
+            config
+            createdAt
+            updatedAt
+          }
+        }
+      `, { spaceId, appId, config });
+      const newConn = data?.connectApp || null;
+      if (newConn) {
+        set(state => {
+          const filtered = state.connections.filter(c => c.appId !== appId.toUpperCase());
+          return { connections: [newConn, ...filtered] };
+        });
+      }
+      return newConn;
+    } catch (err: any) {
+      console.error('connectApp error:', err);
+      return null;
+    }
+  },
+
+  disconnectApp: async (spaceId: string, appId: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation DisconnectApp($spaceId: ID!, $appId: String!) {
+          disconnectApp(spaceId: $spaceId, appId: $appId)
+        }
+      `, { spaceId, appId });
+      const success = data?.disconnectApp || false;
+      if (success) {
+        set(state => ({ connections: state.connections.filter(c => c.appId !== appId.toUpperCase()) }));
+      }
+      return success;
+    } catch (err: any) {
+      console.error('disconnectApp error:', err);
+      return false;
+    }
+  },
+
+  fetchApiLogs: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query ApiLogs($spaceId: ID!) {
+          apiLogs(spaceId: $spaceId) {
+            id
+            spaceId
+            endpoint
+            method
+            statusCode
+            ipAddress
+            duration
+            createdAt
+          }
+        }
+      `, { spaceId });
+      const logs = data?.apiLogs || [];
+      set({ apiLogs: logs });
+      return logs;
+    } catch (err: any) {
+      console.error('fetchApiLogs error:', err);
+      return [];
     }
   }
 }));

@@ -117,6 +117,10 @@ model Space {
   aiHistory        AIHistory[]
   aiInsights       AIInsight[]
   aiJobs           AIJob[]
+  apiKeys          ApiKey[]
+  connections      IntegrationConnection[]
+  webhooksList     WebhookSubscription[]
+  apiLogs          ApiLog[]
 }
 
 model SpaceMember {
@@ -729,6 +733,81 @@ model AIInsight {
   insightsText String
   personaMatch String
   missingTags  String
+  createdAt    DateTime @default(now())
+
+  space        Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model IntegrationConnection {
+  id          String   @id @default(uuid())
+  spaceId     String
+  appId       String   // SLACK, NOTION, HUBSPOT, MAILCHIMP
+  status      String   @default("CONNECTED") // CONNECTED, DISCONNECTED
+  config      String?  // JSON configuration details (webhookUrl, listId)
+  accessToken String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  spaceId   String
+  name      String
+  prefix    String   // pf_live_...
+  key       String   // Hashed key
+  scopes    String   // Comma separated list of permissions
+  expiresAt DateTime?
+  lastUsed  DateTime?
+  createdAt DateTime @default(now())
+
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model WebhookSubscription {
+  id           String   @id @default(uuid())
+  spaceId      String
+  targetUrl    String
+  events       String   // Comma separated list of topics
+  secret       String   // signature secret
+  status       String   @default("ACTIVE") // ACTIVE, INACTIVE
+  createdAt    DateTime @default(now())
+
+  space        Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  logs         WebhookLog[]
+
+  @@index([spaceId])
+}
+
+model WebhookLog {
+  id             String   @id @default(uuid())
+  subscriptionId String
+  event          String
+  statusCode     Int
+  payload        String
+  duration       Int      // execution latency in ms
+  createdAt      DateTime @default(now())
+
+  subscription   WebhookSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId])
+}
+
+model ApiLog {
+  id           String   @id @default(uuid())
+  spaceId      String
+  endpoint     String
+  method       String
+  statusCode   Int
+  ipAddress    String?
+  duration     Int      // latency in ms
   createdAt    DateTime @default(now())
 
   space        Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)

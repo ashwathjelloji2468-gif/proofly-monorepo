@@ -15,6 +15,7 @@ import { CollectionService } from './CollectionService';
 import { ShowcaseService } from './ShowcaseService';
 import { AnalyticsPlatformService } from './AnalyticsPlatformService';
 import { AISuiteService } from './AISuiteService';
+import { IntegrationService } from './IntegrationService';
 
 export interface Services {
   user: UserService;
@@ -33,6 +34,7 @@ export interface Services {
   showcase: ShowcaseService;
   analyticsPlatform: AnalyticsPlatformService;
   aiSuite: AISuiteService;
+  integration: IntegrationService;
 }
 
 const emailService = new EmailService();
@@ -61,6 +63,7 @@ export function createServices(
     collection: new CollectionService(prisma, currentUser),
     showcase: new ShowcaseService(prisma, currentUser),
     analyticsPlatform: new AnalyticsPlatformService(prisma, currentUser),
-    aiSuite: new AISuiteService(prisma, currentUser)
+    aiSuite: new AISuiteService(prisma, currentUser),
+    integration: new IntegrationService(prisma, currentUser)
   };
 }

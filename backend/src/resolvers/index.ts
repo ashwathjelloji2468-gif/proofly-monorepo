@@ -10,6 +10,7 @@ import { collectionResolvers } from './collection';
 import { showcaseResolvers } from './showcase';
 import { analyticsPlatformResolvers } from './analytics_platform';
 import { aiSuiteResolvers } from './ai_suite';
+import { integrationsResolvers } from './integrations';
 
 export const resolvers = {
   Query: {
@@ -23,7 +24,8 @@ export const resolvers = {
     ...collectionResolvers.Query,
     ...showcaseResolvers.Query,
     ...analyticsPlatformResolvers.Query,
-    ...aiSuiteResolvers.Query
+    ...aiSuiteResolvers.Query,
+    ...integrationsResolvers.Query
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -37,7 +39,8 @@ export const resolvers = {
     ...collectionResolvers.Mutation,
     ...showcaseResolvers.Mutation,
     ...analyticsPlatformResolvers.Mutation,
-    ...aiSuiteResolvers.Mutation
+    ...aiSuiteResolvers.Mutation,
+    ...integrationsResolvers.Mutation
   },
   User: authResolvers.User,
   SpaceMember: authResolvers.SpaceMember,

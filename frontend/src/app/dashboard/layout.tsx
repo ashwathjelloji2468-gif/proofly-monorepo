@@ -18,7 +18,8 @@ import {
   ChevronLeft, 
   ChevronRight,
   User,
-  ShieldCheck
+  ShieldCheck,
+  Link2
 } from 'lucide-react';
 
 import { useStore } from '@/store/useStore';
@@ -87,6 +88,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: 'AI Insights', path: '/dashboard/insights', icon: <Cpu className="w-4 h-4" /> },
     { name: 'AI Studio', path: '/dashboard/ai-studio', icon: <Sparkles className="w-4 h-4 text-brand-teal" /> },
     { name: 'Imports', path: '/dashboard/imports', icon: <DownloadCloud className="w-4 h-4" /> },
+    { name: 'Integrations', path: '/dashboard/settings/integrations', icon: <Link2 className="w-4 h-4 text-indigo-400" /> },
     { name: 'Settings', path: '/dashboard/settings', icon: <Settings className="w-4 h-4" /> },
   ];
 

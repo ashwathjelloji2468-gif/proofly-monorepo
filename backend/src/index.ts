@@ -24,6 +24,7 @@ import { createContext } from './context';
 import { authMiddleware } from './middleware/auth';
 import { rateLimiter } from './security/rateLimiter';
 import oauthRouter from './controllers/oauthController';
+import { publicApiRouter } from './controllers/api';
 
 async function startServer() {
   const app = express();
@@ -45,6 +46,7 @@ async function startServer() {
     credentials: true,
   });
   app.use('/auth', oauthCors, rateLimiter(30, 10 * 60 * 1000), oauthRouter);
+  app.use('/api/v1', oauthCors, publicApiRouter);
 
   // Global authentication & token rotation middleware
   app.use(authMiddleware);
