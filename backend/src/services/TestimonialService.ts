@@ -86,7 +86,7 @@ export class TestimonialService extends BaseService {
     const space = await this.prisma.space.findUnique({
       where: { id: input.spaceId },
       include: { 
-        webhooks: { where: { isActive: true } },
+        webhooksList: { where: { status: 'ACTIVE' } },
         user: true
       }
     });
@@ -175,9 +175,9 @@ export class TestimonialService extends BaseService {
     }).catch(err => console.error('Failed to log analytics event:', err));
 
     // Dispatch webhook notifications asynchronously
-    if (space.webhooks.length > 0) {
-      space.webhooks.forEach(webhook => {
-        this.triggerWebhook(webhook.url, {
+    if (space.webhooksList && space.webhooksList.length > 0) {
+      space.webhooksList.forEach((webhook: any) => {
+        this.triggerWebhook(webhook.targetUrl, {
           event: 'testimonial.created',
           space: { id: space.id, name: space.name, slug: space.slug },
           testimonial: {

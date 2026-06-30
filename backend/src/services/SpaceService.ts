@@ -173,17 +173,26 @@ export class SpaceService extends BaseService {
       throw new Error('PRO_FEATURE: Webhooks are only available on PRO, BUSINESS, or ENTERPRISE plans.');
     }
 
-    return this.prisma.webhook.create({
+    const sub = await this.prisma.webhookSubscription.create({
       data: {
         spaceId,
-        url,
-        isActive: true
+        targetUrl: url,
+        events: 'testimonial.created',
+        secret: 'legacy-secret',
+        status: 'ACTIVE'
       }
     });
+
+    return {
+      id: sub.id,
+      url: sub.targetUrl,
+      isActive: sub.status === 'ACTIVE',
+      createdAt: sub.createdAt
+    };
   }
 
   async deleteWebhook(id: string) {
-    const webhook = await this.prisma.webhook.findUnique({
+    const webhook = await this.prisma.webhookSubscription.findUnique({
       where: { id },
       include: { space: true }
     });
@@ -194,7 +203,7 @@ export class SpaceService extends BaseService {
     // Require Owner, Admin or Manager of the associated space
     await this.ensureSpaceAccess(webhook.spaceId, ['OWNER', SpaceRole.ADMIN, SpaceRole.MANAGER]);
 
-    await this.prisma.webhook.delete({ where: { id } });
+    await this.prisma.webhookSubscription.delete({ where: { id } });
     return true;
   }
 

@@ -102,7 +102,6 @@ model Space {
   user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   testimonials     Testimonial[]
   campaigns        Campaign[]
-  webhooks         Webhook[]
   reward           Reward?
   members          SpaceMember[]
   invitations      WorkspaceInvitation[]
@@ -325,14 +324,6 @@ model Campaign {
   updatedAt  DateTime @updatedAt
 }
 
-model Webhook {
-  id        String   @id @default(uuid())
-  url       String
-  isActive  Boolean  @default(true)
-  spaceId   String
-  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-}
 
 model AnalyticsEvent {
   id        String   @id @default(uuid())

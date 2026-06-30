@@ -29,7 +29,7 @@ export const spaceResolvers = {
       return context.services.space.createWebhook(args.input.spaceId, args.input.url);
     },
     deleteWebhook: async (_parent: any, args: { id: string }, context: GraphQLContext) => {
-      const webhook = await context.prisma.webhook.findUnique({ where: { id: args.id } });
+      const webhook = await context.prisma.webhookSubscription.findUnique({ where: { id: args.id } });
       if (!webhook) {
         throw new Error('NOT_FOUND: Webhook not found.');
       }
@@ -95,10 +95,16 @@ export const spaceResolvers = {
         }
       }
       if (!isAuthorized) return [];
-      return context.prisma.webhook.findMany({
+      const subs = await context.prisma.webhookSubscription.findMany({
         where: { spaceId: parent.id },
         orderBy: { createdAt: 'desc' }
       });
+      return subs.map(s => ({
+        id: s.id,
+        url: s.targetUrl,
+        isActive: s.status === 'ACTIVE',
+        createdAt: s.createdAt
+      }));
     },
     reward: async (parent: any, _args: any, context: GraphQLContext) => {
       return context.prisma.reward.findUnique({

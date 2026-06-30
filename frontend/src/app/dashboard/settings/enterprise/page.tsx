@@ -210,12 +210,12 @@ export default function EnterpriseSecurityPage() {
         {/* Tab Filters */}
         <div className="flex space-x-2 border-b border-border-primary/50 pb-2 select-none overflow-x-auto scrollbar-none">
           {[
-            { id: 'security_center', label: 'Security Center', icon: <Shield className="w-3.5 h-3.5" /> },
-            { id: 'rbac', label: 'Custom Roles RBAC', icon: <Users className="w-3.5 h-3.5" /> },
-            { id: 'sso', label: 'Sso setup', icon: <Key className="w-3.5 h-3.5" /> },
-            { id: 'ip_rules', label: 'IP Policies Whitelists', icon: <Globe className="w-3.5 h-3.5" /> },
-            { id: 'audit_timeline', label: 'AuditsTimeline', icon: <Terminal className="w-3.5 h-3.5" /> }
-          ].map(tab => (
+            { id: 'security_center', label: 'Security Center', icon: <Shield className="w-3.5 h-3.5" />, visible: true },
+            { id: 'rbac', label: 'Custom Roles RBAC', icon: <Users className="w-3.5 h-3.5" />, visible: true },
+            { id: 'sso', label: 'Sso setup', icon: <Key className="w-3.5 h-3.5" />, visible: isEnterpriseUser },
+            { id: 'ip_rules', label: 'IP Policies Whitelists', icon: <Globe className="w-3.5 h-3.5" />, visible: isEnterpriseUser },
+            { id: 'audit_timeline', label: 'AuditsTimeline', icon: <Terminal className="w-3.5 h-3.5" />, visible: true }
+          ].filter(tab => tab.visible).map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
