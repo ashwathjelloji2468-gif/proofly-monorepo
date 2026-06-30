@@ -81,9 +81,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: 'Inbox', path: '/dashboard/inbox', icon: <Inbox className="w-4 h-4" /> },
     { name: 'Collections', path: '/dashboard/collections', icon: <FolderHeart className="w-4 h-4" /> },
     { name: 'Wall of Love', path: '/dashboard/wall-of-love', icon: <Heart className="w-4 h-4" /> },
+    { name: 'Showcase', path: '/dashboard/showcase', icon: <Heart className="w-4 h-4 text-[#8B5CF6]" /> },
     { name: 'Widgets', path: '/dashboard/widgets', icon: <Code className="w-4 h-4" /> },
     { name: 'Analytics', path: '/dashboard/analytics', icon: <BarChart3 className="w-4 h-4" /> },
     { name: 'AI Insights', path: '/dashboard/insights', icon: <Cpu className="w-4 h-4" /> },
+    { name: 'AI Studio', path: '/dashboard/ai-studio', icon: <Sparkles className="w-4 h-4 text-brand-teal" /> },
     { name: 'Imports', path: '/dashboard/imports', icon: <DownloadCloud className="w-4 h-4" /> },
     { name: 'Settings', path: '/dashboard/settings', icon: <Settings className="w-4 h-4" /> },
   ];

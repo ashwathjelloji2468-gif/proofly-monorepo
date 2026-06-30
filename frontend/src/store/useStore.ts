@@ -248,6 +248,42 @@ export interface Report {
   createdAt: string;
 }
 
+export interface AIUsage {
+  id: string;
+  spaceId: string;
+  credits: number;
+  limit: number;
+  updatedAt: string;
+}
+
+export interface AIHistory {
+  id: string;
+  spaceId: string;
+  feature: string;
+  creditsUsed: number;
+  inputLength: number;
+  createdAt: string;
+}
+
+export interface AIScore {
+  id: string;
+  testimonialId: string;
+  qualityScore: number;
+  credibility: number;
+  specificity: number;
+  storytelling: number;
+  suggestions: string;
+}
+
+export interface AIInsight {
+  id: string;
+  spaceId: string;
+  bestReviewId?: string;
+  insightsText: string;
+  personaMatch: string;
+  missingTags: string;
+}
+
 export interface CollectionAnalytics {
   views: number;
   visitors: number;
@@ -378,6 +414,20 @@ interface AppState {
   logRevenueEvent: (spaceId: string, visitorId: string, amount: number, source?: string, sourceId?: string) => Promise<void>;
   logHeatmapPoint: (spaceId: string, targetId: string, type: string, x: number, y: number, device: string) => Promise<void>;
   generateReport: (spaceId: string, range: string, format: string) => Promise<Report | null>;
+
+  // AI Suite actions
+  aiUsage: AIUsage | null;
+  aiHistory: AIHistory[];
+  aiInsights: AIInsight[];
+  fetchAIUsage: (spaceId: string) => Promise<AIUsage | null>;
+  fetchAIHistory: (spaceId: string) => Promise<AIHistory[]>;
+  fetchAIInsights: (spaceId: string) => Promise<AIInsight[]>;
+  rewriteTestimonial: (testimonialId: string, tone: string) => Promise<string | null>;
+  analyzeTestimonial: (testimonialId: string) => Promise<AIScore | null>;
+  translateTestimonial: (testimonialId: string, locale: string) => Promise<any | null>;
+  generateSocialContent: (testimonialId: string, platform: string) => Promise<string | null>;
+  generateLandingPageContent: (spaceId: string, layoutType: string) => Promise<string | null>;
+  generateCaseStudyContent: (spaceId: string, testimonialIds: string[]) => Promise<string | null>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -837,6 +887,9 @@ export const useStore = create<AppState>((set, get) => ({
   funnelData: [],
   goals: [],
   reports: [],
+  aiUsage: null,
+  aiHistory: [],
+  aiInsights: [],
 
 
 
@@ -3096,6 +3149,174 @@ export const useStore = create<AppState>((set, get) => ({
       return newReport;
     } catch (err: any) {
       console.error('generateReport error:', err);
+      return null;
+    }
+  },
+
+  fetchAIUsage: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query AIUsage($spaceId: ID!) {
+          aiUsage(spaceId: $spaceId) {
+            id
+            spaceId
+            credits
+            limit
+            updatedAt
+          }
+        }
+      `, { spaceId });
+      const usage = data?.aiUsage || null;
+      set({ aiUsage: usage });
+      return usage;
+    } catch (err: any) {
+      console.error('fetchAIUsage error:', err);
+      return null;
+    }
+  },
+
+  fetchAIHistory: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query AIHistory($spaceId: ID!) {
+          aiHistory(spaceId: $spaceId) {
+            id
+            spaceId
+            feature
+            creditsUsed
+            inputLength
+            createdAt
+          }
+        }
+      `, { spaceId });
+      const historyList = data?.aiHistory || [];
+      set({ aiHistory: historyList });
+      return historyList;
+    } catch (err: any) {
+      console.error('fetchAIHistory error:', err);
+      return [];
+    }
+  },
+
+  fetchAIInsights: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query AIInsights($spaceId: ID!) {
+          aiInsights(spaceId: $spaceId) {
+            id
+            spaceId
+            bestReviewId
+            insightsText
+            personaMatch
+            missingTags
+            createdAt
+          }
+        }
+      `, { spaceId });
+      const insightsList = data?.aiInsights || [];
+      set({ aiInsights: insightsList });
+      return insightsList;
+    } catch (err: any) {
+      console.error('fetchAIInsights error:', err);
+      return [];
+    }
+  },
+
+  rewriteTestimonial: async (testimonialId: string, tone: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation AIRewrite($testimonialId: ID!, $tone: String!) {
+          aiRewrite(testimonialId: $testimonialId, tone: $tone)
+        }
+      `, { testimonialId, tone });
+      return data?.aiRewrite || null;
+    } catch (err: any) {
+      console.error('rewriteTestimonial error:', err);
+      return null;
+    }
+  },
+
+  analyzeTestimonial: async (testimonialId: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation AIAnalyzeTestimonial($testimonialId: ID!) {
+          aiAnalyzeTestimonial(testimonialId: $testimonialId) {
+            id
+            testimonialId
+            qualityScore
+            credibility
+            specificity
+            storytelling
+            suggestions
+            createdAt
+          }
+        }
+      `, { testimonialId });
+      return data?.aiAnalyzeTestimonial || null;
+    } catch (err: any) {
+      console.error('analyzeTestimonial error:', err);
+      return null;
+    }
+  },
+
+  translateTestimonial: async (testimonialId: string, locale: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation AITranslateTestimonial($testimonialId: ID!, $locale: String!) {
+          aiTranslateTestimonial(testimonialId: $testimonialId, locale: $locale) {
+            id
+            testimonialId
+            locale
+            translatedText
+            createdAt
+          }
+        }
+      `, { testimonialId, locale });
+      return data?.aiTranslateTestimonial || null;
+    } catch (err: any) {
+      console.error('translateTestimonial error:', err);
+      return null;
+    }
+  },
+
+  generateSocialContent: async (testimonialId: string, platform: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation AIGenerateSocial($testimonialId: ID!, $platform: String!) {
+          aiGenerateSocial(testimonialId: $testimonialId, platform: $platform)
+        }
+      `, { testimonialId, platform });
+      return data?.aiGenerateSocial || null;
+    } catch (err: any) {
+      console.error('generateSocialContent error:', err);
+      return null;
+    }
+  },
+
+  generateLandingPageContent: async (spaceId: string, layoutType: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation AIGenerateLandingPage($spaceId: ID!, $layoutType: String!) {
+          aiGenerateLandingPage(spaceId: $spaceId, layoutType: $layoutType)
+        }
+      `, { spaceId, layoutType });
+      return data?.aiGenerateLandingPage || null;
+    } catch (err: any) {
+      console.error('generateLandingPageContent error:', err);
+      return null;
+    }
+  },
+
+  generateCaseStudyContent: async (spaceId: string, testimonialIds: string[]) => {
+    try {
+      const data = await gqlRequest(`
+        mutation AIGenerateCaseStudy($spaceId: ID!, $testimonialIds: [ID!]!) {
+          aiGenerateCaseStudy(spaceId: $spaceId, testimonialIds: $testimonialIds)
+        }
+      `, { spaceId, testimonialIds });
+      return data?.aiGenerateCaseStudy || null;
+    } catch (err: any) {
+      console.error('generateCaseStudyContent error:', err);
       return null;
     }
   }

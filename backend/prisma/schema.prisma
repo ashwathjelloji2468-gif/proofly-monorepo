@@ -113,6 +113,10 @@ model Space {
   revenueEvents    RevenueEvent[]
   heatmapEvents    HeatmapEvent[]
   reports          Report[]
+  aiUsage          AIUsage?
+  aiHistory        AIHistory[]
+  aiInsights       AIInsight[]
+  aiJobs           AIJob[]
 }
 
 model SpaceMember {
@@ -281,6 +285,10 @@ model Testimonial {
   space          Space           @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   collectionId   String?
   collection     Collection?     @relation(fields: [collectionId], references: [id], onDelete: SetNull)
+  translations   AITranslation[]
+  aiSummary      AISummary?
+  aiScore        AIScore?
+  aiTags         AITags?
 }
 
 model Reward {
@@ -625,6 +633,105 @@ model Report {
   createdAt  DateTime @default(now())
 
   space      Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model AIUsage {
+  id        String   @id @default(uuid())
+  spaceId   String   @unique
+  credits   Int      @default(0) // total credits used
+  limit     Int      @default(10) // monthly limit
+  updatedAt DateTime @updatedAt
+
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model AIHistory {
+  id          String   @id @default(uuid())
+  spaceId     String
+  feature     String   // REWRITE, TRANSLATE, SOCIAL, SUMMARY, INSIGHTS
+  creditsUsed Int      @default(1)
+  inputLength Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model AIJob {
+  id         String   @id @default(uuid())
+  spaceId    String
+  task       String
+  status     String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  result     String?  // JSON response or path
+  createdAt  DateTime @default(now())
+
+  space      Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model AITranslation {
+  id            String   @id @default(uuid())
+  testimonialId String
+  locale        String   // EN, ES, FR, DE, IT, PT, HI, JA, ZH, KO, AR
+  translatedText String
+  createdAt     DateTime @default(now())
+
+  testimonial   Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+
+  @@index([testimonialId])
+}
+
+model AISummary {
+  id            String   @id @default(uuid())
+  testimonialId String   @unique
+  oneLiner      String
+  twoLiner      String
+  executive     String
+  bulletPoints  String
+  painPoints    String
+  outcomes      String
+  benefits      String
+  createdAt     DateTime @default(now())
+
+  testimonial   Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+}
+
+model AIScore {
+  id            String   @id @default(uuid())
+  testimonialId String   @unique
+  qualityScore  Int      @default(0)
+  credibility   Int      @default(0)
+  specificity   Int      @default(0)
+  storytelling  Int      @default(0)
+  suggestions   String
+  createdAt     DateTime @default(now())
+
+  testimonial   Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+}
+
+model AITags {
+  id            String   @id @default(uuid())
+  testimonialId String   @unique
+  tagsList      String   // Comma separated tags
+  createdAt     DateTime @default(now())
+
+  testimonial   Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade)
+}
+
+model AIInsight {
+  id           String   @id @default(uuid())
+  spaceId      String
+  bestReviewId String?
+  insightsText String
+  personaMatch String
+  missingTags  String
+  createdAt    DateTime @default(now())
+
+  space        Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
 
   @@index([spaceId])
 }

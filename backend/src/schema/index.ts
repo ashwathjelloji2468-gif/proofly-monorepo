@@ -13,7 +13,8 @@ const files = [
   'widget.graphql',
   'collection.graphql',
   'showcase.graphql',
-  'analytics_platform.graphql'
+  'analytics_platform.graphql',
+  'ai_suite.graphql'
 ];
 
 export const typeDefs = files.map(file => {

@@ -1,0 +1,74 @@
+type AIUsage {
+  id: ID!
+  spaceId: ID!
+  credits: Int!
+  limit: Int!
+  updatedAt: String!
+}
+
+type AIHistory {
+  id: ID!
+  spaceId: ID!
+  feature: String!
+  creditsUsed: Int!
+  inputLength: Int!
+  createdAt: String!
+}
+
+type AITranslation {
+  id: ID!
+  testimonialId: ID!
+  locale: String!
+  translatedText: String!
+  createdAt: String!
+}
+
+type AISummary {
+  id: ID!
+  testimonialId: ID!
+  oneLiner: String!
+  twoLiner: String!
+  executive: String!
+  bulletPoints: String!
+  painPoints: String!
+  outcomes: String!
+  benefits: String!
+  createdAt: String!
+}
+
+type AIScore {
+  id: ID!
+  testimonialId: ID!
+  qualityScore: Int!
+  credibility: Int!
+  specificity: Int!
+  storytelling: Int!
+  suggestions: String!
+  createdAt: String!
+}
+
+type AIInsight {
+  id: ID!
+  spaceId: ID!
+  bestReviewId: String
+  insightsText: String!
+  personaMatch: String!
+  missingTags: String!
+  createdAt: String!
+}
+
+extend type Query {
+  aiUsage(spaceId: ID!): AIUsage!
+  aiHistory(spaceId: ID!): [AIHistory!]!
+  aiInsights(spaceId: ID!): [AIInsight!]!
+  aiSearchTestimonials(spaceId: ID!, query: String!): [Testimonial!]!
+}
+
+extend type Mutation {
+  aiRewrite(testimonialId: ID!, tone: String!, options: String): String!
+  aiAnalyzeTestimonial(testimonialId: ID!): AIScore!
+  aiTranslateTestimonial(testimonialId: ID!, locale: String!): AITranslation!
+  aiGenerateSocial(testimonialId: ID!, platform: String!): String!
+  aiGenerateLandingPage(spaceId: ID!, layoutType: String!): String!
+  aiGenerateCaseStudy(spaceId: ID!, testimonialIds: [ID!]!): String!
+}

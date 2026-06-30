@@ -9,6 +9,7 @@ import { widgetResolvers } from './widget';
 import { collectionResolvers } from './collection';
 import { showcaseResolvers } from './showcase';
 import { analyticsPlatformResolvers } from './analytics_platform';
+import { aiSuiteResolvers } from './ai_suite';
 
 export const resolvers = {
   Query: {
@@ -21,7 +22,8 @@ export const resolvers = {
     ...widgetResolvers.Query,
     ...collectionResolvers.Query,
     ...showcaseResolvers.Query,
-    ...analyticsPlatformResolvers.Query
+    ...analyticsPlatformResolvers.Query,
+    ...aiSuiteResolvers.Query
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -34,7 +36,8 @@ export const resolvers = {
     ...widgetResolvers.Mutation,
     ...collectionResolvers.Mutation,
     ...showcaseResolvers.Mutation,
-    ...analyticsPlatformResolvers.Mutation
+    ...analyticsPlatformResolvers.Mutation,
+    ...aiSuiteResolvers.Mutation
   },
   User: authResolvers.User,
   SpaceMember: authResolvers.SpaceMember,
