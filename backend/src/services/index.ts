@@ -18,6 +18,7 @@ import { AISuiteService } from './AISuiteService';
 import { IntegrationService } from './IntegrationService';
 import { WhiteLabelService } from './WhiteLabelService';
 import { EnterpriseSecurityService } from './EnterpriseSecurityService';
+import { MobileNotificationService } from './MobileNotificationService';
 
 export interface Services {
   user: UserService;
@@ -39,6 +40,7 @@ export interface Services {
   integration: IntegrationService;
   whiteLabel: WhiteLabelService;
   enterpriseSecurity: EnterpriseSecurityService;
+  mobileNotification: MobileNotificationService;
 }
 
 const emailService = new EmailService();
@@ -70,6 +72,7 @@ export function createServices(
     aiSuite: new AISuiteService(prisma, currentUser),
     integration: new IntegrationService(prisma, currentUser),
     whiteLabel: new WhiteLabelService(prisma, currentUser),
-    enterpriseSecurity: new EnterpriseSecurityService(prisma, currentUser)
+    enterpriseSecurity: new EnterpriseSecurityService(prisma, currentUser),
+    mobileNotification: new MobileNotificationService(prisma, currentUser)
   };
 }

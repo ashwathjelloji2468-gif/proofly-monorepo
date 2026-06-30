@@ -17,7 +17,8 @@ const files = [
   'ai_suite.graphql',
   'integrations.graphql',
   'white_label.graphql',
-  'enterprise.graphql'
+  'enterprise.graphql',
+  'mobile_notifications.graphql'
 ];
 
 export const typeDefs = files.map(file => {

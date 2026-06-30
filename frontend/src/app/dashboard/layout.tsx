@@ -21,7 +21,10 @@ import {
   ShieldCheck,
   Link2,
   Crown,
-  Shield
+  Shield,
+  Bell,
+  WifiOff,
+  Archive
 } from 'lucide-react';
 
 import { useStore } from '@/store/useStore';
@@ -39,14 +42,40 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [mounted, setMounted] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  const inAppNotifications = useStore(state => state.inAppNotifications);
+  const fetchInAppNotifications = useStore(state => state.fetchInAppNotifications);
+  const markNotificationRead = useStore(state => state.markNotificationRead);
+  const markAllNotificationsRead = useStore(state => state.markAllNotificationsRead);
+
+  const [isOnline, setIsOnline] = useState(true);
+  const [showNotifDrawer, setShowNotifDrawer] = useState(false);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      setIsOnline(navigator.onLine);
+      const handleOnline = () => setIsOnline(true);
+      const handleOffline = () => setIsOnline(false);
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+
+      // Register SW
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(err => {
+          console.warn('Service worker registration failed:', err);
+        });
+      }
+
       const params = new URLSearchParams(window.location.search);
       if (params.get('confetti') === 'true') {
         setShowConfetti(true);
         const cleanUrl = window.location.pathname;
         window.history.replaceState({}, '', cleanUrl);
       }
+
+      return () => {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      };
     }
   }, []);
 
@@ -78,6 +107,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       router.push('/login');
     }
   }, [user, isChecking, mounted, router]);
+
+  useEffect(() => {
+    if (collections.length > 0 && user) {
+      fetchInAppNotifications(collections[0].id);
+    }
+  }, [collections, user]);
 
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <LayoutGrid className="w-4 h-4" /> },
@@ -260,6 +295,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           )}
 
           <button
+            onClick={() => setShowNotifDrawer(true)}
+            className="w-full flex items-center justify-center space-x-2 text-muted-foreground hover:text-brand-emerald hover:bg-brand-emerald/10 py-2 rounded-lg text-xs font-bold transition cursor-pointer relative"
+          >
+            <Bell className="w-4 h-4 text-brand-emerald" />
+            {!isCollapsed && <span>Alert Center</span>}
+            {inAppNotifications.filter(n => n.status === 'UNREAD').length > 0 && (
+              <span className="absolute right-3 top-2 bg-red-500 text-white text-[8px] font-black rounded-full h-4.5 w-4.5 flex items-center justify-center">
+                {inAppNotifications.filter(n => n.status === 'UNREAD').length}
+              </span>
+            )}
+          </button>
+
+          <button
             onClick={handleLogout}
             className="w-full flex items-center justify-center space-x-2 text-muted-foreground hover:text-red-400 hover:bg-red-950/15 py-2 rounded-lg text-xs font-bold transition cursor-pointer"
           >
@@ -280,9 +328,100 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 bg-[#09090B] flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 bg-[#09090B] flex flex-col min-w-0 overflow-y-auto pb-16 md:pb-0">
+        {!isOnline && (
+          <div className="bg-amber-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-center space-x-2 animate-pulse select-none z-50 shadow-md">
+            <WifiOff className="w-4 h-4 shrink-0" />
+            <span>Offline Mode Active. Operations will cache and sync automatically when network returns.</span>
+          </div>
+        )}
         {children}
       </div>
+
+      {/* Bottom Mobile Navigation bar */}
+      <div className="md:hidden border-t border-border-primary bg-[#09090B] px-4 py-3 fixed bottom-0 inset-x-0 z-40 flex items-center justify-around select-none">
+        <Link href="/dashboard" className="flex flex-col items-center text-slate-400 hover:text-white transition">
+          <LayoutGrid className="w-5 h-5" />
+          <span className="text-[9px] mt-0.5">Home</span>
+        </Link>
+        <Link href="/dashboard/collections" className="flex flex-col items-center text-slate-400 hover:text-white transition">
+          <FolderHeart className="w-5 h-5" />
+          <span className="text-[9px] mt-0.5">Spaces</span>
+        </Link>
+        <button 
+          onClick={() => setShowNotifDrawer(true)} 
+          className="flex flex-col items-center text-slate-400 hover:text-white transition relative cursor-pointer"
+        >
+          <Bell className="w-5 h-5 text-brand-emerald" />
+          {inAppNotifications.filter(n => n.status === 'UNREAD').length > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-black rounded-full h-4 w-4 flex items-center justify-center animate-bounce">
+              {inAppNotifications.filter(n => n.status === 'UNREAD').length}
+            </span>
+          )}
+          <span className="text-[9px] mt-0.5">Alerts</span>
+        </button>
+        <Link href="/dashboard/settings" className="flex flex-col items-center text-slate-400 hover:text-white transition">
+          <Settings className="w-5 h-5" />
+          <span className="text-[9px] mt-0.5">Settings</span>
+        </Link>
+      </div>
+
+      {/* In-App Notifications Center Drawer Overlay */}
+      {showNotifDrawer && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+          <div className="w-full max-w-sm bg-[#09090B] border-l border-border-primary h-full shadow-2xl flex flex-col justify-between animate-slide-in">
+            <div>
+              <div className="px-6 py-5 border-b border-border-primary flex items-center justify-between">
+                <span className="text-xs font-black uppercase text-white tracking-wider">Alert notification center</span>
+                <button 
+                  onClick={() => setShowNotifDrawer(false)}
+                  className="text-slate-450 hover:text-white text-xs font-bold px-2 py-1 bg-zinc-900 border border-zinc-800 rounded transition cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                {inAppNotifications.length === 0 ? (
+                  <div className="py-16 text-center text-slate-500 text-xs font-bold border border-dashed border-border-primary rounded-xl">
+                    No active notifications.
+                  </div>
+                ) : (
+                  inAppNotifications.map(notif => (
+                    <div 
+                      key={notif.id} 
+                      onClick={() => markNotificationRead(notif.id)}
+                      className={`border border-border-primary rounded-xl p-4 space-y-2 hover:border-zinc-800 transition cursor-pointer relative ${
+                        notif.status === 'UNREAD' ? 'bg-brand-emerald/5 border-brand-emerald/20' : 'bg-transparent'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[9px] bg-brand-emerald/10 text-brand-emerald px-2 py-0.5 rounded font-mono font-black">{notif.category}</span>
+                        <span className="text-[8px] text-slate-450">{new Date(notif.createdAt).toLocaleTimeString()}</span>
+                      </div>
+                      <span className="text-xs font-bold text-white block">{notif.title}</span>
+                      <p className="text-[10px] text-slate-400 leading-relaxed">{notif.description}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-border-primary bg-[#18181B]/40">
+              <button
+                onClick={() => {
+                  if (collections.length > 0) markAllNotificationsRead(collections[0].id);
+                }}
+                className="w-full bg-brand-emerald hover:opacity-95 text-white font-black text-xs py-3 rounded-lg flex items-center justify-center space-x-1.5 cursor-pointer transition"
+              >
+                <Archive className="w-4 h-4" />
+                <span>Mark all as read</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showConfetti && <ConfettiRibbons />}
     </div>
   );

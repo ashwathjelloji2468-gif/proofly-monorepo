@@ -410,6 +410,16 @@ export interface SsoConfig {
   createdAt: string;
 }
 
+export interface InAppNotification {
+  id: string;
+  spaceId: string;
+  title: string;
+  description: string;
+  category: string;
+  status: string;
+  createdAt: string;
+}
+
 export interface AuditLogMessage {
   id: string;
   userId: string;
@@ -627,6 +637,12 @@ interface AppState {
   fetchIpPolicies: (orgId: string) => Promise<IpPolicy[]>;
   createIpPolicy: (orgId: string, cidr: string, type: string) => Promise<IpPolicy | null>;
   deleteIpPolicy: (id: string) => Promise<boolean>;
+
+  // Mobile notifications actions
+  inAppNotifications: InAppNotification[];
+  fetchInAppNotifications: (spaceId: string) => Promise<InAppNotification[]>;
+  markNotificationRead: (id: string) => Promise<boolean>;
+  markAllNotificationsRead: (spaceId: string) => Promise<boolean>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -1100,6 +1116,7 @@ export const useStore = create<AppState>((set, get) => ({
   customRoles: [],
   ssoConfig: null,
   ipPolicies: [],
+  inAppNotifications: [],
 
 
 
@@ -4202,6 +4219,70 @@ export const useStore = create<AppState>((set, get) => ({
       return success;
     } catch (err: any) {
       console.error('deleteIpPolicy error:', err);
+      return false;
+    }
+  },
+
+  fetchInAppNotifications: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query InAppNotifications($spaceId: ID!) {
+          inAppNotifications(spaceId: $spaceId) {
+            id
+            spaceId
+            title
+            description
+            category
+            status
+            createdAt
+          }
+        }
+      `, { spaceId });
+      const list = data?.inAppNotifications || [];
+      set({ inAppNotifications: list });
+      return list;
+    } catch (err: any) {
+      console.error('fetchInAppNotifications error:', err);
+      return [];
+    }
+  },
+
+  markNotificationRead: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation MarkNotificationAsRead($id: ID!) {
+          markNotificationAsRead(id: $id)
+        }
+      `, { id });
+      const success = data?.markNotificationAsRead || false;
+      if (success) {
+        set(state => ({
+          inAppNotifications: state.inAppNotifications.map(n => n.id === id ? { ...n, status: 'READ' } : n)
+        }));
+      }
+      return success;
+    } catch (err: any) {
+      console.error('markNotificationRead error:', err);
+      return false;
+    }
+  },
+
+  markAllNotificationsRead: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation MarkAllNotificationsAsRead($spaceId: ID!) {
+          markAllNotificationsAsRead(spaceId: $spaceId)
+        }
+      `, { spaceId });
+      const success = data?.markAllNotificationsAsRead || false;
+      if (success) {
+        set(state => ({
+          inAppNotifications: state.inAppNotifications.map(n => ({ ...n, status: 'READ' }))
+        }));
+      }
+      return success;
+    } catch (err: any) {
+      console.error('markAllNotificationsRead error:', err);
       return false;
     }
   }

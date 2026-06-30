@@ -1,0 +1,22 @@
+{
+  "name": "Proofly Testimonial Suite",
+  "short_name": "Proofly",
+  "description": "Enterprise white-label widgets & conversion telemetry tracker.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#09090B",
+  "theme_color": "#10B981",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -13,6 +13,7 @@ import { aiSuiteResolvers } from './ai_suite';
 import { integrationsResolvers } from './integrations';
 import { whiteLabelResolvers } from './white_label';
 import { enterpriseResolvers } from './enterprise';
+import { mobileNotificationsResolvers } from './mobile_notifications';
 
 export const resolvers = {
   Query: {
@@ -29,7 +30,8 @@ export const resolvers = {
     ...aiSuiteResolvers.Query,
     ...integrationsResolvers.Query,
     ...whiteLabelResolvers.Query,
-    ...enterpriseResolvers.Query
+    ...enterpriseResolvers.Query,
+    ...mobileNotificationsResolvers.Query
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -46,7 +48,8 @@ export const resolvers = {
     ...aiSuiteResolvers.Mutation,
     ...integrationsResolvers.Mutation,
     ...whiteLabelResolvers.Mutation,
-    ...enterpriseResolvers.Mutation
+    ...enterpriseResolvers.Mutation,
+    ...mobileNotificationsResolvers.Mutation
   },
   User: authResolvers.User,
   SpaceMember: authResolvers.SpaceMember,

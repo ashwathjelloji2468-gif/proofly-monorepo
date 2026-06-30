@@ -1,0 +1,19 @@
+type InAppNotification {
+  id: ID!
+  spaceId: ID!
+  title: String!
+  description: String!
+  category: String!
+  status: String!
+  createdAt: String!
+}
+
+extend type Query {
+  inAppNotifications(spaceId: ID!): [InAppNotification!]!
+  unreadNotificationsCount(spaceId: ID!): Int!
+}
+
+extend type Mutation {
+  markNotificationAsRead(id: ID!): Boolean!
+  markAllNotificationsAsRead(spaceId: ID!): Boolean!
+}
