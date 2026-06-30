@@ -3,28 +3,27 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy dependency configs
-COPY package*.json ./
 COPY backend/package*.json ./backend/
 COPY frontend/package*.json ./frontend/
 
 # Install dependencies
-RUN npm ci
+RUN npm ci --prefix backend
+RUN npm ci --prefix frontend
 
 # Copy sources
 COPY backend/ ./backend/
 COPY frontend/ ./frontend/
 
 # Generate client and build
-RUN npx prisma generate --schema=./backend/prisma/schema.prisma
-RUN npm run build --workspace=backend
-RUN npm run build --workspace=frontend
+RUN npm run db:generate --prefix backend
+RUN npm run build --prefix backend
+RUN npm run build --prefix frontend
 
 # Runner Stage
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/backend/dist ./backend/dist
 COPY --from=builder /app/backend/node_modules ./backend/node_modules
@@ -33,4 +32,4 @@ COPY --from=builder /app/frontend/public ./frontend/public
 COPY --from=builder /app/frontend/node_modules ./frontend/node_modules
 
 EXPOSE 4000 3000
-CMD ["npm", "start"]
+CMD ["node", "backend/dist/index.js"]
