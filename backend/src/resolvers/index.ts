@@ -12,6 +12,7 @@ import { analyticsPlatformResolvers } from './analytics_platform';
 import { aiSuiteResolvers } from './ai_suite';
 import { integrationsResolvers } from './integrations';
 import { whiteLabelResolvers } from './white_label';
+import { enterpriseResolvers } from './enterprise';
 
 export const resolvers = {
   Query: {
@@ -27,7 +28,8 @@ export const resolvers = {
     ...analyticsPlatformResolvers.Query,
     ...aiSuiteResolvers.Query,
     ...integrationsResolvers.Query,
-    ...whiteLabelResolvers.Query
+    ...whiteLabelResolvers.Query,
+    ...enterpriseResolvers.Query
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -43,7 +45,8 @@ export const resolvers = {
     ...analyticsPlatformResolvers.Mutation,
     ...aiSuiteResolvers.Mutation,
     ...integrationsResolvers.Mutation,
-    ...whiteLabelResolvers.Mutation
+    ...whiteLabelResolvers.Mutation,
+    ...enterpriseResolvers.Mutation
   },
   User: authResolvers.User,
   SpaceMember: authResolvers.SpaceMember,

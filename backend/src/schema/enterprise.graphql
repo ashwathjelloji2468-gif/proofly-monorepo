@@ -1,0 +1,71 @@
+type Organization {
+  id: ID!
+  name: String!
+  createdAt: String!
+  updatedAt: String!
+  spaces: [Space!]!
+  teams: [Team!]!
+  roles: [CustomRole!]!
+  sso: SsoConfig
+  ipPolicies: [IpPolicy!]!
+}
+
+type Team {
+  id: ID!
+  organizationId: ID!
+  name: String!
+  createdAt: String!
+}
+
+type CustomRole {
+  id: ID!
+  organizationId: ID!
+  name: String!
+  permissions: String!
+  createdAt: String!
+}
+
+type IpPolicy {
+  id: ID!
+  organizationId: ID!
+  cidr: String!
+  type: String!
+  createdAt: String!
+}
+
+type SsoConfig {
+  id: ID!
+  organizationId: ID!
+  provider: String!
+  entryPoint: String!
+  issuer: String!
+  status: String!
+  createdAt: String!
+}
+
+type AuditLogMessage {
+  id: ID!
+  userId: ID!
+  action: String!
+  ipAddress: String
+  deviceInfo: String
+  createdAt: String!
+  user: User
+}
+
+extend type Query {
+  organization(id: ID!): Organization!
+  organizationAuditLogs(orgId: ID!): [AuditLogMessage!]!
+  customRoles(orgId: ID!): [CustomRole!]!
+  ssoConfig(orgId: ID!): SsoConfig
+  ipPolicies(orgId: ID!): [IpPolicy!]!
+}
+
+extend type Mutation {
+  createOrganization(name: String!): Organization!
+  createTeam(orgId: ID!, name: String!): Team!
+  createCustomRole(orgId: ID!, name: String!, permissions: String!): CustomRole!
+  updateSsoConfig(orgId: ID!, provider: String!, entryPoint: String!, issuer: String!): SsoConfig!
+  createIpPolicy(orgId: ID!, cidr: String!, type: String!): IpPolicy!
+  deleteIpPolicy(id: ID!): Boolean!
+}

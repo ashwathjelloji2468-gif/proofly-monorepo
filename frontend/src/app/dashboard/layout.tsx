@@ -20,7 +20,8 @@ import {
   User,
   ShieldCheck,
   Link2,
-  Crown
+  Crown,
+  Shield
 } from 'lucide-react';
 
 import { useStore } from '@/store/useStore';
@@ -91,6 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: 'Imports', path: '/dashboard/imports', icon: <DownloadCloud className="w-4 h-4" /> },
     { name: 'Integrations', path: '/dashboard/settings/integrations', icon: <Link2 className="w-4 h-4 text-indigo-400" /> },
     { name: 'White-Label', path: '/dashboard/settings/white-label', icon: <Crown className="w-4 h-4 text-[#F59E0B]" /> },
+    { name: 'Enterprise', path: '/dashboard/settings/enterprise', icon: <Shield className="w-4 h-4 text-brand-emerald" /> },
     { name: 'Settings', path: '/dashboard/settings', icon: <Settings className="w-4 h-4" /> },
   ];
 

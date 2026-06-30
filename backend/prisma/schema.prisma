@@ -124,6 +124,8 @@ model Space {
   connections      IntegrationConnection[]
   webhooksList     WebhookSubscription[]
   apiLogs          ApiLog[]
+  organizationId   String?
+  organization     Organization? @relation(fields: [organizationId], references: [id])
 }
 
 model SpaceMember {
@@ -848,4 +850,58 @@ model SmtpConfig {
   updatedAt   DateTime @updatedAt
 
   space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model Organization {
+  id          String   @id @default(uuid())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  spaces      Space[]
+  teams       Team[]
+  roles       CustomRole[]
+  sso         SsoConfig?
+  ipPolicies  IpPolicy[]
+}
+
+model Team {
+  id             String   @id @default(uuid())
+  organizationId String
+  name           String
+  createdAt      DateTime @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model CustomRole {
+  id             String   @id @default(uuid())
+  organizationId String
+  name           String
+  permissions    String   // Comma separated granular permission strings
+  createdAt      DateTime @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model IpPolicy {
+  id             String   @id @default(uuid())
+  organizationId String
+  cidr           String   // e.g. 192.168.1.0/24
+  type           String   @default("WHITELIST") // WHITELIST, BLACKLIST
+  createdAt      DateTime @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model SsoConfig {
+  id             String   @id @default(uuid())
+  organizationId String   @unique
+  provider       String   // OKTA, AUTH0, GOOGLE_WORKSPACE
+  entryPoint     String
+  issuer         String
+  status         String   @default("ACTIVE") // ACTIVE, DISABLED
+  createdAt      DateTime @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }

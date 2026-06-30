@@ -365,6 +365,65 @@ export interface SmtpConfig {
   updatedAt: string;
 }
 
+export interface Organization {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  spaces?: any[];
+  teams?: Team[];
+  roles?: CustomRole[];
+  sso?: SsoConfig | null;
+  ipPolicies?: IpPolicy[];
+}
+
+export interface Team {
+  id: string;
+  organizationId: string;
+  name: string;
+  createdAt: string;
+}
+
+export interface CustomRole {
+  id: string;
+  organizationId: string;
+  name: string;
+  permissions: string;
+  createdAt: string;
+}
+
+export interface IpPolicy {
+  id: string;
+  organizationId: string;
+  cidr: string;
+  type: string;
+  createdAt: string;
+}
+
+export interface SsoConfig {
+  id: string;
+  organizationId: string;
+  provider: string;
+  entryPoint: string;
+  issuer: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface AuditLogMessage {
+  id: string;
+  userId: string;
+  action: string;
+  ipAddress?: string;
+  deviceInfo?: string;
+  createdAt: string;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
 export interface CollectionAnalytics {
   views: number;
   visitors: number;
@@ -552,6 +611,22 @@ interface AppState {
     senderEmail: string
   ) => Promise<SmtpConfig | null>;
   verifyDomainDNS: (spaceId: string, domain: string) => Promise<any | null>;
+
+  // Enterprise security actions
+  organization: Organization | null;
+  auditLogs: AuditLogMessage[];
+  customRoles: CustomRole[];
+  ssoConfig: SsoConfig | null;
+  ipPolicies: IpPolicy[];
+  fetchOrganization: (id: string) => Promise<Organization | null>;
+  fetchAuditLogs: (orgId: string) => Promise<AuditLogMessage[]>;
+  fetchCustomRoles: (orgId: string) => Promise<CustomRole[]>;
+  createCustomRole: (orgId: string, name: string, permissions: string) => Promise<CustomRole | null>;
+  fetchSsoConfig: (orgId: string) => Promise<SsoConfig | null>;
+  updateSsoConfig: (orgId: string, provider: string, entryPoint: string, issuer: string) => Promise<SsoConfig | null>;
+  fetchIpPolicies: (orgId: string) => Promise<IpPolicy[]>;
+  createIpPolicy: (orgId: string, cidr: string, type: string) => Promise<IpPolicy | null>;
+  deleteIpPolicy: (id: string) => Promise<boolean>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -1020,6 +1095,11 @@ export const useStore = create<AppState>((set, get) => ({
   apiLogs: [],
   whiteLabelConfig: null,
   smtpConfig: null,
+  organization: null,
+  auditLogs: [],
+  customRoles: [],
+  ssoConfig: null,
+  ipPolicies: [],
 
 
 
@@ -3892,6 +3972,237 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (err: any) {
       console.error('verifyDomainDNS error:', err);
       return null;
+    }
+  },
+
+  fetchOrganization: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        query Organization($id: ID!) {
+          organization(id: $id) {
+            id
+            name
+            createdAt
+            updatedAt
+            spaces {
+              id
+              name
+              slug
+            }
+            teams {
+              id
+              name
+              createdAt
+            }
+            roles {
+              id
+              name
+              permissions
+              createdAt
+            }
+            ipPolicies {
+              id
+              cidr
+              type
+              createdAt
+            }
+          }
+        }
+      `, { id });
+      const org = data?.organization || null;
+      set({ organization: org });
+      return org;
+    } catch (err: any) {
+      console.error('fetchOrganization error:', err);
+      return null;
+    }
+  },
+
+  fetchAuditLogs: async (orgId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query OrganizationAuditLogs($orgId: ID!) {
+          organizationAuditLogs(orgId: $orgId) {
+            id
+            userId
+            action
+            ipAddress
+            deviceInfo
+            createdAt
+            user {
+              id
+              name
+              email
+            }
+          }
+        }
+      `, { orgId });
+      const logsList = data?.organizationAuditLogs || [];
+      set({ auditLogs: logsList });
+      return logsList;
+    } catch (err: any) {
+      console.error('fetchAuditLogs error:', err);
+      return [];
+    }
+  },
+
+  fetchCustomRoles: async (orgId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query CustomRoles($orgId: ID!) {
+          customRoles(orgId: $orgId) {
+            id
+            organizationId
+            name
+            permissions
+            createdAt
+          }
+        }
+      `, { orgId });
+      const rolesList = data?.customRoles || [];
+      set({ customRoles: rolesList });
+      return rolesList;
+    } catch (err: any) {
+      console.error('fetchCustomRoles error:', err);
+      return [];
+    }
+  },
+
+  createCustomRole: async (orgId: string, name: string, permissions: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation CreateCustomRole($orgId: ID!, $name: String!, $permissions: String!) {
+          createCustomRole(orgId: $orgId, name: $name, permissions: $permissions) {
+            id
+            organizationId
+            name
+            permissions
+            createdAt
+          }
+        }
+      `, { orgId, name, permissions });
+      const newRole = data?.createCustomRole || null;
+      if (newRole) {
+        set(state => ({ customRoles: [newRole, ...state.customRoles] }));
+      }
+      return newRole;
+    } catch (err: any) {
+      console.error('createCustomRole error:', err);
+      return null;
+    }
+  },
+
+  fetchSsoConfig: async (orgId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query SsoConfig($orgId: ID!) {
+          ssoConfig(orgId: $orgId) {
+            id
+            organizationId
+            provider
+            entryPoint
+            issuer
+            status
+            createdAt
+          }
+        }
+      `, { orgId });
+      const config = data?.ssoConfig || null;
+      set({ ssoConfig: config });
+      return config;
+    } catch (err: any) {
+      console.error('fetchSsoConfig error:', err);
+      return null;
+    }
+  },
+
+  updateSsoConfig: async (orgId: string, provider: string, entryPoint: string, issuer: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation UpdateSsoConfig($orgId: ID!, $provider: String!, $entryPoint: String!, $issuer: String!) {
+          updateSsoConfig(orgId: $orgId, provider: $provider, entryPoint: $entryPoint, issuer: $issuer) {
+            id
+            organizationId
+            provider
+            entryPoint
+            issuer
+            status
+            createdAt
+          }
+        }
+      `, { orgId, provider, entryPoint, issuer });
+      const config = data?.updateSsoConfig || null;
+      if (config) {
+        set({ ssoConfig: config });
+      }
+      return config;
+    } catch (err: any) {
+      console.error('updateSsoConfig error:', err);
+      return null;
+    }
+  },
+
+  fetchIpPolicies: async (orgId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query IpPolicies($orgId: ID!) {
+          ipPolicies(orgId: $orgId) {
+            id
+            organizationId
+            cidr
+            type
+            createdAt
+          }
+        }
+      `, { orgId });
+      const list = data?.ipPolicies || [];
+      set({ ipPolicies: list });
+      return list;
+    } catch (err: any) {
+      console.error('fetchIpPolicies error:', err);
+      return [];
+    }
+  },
+
+  createIpPolicy: async (orgId: string, cidr: string, type: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation CreateIpPolicy($orgId: ID!, $cidr: String!, $type: String!) {
+          createIpPolicy(orgId: $orgId, cidr: $cidr, type: $type) {
+            id
+            organizationId
+            cidr
+            type
+            createdAt
+          }
+        }
+      `, { orgId, cidr, type });
+      const newPolicy = data?.createIpPolicy || null;
+      if (newPolicy) {
+        set(state => ({ ipPolicies: [newPolicy, ...state.ipPolicies] }));
+      }
+      return newPolicy;
+    } catch (err: any) {
+      console.error('createIpPolicy error:', err);
+      return null;
+    }
+  },
+
+  deleteIpPolicy: async (id: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation DeleteIpPolicy($id: ID!) {
+          deleteIpPolicy(id: $id)
+        }
+      `, { id });
+      const success = data?.deleteIpPolicy || false;
+      if (success) {
+        set(state => ({ ipPolicies: state.ipPolicies.filter(p => p.id !== id) }));
+      }
+      return success;
+    } catch (err: any) {
+      console.error('deleteIpPolicy error:', err);
+      return false;
     }
   }
 }));
