@@ -61,6 +61,8 @@ export interface Collection {
   customQuestions: string[];
   slug: string;
   createdAt: string;
+  customDomain?: string;
+  domainStatus?: string;
   reward?: {
     id: string;
     discountCode: string;
@@ -338,6 +340,31 @@ export interface ApiLog {
   createdAt: string;
 }
 
+export interface WhiteLabelConfig {
+  id: string;
+  spaceId: string;
+  brandName: string;
+  logoUrl?: string;
+  darkLogoUrl?: string;
+  faviconUrl?: string;
+  primaryColor: string;
+  secondaryColor: string;
+  accentColor: string;
+  customCss?: string;
+  updatedAt: string;
+}
+
+export interface SmtpConfig {
+  id: string;
+  spaceId: string;
+  host: string;
+  port: number;
+  username: string;
+  senderName: string;
+  senderEmail: string;
+  updatedAt: string;
+}
+
 export interface CollectionAnalytics {
   views: number;
   visitors: number;
@@ -498,6 +525,33 @@ interface AppState {
   connectApp: (spaceId: string, appId: string, config?: string) => Promise<any | null>;
   disconnectApp: (spaceId: string, appId: string) => Promise<boolean>;
   fetchApiLogs: (spaceId: string) => Promise<ApiLog[]>;
+
+  // White-label actions
+  whiteLabelConfig: WhiteLabelConfig | null;
+  smtpConfig: SmtpConfig | null;
+  fetchWhiteLabelConfig: (spaceId: string) => Promise<WhiteLabelConfig | null>;
+  updateWhiteLabelConfig: (
+    spaceId: string,
+    brandName: string,
+    logoUrl?: string | null,
+    darkLogoUrl?: string | null,
+    faviconUrl?: string | null,
+    primaryColor?: string | null,
+    secondaryColor?: string | null,
+    accentColor?: string | null,
+    customCss?: string | null
+  ) => Promise<WhiteLabelConfig | null>;
+  fetchSmtpConfig: (spaceId: string) => Promise<SmtpConfig | null>;
+  updateSmtpConfig: (
+    spaceId: string,
+    host: string,
+    port: number,
+    username: string,
+    passwordPlain: string,
+    senderName: string,
+    senderEmail: string
+  ) => Promise<SmtpConfig | null>;
+  verifyDomainDNS: (spaceId: string, domain: string) => Promise<any | null>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -964,6 +1018,8 @@ export const useStore = create<AppState>((set, get) => ({
   webhooks: [],
   connections: [],
   apiLogs: [],
+  whiteLabelConfig: null,
+  smtpConfig: null,
 
 
 
@@ -3636,6 +3692,206 @@ export const useStore = create<AppState>((set, get) => ({
     } catch (err: any) {
       console.error('fetchApiLogs error:', err);
       return [];
+    }
+  },
+
+  fetchWhiteLabelConfig: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query WhiteLabelConfig($spaceId: ID!) {
+          whiteLabelConfig(spaceId: $spaceId) {
+            id
+            spaceId
+            brandName
+            logoUrl
+            darkLogoUrl
+            faviconUrl
+            primaryColor
+            secondaryColor
+            accentColor
+            customCss
+            updatedAt
+          }
+        }
+      `, { spaceId });
+      const config = data?.whiteLabelConfig || null;
+      set({ whiteLabelConfig: config });
+      return config;
+    } catch (err: any) {
+      console.error('fetchWhiteLabelConfig error:', err);
+      return null;
+    }
+  },
+
+  updateWhiteLabelConfig: async (
+    spaceId: string,
+    brandName: string,
+    logoUrl?: string | null,
+    darkLogoUrl?: string | null,
+    faviconUrl?: string | null,
+    primaryColor?: string | null,
+    secondaryColor?: string | null,
+    accentColor?: string | null,
+    customCss?: string | null
+  ) => {
+    try {
+      const data = await gqlRequest(`
+        mutation UpdateWhiteLabelConfig(
+          $spaceId: ID!
+          $brandName: String!
+          $logoUrl: String
+          $darkLogoUrl: String
+          $faviconUrl: String
+          $primaryColor: String
+          $secondaryColor: String
+          $accentColor: String
+          $customCss: String
+        ) {
+          updateWhiteLabelConfig(
+            spaceId: $spaceId
+            brandName: $brandName
+            logoUrl: $logoUrl
+            darkLogoUrl: $darkLogoUrl
+            faviconUrl: $faviconUrl
+            primaryColor: $primaryColor
+            secondaryColor: $secondaryColor
+            accentColor: $accentColor
+            customCss: $customCss
+          ) {
+            id
+            spaceId
+            brandName
+            logoUrl
+            darkLogoUrl
+            faviconUrl
+            primaryColor
+            secondaryColor
+            accentColor
+            customCss
+            updatedAt
+          }
+        }
+      `, {
+        spaceId,
+        brandName,
+        logoUrl,
+        darkLogoUrl,
+        faviconUrl,
+        primaryColor,
+        secondaryColor,
+        accentColor,
+        customCss
+      });
+      const config = data?.updateWhiteLabelConfig || null;
+      if (config) {
+        set({ whiteLabelConfig: config });
+      }
+      return config;
+    } catch (err: any) {
+      console.error('updateWhiteLabelConfig error:', err);
+      return null;
+    }
+  },
+
+  fetchSmtpConfig: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query SmtpConfig($spaceId: ID!) {
+          smtpConfig(spaceId: $spaceId) {
+            id
+            spaceId
+            host
+            port
+            username
+            senderName
+            senderEmail
+            updatedAt
+          }
+        }
+      `, { spaceId });
+      const config = data?.smtpConfig || null;
+      set({ smtpConfig: config });
+      return config;
+    } catch (err: any) {
+      console.error('fetchSmtpConfig error:', err);
+      return null;
+    }
+  },
+
+  updateSmtpConfig: async (
+    spaceId: string,
+    host: string,
+    port: number,
+    username: string,
+    passwordPlain: string,
+    senderName: string,
+    senderEmail: string
+  ) => {
+    try {
+      const data = await gqlRequest(`
+        mutation UpdateSmtpConfig(
+          $spaceId: ID!
+          $host: String!
+          $port: Int!
+          $username: String!
+          $passwordPlain: String!
+          $senderName: String!
+          $senderEmail: String!
+        ) {
+          updateSmtpConfig(
+            spaceId: $spaceId
+            host: $host
+            port: $port
+            username: $username
+            passwordPlain: $passwordPlain
+            senderName: $senderName
+            senderEmail: $senderEmail
+          ) {
+            id
+            spaceId
+            host
+            port
+            username
+            senderName
+            senderEmail
+            updatedAt
+          }
+        }
+      `, { spaceId, host, port, username, passwordPlain, senderName, senderEmail });
+      const config = data?.updateSmtpConfig || null;
+      if (config) {
+        set({ smtpConfig: config });
+      }
+      return config;
+    } catch (err: any) {
+      console.error('updateSmtpConfig error:', err);
+      return null;
+    }
+  },
+
+  verifyDomainDNS: async (spaceId: string, domain: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation VerifyDomainDNS($spaceId: ID!, $domain: String!) {
+          verifyDomainDNS(spaceId: $spaceId, domain: $domain) {
+            id
+            name
+            slug
+            customDomain
+            domainStatus
+          }
+        }
+      `, { spaceId, domain });
+      const space = data?.verifyDomainDNS || null;
+      if (space) {
+        set(state => ({
+          collections: state.collections.map(c => c.id === spaceId ? { ...c, customDomain: space.customDomain, domainStatus: space.domainStatus } : c)
+        }));
+      }
+      return space;
+    } catch (err: any) {
+      console.error('verifyDomainDNS error:', err);
+      return null;
     }
   }
 }));

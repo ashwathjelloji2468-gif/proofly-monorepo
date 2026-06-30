@@ -15,7 +15,8 @@ const files = [
   'showcase.graphql',
   'analytics_platform.graphql',
   'ai_suite.graphql',
-  'integrations.graphql'
+  'integrations.graphql',
+  'white_label.graphql'
 ];
 
 export const typeDefs = files.map(file => {

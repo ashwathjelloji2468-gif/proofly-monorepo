@@ -1,0 +1,57 @@
+type WhiteLabelConfig {
+  id: ID!
+  spaceId: ID!
+  brandName: String!
+  logoUrl: String
+  darkLogoUrl: String
+  faviconUrl: String
+  primaryColor: String!
+  secondaryColor: String!
+  accentColor: String!
+  customCss: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type SmtpConfig {
+  id: ID!
+  spaceId: ID!
+  host: String!
+  port: Int!
+  username: String!
+  senderName: String!
+  senderEmail: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+extend type Query {
+  whiteLabelConfig(spaceId: ID!): WhiteLabelConfig!
+  smtpConfig(spaceId: ID!): SmtpConfig
+}
+
+extend type Mutation {
+  updateWhiteLabelConfig(
+    spaceId: ID!
+    brandName: String!
+    logoUrl: String
+    darkLogoUrl: String
+    faviconUrl: String
+    primaryColor: String
+    secondaryColor: String
+    accentColor: String
+    customCss: String
+  ): WhiteLabelConfig!
+
+  updateSmtpConfig(
+    spaceId: ID!
+    host: String!
+    port: Int!
+    username: String!
+    passwordPlain: String!
+    senderName: String!
+    senderEmail: String!
+  ): SmtpConfig!
+
+  verifyDomainDNS(spaceId: ID!, domain: String!): Space!
+}

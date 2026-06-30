@@ -16,6 +16,7 @@ import { ShowcaseService } from './ShowcaseService';
 import { AnalyticsPlatformService } from './AnalyticsPlatformService';
 import { AISuiteService } from './AISuiteService';
 import { IntegrationService } from './IntegrationService';
+import { WhiteLabelService } from './WhiteLabelService';
 
 export interface Services {
   user: UserService;
@@ -35,6 +36,7 @@ export interface Services {
   analyticsPlatform: AnalyticsPlatformService;
   aiSuite: AISuiteService;
   integration: IntegrationService;
+  whiteLabel: WhiteLabelService;
 }
 
 const emailService = new EmailService();
@@ -64,6 +66,7 @@ export function createServices(
     showcase: new ShowcaseService(prisma, currentUser),
     analyticsPlatform: new AnalyticsPlatformService(prisma, currentUser),
     aiSuite: new AISuiteService(prisma, currentUser),
-    integration: new IntegrationService(prisma, currentUser)
+    integration: new IntegrationService(prisma, currentUser),
+    whiteLabel: new WhiteLabelService(prisma, currentUser)
   };
 }

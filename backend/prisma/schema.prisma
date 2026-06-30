@@ -92,6 +92,9 @@ model Space {
   theme            String                @default("light")
   showBranding     Boolean               @default(true)
   customDomain     String?
+  domainStatus     String?               @default("PENDING") // PENDING, VERIFIED, FAILED
+  whiteLabel       WhiteLabelConfig?
+  smtp             SmtpConfig?
   createdAt        DateTime              @default(now())
   updatedAt        DateTime              @updatedAt
   userId           String
@@ -813,4 +816,36 @@ model ApiLog {
   space        Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
 
   @@index([spaceId])
+}
+
+model WhiteLabelConfig {
+  id             String   @id @default(uuid())
+  spaceId        String   @unique
+  brandName      String   @default("My Brand")
+  logoUrl        String?
+  darkLogoUrl    String?
+  faviconUrl     String?
+  primaryColor   String   @default("#10B981") // Emerald default
+  secondaryColor String   @default("#8B5CF6") // Purple default
+  accentColor    String   @default("#06B6D4") // Cyan default
+  customCss      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  space          Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model SmtpConfig {
+  id          String   @id @default(uuid())
+  spaceId     String   @unique
+  host        String
+  port        Int      @default(587)
+  username    String
+  password    String   // Encrypted
+  senderName  String
+  senderEmail String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
 }
