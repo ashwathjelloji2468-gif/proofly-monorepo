@@ -54,7 +54,7 @@ type ApiLog {
 
 extend type Query {
   apiKeys(spaceId: ID!): [ApiKey!]!
-  webhooks(spaceId: ID!): [WebhookSubscription!]!
+  webhookSubscriptions(spaceId: ID!): [WebhookSubscription!]!
   connections(spaceId: ID!): [IntegrationConnection!]!
   apiLogs(spaceId: ID!): [ApiLog!]!
 }
@@ -62,8 +62,8 @@ extend type Query {
 extend type Mutation {
   createApiKey(spaceId: ID!, name: String!, scopes: String!): ApiKey!
   revokeApiKey(id: ID!): Boolean!
-  createWebhook(spaceId: ID!, targetUrl: String!, events: String!): WebhookSubscription!
-  deleteWebhook(id: ID!): Boolean!
+  createWebhookSubscription(spaceId: ID!, targetUrl: String!, events: String!): WebhookSubscription!
+  deleteWebhookSubscription(id: ID!): Boolean!
   connectApp(spaceId: ID!, appId: String!, config: String): IntegrationConnection!
   disconnectApp(spaceId: ID!, appId: String!): Boolean!
 }

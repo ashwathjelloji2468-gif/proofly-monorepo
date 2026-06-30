@@ -3525,8 +3525,8 @@ export const useStore = create<AppState>((set, get) => ({
   fetchWebhooks: async (spaceId: string) => {
     try {
       const data = await gqlRequest(`
-        query Webhooks($spaceId: ID!) {
-          webhooks(spaceId: $spaceId) {
+        query WebhookSubscriptions($spaceId: ID!) {
+          webhookSubscriptions(spaceId: $spaceId) {
             id
             spaceId
             targetUrl
@@ -3546,7 +3546,7 @@ export const useStore = create<AppState>((set, get) => ({
           }
         }
       `, { spaceId });
-      const webhooksList = data?.webhooks || [];
+      const webhooksList = data?.webhookSubscriptions || [];
       set({ webhooks: webhooksList });
       return webhooksList;
     } catch (err: any) {
@@ -3558,8 +3558,8 @@ export const useStore = create<AppState>((set, get) => ({
   createWebhook: async (spaceId: string, targetUrl: string, events: string) => {
     try {
       const data = await gqlRequest(`
-        mutation CreateWebhook($spaceId: ID!, $targetUrl: String!, $events: String!) {
-          createWebhook(spaceId: $spaceId, targetUrl: $targetUrl, events: $events) {
+        mutation CreateWebhookSubscription($spaceId: ID!, $targetUrl: String!, $events: String!) {
+          createWebhookSubscription(spaceId: $spaceId, targetUrl: $targetUrl, events: $events) {
             id
             spaceId
             targetUrl
@@ -3570,7 +3570,7 @@ export const useStore = create<AppState>((set, get) => ({
           }
         }
       `, { spaceId, targetUrl, events });
-      const newWebhook = data?.createWebhook || null;
+      const newWebhook = data?.createWebhookSubscription || null;
       if (newWebhook) {
         set(state => ({ webhooks: [newWebhook, ...state.webhooks] }));
       }
@@ -3584,11 +3584,11 @@ export const useStore = create<AppState>((set, get) => ({
   deleteWebhook: async (id: string) => {
     try {
       const data = await gqlRequest(`
-        mutation DeleteWebhook($id: ID!) {
-          deleteWebhook(id: $id)
+        mutation DeleteWebhookSubscription($id: ID!) {
+          deleteWebhookSubscription(id: $id)
         }
       `, { id });
-      const success = data?.deleteWebhook || false;
+      const success = data?.deleteWebhookSubscription || false;
       if (success) {
         set(state => ({ webhooks: state.webhooks.filter(w => w.id !== id) }));
       }

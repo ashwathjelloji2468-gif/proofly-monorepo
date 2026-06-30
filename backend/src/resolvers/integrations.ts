@@ -5,7 +5,7 @@ export const integrationsResolvers = {
     apiKeys: async (_parent: any, args: { spaceId: string }, context: GraphQLContext) => {
       return context.services.integration.getApiKeys(args.spaceId);
     },
-    webhooks: async (_parent: any, args: { spaceId: string }, context: GraphQLContext) => {
+    webhookSubscriptions: async (_parent: any, args: { spaceId: string }, context: GraphQLContext) => {
       return context.services.integration.getWebhooks(args.spaceId);
     },
     connections: async (_parent: any, args: { spaceId: string }, context: GraphQLContext) => {
@@ -23,10 +23,10 @@ export const integrationsResolvers = {
     revokeApiKey: async (_parent: any, args: { id: string }, context: GraphQLContext) => {
       return context.services.integration.revokeApiKey(args.id);
     },
-    createWebhook: async (_parent: any, args: { spaceId: string; targetUrl: string; events: string }, context: GraphQLContext) => {
+    createWebhookSubscription: async (_parent: any, args: { spaceId: string; targetUrl: string; events: string }, context: GraphQLContext) => {
       return context.services.integration.createWebhook(args.spaceId, args.targetUrl, args.events);
     },
-    deleteWebhook: async (_parent: any, args: { id: string }, context: GraphQLContext) => {
+    deleteWebhookSubscription: async (_parent: any, args: { id: string }, context: GraphQLContext) => {
       return context.services.integration.deleteWebhook(args.id);
     },
     connectApp: async (_parent: any, args: { spaceId: string; appId: string; config?: string }, context: GraphQLContext) => {
