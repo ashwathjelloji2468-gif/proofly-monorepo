@@ -107,6 +107,12 @@ model Space {
   showcaseSettings ShowcaseSettings?
   showcaseViews    ShowcaseView[]
   showcaseShares   ShowcaseShare[]
+  visitors         Visitor[]
+  goals            Goal[]
+  conversions      Conversion[]
+  revenueEvents    RevenueEvent[]
+  heatmapEvents    HeatmapEvent[]
+  reports          Report[]
 }
 
 model SpaceMember {
@@ -503,6 +509,122 @@ model ShowcaseShare {
   createdAt     DateTime @default(now())
 
   space         Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model Visitor {
+  id        String   @id @default(uuid())
+  spaceId   String
+  visitorId String   @unique // unique tracking id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  sessions  VisitorSession[]
+  conversions Conversion[]
+  revenueEvents RevenueEvent[]
+
+  @@index([spaceId])
+}
+
+model VisitorSession {
+  id           String   @id @default(uuid())
+  visitorId    String
+  device       String   @default("Desktop")
+  browser      String   @default("Other")
+  os           String   @default("Other")
+  country      String   @default("USA")
+  city         String   @default("Unknown")
+  referrer     String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  startedAt    DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+
+  visitor      Visitor  @relation(fields: [visitorId], references: [visitorId], onDelete: Cascade)
+
+  @@index([visitorId])
+}
+
+model Goal {
+  id          String   @id @default(uuid())
+  spaceId     String
+  name        String
+  description String?
+  triggerType String   // CLICK, VIEW, CUSTOM
+  category    String   // SIGNUP, PURCHASE, LEAD, CUSTOM
+  value       Float    @default(0.0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  conversions Conversion[]
+
+  @@index([spaceId])
+}
+
+model Conversion {
+  id          String   @id @default(uuid())
+  spaceId     String
+  visitorId   String
+  goalId      String
+  value       Float    @default(0.0)
+  createdAt   DateTime @default(now())
+
+  space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  visitor     Visitor  @relation(fields: [visitorId], references: [visitorId], onDelete: Cascade)
+  goal        Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+  @@index([visitorId])
+  @@index([goalId])
+}
+
+model RevenueEvent {
+  id          String   @id @default(uuid())
+  spaceId     String
+  visitorId   String
+  amount      Float
+  currency    String   @default("USD")
+  source      String?  // WIDGET, COLLECTION, SHOWCASE
+  sourceId    String?  // widgetId or collectionId
+  createdAt   DateTime @default(now())
+
+  space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  visitor     Visitor  @relation(fields: [visitorId], references: [visitorId], onDelete: Cascade)
+
+  @@index([spaceId])
+  @@index([visitorId])
+}
+
+model HeatmapEvent {
+  id        String   @id @default(uuid())
+  spaceId   String
+  targetId  String   // widgetId or collectionId
+  type      String   // CLICK, SCROLL
+  x         Float
+  y         Float
+  device    String   @default("Desktop")
+  createdAt DateTime @default(now())
+
+  space     Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+  @@index([spaceId])
+}
+
+model Report {
+  id         String   @id @default(uuid())
+  spaceId    String
+  name       String
+  range      String   // DAILY, WEEKLY, MONTHLY, YEARLY
+  format     String   // CSV, EXCEL, PDF
+  status     String   @default("READY")
+  fileUrl    String?
+  createdAt  DateTime @default(now())
+
+  space      Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
 
   @@index([spaceId])
 }

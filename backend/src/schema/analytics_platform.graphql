@@ -1,0 +1,93 @@
+type Visitor {
+  id: ID!
+  spaceId: ID!
+  visitorId: String!
+  createdAt: String!
+}
+
+type Goal {
+  id: ID!
+  spaceId: ID!
+  name: String!
+  description: String
+  triggerType: String!
+  category: String!
+  value: Float!
+  createdAt: String!
+}
+
+type Report {
+  id: ID!
+  spaceId: ID!
+  name: String!
+  range: String!
+  format: String!
+  status: String!
+  fileUrl: String
+  createdAt: String!
+}
+
+type AdvancedAnalyticsPayload {
+  visitors: Int!
+  views: Int!
+  conversions: Int!
+  conversionRate: Float!
+  revenueInfluenced: Float!
+  devices: [DeviceMetrics!]!
+  browsers: [BrowserMetrics!]!
+  countries: [CountryMetrics!]!
+  traffic: String! # JSON string of views/submissions
+}
+
+type FunnelMetric {
+  step: String!
+  count: Int!
+  percentage: Float!
+}
+
+extend type Query {
+  advancedAnalytics(spaceId: ID!): AdvancedAnalyticsPayload!
+  showcaseFunnel(spaceId: ID!): [FunnelMetric!]!
+  conversionGoals(spaceId: ID!): [Goal!]!
+  telemetryReports(spaceId: ID!): [Report!]!
+}
+
+extend type Mutation {
+  createGoal(
+    spaceId: ID!
+    name: String!
+    description: String
+    triggerType: String!
+    category: String!
+    value: Float!
+  ): Goal!
+
+  logConversion(
+    spaceId: ID!
+    visitorId: String!
+    goalId: ID!
+  ): Boolean!
+
+  logRevenue(
+    spaceId: ID!
+    visitorId: String!
+    amount: Float!
+    source: String
+    sourceId: String
+  ): Boolean!
+
+  logHeatmapPoint(
+    spaceId: ID!
+    targetId: ID!
+    type: String!
+    x: Float!
+    y: Float!
+    device: String!
+  ): Boolean!
+
+  generateReport(
+    spaceId: ID!
+    range: String!
+    format: String!
+  ): Report!
+}

@@ -8,6 +8,7 @@ import { staticPageResolvers } from './staticPage';
 import { widgetResolvers } from './widget';
 import { collectionResolvers } from './collection';
 import { showcaseResolvers } from './showcase';
+import { analyticsPlatformResolvers } from './analytics_platform';
 
 export const resolvers = {
   Query: {
@@ -19,7 +20,8 @@ export const resolvers = {
     ...staticPageResolvers.Query,
     ...widgetResolvers.Query,
     ...collectionResolvers.Query,
-    ...showcaseResolvers.Query
+    ...showcaseResolvers.Query,
+    ...analyticsPlatformResolvers.Query
   },
   Mutation: {
     ...authResolvers.Mutation,
@@ -31,7 +33,8 @@ export const resolvers = {
     ...staticPageResolvers.Mutation,
     ...widgetResolvers.Mutation,
     ...collectionResolvers.Mutation,
-    ...showcaseResolvers.Mutation
+    ...showcaseResolvers.Mutation,
+    ...analyticsPlatformResolvers.Mutation
   },
   User: authResolvers.User,
   SpaceMember: authResolvers.SpaceMember,

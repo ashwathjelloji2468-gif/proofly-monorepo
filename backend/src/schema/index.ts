@@ -12,7 +12,8 @@ const files = [
   'staticPage.graphql',
   'widget.graphql',
   'collection.graphql',
-  'showcase.graphql'
+  'showcase.graphql',
+  'analytics_platform.graphql'
 ];
 
 export const typeDefs = files.map(file => {

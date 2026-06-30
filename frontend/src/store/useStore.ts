@@ -208,6 +208,46 @@ export interface ShowcaseAnalytics {
   traffic: string;
 }
 
+export interface AdvancedAnalytics {
+  visitors: number;
+  views: number;
+  conversions: number;
+  conversionRate: number;
+  revenueInfluenced: number;
+  devices: { device: string; count: number }[];
+  browsers: { browser: string; count: number }[];
+  countries: { country: string; count: number }[];
+  traffic: string;
+}
+
+export interface FunnelMetric {
+  step: string;
+  count: number;
+  percentage: number;
+}
+
+export interface Goal {
+  id: string;
+  spaceId: string;
+  name: string;
+  description?: string;
+  triggerType: string;
+  category: string;
+  value: number;
+  createdAt: string;
+}
+
+export interface Report {
+  id: string;
+  spaceId: string;
+  name: string;
+  range: string;
+  format: string;
+  status: string;
+  fileUrl?: string;
+  createdAt: string;
+}
+
 export interface CollectionAnalytics {
   views: number;
   visitors: number;
@@ -324,6 +364,20 @@ interface AppState {
   trackShowcaseView: (input: any) => Promise<void>;
   trackShowcaseShare: (spaceId: string, platform: string, testimonialId?: string) => Promise<void>;
   fetchShowcaseAnalytics: (spaceId: string) => Promise<ShowcaseAnalytics | null>;
+
+  // Analytics Platform actions
+  advancedAnalytics: AdvancedAnalytics | null;
+  funnelData: FunnelMetric[];
+  goals: Goal[];
+  reports: Report[];
+  fetchAdvancedAnalytics: (spaceId: string) => Promise<AdvancedAnalytics | null>;
+  fetchFunnelData: (spaceId: string) => Promise<FunnelMetric[]>;
+  fetchGoals: (spaceId: string) => Promise<Goal[]>;
+  createGoal: (spaceId: string, name: string, description: string | null, triggerType: string, category: string, value: number) => Promise<Goal | null>;
+  logConversionGoal: (spaceId: string, visitorId: string, goalId: string) => Promise<void>;
+  logRevenueEvent: (spaceId: string, visitorId: string, amount: number, source?: string, sourceId?: string) => Promise<void>;
+  logHeatmapPoint: (spaceId: string, targetId: string, type: string, x: number, y: number, device: string) => Promise<void>;
+  generateReport: (spaceId: string, range: string, format: string) => Promise<Report | null>;
   
   // Testimonials actions
   submitTestimonial: (collectionId: string, testimonial: Omit<Testimonial, 'id' | 'collection_id' | 'status' | 'sentiment' | 'keywords' | 'createdAt' | 'views' | 'clicks' | 'shares'> & { videoBlob?: Blob }) => Promise<Testimonial>;
@@ -779,6 +833,10 @@ export const useStore = create<AppState>((set, get) => ({
   collectionAnalytics: null,
   showcaseSettings: null,
   showcaseAnalytics: null,
+  advancedAnalytics: null,
+  funnelData: [],
+  goals: [],
+  reports: [],
 
 
 
@@ -2854,6 +2912,190 @@ export const useStore = create<AppState>((set, get) => ({
       return analytics;
     } catch (err: any) {
       console.error('fetchShowcaseAnalytics error:', err);
+      return null;
+    }
+  },
+
+  fetchAdvancedAnalytics: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query AdvancedAnalytics($spaceId: ID!) {
+          advancedAnalytics(spaceId: $spaceId) {
+            visitors
+            views
+            conversions
+            conversionRate
+            revenueInfluenced
+            devices {
+              device
+              count
+            }
+            browsers {
+              browser
+              count
+            }
+            countries {
+              country
+              count
+            }
+            traffic
+          }
+        }
+      `, { spaceId });
+      const analytics = data?.advancedAnalytics || null;
+      set({ advancedAnalytics: analytics });
+      return analytics;
+    } catch (err: any) {
+      console.error('fetchAdvancedAnalytics error:', err);
+      return null;
+    }
+  },
+
+  fetchFunnelData: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query ShowcaseFunnel($spaceId: ID!) {
+          showcaseFunnel(spaceId: $spaceId) {
+            step
+            count
+            percentage
+          }
+        }
+      `, { spaceId });
+      const funnel = data?.showcaseFunnel || [];
+      set({ funnelData: funnel });
+      return funnel;
+    } catch (err: any) {
+      console.error('fetchFunnelData error:', err);
+      return [];
+    }
+  },
+
+  fetchGoals: async (spaceId: string) => {
+    try {
+      const data = await gqlRequest(`
+        query ConversionGoals($spaceId: ID!) {
+          conversionGoals(spaceId: $spaceId) {
+            id
+            spaceId
+            name
+            description
+            triggerType
+            category
+            value
+            createdAt
+          }
+        }
+      `, { spaceId });
+      const goalsList = data?.conversionGoals || [];
+      set({ goals: goalsList });
+      return goalsList;
+    } catch (err: any) {
+      console.error('fetchGoals error:', err);
+      return [];
+    }
+  },
+
+  createGoal: async (spaceId: string, name: string, description: string | null, triggerType: string, category: string, value: number) => {
+    try {
+      const data = await gqlRequest(`
+        mutation CreateGoal(
+          $spaceId: ID!
+          $name: String!
+          $description: String
+          $triggerType: String!
+          $category: String!
+          $value: Float!
+        ) {
+          createGoal(
+            spaceId: $spaceId
+            name: $name
+            description: $description
+            triggerType: $triggerType
+            category: $category
+            value: $value
+          ) {
+            id
+            spaceId
+            name
+            description
+            triggerType
+            category
+            value
+            createdAt
+          }
+        }
+      `, { spaceId, name, description, triggerType, category, value });
+      const newGoal = data?.createGoal || null;
+      if (newGoal) {
+        set(state => ({ goals: [newGoal, ...state.goals] }));
+      }
+      return newGoal;
+    } catch (err: any) {
+      console.error('createGoal error:', err);
+      return null;
+    }
+  },
+
+  logConversionGoal: async (spaceId: string, visitorId: string, goalId: string) => {
+    try {
+      await gqlRequest(`
+        mutation LogConversion($spaceId: ID!, $visitorId: String!, $goalId: ID!) {
+          logConversion(spaceId: $spaceId, visitorId: $visitorId, goalId: $goalId)
+        }
+      `, { spaceId, visitorId, goalId });
+    } catch (err: any) {
+      console.error('logConversionGoal error:', err);
+    }
+  },
+
+  logRevenueEvent: async (spaceId: string, visitorId: string, amount: number, source?: string, sourceId?: string) => {
+    try {
+      await gqlRequest(`
+        mutation LogRevenue($spaceId: ID!, $visitorId: String!, $amount: Float!, $source: String, $sourceId: String) {
+          logRevenue(spaceId: $spaceId, visitorId: $visitorId, amount: $amount, source: $source, sourceId: $sourceId)
+        }
+      `, { spaceId, visitorId, amount, source, sourceId });
+    } catch (err: any) {
+      console.error('logRevenueEvent error:', err);
+    }
+  },
+
+  logHeatmapPoint: async (spaceId: string, targetId: string, type: string, x: number, y: number, device: string) => {
+    try {
+      await gqlRequest(`
+        mutation LogHeatmapPoint($spaceId: ID!, $targetId: ID!, $type: String!, $x: Float!, $y: Float!, $device: String!) {
+          logHeatmapPoint(spaceId: $spaceId, targetId: $targetId, type: $type, x: $x, y: $y, device: $device)
+        }
+      `, { spaceId, targetId, type, x, y, device });
+    } catch (err: any) {
+      console.error('logHeatmapPoint error:', err);
+    }
+  },
+
+  generateReport: async (spaceId: string, range: string, format: string) => {
+    try {
+      const data = await gqlRequest(`
+        mutation GenerateReport($spaceId: ID!, $range: String!, $format: String!) {
+          generateReport(spaceId: $spaceId, range: $range, format: $format) {
+            id
+            spaceId
+            name
+            range
+            format
+            status
+            fileUrl
+            createdAt
+          }
+        }
+      `, { spaceId, range, format });
+      const newReport = data?.generateReport || null;
+      if (newReport) {
+        set(state => ({ reports: [newReport, ...state.reports] }));
+      }
+      return newReport;
+    } catch (err: any) {
+      console.error('generateReport error:', err);
       return null;
     }
   }
