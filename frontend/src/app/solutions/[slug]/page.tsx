@@ -248,7 +248,7 @@ export default function SolutionsDetailPage() {
   }
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none relative overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  relative overflow-hidden">
       <Navbar />
 
       {/* Dynamic Background Glow */}
@@ -375,7 +375,7 @@ export default function SolutionsDetailPage() {
           <div className="space-y-3">
             <div className="flex space-x-0.5">
               {[...Array(5)].map((_, i) => (
-                <span key={i} className="text-sm select-none" style={{ color: data.accentColor }}>★</span>
+                <span key={i} className="text-sm " style={{ color: data.accentColor }}>★</span>
               ))}
             </div>
             <p className="text-sm text-slate-200 italic leading-relaxed font-medium">

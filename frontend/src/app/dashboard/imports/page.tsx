@@ -178,7 +178,7 @@ export default function ImportsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
           {/* Navigation Sidebar */}
-          <aside className="md:col-span-1 space-y-2 select-none">
+          <aside className="md:col-span-1 space-y-2 ">
             {[
               { id: 'x', label: 'Import from X', desc: 'Paste Tweet URLs', icon: <TwitterIcon className="w-4 h-4 text-brand-teal" /> },
               { id: 'linkedin', label: 'LinkedIn Connection', desc: 'Paste recommendations', icon: <LinkedinIcon className="w-4 h-4 text-brand-emerald" /> },
@@ -200,7 +200,7 @@ export default function ImportsPage() {
                 {tab.icon}
                 <div>
                   <span className="text-xs font-bold block">{tab.label}</span>
-                  <span className="text-[9px] text-muted-foreground block">{tab.desc}</span>
+                  <span className="text-[11px] text-muted-foreground block">{tab.desc}</span>
                 </div>
               </button>
             ))}

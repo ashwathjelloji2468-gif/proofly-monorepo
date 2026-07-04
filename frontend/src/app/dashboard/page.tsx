@@ -27,7 +27,7 @@ export default function DashboardHome() {
   const textTestimonials = totalTestimonials - videoTestimonials;
 
   // Aggregate simulated metrics
-  const totalViews = testimonials.reduce((sum, t) => sum + t.views, 0) + 145;
+  const totalViews = testimonials.reduce((sum, t) => sum + t.views, 0) ;
   const conversionRate = totalViews > 0 ? ((totalTestimonials / totalViews) * 100).toFixed(1) : '0.0';
 
   const recentActivity = [...testimonials]
@@ -170,7 +170,7 @@ export default function DashboardHome() {
             </div>
             <div className="flex items-baseline space-x-1.5">
               <span className="text-3xl font-black text-white">{conversionRate}%</span>
-              <span className="text-[10px] text-brand-emerald font-bold">+2.4%</span>
+              <span className="text-[10px] text-brand-emerald font-bold">—</span>
             </div>
           </div>
         </div>
@@ -294,11 +294,11 @@ export default function DashboardHome() {
                       <p className="text-slate-200">
                         <strong>{act.name}</strong> submitted a new {act.video_url ? 'video' : 'text'} testimonial.
                       </p>
-                      <span className="text-[9px] text-muted-foreground" suppressHydrationWarning>{new Date(act.createdAt).toLocaleDateString()}</span>
+                      <span className="text-[11px] text-muted-foreground" suppressHydrationWarning>{new Date(act.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
                   
-                  <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase border ${
+                  <span className={`px-2 py-0.5 rounded text-[11px] font-black uppercase border ${
                     act.status === 'approved' 
                       ? 'bg-brand-emerald/10 text-brand-emerald border-brand-emerald/30' 
                       : 'bg-zinc-800 text-zinc-400 border-zinc-700'

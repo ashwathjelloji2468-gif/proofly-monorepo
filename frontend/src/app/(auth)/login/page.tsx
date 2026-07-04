@@ -91,7 +91,7 @@ function LoginContent() {
               <ProoflyLogo iconSize={36} showText={true} />
             </Link>
             <h2 className="text-xl font-bold tracking-tight text-white mt-4">Welcome back</h2>
-            <p className="text-muted-foreground text-xs">Enter your details to access your SaaS dashboard</p>
+            <p className="text-muted-foreground text-xs">Sign in to your Proofly account</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -182,13 +182,13 @@ function LoginContent() {
               href={`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000'}/auth/google`}
               className="bg-[#09090B] border border-border-primary hover:bg-[#18181B] text-slate-300 text-[10px] font-bold py-2.5 px-4 rounded-lg flex items-center justify-center space-x-1.5 cursor-pointer transition"
             >
-              <span>Google Login</span>
+              <span>Continue with Google</span>
             </a>
             <a
               href={`${process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000'}/auth/github`}
               className="bg-[#09090B] border border-border-primary hover:bg-[#18181B] text-slate-300 text-[10px] font-bold py-2.5 px-4 rounded-lg flex items-center justify-center space-x-1.5 cursor-pointer transition"
             >
-              <span>GitHub Login</span>
+              <span>Continue with GitHub</span>
             </a>
           </div>
 

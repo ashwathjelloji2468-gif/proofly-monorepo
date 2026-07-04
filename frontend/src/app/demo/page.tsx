@@ -156,7 +156,7 @@ export default function DemoPlayground() {
 
           {/* 1. Layout Selection */}
           <div className="space-y-2">
-            <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest block">Widget Display Layout</label>
+            <label className="text-[11px] font-black text-zinc-400 uppercase tracking-widest block">Widget Display Layout</label>
             <div className="grid grid-cols-2 gap-2">
               {(['masonry', 'grid', 'carousel', 'list'] as const).map(mode => (
                 <button
@@ -176,7 +176,7 @@ export default function DemoPlayground() {
 
           {/* 2. Color Theme Selection */}
           <div className="space-y-2">
-            <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest block">Theme Color Accent</label>
+            <label className="text-[11px] font-black text-zinc-400 uppercase tracking-widest block">Theme Color Accent</label>
             <div className="grid grid-cols-4 gap-2">
               {(['emerald', 'teal', 'indigo', 'slate'] as const).map(color => {
                 const colors = {
@@ -205,12 +205,12 @@ export default function DemoPlayground() {
 
           {/* 3. Micro-Interaction Toggles */}
           <div className="space-y-3">
-            <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest block">Micro-Interactions</label>
+            <label className="text-[11px] font-black text-zinc-400 uppercase tracking-widest block">Micro-Interactions</label>
             
             <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-900/60 border border-border-primary/80">
               <div>
                 <span className="text-[11px] font-extrabold text-white block">3D Perspective Tilt</span>
-                <span className="text-[9px] text-slate-400">Card responds to mouse movement coordinates</span>
+                <span className="text-[11px] text-slate-400">Card responds to mouse movement coordinates</span>
               </div>
               <input
                 type="checkbox"
@@ -223,7 +223,7 @@ export default function DemoPlayground() {
             <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-900/60 border border-border-primary/80">
               <div>
                 <span className="text-[11px] font-extrabold text-white block">Aesthetic Glow Shadow</span>
-                <span className="text-[9px] text-slate-400">Mesh spotlight overlays on card faces</span>
+                <span className="text-[11px] text-slate-400">Mesh spotlight overlays on card faces</span>
               </div>
               <input
                 type="checkbox"
@@ -237,7 +237,7 @@ export default function DemoPlayground() {
           {/* 4. Glow Intensity Selection */}
           {enableGlow && (
             <div className="space-y-2">
-              <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest block">Glow Spotlight Density</label>
+              <label className="text-[11px] font-black text-zinc-400 uppercase tracking-widest block">Glow Spotlight Density</label>
               <div className="flex items-center space-x-1.5 p-1 bg-zinc-900/80 border border-border-primary rounded-xl">
                 {(['low', 'medium', 'high'] as const).map(intensity => (
                   <button
@@ -256,13 +256,13 @@ export default function DemoPlayground() {
 
           {/* 5. Smart Ranking */}
           <div className="space-y-2">
-            <label className="text-[9px] font-black text-zinc-400 uppercase tracking-widest block">AI Smart Sorting Rule</label>
+            <label className="text-[11px] font-black text-zinc-400 uppercase tracking-widest block">AI Smart Sorting Rule</label>
             <div className="flex items-center space-x-1.5 p-1 bg-zinc-900/80 border border-border-primary rounded-xl">
               {(['default', 'ctr', 'views', 'trust'] as const).map(rule => (
                 <button
                   key={rule}
                   onClick={() => setSortBy(rule)}
-                  className={`flex-1 text-[9px] font-black uppercase py-2 rounded-lg cursor-pointer transition ${
+                  className={`flex-1 text-[11px] font-black uppercase py-2 rounded-lg cursor-pointer transition ${
                     sortBy === rule ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:text-white'
                   }`}
                 >
@@ -270,7 +270,7 @@ export default function DemoPlayground() {
                 </button>
               ))}
             </div>
-            <div className="bg-zinc-900/40 p-2.5 rounded-lg border border-border-primary/50 flex space-x-2 text-[9px] text-slate-400 italic">
+            <div className="bg-zinc-900/40 p-2.5 rounded-lg border border-border-primary/50 flex space-x-2 text-[11px] text-slate-400 italic">
               <Info className="w-3.5 h-3.5 text-brand-teal shrink-0 mt-0.5" />
               <span>
                 {sortBy === 'default' && "Standard chronologically approved testimonials pipeline feed."}
@@ -415,7 +415,7 @@ export default function DemoPlayground() {
 
             {/* Smart Ranking Highlight (Views / conversion label) */}
             <span 
-              className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider"
+              className="px-1.5 py-0.5 rounded text-[11px] font-black uppercase tracking-wider"
               style={{
                 backgroundColor: `${activeColors.primary}20`,
                 border: `1px solid ${activeColors.primary}30`,
@@ -432,7 +432,7 @@ export default function DemoPlayground() {
           {/* AI highlights if available */}
           {t.bestQuoteHighlight && (
             <div 
-              className="text-[9px] font-black tracking-wide uppercase px-2 py-0.5 rounded inline-block"
+              className="text-[11px] font-black tracking-wide uppercase px-2 py-0.5 rounded inline-block"
               style={{
                 backgroundColor: `${activeColors.primary}10`,
                 color: activeColors.primary,
@@ -462,7 +462,7 @@ export default function DemoPlayground() {
               
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/spotlight:opacity-100 transition duration-300 flex items-center justify-center">
                 <div 
-                  className="text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center space-x-1.5 shadow-lg transform scale-90 group-hover/spotlight:scale-100 transition duration-300"
+                  className="text-white px-3 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center space-x-1.5 shadow-lg transform scale-90 group-hover/spotlight:scale-100 transition duration-300"
                   style={{
                     backgroundColor: activeColors.primary,
                     boxShadow: `0 0 15px ${activeColors.primary}50`
@@ -473,7 +473,7 @@ export default function DemoPlayground() {
                 </div>
               </div>
 
-              <div className="absolute bottom-2 left-2 bg-[#09090B]/85 backdrop-blur text-[8px] font-black text-white px-2 py-0.5 rounded border border-border-primary/50 flex items-center space-x-1 uppercase tracking-wider">
+              <div className="absolute bottom-2 left-2 bg-[#09090B]/85 backdrop-blur text-[11px] font-black text-white px-2 py-0.5 rounded border border-border-primary/50 flex items-center space-x-1 uppercase tracking-wider">
                 <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: activeColors.primary }} />
                 <span>Live Video</span>
               </div>
@@ -496,7 +496,7 @@ export default function DemoPlayground() {
           </div>
 
           <span 
-            className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider"
+            className="px-2 py-0.5 rounded text-[11px] font-black uppercase tracking-wider"
             style={{
               backgroundColor: `${activeColors.primary}15`,
               color: activeColors.primary,

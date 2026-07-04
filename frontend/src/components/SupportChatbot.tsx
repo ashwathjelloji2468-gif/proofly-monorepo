@@ -248,7 +248,7 @@ export function SupportChatbot() {
                 <div>
                   <div className="flex items-center space-x-1.5">
                     <span className="text-xs font-bold text-white">Fin AI Assistant</span>
-                    <span className="bg-brand-teal/10 text-brand-teal px-1 py-0.5 rounded-[4px] text-[8px] font-black uppercase tracking-wider">AI Support</span>
+                    <span className="bg-brand-teal/10 text-brand-teal px-1 py-0.5 rounded-[4px] text-[11px] font-black uppercase tracking-wider">AI Support</span>
                   </div>
                   <span className="text-[10px] text-zinc-500 block flex items-center space-x-1">
                     <span>Answers instantly ·</span>
@@ -328,7 +328,7 @@ export function SupportChatbot() {
                         {msg.text}
                       </div>
                     )}
-                    <span className="text-[8px] text-zinc-600 font-mono self-start pl-1">
+                    <span className="text-[11px] text-zinc-600 font-mono self-start pl-1">
                       {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
@@ -355,9 +355,9 @@ export function SupportChatbot() {
                     </svg>
                   </div>
                   <div className="bg-zinc-900 border border-zinc-800 px-3 py-2 rounded-xl rounded-tl-none flex space-x-1 items-center">
-                    <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-pulse" style={{ animationDelay: '0ms' }} />
+                    <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-pulse" style={{ animationDelay: '150ms' }} />
+                    <div className="w-1.5 h-1.5 bg-brand-teal rounded-full animate-pulse" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}
@@ -365,7 +365,7 @@ export function SupportChatbot() {
               {/* Suggestions Quick Buttons */}
               {messages.length === 1 && !isTyping && (
                 <div className="pt-2 pl-8 space-y-1.5">
-                  <span className="text-[9px] font-extrabold text-zinc-600 uppercase tracking-widest block mb-1">Fin Help Directory</span>
+                  <span className="text-[11px] font-extrabold text-zinc-600 uppercase tracking-widest block mb-1">Fin Help Directory</span>
                   <button
                     onClick={() => handleSuggestionClick("💬 How do I collect testimonials?", "collect")}
                     className="w-full text-left bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-brand-teal/40 p-2.5 rounded-lg text-[10px] font-bold text-slate-400 cursor-pointer block transition"
@@ -418,7 +418,7 @@ export function SupportChatbot() {
                 href="https://fin.ai/?referer=messenger" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-[8px] text-zinc-500 hover:text-brand-teal transition inline-flex items-center space-x-0.5"
+                className="text-[11px] text-zinc-500 hover:text-brand-teal transition inline-flex items-center space-x-0.5"
               >
                 <span>Powered by</span>
                 <span className="font-extrabold flex items-center">

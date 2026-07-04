@@ -191,7 +191,7 @@ export function Navbar() {
   return (
     <>
       <header 
-        className={`fixed left-0 right-0 z-50 transition-all duration-300 w-full select-none ${
+        className={`fixed left-0 right-0 z-50 transition-all duration-300 w-full  ${
           isScrolled ? 'top-2' : 'top-4'
         }`}
       >
@@ -266,7 +266,7 @@ export function Navbar() {
                         </div>
                         <div className="text-left space-y-0.5">
                           <h4 className="text-[11px] font-bold text-white tracking-wide">{item.title}</h4>
-                          <p className="text-[9px] text-slate-400 leading-normal">{item.desc}</p>
+                          <p className="text-[11px] text-slate-400 leading-normal">{item.desc}</p>
                         </div>
                       </Link>
                     ))}
@@ -315,7 +315,7 @@ export function Navbar() {
                         </div>
                         <div className="text-left space-y-0.5">
                           <h4 className="text-[11px] font-bold text-white tracking-wide">{item.title}</h4>
-                          <p className="text-[9px] text-slate-400 leading-normal">{item.desc}</p>
+                          <p className="text-[11px] text-slate-400 leading-normal">{item.desc}</p>
                         </div>
                       </Link>
                     ))}
@@ -464,7 +464,7 @@ export function Navbar() {
             >
               <Search className="w-3.5 h-3.5" />
               <span className="text-[10px] font-bold tracking-wider">Search</span>
-              <kbd className="text-[8px] bg-white/10 px-1.5 py-0.5 rounded font-mono font-black text-slate-300 border border-white/5">
+              <kbd className="text-[11px] bg-white/10 px-1.5 py-0.5 rounded font-mono font-black text-slate-300 border border-white/5">
                 ⌘K
               </kbd>
             </button>
@@ -542,7 +542,7 @@ export function Navbar() {
                 </div>
 
                 <div className="flex flex-col space-y-1.5 text-left">
-                  <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">Navigation</span>
+                  <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest block mb-1">Navigation</span>
                   {[
                     { title: 'Product Features', id: 'features' },
                     { title: 'Wall of Love', id: 'showcase' },
@@ -562,7 +562,7 @@ export function Navbar() {
                 </div>
 
                 <div className="flex flex-col space-y-1.5 text-left pt-2 border-t border-white/5">
-                  <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">Actions</span>
+                  <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest block mb-1">Actions</span>
                   <Link href="/demo" onClick={() => setIsOpen(false)} className="flex items-center justify-between p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 text-xs font-semibold transition">
                     <span>Live Demo</span>
                     <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
@@ -644,11 +644,11 @@ export function Navbar() {
                     >
                       <div className="flex flex-col space-y-0.5 text-left">
                         <span className="text-xs font-bold tracking-wide">{cmd.name}</span>
-                        <span className="text-[9px] text-slate-500 font-medium">{cmd.description}</span>
+                        <span className="text-[11px] text-slate-500 font-medium">{cmd.description}</span>
                       </div>
                       
                       {idx === selectedIndex && (
-                        <span className="text-[8px] uppercase font-black text-[#6366F1] bg-[#6366F1]/10 border border-[#6366F1]/20 px-2 py-0.5 rounded tracking-widest flex items-center space-x-0.5">
+                        <span className="text-[11px] uppercase font-black text-[#6366F1] bg-[#6366F1]/10 border border-[#6366F1]/20 px-2 py-0.5 rounded tracking-widest flex items-center space-x-0.5">
                           <span>Select</span>
                           <span>↵</span>
                         </span>
@@ -656,15 +656,15 @@ export function Navbar() {
                     </button>
                   ))
                 ) : (
-                  <div className="py-12 text-center flex flex-col items-center justify-center space-y-1.5 select-none">
+                  <div className="py-12 text-center flex flex-col items-center justify-center space-y-1.5 ">
                     <span className="text-zinc-600 text-xs">No matching commands found.</span>
-                    <span className="text-[9px] text-zinc-500">Try searching "AI", "Pricing" or "Embeds"</span>
+                    <span className="text-[11px] text-zinc-500">Try searching "AI", "Pricing" or "Embeds"</span>
                   </div>
                 )}
               </div>
 
               {/* Command Palette Footer */}
-              <div className="border-t border-white/[0.06] bg-white/[0.01] px-4 py-2 flex items-center justify-between text-[8.5px] text-slate-500 select-none">
+              <div className="border-t border-white/[0.06] bg-white/[0.01] px-4 py-2 flex items-center justify-between text-[8.5px] text-slate-500 ">
                 <div className="flex items-center space-x-3">
                   <span className="flex items-center space-x-1">
                     <kbd className="bg-white/5 border border-white/10 px-1 rounded font-mono">↑↓</kbd>

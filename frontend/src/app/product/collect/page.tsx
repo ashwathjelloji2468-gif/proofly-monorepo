@@ -53,7 +53,7 @@ export default function CollectProductPage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans ">
       <Navbar />
 
       {/* Hero Section */}
@@ -252,12 +252,12 @@ export default function CollectProductPage() {
               )}
 
               {/* Internal simulator preview contents */}
-              <div className="w-full h-full flex flex-col justify-between text-left relative z-10 select-none overflow-y-auto pr-0.5 animate-fadeIn">
+              <div className="w-full h-full flex flex-col justify-between text-left relative z-10  overflow-y-auto pr-0.5 animate-fadeIn">
                 
                 {/* Brand header */}
                 <div className="flex items-center space-x-2.5 pb-2.5 border-b border-white/5 mt-2">
                   <div 
-                    className="w-6 h-6 rounded-full flex items-center justify-center font-black text-[9px] text-white shrink-0 shadow-lg"
+                    className="w-6 h-6 rounded-full flex items-center justify-center font-black text-[11px] text-white shrink-0 shadow-lg"
                     style={{ backgroundColor: themeColor }}
                   >
                     {spaceName ? spaceName.charAt(0).toUpperCase() : 'P'}
@@ -273,7 +273,7 @@ export default function CollectProductPage() {
                   <h3 className="text-xs sm:text-sm font-extrabold text-white leading-tight">
                     {headerTitle || 'Love our product?'}
                   </h3>
-                  <p className="text-[9px] sm:text-[10px] text-slate-400 leading-relaxed">
+                  <p className="text-[11px] sm:text-[10px] text-slate-400 leading-relaxed">
                     {customMessage || 'Share details about your experience...'}
                   </p>
                 </div>
@@ -281,11 +281,11 @@ export default function CollectProductPage() {
                 {/* Guide questions box */}
                 {questions.length > 0 && (
                   <div className="bg-zinc-950/60 border border-white/5 rounded-xl p-3 space-y-1.5 mb-2.5 text-left">
-                    <span className="text-[8px] font-black uppercase text-zinc-500 tracking-widest block">Guide Checklist</span>
+                    <span className="text-[11px] font-black uppercase text-zinc-500 tracking-widest block">Guide Checklist</span>
                     <ul className="space-y-1 text-[8.5px] text-slate-300 leading-snug">
                       {questions.map((q, idx) => (
                         <li key={idx} className="flex items-start space-x-1.5">
-                          <span className="text-[7.5px] select-none" style={{ color: themeColor }}>✓</span>
+                          <span className="text-[7.5px] " style={{ color: themeColor }}>✓</span>
                           <span>{q}</span>
                         </li>
                       ))}

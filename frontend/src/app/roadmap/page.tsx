@@ -75,7 +75,7 @@ export default function RoadmapPage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       {/* Hero Section */}
@@ -187,12 +187,12 @@ export default function RoadmapPage() {
                     >
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className={`text-[8px] font-black px-1.5 py-0.2 rounded uppercase ${
+                          <span className={`text-[11px] font-black px-1.5 py-0.5 rounded uppercase ${
                             item.category === 'AI' ? 'bg-[#6366F1]/10 text-[#6366F1]' : item.category === 'Core' ? 'bg-brand-teal/10 text-brand-teal' : 'bg-blue-500/10 text-blue-400'
                           }`}>
                             {item.category}
                           </span>
-                          <span className={`text-[8px] font-bold ${
+                          <span className={`text-[11px] font-bold ${
                             item.priority === 'HIGH' ? 'text-rose-400' : item.priority === 'MEDIUM' ? 'text-amber-400' : 'text-slate-400'
                           }`}>
                             {item.priority}
@@ -269,7 +269,7 @@ export default function RoadmapPage() {
 
               <form onSubmit={handleCreateItem} className="space-y-3.5">
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Feature Title</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Feature Title</label>
                   <input 
                     type="text" 
                     required
@@ -281,7 +281,7 @@ export default function RoadmapPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Description</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Description</label>
                   <textarea 
                     required
                     value={newDesc}
@@ -293,7 +293,7 @@ export default function RoadmapPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Category</label>
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Category</label>
                     <select
                       value={newCategory}
                       onChange={(e: any) => setNewCategory(e.target.value)}
@@ -306,7 +306,7 @@ export default function RoadmapPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Priority</label>
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Priority</label>
                     <select
                       value={newPriority}
                       onChange={(e: any) => setNewPriority(e.target.value)}
@@ -320,7 +320,7 @@ export default function RoadmapPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Estimated Release</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Estimated Release</label>
                   <input 
                     type="text" 
                     value={newRelease}
@@ -368,7 +368,7 @@ export default function RoadmapPage() {
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="flex items-center space-x-2 text-[9px] text-zinc-500 font-bold uppercase tracking-wider">
+              <div className="flex items-center space-x-2 text-[11px] text-zinc-500 font-bold uppercase tracking-wider">
                 <span>Roadmap</span>
                 <span>/</span>
                 <span>{activeItem.status}</span>

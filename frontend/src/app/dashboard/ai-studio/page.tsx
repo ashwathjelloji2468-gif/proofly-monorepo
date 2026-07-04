@@ -213,7 +213,7 @@ export default function AIStudioDashboardPage() {
       
       {/* Toast Alert */}
       {errorToast && (
-        <div className="fixed top-5 right-5 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
+        <div className="fixed top-5 right-5 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <AlertCircle className="w-4 h-4" />
           <span>{errorToast}</span>
         </div>
@@ -250,7 +250,7 @@ export default function AIStudioDashboardPage() {
           {aiUsage && (
             <div className="bg-[#18181B] border border-border-primary p-4 rounded-xl shadow-md flex items-center justify-between">
               <div className="space-y-1">
-                <span className="text-[9px] uppercase font-bold text-slate-450 tracking-wider">Monthly AI Usage Credits</span>
+                <span className="text-[11px] uppercase font-bold text-slate-450 tracking-wider">Monthly AI Usage Credits</span>
                 <div className="text-lg font-black text-white">
                   <span>{aiUsage.credits}</span>
                   <span className="text-slate-550"> / {aiUsage.limit} credits used</span>
@@ -269,7 +269,7 @@ export default function AIStudioDashboardPage() {
         </div>
 
         {/* AI Tool Menu Tabs */}
-        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 select-none overflow-x-auto scrollbar-none">
+        <div className="flex space-x-2 border-b border-border-primary/50 pb-2  overflow-x-auto scrollbar-none">
           {[
             { id: 'rewrite', label: 'Rewrite & Translate', icon: <PenTool className="w-3.5 h-3.5" /> },
             { id: 'quality', label: 'Quality Audit', icon: <Award className="w-3.5 h-3.5" /> },
@@ -425,15 +425,15 @@ export default function AIStudioDashboardPage() {
                   
                   <div className="grid grid-cols-3 gap-2 text-center">
                     <div className="bg-zinc-900 border border-zinc-800 p-2.5 rounded-lg">
-                      <span className="text-[8px] uppercase text-slate-450 block font-bold">Credibility</span>
+                      <span className="text-[11px] uppercase text-slate-450 block font-bold">Credibility</span>
                       <span className="text-xs font-bold text-slate-200">{qualityScore.credibility}</span>
                     </div>
                     <div className="bg-zinc-900 border border-zinc-800 p-2.5 rounded-lg">
-                      <span className="text-[8px] uppercase text-slate-450 block font-bold">Specificity</span>
+                      <span className="text-[11px] uppercase text-slate-450 block font-bold">Specificity</span>
                       <span className="text-xs font-bold text-slate-200">{qualityScore.specificity}</span>
                     </div>
                     <div className="bg-zinc-900 border border-zinc-800 p-2.5 rounded-lg">
-                      <span className="text-[8px] uppercase text-slate-450 block font-bold">Storytelling</span>
+                      <span className="text-[11px] uppercase text-slate-450 block font-bold">Storytelling</span>
                       <span className="text-xs font-bold text-slate-200">{qualityScore.storytelling}</span>
                     </div>
                   </div>
@@ -612,7 +612,7 @@ export default function AIStudioDashboardPage() {
           <div className="bg-[#18181B] border border-border-primary rounded-2xl p-6 space-y-4 shadow-xl text-left">
             <h3 className="text-white text-xs font-black uppercase tracking-wider border-b border-border-primary/50 pb-2">AI History Logs</h3>
             
-            <div className="overflow-x-auto select-none">
+            <div className="overflow-x-auto ">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-border-primary text-[10px] text-slate-400 font-black uppercase tracking-wider">

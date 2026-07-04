@@ -76,7 +76,7 @@ export default function WallOfLovePage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans ">
       <Navbar />
 
       {/* Hero Section */}
@@ -118,7 +118,7 @@ export default function WallOfLovePage() {
                 }`}
               >
                 <GridIcon className="w-3.5 h-3.5" />
-                <span className="text-[8px] font-bold">Grid</span>
+                <span className="text-[11px] font-bold">Grid</span>
               </button>
               <button
                 onClick={() => setLayoutMode('masonry')}
@@ -127,7 +127,7 @@ export default function WallOfLovePage() {
                 }`}
               >
                 <Columns className="w-3.5 h-3.5" />
-                <span className="text-[8px] font-bold">Masonry</span>
+                <span className="text-[11px] font-bold">Masonry</span>
               </button>
               <button
                 onClick={() => setLayoutMode('carousel')}
@@ -136,7 +136,7 @@ export default function WallOfLovePage() {
                 }`}
               >
                 <LayoutList className="w-3.5 h-3.5" />
-                <span className="text-[8px] font-bold">Carousel</span>
+                <span className="text-[11px] font-bold">Carousel</span>
               </button>
             </div>
           </div>
@@ -244,14 +244,14 @@ export default function WallOfLovePage() {
                     />
                     <div className="leading-none text-left">
                       <span className="text-[11px] font-bold text-white block">{t.name}</span>
-                      <span className="text-[8px] text-zinc-500 block mt-0.5">{t.role} at {t.company}</span>
+                      <span className="text-[11px] text-zinc-500 block mt-0.5">{t.role} at {t.company}</span>
                     </div>
                   </div>
 
                   {showStars && (
                     <div className="flex space-x-0.5 mb-2.5">
                       {[...Array(t.rating)].map((_, i) => (
-                        <span key={i} className="text-xs select-none" style={{ color: starColor }}>★</span>
+                        <span key={i} className="text-xs " style={{ color: starColor }}>★</span>
                       ))}
                     </div>
                   )}
@@ -268,7 +268,7 @@ export default function WallOfLovePage() {
           {/* Code snippet display */}
           <div className="bg-[#0c0d16] border border-white/[0.06] rounded-2xl p-5 shadow-2xl text-left space-y-3">
             <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
-              <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Embed Code Snippet</span>
+              <span className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Embed Code Snippet</span>
               <button
                 onClick={handleCopyCode}
                 className="bg-white/5 hover:bg-white/10 text-white font-bold text-[10px] px-3.5 py-1.5 rounded-lg border border-white/10 transition flex items-center space-x-1.5 cursor-pointer focus:outline-none"
@@ -287,7 +287,7 @@ export default function WallOfLovePage() {
               </button>
             </div>
             
-            <pre className="w-full bg-[#030303] border border-white/[0.05] p-4 rounded-xl text-[9px] sm:text-[10px] font-mono text-zinc-400 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+            <pre className="w-full bg-[#030303] border border-white/[0.05] p-4 rounded-xl text-[11px] sm:text-[10px] font-mono text-zinc-400 overflow-x-auto whitespace-pre-wrap leading-relaxed">
               {`<div id="proofly-widget-container" data-space-id="acme-saas" data-layout="${layoutMode}" data-theme="${cardTheme}"></div>\n<script src="https://cdn.proofly.co/widget.js" async></script>`}
             </pre>
           </div>

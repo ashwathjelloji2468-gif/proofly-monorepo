@@ -34,7 +34,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       {/* Hero Section */}

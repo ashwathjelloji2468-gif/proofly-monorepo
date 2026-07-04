@@ -34,7 +34,7 @@ export function CookieConsent() {
           initial={{ opacity: 0, y: 30, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.95 }}
-          className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-[#0c0d16]/95 backdrop-blur-xl border border-white/[0.08] p-5 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.5)] flex flex-col space-y-4 text-left select-none"
+          className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-[#0c0d16]/95 backdrop-blur-xl border border-white/[0.08] p-5 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.5)] flex flex-col space-y-4 text-left "
         >
           {/* Header */}
           <div className="flex items-start justify-between">

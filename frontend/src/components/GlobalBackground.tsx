@@ -29,7 +29,7 @@ export function GlobalBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-[#09090B] overflow-hidden pointer-events-none -z-50 select-none">
+    <div className="fixed inset-0 w-full h-full bg-[#09090B] overflow-hidden pointer-events-none -z-50 ">
       {/* Texture Noise Overlay */}
       <div 
         className="absolute inset-0 opacity-[0.03] mix-blend-overlay"

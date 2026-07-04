@@ -7,7 +7,7 @@ import { Download, FileText, Globe } from 'lucide-react';
 
 export default function PressKitPage() {
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       <section className="max-w-4xl mx-auto px-6 pt-32 pb-24 w-full flex-1 space-y-6 text-left">
@@ -24,7 +24,7 @@ export default function PressKitPage() {
           <div className="bg-[#0c0d16] border border-white/[0.05] p-5 rounded-2xl space-y-3">
             <h4 className="text-xs font-bold text-white">Media Kit Assets</h4>
             <p className="text-[10px] text-slate-400">Download high-res logo packages, screenshots mockups, and executive headshots.</p>
-            <button className="bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-[9px] px-3.5 py-2 rounded-xl transition flex items-center space-x-1 cursor-pointer">
+            <button className="bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-[11px] px-3.5 py-2 rounded-xl transition flex items-center space-x-1 cursor-pointer">
               <Download className="w-3.5 h-3.5" />
               <span>Download ZIP Package (12MB)</span>
             </button>
@@ -34,7 +34,7 @@ export default function PressKitPage() {
             <h4 className="text-xs font-bold text-white">Brand Assets Info</h4>
             <p className="text-[10px] text-slate-400">Learn about Proofly colors, typography guidelines, and styling badges.</p>
             <a href="/company/brand">
-              <button className="bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-[9px] px-3.5 py-2 rounded-xl transition cursor-pointer mt-2.5">
+              <button className="bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-[11px] px-3.5 py-2 rounded-xl transition cursor-pointer mt-2.5">
                 View Brand Assets
               </button>
             </a>

@@ -120,7 +120,7 @@ export function StripeCheckoutModal({ isOpen, onClose, planName, price, tierKey 
               <form onSubmit={handlePaySubmit} className="p-6 space-y-5">
                 <div className="space-y-1">
                   <div className="flex items-center space-x-1.5">
-                    <span className="bg-brand-emerald/10 text-brand-emerald text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded border border-brand-emerald/20">Stripe Secure</span>
+                    <span className="bg-brand-emerald/10 text-brand-emerald text-[11px] font-black uppercase tracking-widest px-2 py-0.5 rounded border border-brand-emerald/20">Stripe Secure</span>
                     <ShieldCheck className="w-3.5 h-3.5 text-brand-emerald" />
                   </div>
                   <h3 className="text-white text-lg font-black tracking-tight">Checkout Subscription</h3>

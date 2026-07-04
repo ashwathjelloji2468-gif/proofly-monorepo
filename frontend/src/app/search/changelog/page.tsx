@@ -20,7 +20,7 @@ export default function ChangelogSearchPage() {
   );
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       <section className="max-w-4xl mx-auto px-6 pt-32 pb-24 w-full flex-1 space-y-6 text-left">
@@ -47,7 +47,7 @@ export default function ChangelogSearchPage() {
             <Link key={idx} href="/changelog">
               <button className="w-full text-left bg-[#0c0d16] border border-white/[0.04] hover:border-white/10 p-4 rounded-xl flex items-center justify-between transition cursor-pointer mt-2.5">
                 <div className="space-y-1">
-                  <span className="text-[8px] font-black uppercase text-zinc-500 tracking-wider block">{item.date}</span>
+                  <span className="text-[11px] font-black uppercase text-zinc-500 tracking-wider block">{item.date}</span>
                   <div className="flex items-center space-x-2.5">
                     <span className="text-[9.5px] font-mono font-black text-[#6366F1]">{item.version}</span>
                     <span className="text-xs font-bold text-white block">{item.headline}</span>

@@ -66,7 +66,7 @@ export default function ChangelogPage() {
   );
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       {/* Hero Section */}
@@ -123,7 +123,7 @@ export default function ChangelogPage() {
                     {release.headline}
                   </h2>
                 </div>
-                <div className="flex items-center space-x-1.5 text-[9px] text-zinc-500 font-bold uppercase tracking-wider">
+                <div className="flex items-center space-x-1.5 text-[11px] text-zinc-500 font-bold uppercase tracking-wider">
                   <Calendar className="w-3.5 h-3.5" />
                   <span>{release.date}</span>
                 </div>
@@ -135,7 +135,7 @@ export default function ChangelogPage() {
                 {/* Features (if present) */}
                 {release.features.length > 0 && (
                   <div className="space-y-2 text-left">
-                    <span className="text-[9px] font-black uppercase text-brand-teal tracking-widest block flex items-center space-x-1">
+                    <span className="text-[11px] font-black uppercase text-brand-teal tracking-widest block flex items-center space-x-1">
                       <Sparkles className="w-3.5 h-3.5 text-brand-teal" />
                       <span>New Features</span>
                     </span>
@@ -150,7 +150,7 @@ export default function ChangelogPage() {
                 {/* Improvements (if present) */}
                 {release.improvements.length > 0 && (
                   <div className="space-y-2 text-left">
-                    <span className="text-[9px] font-black uppercase text-blue-450 tracking-widest block flex items-center space-x-1">
+                    <span className="text-[11px] font-black uppercase text-blue-450 tracking-widest block flex items-center space-x-1">
                       <TrendingUp className="w-3.5 h-3.5 text-blue-400" />
                       <span>Improvements</span>
                     </span>
@@ -165,7 +165,7 @@ export default function ChangelogPage() {
                 {/* Bug Fixes (if present) */}
                 {release.fixes.length > 0 && (
                   <div className="space-y-2 text-left">
-                    <span className="text-[9px] font-black uppercase text-red-400 tracking-widest block flex items-center space-x-1">
+                    <span className="text-[11px] font-black uppercase text-red-400 tracking-widest block flex items-center space-x-1">
                       <Bug className="w-3.5 h-3.5 text-red-500" />
                       <span>Bug Fixes</span>
                     </span>

@@ -117,7 +117,7 @@ export default function LiveDemoPage() {
                     <button
                       key={q}
                       onClick={() => handleQueryClick(q)}
-                      className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition cursor-pointer select-none ${
+                      className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition cursor-pointer  ${
                         activeSearchQuery === q
                           ? 'bg-brand-emerald text-white border-brand-emerald'
                           : 'bg-zinc-900/60 text-slate-400 border-border-primary hover:text-white'
@@ -147,7 +147,7 @@ export default function LiveDemoPage() {
                   onKeyDown={(e) => e.key === 'Enter' && setActiveSearchQuery(searchQuery)}
                   className="w-full bg-[#09090B] border border-border-primary p-2.5 text-xs text-slate-300 rounded-lg outline-none focus:border-brand-emerald"
                 />
-                <span className="text-[9px] text-zinc-500 font-medium block">Press Enter to run query search</span>
+                <span className="text-[11px] text-zinc-500 font-medium block">Press Enter to run query search</span>
               </div>
             </SpotlightCard>
 
@@ -186,11 +186,11 @@ export default function LiveDemoPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-[#09090B] border border-border-primary/80 p-3 rounded-lg text-center">
-                  <span className="text-[9px] text-zinc-500 font-extrabold block">TOTAL VIEWS</span>
+                  <span className="text-[11px] text-zinc-500 font-extrabold block">TOTAL VIEWS</span>
                   <span className="text-sm font-black text-white font-mono">18,520</span>
                 </div>
                 <div className="bg-[#09090B] border border-border-primary/80 p-3 rounded-lg text-center">
-                  <span className="text-[9px] text-zinc-500 font-extrabold block">TOTAL CLICKS</span>
+                  <span className="text-[11px] text-zinc-500 font-extrabold block">TOTAL CLICKS</span>
                   <span className="text-sm font-black text-white font-mono">4,195</span>
                 </div>
               </div>
@@ -288,7 +288,7 @@ export default function LiveDemoPage() {
                   onChange={(e) => setGlowEnabled(e.target.checked)}
                   className="rounded border-zinc-800 text-brand-emerald focus:ring-brand-emerald w-4 h-4 bg-zinc-950"
                 />
-                <label htmlFor="glow-config" className="text-xs text-slate-300 font-bold cursor-pointer select-none">
+                <label htmlFor="glow-config" className="text-xs text-slate-300 font-bold cursor-pointer ">
                   Enable Border Glowing Hover Spotlight Effects
                 </label>
               </div>
@@ -299,7 +299,7 @@ export default function LiveDemoPage() {
             <SpotlightCard className="p-6 space-y-4 text-left" glowColor="rgba(99, 102, 241, 0.1)">
               <div className="flex items-center justify-between border-b border-border-primary/50 pb-3">
                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">Iframe Code Snippet</span>
-                <span className="text-[9px] font-mono text-zinc-500">HTML embed code</span>
+                <span className="text-[11px] font-mono text-zinc-500">HTML embed code</span>
               </div>
               <div className="bg-[#09090B] border border-border-primary p-4 rounded-lg overflow-x-auto">
                 <code className="text-xs text-brand-teal block whitespace-normal break-all font-mono leading-relaxed select-all">

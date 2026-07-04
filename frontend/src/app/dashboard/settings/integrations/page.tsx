@@ -167,13 +167,13 @@ export default function IntegrationsDashboardPage() {
       
       {/* Toast alerts */}
       {saveSuccess && (
-        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-bounce">
+        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <CheckCircle2 className="w-4 h-4" />
           <span>Integrations updated successfully!</span>
         </div>
       )}
       {errorToast && (
-        <div className="fixed top-5 right-5 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
+        <div className="fixed top-5 right-5 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <AlertCircle className="w-4 h-4" />
           <span>{errorToast}</span>
         </div>
@@ -207,7 +207,7 @@ export default function IntegrationsDashboardPage() {
         </div>
 
         {/* Tab Filters */}
-        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 select-none overflow-x-auto scrollbar-none">
+        <div className="flex space-x-2 border-b border-border-primary/50 pb-2  overflow-x-auto scrollbar-none">
           {[
             { id: 'marketplace', label: 'Connected Apps', icon: <Layers className="w-3.5 h-3.5" /> },
             { id: 'apikeys', label: 'API Access Keys', icon: <Code className="w-3.5 h-3.5" /> },
@@ -240,9 +240,9 @@ export default function IntegrationsDashboardPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-black text-white">Slack Channel Feed</span>
                     {connections.find(c => c.appId === 'SLACK') ? (
-                      <span className="text-[9px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25 px-2 py-0.5 rounded-full font-bold uppercase">Connected</span>
+                      <span className="text-[11px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25 px-2 py-0.5 rounded-full font-bold uppercase">Connected</span>
                     ) : (
-                      <span className="text-[9px] bg-zinc-800 text-slate-400 px-2 py-0.5 rounded-full font-bold uppercase">Not Configured</span>
+                      <span className="text-[11px] bg-zinc-800 text-slate-400 px-2 py-0.5 rounded-full font-bold uppercase">Not Configured</span>
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">Post real-time messages directly into your Slack channel when new reviews are approved.</p>
@@ -271,7 +271,7 @@ export default function IntegrationsDashboardPage() {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-black text-white">Notion Database Logs</span>
-                    <span className="text-[9px] bg-zinc-800 text-slate-400 px-2 py-0.5 rounded-full font-bold uppercase">Pro</span>
+                    <span className="text-[11px] bg-zinc-800 text-slate-400 px-2 py-0.5 rounded-full font-bold uppercase">Pro</span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">Automatically log submitted customer details and star ratings directly into your Notion table.</p>
                 </div>
@@ -334,7 +334,7 @@ export default function IntegrationsDashboardPage() {
                     <div key={key.id} className="bg-[#09090B] border border-border-primary rounded-xl p-4 flex items-center justify-between hover:border-zinc-800 transition">
                       <div className="space-y-1">
                         <span className="text-xs font-bold text-white leading-none">{key.name}</span>
-                        <div className="flex gap-2 pt-1 font-mono text-[9px] text-slate-450">
+                        <div className="flex gap-2 pt-1 font-mono text-[11px] text-slate-450">
                           <span>Prefix: {key.prefix}...</span>
                           <span>•</span>
                           <span className="bg-zinc-900 border border-zinc-850 px-1 py-0.5 rounded text-brand-teal font-black">{key.scopes}</span>
@@ -431,15 +431,15 @@ export default function IntegrationsDashboardPage() {
 
                       <div className="flex justify-between items-center pt-2 border-t border-zinc-900">
                         <div className="flex gap-2">
-                          <span className="text-[9px] bg-zinc-900 border border-zinc-850 px-2 py-0.5 rounded text-slate-450 font-mono">Secret: {wh.secret}</span>
-                          <span className="text-[9px] bg-brand-emerald/10 px-2 py-0.5 rounded text-brand-emerald font-bold uppercase">{wh.events}</span>
+                          <span className="text-[11px] bg-zinc-900 border border-zinc-850 px-2 py-0.5 rounded text-slate-450 font-mono">Secret: {wh.secret}</span>
+                          <span className="text-[11px] bg-brand-emerald/10 px-2 py-0.5 rounded text-brand-emerald font-bold uppercase">{wh.events}</span>
                         </div>
                       </div>
 
                       {/* Log lists */}
                       {wh.logs && wh.logs.length > 0 && (
                         <div className="pt-3 border-t border-zinc-900 space-y-1">
-                          <span className="text-[9px] uppercase font-bold text-slate-500">Recent Deliveries:</span>
+                          <span className="text-[11px] uppercase font-bold text-slate-500">Recent Deliveries:</span>
                           <div className="space-y-1">
                             {wh.logs.map(log => (
                               <div key={log.id} className="flex justify-between text-[10px] bg-zinc-900/40 p-1 rounded font-mono">
@@ -516,7 +516,7 @@ export default function IntegrationsDashboardPage() {
           <div className="bg-[#18181B] border border-border-primary rounded-2xl p-6 space-y-4 shadow-xl text-left">
             <h3 className="text-white text-xs font-black uppercase tracking-wider border-b border-border-primary/50 pb-2">Developer Requests Audit Trail</h3>
             
-            <div className="overflow-x-auto select-none">
+            <div className="overflow-x-auto ">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-border-primary text-[10px] text-slate-400 font-black uppercase tracking-wider">
@@ -557,7 +557,7 @@ export default function IntegrationsDashboardPage() {
 
       {/* ─── SLACK CONFIGURATION DIALOG MODAL ────────────────────────────────────── */}
       {activeConfigApp === 'SLACK' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm select-none">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm ">
           <div className="bg-[#18181B] border border-border-primary p-6 rounded-2xl w-full max-w-md shadow-2xl relative text-left">
             <button
               onClick={() => setActiveConfigApp(null)}

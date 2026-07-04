@@ -43,7 +43,7 @@ export default function AnalyticsProductPage() {
   ];
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans ">
       <Navbar />
 
       {/* Hero Section */}
@@ -113,7 +113,7 @@ export default function AnalyticsProductPage() {
               </div>
               <div className="flex items-baseline space-x-2 pt-1">
                 <span className="text-xl font-black text-white">{m.value}</span>
-                <span className="text-[9px] font-bold text-brand-emerald">{m.change}</span>
+                <span className="text-[11px] font-bold text-brand-emerald">{m.change}</span>
               </div>
             </div>
           ))}
@@ -129,7 +129,7 @@ export default function AnalyticsProductPage() {
                 <TrendingUp className="w-3.5 h-3.5 text-brand-teal" />
                 <span>Conversion Growth Curve</span>
               </span>
-              <span className="text-[8px] text-zinc-500 font-bold uppercase tracking-widest">Attributed Lift in Week 1</span>
+              <span className="text-[11px] text-zinc-500 font-bold uppercase tracking-widest">Attributed Lift in Week 1</span>
             </div>
 
             {/* Custom SVG Line graph */}
@@ -168,7 +168,7 @@ export default function AnalyticsProductPage() {
             </div>
 
             {/* X-Axis Labels */}
-            <div className="flex justify-between text-[8px] text-zinc-500 font-bold uppercase pt-1">
+            <div className="flex justify-between text-[11px] text-zinc-500 font-bold uppercase pt-1">
               <span>Mon</span>
               <span>Tue</span>
               <span>Wed</span>

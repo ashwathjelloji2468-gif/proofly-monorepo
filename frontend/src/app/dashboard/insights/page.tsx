@@ -214,14 +214,14 @@ export default function InsightsPage() {
                           <span className="font-bold text-white">{t.name}</span>
                           <span className="text-zinc-500">{t.role}</span>
                         </div>
-                        <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 px-2 py-0.5 rounded font-black text-[9px]">
+                        <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 px-2 py-0.5 rounded font-black text-[11px]">
                           {relevanceScore * 10}% match
                         </span>
                       </div>
 
                       <p className="text-xs text-slate-300 line-clamp-3">"{t.review}"</p>
 
-                      <div className="flex items-center space-x-1.5 text-[9px] text-zinc-500 pt-1 border-t border-border-primary/20">
+                      <div className="flex items-center space-x-1.5 text-[11px] text-zinc-500 pt-1 border-t border-border-primary/20">
                         <Lightbulb className="w-3 h-3 text-brand-teal" />
                         <span>AI Reason: {matchReason}</span>
                       </div>
@@ -244,7 +244,7 @@ export default function InsightsPage() {
                 <h3 className="text-sm font-bold text-white flex items-center space-x-2">
                   <Share2 className="w-4 h-4 text-brand-emerald animate-pulse" />
                   <span>AI Testimonial Amplifier</span>
-                  <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[9px] px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider">
+                  <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[11px] px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider">
                     Killer Feature
                   </span>
                 </h3>
@@ -277,7 +277,7 @@ export default function InsightsPage() {
               {/* Column 1: Reviewer & Persuasive Hooks (4 cols) */}
               <div className="lg:col-span-4 bg-[#09090B] border border-border-primary/60 p-5 rounded-xl flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
-                  <span className="text-[9px] font-extrabold text-[#6366F1] uppercase tracking-widest block text-left">Review Details & Hooks</span>
+                  <span className="text-[11px] font-extrabold text-[#6366F1] uppercase tracking-widest block text-left">Review Details & Hooks</span>
                   
                   {/* Review Box */}
                   <div className="bg-[#12161D]/40 border border-border-primary/50 p-3.5 rounded-lg text-xs leading-relaxed italic text-slate-300 text-left">
@@ -286,7 +286,7 @@ export default function InsightsPage() {
 
                   {/* Highlights */}
                   <div className="space-y-2 pt-2 text-left">
-                    <span className="text-[9px] font-bold text-slate-500 uppercase block">Extracted conversion hooks:</span>
+                    <span className="text-[11px] font-bold text-slate-500 uppercase block">Extracted conversion hooks:</span>
                     <div className="space-y-1.5">
                       {aiAmplified.hooks.map((hook, i) => (
                         <div key={i} className="flex items-center space-x-2 text-xs text-slate-200">
@@ -316,7 +316,7 @@ export default function InsightsPage() {
               {/* Column 2: Social Media Autopilot (4 cols) */}
               <div className="lg:col-span-4 bg-[#09090B] border border-border-primary/60 p-5 rounded-xl flex flex-col justify-between space-y-4">
                 <div className="space-y-4">
-                  <span className="text-[9px] font-extrabold text-[#6366F1] uppercase tracking-widest block text-left">Social Media Autopilot</span>
+                  <span className="text-[11px] font-extrabold text-[#6366F1] uppercase tracking-widest block text-left">Social Media Autopilot</span>
                   
                   {/* Twitter Copy */}
                   <div className="space-y-2 text-left">
@@ -358,7 +358,7 @@ export default function InsightsPage() {
               <div className="lg:col-span-4 bg-[#09090B] border border-border-primary/60 p-5 rounded-xl flex flex-col justify-between space-y-4">
                 <div className="space-y-4 text-left">
                   <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-extrabold text-[#6366F1] uppercase tracking-widest block">Placement Recommendation</span>
+                    <span className="text-[11px] font-extrabold text-[#6366F1] uppercase tracking-widest block">Placement Recommendation</span>
                     <span className="bg-brand-teal/15 border border-brand-teal/30 text-brand-teal text-[10px] font-extrabold px-2.5 py-0.5 rounded-full shadow-[0_0_12px_rgba(99,102,241,0.2)] animate-pulse">
                       {aiAmplified.lift}
                     </span>
@@ -377,7 +377,7 @@ export default function InsightsPage() {
 
                   {/* Psychological Reason */}
                   <div className="space-y-1.5">
-                    <span className="text-[9px] font-bold text-slate-500 uppercase block">Psychological conversion analysis:</span>
+                    <span className="text-[11px] font-bold text-slate-500 uppercase block">Psychological conversion analysis:</span>
                     <p className="text-xs text-slate-300 leading-relaxed">
                       {aiAmplified.reason}
                     </p>
@@ -411,7 +411,7 @@ export default function InsightsPage() {
               <div className="h-6 bg-[#09090B] rounded-lg overflow-hidden flex border border-border-primary">
                 {positivePercent > 0 && (
                   <div 
-                    className="h-full bg-gradient-to-r from-emerald-600 to-brand-emerald flex items-center justify-center text-[9px] font-black text-white" 
+                    className="h-full bg-gradient-to-r from-emerald-600 to-brand-emerald flex items-center justify-center text-[11px] font-black text-white" 
                     style={{ width: `${positivePercent}%` }}
                     title={`Positive: ${positive}`}
                   >
@@ -420,7 +420,7 @@ export default function InsightsPage() {
                 )}
                 {neutralPercent > 0 && (
                   <div 
-                    className="h-full bg-brand-teal flex items-center justify-center text-[9px] font-black text-white" 
+                    className="h-full bg-brand-teal flex items-center justify-center text-[11px] font-black text-white" 
                     style={{ width: `${neutralPercent}%` }}
                     title={`Neutral: ${neutral}`}
                   >
@@ -429,7 +429,7 @@ export default function InsightsPage() {
                 )}
                 {negativePercent > 0 && (
                   <div 
-                    className="h-full bg-red-600 flex items-center justify-center text-[9px] font-black text-white" 
+                    className="h-full bg-red-600 flex items-center justify-center text-[11px] font-black text-white" 
                     style={{ width: `${negativePercent}%` }}
                     title={`Negative: ${negative}`}
                   >
@@ -530,7 +530,7 @@ export default function InsightsPage() {
                 <div key={issue.title} className="bg-[#09090B] border border-border-primary p-4 rounded-xl space-y-2 text-left">
                   <div className="flex items-center justify-between text-xs font-bold">
                     <span className="text-white">{issue.title}</span>
-                    <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded border ${
+                    <span className={`text-[11px] font-black uppercase px-2 py-0.5 rounded border ${
                       issue.severity === 'medium'
                         ? 'bg-amber-500/10 text-amber-500 border-amber-500/20'
                         : 'bg-zinc-800 text-zinc-400 border-border-primary'

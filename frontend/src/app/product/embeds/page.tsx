@@ -68,7 +68,7 @@ export default function EmbedsProductPage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans ">
       <Navbar />
 
       {/* Hero Section */}
@@ -115,7 +115,7 @@ export default function EmbedsProductPage() {
                     : 'bg-zinc-950 border-white/[0.04] text-slate-400 hover:text-slate-200'
                 }`}
               >
-                <span className="text-sm select-none shrink-0">{f.icon}</span>
+                <span className="text-sm  shrink-0">{f.icon}</span>
                 <span className="text-[10px] truncate">{f.name}</span>
               </button>
             ))}
@@ -183,7 +183,7 @@ export default function EmbedsProductPage() {
             >
               <div className="flex items-center space-x-2.5 mb-2.5">
                 <div 
-                  className="w-6 h-6 rounded-full flex items-center justify-center font-black text-[9px] text-white shrink-0"
+                  className="w-6 h-6 rounded-full flex items-center justify-center font-black text-[11px] text-white shrink-0"
                   style={{ backgroundColor: accentColor }}
                 >
                   S
@@ -204,7 +204,7 @@ export default function EmbedsProductPage() {
                 </span>
                 <div className="flex space-x-0.5">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-[9px]" style={{ color: accentColor }}>★</span>
+                    <span key={i} className="text-[11px]" style={{ color: accentColor }}>★</span>
                   ))}
                 </div>
               </div>
@@ -215,7 +215,7 @@ export default function EmbedsProductPage() {
           {/* Snippet box */}
           <div className="bg-[#0c0d16] border border-white/[0.06] rounded-2xl p-5 shadow-2xl text-left space-y-3">
             <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
-              <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Embed Code Snippet</span>
+              <span className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Embed Code Snippet</span>
               <button
                 onClick={handleCopyCode}
                 className="bg-white/5 hover:bg-white/10 text-white font-bold text-[10px] px-3.5 py-1.5 rounded-lg border border-white/10 transition flex items-center space-x-1.5 cursor-pointer focus:outline-none"
@@ -234,7 +234,7 @@ export default function EmbedsProductPage() {
               </button>
             </div>
             
-            <pre className="w-full bg-[#030303] border border-white/[0.05] p-4 rounded-xl text-[9px] sm:text-[10px] font-mono text-zinc-400 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+            <pre className="w-full bg-[#030303] border border-white/[0.05] p-4 rounded-xl text-[11px] sm:text-[10px] font-mono text-zinc-400 overflow-x-auto whitespace-pre-wrap leading-relaxed">
               {getEmbedCode()}
             </pre>
           </div>

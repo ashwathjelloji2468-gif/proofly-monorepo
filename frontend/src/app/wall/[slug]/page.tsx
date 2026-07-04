@@ -169,7 +169,7 @@ export default function PublicWallShowcasePage() {
   };
 
   return (
-    <div className={`min-h-screen font-sans ${isDark ? 'bg-[#09090B] text-slate-200' : 'bg-white text-slate-800'} transition-colors duration-300 pb-20 select-none`}>
+    <div className={`min-h-screen font-sans ${isDark ? 'bg-[#09090B] text-slate-200' : 'bg-white text-slate-800'} transition-colors duration-300 pb-20 `}>
       {/* Structured SEO script */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }} />
 
@@ -241,7 +241,7 @@ export default function PublicWallShowcasePage() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <label className="flex items-center space-x-1.5 text-xs text-slate-400 cursor-pointer select-none">
+            <label className="flex items-center space-x-1.5 text-xs text-slate-400 cursor-pointer ">
               <input
                 type="checkbox"
                 checked={onlyVideo}
@@ -308,14 +308,14 @@ export default function PublicWallShowcasePage() {
                   </div>
 
                   {t.textContent && (
-                    <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-650'}`}>
+                    <p className={`text-xs leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                       "{t.textContent}"
                     </p>
                   )}
 
                   {t.videoUrl && (
                     <div className="relative rounded-xl overflow-hidden bg-black flex h-36">
-                      <video src={t.videoUrl} className="w-full h-full object-cover" />
+                      <video src={t.videoUrl} preload="none" className="w-full h-full object-cover" />
                       <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                         <span className="w-8 h-8 rounded-full bg-brand-emerald flex items-center justify-center text-white text-xs pl-0.5 shadow-md shadow-brand-emerald/10">▶</span>
                       </div>
@@ -324,7 +324,7 @@ export default function PublicWallShowcasePage() {
                 </div>
 
                 <div className="flex items-center justify-between border-t border-border-primary/40 pt-4 mt-5">
-                  <span className="text-[9px] text-slate-550 font-bold">{new Date(t.createdAt).toLocaleDateString()}</span>
+                  <span className="text-[11px] text-slate-550 font-bold">{new Date(t.createdAt).toLocaleDateString()}</span>
                   <button
                     onClick={(e) => copyTestimonialUrl(t.id, e)}
                     className="text-[10px] font-bold text-slate-350 hover:text-white transition flex items-center space-x-1"
@@ -354,7 +354,7 @@ export default function PublicWallShowcasePage() {
             isDark ? 'bg-[#18181B] border-border-primary' : 'bg-white border-zinc-250'
           }`}>
             <button
-              onClick={() => setSelectedReview(null)}
+              onClick={() => setSelectedReview(null)} aria-label="Close testimonial detail"
               className="absolute top-4 right-4 text-slate-400 hover:text-white"
             >
               <X className="w-4 h-4" />

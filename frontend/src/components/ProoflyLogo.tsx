@@ -18,7 +18,7 @@ export function ProoflyLogo({
   showSlogan = false
 }: ProoflyLogoProps) {
   return (
-    <div className={`flex items-center space-x-3 select-none ${className}`}>
+    <div className={`flex items-center space-x-3  ${className}`}>
       {/* SVG Icon */}
       <svg
         width={iconSize}

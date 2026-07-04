@@ -87,7 +87,7 @@ export default function AIWorkspacePage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans ">
       <Navbar />
 
       {/* Hero Section */}
@@ -147,7 +147,7 @@ export default function AIWorkspacePage() {
                   <div className="flex-1 min-w-0 space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-white block truncate">{t.name}</span>
-                      <span className="text-[7.5px] font-black uppercase bg-brand-emerald/10 border border-brand-emerald/20 px-1.5 py-0.2 rounded text-brand-emerald">
+                      <span className="text-[7.5px] font-black uppercase bg-brand-emerald/10 border border-brand-emerald/20 px-1.5 py-0.5 rounded text-brand-emerald">
                         Positive
                       </span>
                     </div>
@@ -163,7 +163,7 @@ export default function AIWorkspacePage() {
             {filteredList.length === 0 && (
               <div className="py-16 text-center flex flex-col items-center justify-center space-y-1.5">
                 <span className="text-zinc-600 text-xs">No matching testimonials.</span>
-                <span className="text-[9px] text-zinc-500">Try searching "onboarding" or "conversion"</span>
+                <span className="text-[11px] text-zinc-500">Try searching "onboarding" or "conversion"</span>
               </div>
             )}
           </div>
@@ -198,7 +198,7 @@ export default function AIWorkspacePage() {
 
             {/* Testimonial Quote */}
             <div className="space-y-1 text-left relative bg-zinc-950/40 p-4 rounded-xl border border-white/[0.03]">
-              <span className="text-[9px] font-black uppercase text-zinc-500 tracking-widest block">Original Transcription</span>
+              <span className="text-[11px] font-black uppercase text-zinc-500 tracking-widest block">Original Transcription</span>
               <p className="text-xs text-slate-200 leading-relaxed italic mt-1.5">
                 "{activeTestimonial.review}"
               </p>
@@ -211,7 +211,7 @@ export default function AIWorkspacePage() {
               <div className="sm:col-span-8 bg-zinc-950/50 border border-white/[0.04] p-4 rounded-xl space-y-2.5 text-left relative">
                 <div className="flex items-center space-x-1.5">
                   <BrainCircuit className="w-4 h-4 text-brand-teal animate-pulse" />
-                  <span className="text-[9px] font-black uppercase text-brand-teal tracking-widest">AI Generated Summary</span>
+                  <span className="text-[11px] font-black uppercase text-brand-teal tracking-widest">AI Generated Summary</span>
                 </div>
                 <p className="text-[10px] text-slate-300 leading-relaxed">
                   {activeTestimonial.aiSummary}
@@ -220,12 +220,12 @@ export default function AIWorkspacePage() {
 
               {/* Smart Keyword Tags (4 Columns) */}
               <div className="sm:col-span-4 bg-zinc-950/50 border border-white/[0.04] p-4 rounded-xl space-y-2 text-left h-full">
-                <span className="text-[9px] font-black uppercase text-zinc-500 tracking-widest block">extracted keywords</span>
+                <span className="text-[11px] font-black uppercase text-zinc-500 tracking-widest block">extracted keywords</span>
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {activeTestimonial.tags.map((tag, idx) => (
                     <span 
                       key={idx}
-                      className="text-[8px] font-bold bg-[#6366F1]/10 text-[#6366F1] border border-[#6366F1]/20 px-2 py-0.5 rounded-full"
+                      className="text-[11px] font-bold bg-[#6366F1]/10 text-[#6366F1] border border-[#6366F1]/20 px-2 py-0.5 rounded-full"
                     >
                       #{tag}
                     </span>
@@ -243,13 +243,13 @@ export default function AIWorkspacePage() {
             {/* Twitter draft */}
             <div className="bg-zinc-950 border border-white/[0.04] p-3.5 rounded-xl flex flex-col justify-between space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[9px] font-black uppercase text-sky-400 tracking-wider flex items-center space-x-1">
+                <span className="text-[11px] font-black uppercase text-sky-400 tracking-wider flex items-center space-x-1">
                   <Share2 className="w-3.5 h-3.5" />
                   <span>Twitter Post Draft</span>
                 </span>
                 <button
                   onClick={() => handleCopyText(activeTestimonial.socialTwitter, 'twitter')}
-                  className="text-zinc-500 hover:text-white transition flex items-center space-x-1 text-[9px] cursor-pointer"
+                  className="text-zinc-500 hover:text-white transition flex items-center space-x-1 text-[11px] cursor-pointer"
                 >
                   {copiedType === 'twitter' ? (
                     <span className="text-brand-emerald">Copied!</span>
@@ -269,13 +269,13 @@ export default function AIWorkspacePage() {
             {/* LinkedIn draft */}
             <div className="bg-zinc-950 border border-white/[0.04] p-3.5 rounded-xl flex flex-col justify-between space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[9px] font-black uppercase text-blue-400 tracking-wider flex items-center space-x-1">
+                <span className="text-[11px] font-black uppercase text-blue-400 tracking-wider flex items-center space-x-1">
                   <Share2 className="w-3.5 h-3.5" />
                   <span>LinkedIn Post Draft</span>
                 </span>
                 <button
                   onClick={() => handleCopyText(activeTestimonial.socialLinkedIn, 'linkedin')}
-                  className="text-zinc-500 hover:text-white transition flex items-center space-x-1 text-[9px] cursor-pointer"
+                  className="text-zinc-500 hover:text-white transition flex items-center space-x-1 text-[11px] cursor-pointer"
                 >
                   {copiedType === 'linkedin' ? (
                     <span className="text-brand-emerald">Copied!</span>

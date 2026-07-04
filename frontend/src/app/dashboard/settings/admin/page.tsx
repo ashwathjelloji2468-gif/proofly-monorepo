@@ -84,7 +84,7 @@ export default function AdminLaunchPage() {
       
       {/* Toast Alert */}
       {saveSuccess && (
-        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-bounce">
+        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <CheckCircle2 className="w-4 h-4" />
           <span>Admin configuration updated!</span>
         </div>
@@ -104,7 +104,7 @@ export default function AdminLaunchPage() {
       <main className="p-8 space-y-6 max-w-6xl w-full text-left relative">
         
         {/* Tab Filters */}
-        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 select-none overflow-x-auto scrollbar-none">
+        <div className="flex space-x-2 border-b border-border-primary/50 pb-2  overflow-x-auto scrollbar-none">
           {[
             { id: 'health', label: 'System Health & Metrics', icon: <Activity className="w-3.5 h-3.5" /> },
             { id: 'readiness', label: 'Launch Readiness Score', icon: <ListTodo className="w-3.5 h-3.5" /> },

@@ -133,13 +133,13 @@ export default function AdvancedAnalyticsPage() {
       
       {/* Toast Alert */}
       {saveSuccess && (
-        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-bounce">
+        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <CheckCircle2 className="w-4 h-4" />
           <span>Goal Created & Verified!</span>
         </div>
       )}
       {errorToast && (
-        <div className="fixed top-5 right-5 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
+        <div className="fixed top-5 right-5 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <AlertCircle className="w-4 h-4" />
           <span>{errorToast}</span>
         </div>
@@ -173,13 +173,13 @@ export default function AdvancedAnalyticsPage() {
         </div>
 
         {/* Multi-Tab Navigation */}
-        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 select-none">
+        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 ">
           {[
             { id: 'overview', label: 'Overview Metrics' },
             { id: 'funnels', label: 'Conversion Funnels' },
-            { id: 'attribution', label: 'Revenue Influence' },
-            { id: 'goals', label: 'Goal Triggers' },
-            { id: 'reports', label: 'Reports Export' }
+            { id: 'attribution', label: 'Revenue Attribution' },
+            { id: 'goals', label: 'Goals' },
+            { id: 'reports', label: 'Export Reports' }
           ].map(tab => (
             <button
               key={tab.id}
@@ -209,9 +209,9 @@ export default function AdvancedAnalyticsPage() {
                     { label: 'Revenue Influenced', value: '$' + advancedAnalytics.revenueInfluenced.toFixed(2), sub: 'AOV: $49.50', color: 'text-[#EC4899]' }
                   ].map(card => (
                     <div key={card.label} className="bg-[#18181B] border border-border-primary p-5 rounded-xl flex flex-col justify-between h-28 hover:border-zinc-800 transition">
-                      <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{card.label}</div>
+                      <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">{card.label}</div>
                       <div className={`text-2xl font-black ${card.color}`}>{card.value}</div>
-                      <div className="text-[9px] text-slate-500 font-bold">{card.sub}</div>
+                      <div className="text-[11px] text-slate-500 font-bold">{card.sub}</div>
                     </div>
                   ))}
                 </div>
@@ -372,7 +372,7 @@ export default function AdvancedAnalyticsPage() {
               <p className="text-[10px] text-muted-foreground">List of channels showing direct purchase influences.</p>
             </div>
 
-            <div className="overflow-x-auto select-none">
+            <div className="overflow-x-auto ">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-border-primary text-[10px] text-slate-400 font-black uppercase tracking-wider">
@@ -420,8 +420,8 @@ export default function AdvancedAnalyticsPage() {
                         <span className="text-xs font-bold text-white leading-none">{g.name}</span>
                         {g.description && <p className="text-[10px] text-muted-foreground">{g.description}</p>}
                         <div className="flex gap-2.5 pt-1">
-                          <span className="text-[9px] bg-zinc-900 px-2 py-0.5 rounded text-slate-400 font-mono border border-zinc-800">{g.triggerType}</span>
-                          <span className="text-[9px] bg-brand-emerald/10 px-2 py-0.5 rounded text-brand-emerald font-bold border border-brand-emerald/20">{g.category}</span>
+                          <span className="text-[11px] bg-zinc-900 px-2 py-0.5 rounded text-slate-400 font-mono border border-zinc-800">{g.triggerType}</span>
+                          <span className="text-[11px] bg-brand-emerald/10 px-2 py-0.5 rounded text-brand-emerald font-bold border border-brand-emerald/20">{g.category}</span>
                         </div>
                       </div>
                       <div className="text-sm font-black text-brand-teal font-mono">${g.value.toFixed(2)}</div>
@@ -559,7 +559,7 @@ export default function AdvancedAnalyticsPage() {
               <div className="space-y-3">
                 {reports.length === 0 ? (
                   <div className="py-12 text-center text-xs text-slate-500 font-bold border border-dashed border-border-primary rounded-xl">
-                    No export files compile templates. Trigger one on the side to compile details.
+                    No reports generated yet. Configure and generate your first export on the left.
                   </div>
                 ) : (
                   reports.map(r => (
@@ -567,8 +567,8 @@ export default function AdvancedAnalyticsPage() {
                       <div className="space-y-1">
                         <span className="text-xs font-bold text-white">{r.name}</span>
                         <div className="flex gap-2 pt-1">
-                          <span className="text-[9px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-slate-400 font-mono">{r.range}</span>
-                          <span className="text-[9px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-brand-teal font-black">{r.format}</span>
+                          <span className="text-[11px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-slate-400 font-mono">{r.range}</span>
+                          <span className="text-[11px] bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded text-brand-teal font-black">{r.format}</span>
                         </div>
                       </div>
                       <a

@@ -69,8 +69,8 @@ export default function InboxPage() {
     setTimeout(() => {
       const generatedId = `vid-ai-${Date.now()}`;
       const videoUrl = avatarGender === 'female'
-        ? 'https://www.w3schools.com/html/mov_bbb.mp4'
-        : 'https://www.w3schools.com/html/movie.mp4';
+        ? 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4'
+        : 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4';
       
       const avatarUrl = avatarGender === 'female'
         ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150'
@@ -228,7 +228,7 @@ export default function InboxPage() {
               <button
                 key={tab.id}
                 onClick={() => setSelectedStatus(tab.id)}
-                className={`text-[10px] font-extrabold px-3 py-1.5 rounded-md transition cursor-pointer select-none ${
+                className={`text-[10px] font-extrabold px-3 py-1.5 rounded-md transition cursor-pointer  ${
                   selectedStatus === tab.id
                     ? 'bg-[#18181B] text-brand-emerald border border-border-primary'
                     : 'text-muted-foreground hover:text-white'
@@ -265,9 +265,9 @@ export default function InboxPage() {
                     <div className="flex items-start justify-between space-x-2">
                       <div className="truncate">
                         <span className="font-bold text-xs text-white block truncate">{t.name}</span>
-                        <span className="text-[9px] text-zinc-500 block truncate">{col?.title || 'Unknown Space'}</span>
+                        <span className="text-[11px] text-zinc-500 block truncate">{col?.title || 'Unknown Space'}</span>
                       </div>
-                      <span className="text-[8px] text-zinc-600 shrink-0 font-medium" suppressHydrationWarning>
+                      <span className="text-[11px] text-zinc-600 shrink-0 font-medium" suppressHydrationWarning>
                         {new Date(t.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </span>
                     </div>
@@ -287,12 +287,12 @@ export default function InboxPage() {
                           ))}
                         </div>
                         {t.video_url ? (
-                          <span className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 text-[8px] font-black px-1.5 py-0.5 rounded flex items-center space-x-0.5 uppercase">
+                          <span className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 text-[11px] font-black px-1.5 py-0.5 rounded flex items-center space-x-0.5 uppercase">
                             <Video className="w-2.5 h-2.5" />
                             <span>Video</span>
                           </span>
                         ) : (
-                          <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[8px] font-black px-1.5 py-0.5 rounded flex items-center space-x-0.5 uppercase">
+                          <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[11px] font-black px-1.5 py-0.5 rounded flex items-center space-x-0.5 uppercase">
                             <MessageSquare className="w-2.5 h-2.5" />
                             <span>Text</span>
                           </span>
@@ -300,7 +300,7 @@ export default function InboxPage() {
                       </div>
 
                       {/* Status badge */}
-                      <span className={`text-[8px] font-extrabold px-2 py-0.5 rounded uppercase border ${
+                      <span className={`text-[11px] font-extrabold px-2 py-0.5 rounded uppercase border ${
                         t.status === 'pending' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
                         t.status === 'approved' ? 'bg-brand-emerald/10 text-brand-emerald border-brand-emerald/20' :
                         t.status === 'rejected' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
@@ -418,7 +418,7 @@ export default function InboxPage() {
                       <Calendar className="w-3 h-3" />
                       <span>{new Date(activeTestimonial.createdAt).toLocaleString()}</span>
                     </span>
-                    <span className={`px-2 py-0.5 rounded-full border text-[9px] font-extrabold flex items-center space-x-1 ${getSentimentClass(activeTestimonial.sentiment)}`}>
+                    <span className={`px-2 py-0.5 rounded-full border text-[11px] font-extrabold flex items-center space-x-1 ${getSentimentClass(activeTestimonial.sentiment)}`}>
                       {getSentimentIcon(activeTestimonial.sentiment)}
                       <span className="uppercase">{activeTestimonial.sentiment} Sentiment</span>
                     </span>
@@ -438,7 +438,7 @@ export default function InboxPage() {
 
                 {/* Review Text block */}
                 <div className="bg-[#18181B]/60 border border-border-primary rounded-xl p-6 relative">
-                  <span className="absolute -top-3 left-4 bg-brand-emerald text-white text-[9px] font-black uppercase px-2 py-0.5 rounded shadow">
+                  <span className="absolute -top-3 left-4 bg-brand-emerald text-white text-[11px] font-black uppercase px-2 py-0.5 rounded shadow">
                     {activeTestimonial.video_url ? 'Video Transcript' : 'Review Text'}
                   </span>
                   <p className="text-sm text-slate-200 leading-relaxed font-medium">
@@ -505,7 +505,7 @@ export default function InboxPage() {
                         {activeTestimonial.keywords.map(kw => (
                           <span 
                             key={kw} 
-                            className="bg-[#09090B] border border-border-primary text-slate-400 font-semibold px-2 py-0.5 rounded-md text-[9px] hover:text-brand-emerald cursor-pointer transition"
+                            className="bg-[#09090B] border border-border-primary text-slate-400 font-semibold px-2 py-0.5 rounded-md text-[11px] hover:text-brand-emerald cursor-pointer transition"
                           >
                             #{kw}
                           </span>
@@ -568,14 +568,14 @@ export default function InboxPage() {
                     </div>
                     <h3 className="text-white text-base font-black tracking-tight">AI Avatar Review Generator</h3>
                     <p className="text-[11px] text-slate-400 leading-normal">
-                      Synthesize realistic video testimonial reviews from raw script scripts.
+                      Synthesize realistic video testimonial reviews from a written script.
                     </p>
                   </div>
 
                   <div className="space-y-3.5">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block">Customer Name</label>
+                        <label className="text-[11px] font-extrabold text-zinc-400 uppercase tracking-wider block">Customer Name</label>
                         <input
                           type="text"
                           required
@@ -585,7 +585,7 @@ export default function InboxPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block">Avatar Gender</label>
+                        <label className="text-[11px] font-extrabold text-zinc-400 uppercase tracking-wider block">Avatar Gender</label>
                         <select
                           value={avatarGender}
                           onChange={(e) => setAvatarGender(e.target.value as 'male' | 'female')}
@@ -599,7 +599,7 @@ export default function InboxPage() {
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block">Role / Headline</label>
+                        <label className="text-[11px] font-extrabold text-zinc-400 uppercase tracking-wider block">Role / Headline</label>
                         <input
                           type="text"
                           required
@@ -609,7 +609,7 @@ export default function InboxPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block">Company</label>
+                        <label className="text-[11px] font-extrabold text-zinc-400 uppercase tracking-wider block">Company</label>
                         <input
                           type="text"
                           required
@@ -621,7 +621,7 @@ export default function InboxPage() {
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-[9px] font-extrabold text-zinc-400 uppercase tracking-wider block">AI Testimonial script (Text)</label>
+                      <label className="text-[11px] font-extrabold text-zinc-400 uppercase tracking-wider block">AI Testimonial script (Text)</label>
                       <textarea
                         required
                         rows={3}
@@ -667,7 +667,7 @@ export default function InboxPage() {
                     
                     <p className="text-[10px] text-slate-500 leading-normal max-w-[240px]">
                       {synthesisStep === 'voice' && "Power AI synthesizer is generating natural voice transcripts..."}
-                      {synthesisStep === 'video' && "DeepFake face mappings are blending video frames securely..."}
+                      {synthesisStep === 'video' && "Synthesizing your AI video testimonial, please wait......"}
                       {synthesisStep === 'save' && "Saving the pending review in your testimonials inbox space..."}
                     </p>
                   </div>
@@ -678,7 +678,7 @@ export default function InboxPage() {
               {synthesisStep === 'success' && (
                 <div className="p-8 flex flex-col items-center justify-center space-y-5 text-center">
                   <div className="w-12 h-12 rounded-full bg-brand-emerald/10 border border-brand-emerald flex items-center justify-center text-brand-emerald">
-                    <Zap className="w-6 h-6 animate-bounce" />
+                    <Zap className="w-6 h-6 animate-pulse" />
                   </div>
 
                   <div className="space-y-1">
@@ -688,7 +688,7 @@ export default function InboxPage() {
                     </p>
                   </div>
 
-                  <div className="bg-[#09090B] border border-border-primary/50 p-2.5 rounded-lg text-[9px] text-zinc-500 font-mono w-full">
+                  <div className="bg-[#09090B] border border-border-primary/50 p-2.5 rounded-lg text-[11px] text-zinc-500 font-mono w-full">
                     Space queue updated with status: pending
                   </div>
 

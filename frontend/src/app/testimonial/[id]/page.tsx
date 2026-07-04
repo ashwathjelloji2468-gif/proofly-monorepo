@@ -113,7 +113,7 @@ export default function IndividualTestimonialDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090B] text-slate-200 font-sans flex flex-col items-center justify-center p-4 md:p-8 select-none">
+    <div className="min-h-screen bg-[#09090B] text-slate-200 font-sans flex flex-col items-center justify-center p-4 md:p-8 ">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
 
       <div className="w-full max-w-2xl space-y-6">

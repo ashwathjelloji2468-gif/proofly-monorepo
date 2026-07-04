@@ -168,12 +168,12 @@ export default function WallOfLovePage() {
               </h4>
               <p className="text-[10px] text-muted-foreground">Copy and paste this script where you want the Wall of Love to render.</p>
               <div className="bg-[#09090B] border border-border-primary/80 rounded-lg p-2.5 relative">
-                <pre className="text-[9px] font-mono text-zinc-500 overflow-x-auto whitespace-pre-wrap h-16 scrollbar-thin">
+                <pre className="text-[11px] font-mono text-zinc-500 overflow-x-auto whitespace-pre-wrap h-16 scrollbar-thin">
                   {getEmbedCode()}
                 </pre>
                 <button
                   onClick={copyEmbedCode}
-                  className="absolute bottom-2 right-2 bg-[#18181B] hover:bg-[#27272A] text-slate-400 hover:text-white p-1.5 rounded border border-border-primary cursor-pointer transition flex items-center space-x-1 text-[9px] font-bold"
+                  className="absolute bottom-2 right-2 bg-[#18181B] hover:bg-[#27272A] text-slate-400 hover:text-white p-1.5 rounded border border-border-primary cursor-pointer transition flex items-center space-x-1 text-[11px] font-bold"
                 >
                   {copied ? <Check className="w-3 h-3 text-brand-emerald" /> : <Copy className="w-3 h-3" />}
                   <span>{copied ? 'Copied!' : 'Copy'}</span>
@@ -195,7 +195,7 @@ export default function WallOfLovePage() {
                 <Eye className="w-4 h-4 text-brand-emerald" />
                 <span className="text-xs font-bold text-slate-200">Interactive Canvas Preview</span>
               </div>
-              <span className="text-[9px] bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald px-2 py-0.5 rounded-full font-black uppercase">
+              <span className="text-[11px] bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald px-2 py-0.5 rounded-full font-black uppercase">
                 {approvedTestimonials.length} Reviews Loaded
               </span>
             </div>

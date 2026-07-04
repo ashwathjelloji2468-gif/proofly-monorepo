@@ -78,13 +78,13 @@ export default function SignupPage() {
               </div>
               <h3 className="font-bold text-white text-sm">Check your inbox</h3>
               <p className="text-muted-foreground text-xs leading-relaxed">
-                We have sent an verification email to <strong className="text-white">{registeredEmail}</strong>. 
+                We have sent a verification email to <strong className="text-white">{registeredEmail}</strong>. 
                 Please click the link in the email to confirm your account and log in.
               </p>
               <div className="pt-4">
                 <Link href="/login" className="inline-flex items-center space-x-1.5 text-xs text-brand-emerald hover:underline font-semibold">
                   <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Proceed to Login</span>
+                  <span>Back to Login</span>
                 </Link>
               </div>
             </div>

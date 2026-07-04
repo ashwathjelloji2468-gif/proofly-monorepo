@@ -30,7 +30,7 @@ export default function ContactSalesPage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       {/* Hero Section */}
@@ -71,7 +71,7 @@ export default function ContactSalesPage() {
               {/* Full Name & Business Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1 text-left">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Full Name</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Full Name</label>
                   <input 
                     type="text" 
                     required
@@ -82,7 +82,7 @@ export default function ContactSalesPage() {
                   />
                 </div>
                 <div className="space-y-1 text-left">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Business Email</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Business Email</label>
                   <input 
                     type="email" 
                     required
@@ -97,7 +97,7 @@ export default function ContactSalesPage() {
               {/* Company Name & Team Size */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1 text-left">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Company Name</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Company Name</label>
                   <div className="relative">
                     <input 
                       type="text" 
@@ -112,7 +112,7 @@ export default function ContactSalesPage() {
                 </div>
                 
                 <div className="space-y-1 text-left">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Team Size</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Team Size</label>
                   <div className="relative">
                     <select
                       value={teamSize}
@@ -132,7 +132,7 @@ export default function ContactSalesPage() {
 
               {/* Message */}
               <div className="space-y-1 text-left">
-                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Project Requirements / Details</label>
+                <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Project Requirements / Details</label>
                 <textarea 
                   required
                   value={message}

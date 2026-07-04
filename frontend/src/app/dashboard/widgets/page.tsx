@@ -133,7 +133,7 @@ export default function WidgetsPage() {
     if (user?.tier === 'FREE') {
       const widgetCount = widgets.length;
       if (widgetCount >= 1) {
-        setErrorToast('LIMIT_REACHED: Free tier is limited to 1 widget. Please upgrade to Pro.');
+        setErrorToast('Free tier is limited to 1 widget. Please upgrade to Pro.');
         setTimeout(() => setErrorToast(null), 4000);
         return;
       }
@@ -284,13 +284,13 @@ export default function WidgetsPage() {
       
       {/* Dynamic Alerts/Toasts */}
       {saveSuccess && (
-        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl border border-brand-emerald/20 transition animate-bounce">
+        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl border border-brand-emerald/20 transition animate-pulse">
           <CheckCircle className="w-4 h-4" />
           <span>Widget saved successfully!</span>
         </div>
       )}
       {errorToast && (
-        <div className="fixed top-5 right-5 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl border border-red-600/20 transition animate-pulse">
+        <div className="fixed top-5 right-5 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl border border-red-600/20 transition animate-pulse">
           <AlertCircle className="w-4 h-4" />
           <span>{errorToast}</span>
         </div>
@@ -357,7 +357,7 @@ export default function WidgetsPage() {
                       <div className="space-y-1.5">
                         <div className="flex items-center space-x-2">
                           <h3 className="text-white font-extrabold text-sm">{w.name}</h3>
-                          <span className="text-[8px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 px-2 py-0.5 rounded font-black uppercase">{w.layout}</span>
+                          <span className="text-[11px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 px-2 py-0.5 rounded font-black uppercase">{w.layout}</span>
                         </div>
                         <p className="text-[10px] text-muted-foreground font-mono">ID: {w.id}</p>
                       </div>
@@ -443,7 +443,7 @@ export default function WidgetsPage() {
 
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
             {/* Left Column: Panel settings */}
-            <div className="w-full lg:w-96 border-r border-border-primary flex flex-col bg-[#141417] overflow-y-auto shrink-0 select-none">
+            <div className="w-full lg:w-96 border-r border-border-primary flex flex-col bg-[#141417] overflow-y-auto shrink-0 ">
               
               {/* Layout Config */}
               <div className="p-5 border-b border-border-primary space-y-4">
@@ -505,7 +505,7 @@ export default function WidgetsPage() {
                   <div className="space-y-3 pt-2">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-extrabold uppercase text-slate-400">Primary Color</label>
+                        <label className="text-[11px] font-extrabold uppercase text-slate-400">Primary Color</label>
                         <input
                           type="color"
                           value={widgetSettings.primaryColor}
@@ -514,7 +514,7 @@ export default function WidgetsPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-extrabold uppercase text-slate-400">Background</label>
+                        <label className="text-[11px] font-extrabold uppercase text-slate-400">Background</label>
                         <input
                           type="color"
                           value={widgetSettings.backgroundColor}
@@ -525,7 +525,7 @@ export default function WidgetsPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="text-[9px] font-extrabold uppercase text-slate-400">Card Color</label>
+                        <label className="text-[11px] font-extrabold uppercase text-slate-400">Card Color</label>
                         <input
                           type="color"
                           value={widgetSettings.cardColor}
@@ -534,7 +534,7 @@ export default function WidgetsPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[9px] font-extrabold uppercase text-slate-400">Text Color</label>
+                        <label className="text-[11px] font-extrabold uppercase text-slate-400">Text Color</label>
                         <input
                           type="color"
                           value={widgetSettings.textColor}
@@ -556,7 +556,7 @@ export default function WidgetsPage() {
 
                 {/* Min rating */}
                 <div className="space-y-1">
-                  <label className="text-[9px] font-extrabold uppercase text-slate-400">Min Rating</label>
+                  <label className="text-[11px] font-extrabold uppercase text-slate-400">Min Rating</label>
                   <select
                     value={widgetSettings.minRating}
                     onChange={(e) => setWidgetSettings({ ...widgetSettings, minRating: parseInt(e.target.value, 10) })}
@@ -570,7 +570,7 @@ export default function WidgetsPage() {
 
                 {/* Type Filter */}
                 <div className="space-y-1.5 pt-1">
-                  <label className="text-[9px] font-extrabold uppercase text-slate-400 block">Content Type</label>
+                  <label className="text-[11px] font-extrabold uppercase text-slate-400 block">Content Type</label>
                   <div className="flex gap-2">
                     <button
                       onClick={() => setWidgetSettings({ ...widgetSettings, onlyVideo: false, onlyText: false })}
@@ -608,7 +608,7 @@ export default function WidgetsPage() {
                 {/* Testimonials Limit Slider */}
                 <div className="space-y-1 pt-1">
                   <div className="flex items-center justify-between">
-                    <label className="text-[9px] font-extrabold uppercase text-slate-400">Max Testimonials</label>
+                    <label className="text-[11px] font-extrabold uppercase text-slate-400">Max Testimonials</label>
                     <span className="text-xs text-brand-emerald font-black">{widgetSettings.maxTestimonials}</span>
                   </div>
                   <input
@@ -620,13 +620,13 @@ export default function WidgetsPage() {
                     className="w-full accent-brand-emerald cursor-pointer"
                   />
                   {user?.tier === 'FREE' && (
-                    <span className="text-[8px] text-yellow-500 font-bold block mt-1">⚠️ Free tier limits list to maximum 25.</span>
+                    <span className="text-[11px] text-yellow-500 font-bold block mt-1">⚠️ Free tier limits list to maximum 25.</span>
                   )}
                 </div>
 
                 {/* Sort logic */}
                 <div className="space-y-1">
-                  <label className="text-[9px] font-extrabold uppercase text-slate-400">Sort Testimonials By</label>
+                  <label className="text-[11px] font-extrabold uppercase text-slate-400">Sort Testimonials By</label>
                   <select
                     value={widgetSettings.sortBy}
                     onChange={(e) => setWidgetSettings({ ...widgetSettings, sortBy: e.target.value as any })}
@@ -669,7 +669,7 @@ export default function WidgetsPage() {
                 <label className="flex items-center justify-between cursor-pointer group text-xs text-slate-300 hover:text-white transition pt-3 border-t border-border-primary/50">
                   <div className="space-y-0.5">
                     <span className="block font-bold">Show Proofly Branding</span>
-                    <span className="text-[9px] text-muted-foreground block">Support our project with a small footer link.</span>
+                    <span className="text-[11px] text-muted-foreground block">Support our project with a small footer link.</span>
                   </div>
                   <input
                     type="checkbox"
@@ -680,7 +680,7 @@ export default function WidgetsPage() {
                   />
                 </label>
                 {user?.tier === 'FREE' && (
-                  <div className="p-2 rounded bg-yellow-500/10 border border-yellow-500/20 text-[9px] text-yellow-400 font-semibold leading-relaxed">
+                  <div className="p-2 rounded bg-yellow-500/10 border border-yellow-500/20 text-[11px] text-yellow-400 font-semibold leading-relaxed">
                     🌟 Removing Proofly branding requires upgrading to the **PRO** plan.
                   </div>
                 )}
@@ -755,8 +755,8 @@ export default function WidgetsPage() {
                             </div>
                           ))}
                         </div>
-                        <div className="absolute top-1/2 -translate-y-1/2 left-2 p-1.5 rounded-full bg-zinc-800/80 border border-zinc-700 text-white cursor-pointer select-none">‹</div>
-                        <div className="absolute top-1/2 -translate-y-1/2 right-2 p-1.5 rounded-full bg-zinc-800/80 border border-zinc-700 text-white cursor-pointer select-none">›</div>
+                        <div className="absolute top-1/2 -translate-y-1/2 left-2 p-1.5 rounded-full bg-zinc-800/80 border border-zinc-700 text-white cursor-pointer ">‹</div>
+                        <div className="absolute top-1/2 -translate-y-1/2 right-2 p-1.5 rounded-full bg-zinc-800/80 border border-zinc-700 text-white cursor-pointer ">›</div>
                       </div>
                     )}
 
@@ -782,7 +782,7 @@ export default function WidgetsPage() {
 
                     {/* Powered by Proofly footer badge */}
                     {widgetSettings.showProoflyBranding && (
-                      <div className="flex items-center justify-center space-x-1.5 text-[10px] text-slate-450 font-bold select-none cursor-pointer">
+                      <div className="flex items-center justify-center space-x-1.5 text-[10px] text-slate-450 font-bold  cursor-pointer">
                         <span>Powered by</span>
                         <span className="text-[#8B5CF6]">Proofly</span>
                       </div>
@@ -798,7 +798,7 @@ export default function WidgetsPage() {
                   <p className="text-[11px] text-muted-foreground">Copy and paste this snippet to embed the widget in any page builder or source code.</p>
                 </div>
 
-                <div className="flex space-x-2 border-b border-border-primary/50 pb-2 overflow-x-auto select-none">
+                <div className="flex space-x-2 border-b border-border-primary/50 pb-2 overflow-x-auto ">
                   {[
                     { id: 'html', label: 'HTML / JS' },
                     { id: 'react', label: 'React' },
@@ -874,7 +874,7 @@ export default function WidgetsPage() {
                   ].map(stat => (
                     <div key={stat.label} className="bg-[#18181B] border border-border-primary p-5 rounded-xl shadow-lg flex flex-col justify-between h-28 hover:border-zinc-800 transition">
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-wider">{stat.label}</span>
+                        <span className="text-[11px] text-slate-400 uppercase font-black tracking-wider">{stat.label}</span>
                         {stat.icon}
                       </div>
                       <div className="text-2xl font-black text-white">{stat.value}</div>
@@ -1082,7 +1082,7 @@ function MockWidgetCard({ t, settings, theme }: { t: any; settings: WidgetSettin
 
       {/* Date */}
       {settings.showDate && t.createdAt && (
-        <div className="text-[9px] text-slate-500 font-bold mt-2">
+        <div className="text-[11px] text-slate-500 font-bold mt-2">
           {new Date(t.createdAt).toLocaleDateString()}
         </div>
       )}

@@ -196,13 +196,13 @@ export default function WhiteLabelSettingsPage() {
       
       {/* Toast Alert */}
       {saveSuccess && (
-        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-bounce">
+        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <CheckCircle2 className="w-4 h-4" />
           <span>Branding configurations updated!</span>
         </div>
       )}
       {errorToast && (
-        <div className="fixed top-5 right-5 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
+        <div className="fixed top-5 right-5 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <AlertCircle className="w-4 h-4" />
           <span>{errorToast}</span>
         </div>
@@ -236,7 +236,7 @@ export default function WhiteLabelSettingsPage() {
         </div>
 
         {/* Tab Filters */}
-        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 select-none overflow-x-auto scrollbar-none">
+        <div className="flex space-x-2 border-b border-border-primary/50 pb-2  overflow-x-auto scrollbar-none">
           {[
             { id: 'branding', label: 'Brand Assets', icon: <Layers className="w-3.5 h-3.5" /> },
             { id: 'theme', label: 'Color Identity', icon: <Palette className="w-3.5 h-3.5" /> },
@@ -269,7 +269,7 @@ export default function WhiteLabelSettingsPage() {
               </p>
             </div>
             <Link 
-              href="/dashboard/settings" 
+              href="/dashboard/settings?tab=billing" 
               className="bg-[#8B5CF6] hover:bg-[#7c4fe3] text-white font-black text-xs px-6 py-3 rounded-lg shadow-xl shadow-purple-900/10 transition"
             >
               Upgrade to Business Plan
@@ -361,7 +361,7 @@ export default function WhiteLabelSettingsPage() {
                     )}
                     <span className="font-extrabold text-white">{brandName || 'Acme Workspace'}</span>
                   </div>
-                  <span className="text-[9px] bg-zinc-900 border border-zinc-850 px-2 py-0.5 rounded text-slate-450 uppercase">Dashboard</span>
+                  <span className="text-[11px] bg-zinc-900 border border-zinc-850 px-2 py-0.5 rounded text-slate-450 uppercase">Dashboard</span>
                 </div>
               </div>
 
@@ -438,7 +438,7 @@ export default function WhiteLabelSettingsPage() {
                     <div className="w-8 h-8 rounded-full bg-zinc-800" />
                     <div>
                       <span className="text-xs font-bold text-white block">John Doe</span>
-                      <span className="text-[9px] text-slate-450 block">CTO, TechCorp</span>
+                      <span className="text-[11px] text-slate-450 block">CTO, TechCorp</span>
                     </div>
                   </div>
                   <p className="text-[11px] leading-relaxed text-slate-350 italic">"The automated conversion attribution is absolutely game changing. Setup took two minutes."</p>
@@ -447,13 +447,13 @@ export default function WhiteLabelSettingsPage() {
                   <div className="flex gap-2 pt-2">
                     <span 
                       style={{ backgroundColor: `${primaryColor}15`, color: primaryColor }}
-                      className="text-[9px] font-bold px-2 py-0.5 rounded-full border border-current"
+                      className="text-[11px] font-bold px-2 py-0.5 rounded-full border border-current"
                     >
                       Verified Reviewer
                     </span>
                     <span 
                       style={{ backgroundColor: `${secondaryColor}15`, color: secondaryColor }}
-                      className="text-[9px] font-bold px-2 py-0.5 rounded-full border border-current"
+                      className="text-[11px] font-bold px-2 py-0.5 rounded-full border border-current"
                     >
                       Featured
                     </span>
@@ -506,12 +506,12 @@ export default function WhiteLabelSettingsPage() {
                         </a>
                       </div>
                     </div>
-                    <span className="text-[9px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25 px-2 py-0.5 rounded-full font-bold uppercase">Active</span>
+                    <span className="text-[11px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25 px-2 py-0.5 rounded-full font-bold uppercase">Active</span>
                   </div>
                 )}
 
                 {activeSpace && activeSpace.domainStatus === 'FAILED' && (
-                  <div className="p-4 bg-red-650/5 border border-red-900/20 rounded-xl flex items-center space-x-2 text-xs">
+                  <div className="p-4 bg-red-600/5 border border-red-900/20 rounded-xl flex items-center space-x-2 text-xs">
                     <XCircle className="w-5 h-5 text-red-400" />
                     <div>
                       <span className="font-extrabold text-white block">Verification failed.</span>
@@ -527,7 +527,7 @@ export default function WhiteLabelSettingsPage() {
               <h3 className="text-white text-xs font-black uppercase tracking-wider border-b border-border-primary/50 pb-2">DNS verification instructions</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">Add CNAME records inside your hosting dashboard (Cloudflare, GoDaddy, Vercel):</p>
               
-              <div className="space-y-3 font-mono text-[9px] bg-[#09090B] border border-border-primary rounded-xl p-4">
+              <div className="space-y-3 font-mono text-[11px] bg-[#09090B] border border-border-primary rounded-xl p-4">
                 <div>
                   <span className="text-slate-450 block uppercase font-bold">Type:</span>
                   <span className="text-slate-200">CNAME</span>

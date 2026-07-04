@@ -23,7 +23,7 @@ export default function DocsSearchPage() {
   );
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       <section className="max-w-4xl mx-auto px-6 pt-32 pb-24 w-full flex-1 space-y-6 text-left">
@@ -50,7 +50,7 @@ export default function DocsSearchPage() {
             <Link key={idx} href="/docs">
               <button className="w-full text-left bg-[#0c0d16] border border-white/[0.04] hover:border-white/10 p-4 rounded-xl flex items-center justify-between transition cursor-pointer mt-2.5">
                 <div className="space-y-1">
-                  <span className="text-[8px] font-black uppercase text-zinc-500 tracking-wider block">{item.category}</span>
+                  <span className="text-[11px] font-black uppercase text-zinc-500 tracking-wider block">{item.category}</span>
                   <span className="text-xs font-bold text-white block">{item.title}</span>
                   <p className="text-[10px] text-slate-400">{item.desc}</p>
                 </div>

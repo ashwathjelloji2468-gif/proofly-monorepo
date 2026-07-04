@@ -75,7 +75,7 @@ export default function EnterpriseSecurityPage() {
   const [errorToast, setErrorToast] = useState<string | null>(null);
 
   // Mock Org ID mapping
-  const orgId = 'acme_enterprise_org_123';
+  const orgId = user?.id || '';
 
   // Load details
   useEffect(() => {
@@ -182,13 +182,13 @@ export default function EnterpriseSecurityPage() {
       
       {/* Toast Alert */}
       {saveSuccess && (
-        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-bounce">
+        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <CheckCircle2 className="w-4 h-4" />
           <span>Security configurations updated!</span>
         </div>
       )}
       {errorToast && (
-        <div className="fixed top-5 right-5 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
+        <div className="fixed top-5 right-5 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <AlertCircle className="w-4 h-4" />
           <span>{errorToast}</span>
         </div>
@@ -208,13 +208,13 @@ export default function EnterpriseSecurityPage() {
       <main className="p-8 space-y-6 max-w-6xl w-full text-left relative">
         
         {/* Tab Filters */}
-        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 select-none overflow-x-auto scrollbar-none">
+        <div className="flex space-x-2 border-b border-border-primary/50 pb-2  overflow-x-auto scrollbar-none">
           {[
             { id: 'security_center', label: 'Security Center', icon: <Shield className="w-3.5 h-3.5" />, visible: true },
             { id: 'rbac', label: 'Custom Roles RBAC', icon: <Users className="w-3.5 h-3.5" />, visible: true },
-            { id: 'sso', label: 'Sso setup', icon: <Key className="w-3.5 h-3.5" />, visible: isEnterpriseUser },
+            { id: 'sso', label: 'SSO Setup', icon: <Key className="w-3.5 h-3.5" />, visible: isEnterpriseUser },
             { id: 'ip_rules', label: 'IP Policies Whitelists', icon: <Globe className="w-3.5 h-3.5" />, visible: isEnterpriseUser },
-            { id: 'audit_timeline', label: 'AuditsTimeline', icon: <Terminal className="w-3.5 h-3.5" />, visible: true }
+            { id: 'audit_timeline', label: 'Audit Timeline', icon: <Terminal className="w-3.5 h-3.5" />, visible: true }
           ].filter(tab => tab.visible).map(tab => (
             <button
               key={tab.id}
@@ -310,7 +310,7 @@ export default function EnterpriseSecurityPage() {
                       <span className="text-xs font-bold text-white block">{role.name}</span>
                       <div className="flex gap-1.5 flex-wrap">
                         {role.permissions.split(',').map((p, idx) => (
-                          <span key={idx} className="text-[9px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25 px-2 py-0.5 rounded font-mono font-black">{p}</span>
+                          <span key={idx} className="text-[11px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25 px-2 py-0.5 rounded font-mono font-black">{p}</span>
                         ))}
                       </div>
                     </div>
@@ -433,14 +433,14 @@ export default function EnterpriseSecurityPage() {
               <h3 className="text-white text-xs font-black uppercase tracking-wider border-b border-border-primary/50 pb-2">SSO Callback metadata</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">Provide these parameters inside your Okta/Azure dashboard setting fields:</p>
               
-              <div className="space-y-3 font-mono text-[9px] bg-[#09090B] border border-border-primary rounded-xl p-4">
+              <div className="space-y-3 font-mono text-[11px] bg-[#09090B] border border-border-primary rounded-xl p-4">
                 <div>
                   <span className="text-slate-450 block uppercase font-bold">Assertion Consumer Service URL (ACS):</span>
-                  <span className="text-slate-200">https://useproofly.vercel.app/api/auth/saml/callback</span>
+                  <span className="text-slate-200">https://app.useproofly.com/api/auth/saml/callback</span>
                 </div>
                 <div>
                   <span className="text-slate-450 block uppercase font-bold">Entity ID:</span>
-                  <span className="text-slate-200">urn:amazon:cognito:sp:useproofly_sp</span>
+                  <span className="text-slate-200">urn:useproofly:saml:sp</span>
                 </div>
               </div>
             </div>
@@ -466,7 +466,7 @@ export default function EnterpriseSecurityPage() {
                     <div key={pol.id} className="bg-[#09090B] border border-border-primary rounded-xl p-4 flex items-center justify-between hover:border-zinc-800 transition">
                       <div className="space-y-0.5">
                         <span className="text-xs font-bold text-white font-mono block">{pol.cidr}</span>
-                        <span className="text-[9px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25 px-2 py-0.5 rounded font-black uppercase font-mono">{pol.type}</span>
+                        <span className="text-[11px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/25 px-2 py-0.5 rounded font-black uppercase font-mono">{pol.type}</span>
                       </div>
                       
                       <button
@@ -528,7 +528,7 @@ export default function EnterpriseSecurityPage() {
           <div className="bg-[#18181B] border border-border-primary rounded-2xl p-6 space-y-4 shadow-xl text-left">
             <h3 className="text-white text-xs font-black uppercase tracking-wider border-b border-border-primary/50 pb-2">Audit Logs Trail</h3>
             
-            <div className="overflow-x-auto select-none">
+            <div className="overflow-x-auto ">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-border-primary text-[10px] text-slate-400 font-black uppercase tracking-wider">

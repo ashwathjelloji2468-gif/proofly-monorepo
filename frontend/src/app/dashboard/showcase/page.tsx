@@ -49,8 +49,8 @@ export default function ShowcaseDashboardPage() {
   const [ctaUrl, setCtaUrl] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
   const [coverImageUrl, setCoverImageUrl] = useState('');
-  const [layout, setLayout] = useState('MASONRY');
-  const [theme, setTheme] = useState('DARK');
+  const [layout, setLayout] = useState('Masonry Grid');
+  const [theme, setTheme] = useState('Dark');
   const [customCss, setCustomCss] = useState('');
   const [showBranding, setShowBranding] = useState(true);
   const [metaTitle, setMetaTitle] = useState('Customer Reviews & Testimonials');
@@ -142,13 +142,13 @@ export default function ShowcaseDashboardPage() {
       
       {/* Toast notifications */}
       {saveSuccess && (
-        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-bounce">
+        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <CheckCircle2 className="w-4 h-4" />
           <span>Showcase configurations saved!</span>
         </div>
       )}
       {errorToast && (
-        <div className="fixed top-5 right-5 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
+        <div className="fixed top-5 right-5 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <AlertCircle className="w-4 h-4" />
           <span>{errorToast}</span>
         </div>
@@ -203,7 +203,7 @@ export default function ShowcaseDashboardPage() {
         </div>
 
         {/* Tab filters */}
-        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 select-none">
+        <div className="flex space-x-2 border-b border-border-primary/50 pb-2 ">
           <button
             onClick={() => setActiveTab('editor')}
             className={`text-xs font-black uppercase px-4 py-2 border rounded-lg transition cursor-pointer ${
@@ -296,7 +296,7 @@ export default function ShowcaseDashboardPage() {
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Layout Style</label>
                     <div className="grid grid-cols-2 gap-2">
-                      {['MASONRY', 'CLASSIC', 'CAROUSEL', 'MINIMAL'].map(lay => (
+                      {['Masonry Grid', 'Classic', 'Carousel', 'Minimal'].map(lay => (
                         <button
                           key={lay}
                           onClick={() => setLayout(lay)}
@@ -315,7 +315,7 @@ export default function ShowcaseDashboardPage() {
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Color Theme</label>
                     <div className="grid grid-cols-2 gap-2">
-                      {['DARK', 'LIGHT', 'GLASSMORPHISM', 'GRADIENT'].map(t => (
+                      {['Dark', 'Light', 'Glassmorphism', 'Gradient'].map(t => (
                         <button
                           key={t}
                           onClick={() => setTheme(t)}
@@ -344,8 +344,8 @@ export default function ShowcaseDashboardPage() {
                     />
                   </label>
                   {user?.tier === 'FREE' && (
-                    <div className="p-2 rounded bg-yellow-500/10 border border-yellow-500/20 text-[9px] text-yellow-450 font-bold leading-relaxed">
-                      🌟 Removing Proofly logo requires upgrading to the **PRO** plan.
+                    <div className="p-2 rounded bg-yellow-500/10 border border-yellow-500/20 text-[11px] text-yellow-450 font-bold leading-relaxed">
+                      🌟 Removing Proofly logo requires upgrading to the <strong>PRO</strong> plan.
                     </div>
                   )}
                 </div>
@@ -426,7 +426,7 @@ export default function ShowcaseDashboardPage() {
                   ].map(stat => (
                     <div key={stat.label} className="bg-[#18181B] border border-border-primary p-5 rounded-xl shadow-lg flex flex-col justify-between h-28 hover:border-zinc-800 transition">
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-wider">{stat.label}</span>
+                        <span className="text-[11px] text-slate-400 uppercase font-black tracking-wider">{stat.label}</span>
                         {stat.icon}
                       </div>
                       <div className="text-2xl font-black text-white">{stat.value}</div>

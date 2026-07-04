@@ -69,7 +69,7 @@ export default function ApiDeveloperPage() {
               type: 'TEXT',
               rating: 5,
               textContent: 'Proofly integrated in less than 30 minutes! Onboarding pipeline speed doubled immediately.',
-              reviewerName: 'J. Ashwath',
+              reviewerName: 'Alex Rivera',
               reviewerTitle: 'SaaS Founder',
               createdAt: '2026-06-25T10:00:00Z'
             },
@@ -77,8 +77,8 @@ export default function ApiDeveloperPage() {
               id: 'test_5e6f7g8h',
               type: 'VIDEO',
               rating: 5,
-              videoUrl: 'https://cdn.proofly.co/videos/james-grid.mp4',
-              reviewerName: 'Ateeqhulla Khan',
+              videoUrl: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
+              reviewerName: 'Alex Rivera',
               reviewerTitle: 'Product Lead',
               createdAt: '2026-06-26T04:00:00Z'
             }
@@ -98,8 +98,8 @@ export default function ApiDeveloperPage() {
         spaceId: 'acme-saas',
         rating: 5,
         textContent: 'The analytics reports are visual, comprehensive, and load instantly.',
-        reviewerName: 'Ateeqhulla Khan',
-        reviewerEmail: 'marcus@launchpad.io',
+        reviewerName: 'Alex Rivera',
+        reviewerEmail: 'alex@example.com',
         reviewerTitle: 'Growth Hacker'
       },
       mockResponse: {
@@ -110,7 +110,7 @@ export default function ApiDeveloperPage() {
           spaceId: 'acme-saas',
           rating: 5,
           textContent: 'The analytics reports are visual, comprehensive, and load instantly.',
-          reviewerName: 'Ateeqhulla Khan',
+          reviewerName: 'Alex Rivera',
           reviewerTitle: 'Growth Hacker',
           isApproved: false,
           sentiment: 'POSITIVE',
@@ -122,7 +122,7 @@ export default function ApiDeveloperPage() {
 
   // States
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const [apiKey, setApiKey] = useState('pr_live_51N392kd849j292');
+  const [apiKey, setApiKey] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [responseOutput, setResponseOutput] = useState<any>(null);
   const [copied, setCopied] = useState(false);
@@ -159,7 +159,7 @@ export default function ApiDeveloperPage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans ">
       <Navbar />
 
       {/* Hero Section */}
@@ -208,7 +208,7 @@ export default function ApiDeveloperPage() {
                 }`}
               >
                 <div className="flex items-center space-x-3.5">
-                  <span className={`text-[9px] font-black px-2 py-0.5 rounded ${
+                  <span className={`text-[11px] font-black px-2 py-0.5 rounded ${
                     e.method === 'POST' ? 'bg-brand-teal/10 text-brand-teal border border-brand-teal/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
                   }`}>
                     {e.method}
@@ -227,7 +227,7 @@ export default function ApiDeveloperPage() {
             <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Authorization Headers</span>
             
             <div className="space-y-1.5">
-              <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Bearer API Key</label>
+              <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Bearer API Key</label>
               <div className="relative">
                 <input 
                   type="text" 
@@ -244,10 +244,10 @@ export default function ApiDeveloperPage() {
             {activeEndpoint.requestBody && (
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Request Payload (JSON)</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Request Payload (JSON)</label>
                   <button 
                     onClick={handleCopyCode}
-                    className="text-zinc-500 hover:text-white transition flex items-center space-x-1 text-[9px] cursor-pointer"
+                    className="text-zinc-500 hover:text-white transition flex items-center space-x-1 text-[11px] cursor-pointer"
                   >
                     {copied ? (
                       <span className="text-brand-emerald">Copied!</span>
@@ -306,7 +306,7 @@ export default function ApiDeveloperPage() {
                   {/* Status header */}
                   <div className="flex items-center space-x-2 border-b border-white/5 pb-2.5">
                     <span className="text-[9.5px] text-zinc-500 font-bold">Status:</span>
-                    <span className={`text-[10.5px] font-black uppercase px-2 py-0.2 rounded ${
+                    <span className={`text-[10.5px] font-black uppercase px-2 py-0.5 rounded ${
                       responseOutput.status < 300 
                         ? 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20' 
                         : 'bg-red-500/10 text-red-400 border border-red-500/20'
@@ -336,7 +336,7 @@ export default function ApiDeveloperPage() {
             <div className="space-y-1">
               <span className="text-[8.5px] font-black uppercase text-zinc-500 tracking-wider block">rate limit constraints</span>
               <p className="leading-normal">
-                Standard tokens support up to **60 requests/minute**. Rate limit metrics are returned inside headers (<code className="text-slate-200">X-RateLimit-Remaining</code>).
+                Standard tokens support up to <strong>60 requests/minute</strong>. Rate limit metrics are returned inside headers (<code className="text-slate-200">X-RateLimit-Remaining</code>).
               </p>
             </div>
             <div className="space-y-1">

@@ -256,11 +256,11 @@ export default function CollectTestimonialPage() {
   const primaryColor = currentCollectionPage.theme?.primaryColor || '#10B981';
 
   return (
-    <div className="min-h-screen bg-[#09090B] text-slate-200 font-sans flex flex-col items-center justify-center p-4 md:p-8 select-none">
+    <div className="min-h-screen bg-[#09090B] text-slate-200 font-sans flex flex-col items-center justify-center p-4 md:p-8 ">
       
       {/* Toast Alert */}
       {errorText && (
-        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl border border-red-500/20 animate-pulse">
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl border border-red-500/20 animate-pulse">
           <AlertCircle className="w-4 h-4" />
           <span>{errorText}</span>
         </div>
@@ -491,7 +491,7 @@ export default function CollectTestimonialPage() {
                     className="w-12 h-12 rounded-full object-cover border border-zinc-800 bg-zinc-900"
                   />
                   <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
-                  <span className="absolute bottom-0 right-0 bg-brand-emerald text-white p-0.5 rounded-full text-[8px]">✎</span>
+                  <span className="absolute bottom-0 right-0 bg-brand-emerald text-white p-0.5 rounded-full text-[11px]">✎</span>
                 </label>
                 <div className="space-y-1.5 flex-1">
                   <label className="text-[10px] font-black uppercase text-slate-450">Full Name *</label>
@@ -542,7 +542,7 @@ export default function CollectTestimonialPage() {
               </div>
 
               {/* Consent check */}
-              <label className="flex items-start space-x-2.5 pt-4 border-t border-border-primary/50 cursor-pointer select-none">
+              <label className="flex items-start space-x-2.5 pt-4 border-t border-border-primary/50 cursor-pointer ">
                 <input 
                   type="checkbox" 
                   checked={consentGiven}

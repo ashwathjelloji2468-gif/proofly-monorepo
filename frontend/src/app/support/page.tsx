@@ -90,7 +90,7 @@ export default function SupportPage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden relative">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden relative">
       <Navbar />
 
       {/* Hero Search Section */}
@@ -130,7 +130,7 @@ export default function SupportPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredKb.map((art, idx) => (
                 <div key={idx} className="bg-zinc-950/60 p-4 border border-white/[0.04] rounded-2xl text-left space-y-2">
-                  <span className="text-[8px] font-black uppercase text-[#6366F1] tracking-wider block">{art.category}</span>
+                  <span className="text-[11px] font-black uppercase text-[#6366F1] tracking-wider block">{art.category}</span>
                   <h4 className="text-xs font-bold text-white leading-tight">{art.title}</h4>
                   <p className="text-[10px] text-slate-400 leading-relaxed">{art.content}</p>
                 </div>
@@ -173,7 +173,7 @@ export default function SupportPage() {
           <div className="lg:col-span-7 bg-[#0c0d16] border border-white/[0.05] p-6 sm:p-8 rounded-3xl space-y-5 shadow-2xl relative">
             <div className="flex items-center justify-between border-b border-white/5 pb-3">
               <span className="text-xs font-black uppercase tracking-widest text-[#6366F1] block">Contact Support Desk</span>
-              <span className="text-[9px] text-zinc-500 font-bold uppercase">Average response: 4 hrs</span>
+              <span className="text-[11px] text-zinc-500 font-bold uppercase">Average response: 4 hrs</span>
             </div>
 
             {successSubmitted ? (
@@ -191,7 +191,7 @@ export default function SupportPage() {
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Full Name</label>
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Full Name</label>
                     <input 
                       type="text" 
                       required
@@ -202,7 +202,7 @@ export default function SupportPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Email Address</label>
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Email Address</label>
                     <input 
                       type="email" 
                       required
@@ -216,7 +216,7 @@ export default function SupportPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="sm:col-span-2 space-y-1">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Subject</label>
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Subject</label>
                     <input 
                       type="text" 
                       required
@@ -228,7 +228,7 @@ export default function SupportPage() {
                   </div>
                   
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Priority</label>
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Priority</label>
                     <select
                       value={contactPriority}
                       onChange={(e: any) => setContactPriority(e.target.value)}
@@ -243,7 +243,7 @@ export default function SupportPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Category</label>
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Category</label>
                     <select
                       value={contactCategory}
                       onChange={(e) => setContactCategory(e.target.value)}
@@ -258,7 +258,7 @@ export default function SupportPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Company (Optional)</label>
+                    <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Company (Optional)</label>
                     <input 
                       type="text" 
                       value={contactCompany}
@@ -270,7 +270,7 @@ export default function SupportPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Message details</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Message details</label>
                   <textarea 
                     required
                     value={contactMessage}
@@ -291,11 +291,11 @@ export default function SupportPage() {
                     />
                     <label 
                       htmlFor="file-attachment"
-                      className="bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-[9px] px-3.5 py-2 rounded-xl transition cursor-pointer"
+                      className="bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-[11px] px-3.5 py-2 rounded-xl transition cursor-pointer"
                     >
                       Attach screenshots
                     </label>
-                    <span className="text-[9px] text-zinc-500 font-mono truncate max-w-xs">{attachmentName || 'No files attached'}</span>
+                    <span className="text-[11px] text-zinc-500 font-mono truncate max-w-xs">{attachmentName || 'No files attached'}</span>
                   </div>
 
                   <button 
@@ -326,12 +326,12 @@ export default function SupportPage() {
                   className="bg-zinc-950/60 border border-white/[0.04] p-3.5 rounded-xl hover:border-[#6366F1]/25 cursor-pointer transition duration-200 space-y-2 text-left"
                 >
                   <div className="flex items-center justify-between">
-                    <span className={`text-[8px] font-black px-1.5 py-0.2 rounded uppercase ${
+                    <span className={`text-[11px] font-black px-1.5 py-0.5 rounded uppercase ${
                       t.status === 'OPEN' ? 'bg-brand-teal/10 text-brand-teal' : t.status === 'PENDING' ? 'bg-yellow-500/10 text-yellow-450' : 'bg-zinc-800 text-zinc-400'
                     }`}>
                       {t.status}
                     </span>
-                    <span className="text-[8px] text-zinc-500 font-mono">{t.createdAt.slice(0,10)}</span>
+                    <span className="text-[11px] text-zinc-500 font-mono">{t.createdAt.slice(0,10)}</span>
                   </div>
                   <h4 className="text-xs font-bold text-white truncate">{t.subject}</h4>
                   <div className="flex justify-between items-center text-[8.5px] text-zinc-500 font-bold">
@@ -376,7 +376,7 @@ export default function SupportPage() {
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="flex items-center space-x-2 text-[9px] text-zinc-500 font-bold uppercase tracking-wider">
+              <div className="flex items-center space-x-2 text-[11px] text-zinc-500 font-bold uppercase tracking-wider">
                 <span>Support Ticket</span>
                 <span>/</span>
                 <span>{activeTicket.category}</span>
@@ -391,7 +391,7 @@ export default function SupportPage() {
                     closeTicket(activeTicket.id);
                     setActiveTicketId(null);
                   }}
-                  className="bg-zinc-800 hover:bg-zinc-700 border border-white/5 text-[9px] font-bold px-3 py-1.5 rounded-lg text-slate-350 cursor-pointer"
+                  className="bg-zinc-800 hover:bg-zinc-700 border border-white/5 text-[11px] font-bold px-3 py-1.5 rounded-lg text-slate-350 cursor-pointer"
                 >
                   Close Issue
                 </button>
@@ -401,7 +401,7 @@ export default function SupportPage() {
               <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-thin text-xs leading-relaxed max-h-[220px]">
                 {/* Client core message */}
                 <div className="bg-zinc-950/60 p-3 border border-white/[0.04] rounded-xl space-y-1">
-                  <div className="flex justify-between items-center text-[9px] font-bold text-slate-400">
+                  <div className="flex justify-between items-center text-[11px] font-bold text-slate-400">
                     <span>{activeTicket.name} (Creator)</span>
                     <span className="font-mono">{activeTicket.createdAt.slice(11,16)}</span>
                   </div>
@@ -416,7 +416,7 @@ export default function SupportPage() {
                       rep.author === 'You' ? 'bg-[#6366F1]/5 border-[#6366F1]/15' : 'bg-brand-teal/5 border-brand-teal/15'
                     }`}
                   >
-                    <div className="flex justify-between items-center text-[9px] font-bold text-slate-400">
+                    <div className="flex justify-between items-center text-[11px] font-bold text-slate-400">
                       <span className={rep.author !== 'You' ? 'text-brand-teal' : 'text-[#6366F1]'}>{rep.author}</span>
                       <span className="font-mono">{rep.createdAt.slice(11,16)}</span>
                     </div>
@@ -492,7 +492,7 @@ export default function SupportPage() {
             </p>
 
             <div className="bg-zinc-950/60 p-3 rounded-lg border border-white/[0.04]">
-              <span className="text-[8px] font-black text-zinc-500 uppercase tracking-wider block">Status</span>
+              <span className="text-[11px] font-black text-zinc-500 uppercase tracking-wider block">Status</span>
               <span className="text-[9.5px] font-bold text-white block mt-0.5">Live Desk Offline</span>
             </div>
 

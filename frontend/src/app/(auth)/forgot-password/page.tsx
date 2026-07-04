@@ -71,7 +71,7 @@ export default function ForgotPasswordPage() {
       await verifyOTP(email, otpCode);
       setSuccessMsg('Verification successful! Logging you in...');
       setTimeout(() => {
-        router.push('/dashboard?confetti=true');
+        setStep(3);
       }, 1500);
     } catch (err: any) {
       setError(err.message || 'Invalid verification code. Please try again.');

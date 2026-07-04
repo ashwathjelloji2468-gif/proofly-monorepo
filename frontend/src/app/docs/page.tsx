@@ -114,7 +114,7 @@ All layouts are fully responsive, aligning to mobile grids automatically.`,
   );
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans ">
       <Navbar />
 
       {/* Main Workspace Layout */}
@@ -125,7 +125,7 @@ All layouts are fully responsive, aligning to mobile grids automatically.`,
           
           {/* Search box */}
           <div className="space-y-1.5">
-            <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Search Documentation</span>
+            <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest block">Search Documentation</span>
             <div className="relative">
               <input 
                 type="text"
@@ -179,7 +179,7 @@ All layouts are fully responsive, aligning to mobile grids automatically.`,
         <div className="lg:col-span-9 bg-[#0c0d16] border border-white/[0.05] rounded-2xl p-6 sm:p-8 shadow-xl text-left space-y-6">
           
           {/* Breadcrumbs */}
-          <div className="flex items-center space-x-1.5 text-[9px] text-zinc-500 font-bold uppercase tracking-wider">
+          <div className="flex items-center space-x-1.5 text-[11px] text-zinc-500 font-bold uppercase tracking-wider">
             <span>Docs</span>
             <span>/</span>
             <span>{activeDoc.category}</span>
@@ -207,7 +207,7 @@ All layouts are fully responsive, aligning to mobile grids automatically.`,
             <div className="space-y-2.5 pt-2">
               <div className="flex items-center space-x-1.5">
                 <Terminal className="w-3.5 h-3.5 text-[#6366F1]" />
-                <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Example Configuration Code</span>
+                <span className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Example Configuration Code</span>
               </div>
               <pre className="w-full bg-[#030303] border border-white/[0.05] p-4 rounded-xl text-[9.5px] font-mono text-zinc-400 overflow-x-auto whitespace-pre-wrap leading-relaxed">
                 {activeDoc.code}

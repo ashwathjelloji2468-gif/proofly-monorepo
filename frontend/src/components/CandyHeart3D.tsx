@@ -62,7 +62,7 @@ export function CandyHeart3D() {
   }, [isInView]);
 
   return (
-    <div ref={containerRef} className="relative w-28 h-28 mx-auto flex items-center justify-center select-none">
+    <div ref={containerRef} className="relative w-28 h-28 mx-auto flex items-center justify-center ">
       
       {/* Particle emitter overlay */}
       {sparkles.map((sp) => (

@@ -7,7 +7,7 @@ import { Sparkles, Palette } from 'lucide-react';
 
 export default function BrandAssetsPage() {
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       <section className="max-w-4xl mx-auto px-6 pt-32 pb-24 w-full flex-1 space-y-6 text-left">
@@ -29,7 +29,7 @@ export default function BrandAssetsPage() {
               </div>
               <span className="font-extrabold text-sm text-white">Proofly Logo</span>
             </div>
-            <button className="bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-[9px] px-3 py-1.5 rounded-lg transition cursor-pointer">
+            <button className="bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg transition cursor-pointer">
               Download SVG
             </button>
           </div>

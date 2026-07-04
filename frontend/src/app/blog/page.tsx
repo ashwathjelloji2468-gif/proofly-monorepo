@@ -106,7 +106,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
   });
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       {/* Hero Header */}
@@ -165,7 +165,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
             className="bg-[#0c0d16] border border-white/[0.05] rounded-3xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center shadow-2xl cursor-pointer hover:scale-[1.01] transition-all duration-300 relative overflow-hidden"
           >
             <div className="md:col-span-7 space-y-4">
-              <span className="text-[9px] font-black uppercase text-brand-teal tracking-widest bg-brand-teal/10 border border-brand-teal/20 px-2.5 py-0.5 rounded-full">
+              <span className="text-[11px] font-black uppercase text-brand-teal tracking-widest bg-brand-teal/10 border border-brand-teal/20 px-2.5 py-0.5 rounded-full">
                 Featured Case Study
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight">
@@ -181,7 +181,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
             </div>
 
             <div className="md:col-span-5 bg-zinc-950/80 border border-white/[0.05] p-5 rounded-2xl flex flex-col justify-between h-full min-h-[140px] text-left">
-              <span className="text-[8px] font-black uppercase text-zinc-500 tracking-wider">Author Profile</span>
+              <span className="text-[11px] font-black uppercase text-zinc-500 tracking-wider">Author Profile</span>
               <div className="flex items-center space-x-3 mt-4">
                 <img 
                   src={blogPosts[0].avatar} 
@@ -190,7 +190,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
                 />
                 <div className="leading-none text-left">
                   <span className="text-xs font-bold text-white block">{blogPosts[0].author}</span>
-                  <span className="text-[9px] text-zinc-500 block mt-1">{blogPosts[0].authorRole}</span>
+                  <span className="text-[11px] text-zinc-500 block mt-1">{blogPosts[0].authorRole}</span>
                 </div>
               </div>
             </div>
@@ -207,7 +207,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[8px] font-black uppercase tracking-widest bg-white/5 border border-white/5 px-2 py-0.5 rounded-full text-slate-400">
+                  <span className="text-[11px] font-black uppercase tracking-widest bg-white/5 border border-white/5 px-2 py-0.5 rounded-full text-slate-400">
                     {post.category}
                   </span>
                   <span className="text-[8.5px] text-zinc-500">{post.readTime}</span>
@@ -228,7 +228,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
                 />
                 <div className="leading-none">
                   <span className="text-[10px] font-bold text-white block">{post.author}</span>
-                  <span className="text-[8px] text-zinc-500 block mt-0.5">{post.authorRole}</span>
+                  <span className="text-[11px] text-zinc-500 block mt-0.5">{post.authorRole}</span>
                 </div>
               </div>
             </div>
@@ -261,7 +261,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="flex items-center space-x-2 text-[9px] text-zinc-500 font-bold uppercase tracking-wider">
+              <div className="flex items-center space-x-2 text-[11px] text-zinc-500 font-bold uppercase tracking-wider">
                 <span>Blog</span>
                 <span>/</span>
                 <span>{activePost.category}</span>
@@ -285,7 +285,7 @@ By building premium interfaces, visitors view reviews longer, boosting overall a
                 />
                 <div className="leading-none text-left">
                   <span className="text-xs font-bold text-white block">{activePost.author}</span>
-                  <span className="text-[9px] text-zinc-500 block mt-1">{activePost.authorRole} • Published {activePost.date}</span>
+                  <span className="text-[11px] text-zinc-500 block mt-1">{activePost.authorRole} • Published {activePost.date}</span>
                 </div>
               </div>
 

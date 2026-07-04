@@ -202,7 +202,7 @@ export default function LandingPage() {
   }, [heroTab]);
 
   // 4. Typewriter text simulation for Dashboard AI summary
-  const fullSummaryText = "J. Ashwath details the fast 15-minute onboarding configuration and the quality of developer integrations.";
+  const fullSummaryText = "Sarah Chen details the fast 15-minute onboarding configuration and the quality of developer integrations.";
   useEffect(() => {
     if (heroTab !== 'dashboard') {
       setTypedText("");
@@ -333,7 +333,7 @@ export default function LandingPage() {
       <section id="home" className="max-w-7xl mx-auto px-6 pt-24 pb-16 relative w-full">
         
         {/* Floating Avatars in Hero Background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none -z-10">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden  -z-10">
           {[
             { id: 1, src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', left: '15%', top: '25%', size: 48, delay: 0, duration: 8 },
             { id: 2, src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', left: '80%', top: '20%', size: 40, delay: 1.5, duration: 10 },
@@ -475,7 +475,7 @@ export default function LandingPage() {
             >
               <Link href="/signup">
                 <button className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 font-bold text-sm py-4 px-8 rounded-lg shadow-xl shadow-brand-emerald/10 flex items-center justify-center space-x-2 cursor-pointer transition hover:scale-103 duration-200">
-                  <span>Start Free Trial</span>
+                  <span>Get Started Free</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </Link>
@@ -529,20 +529,20 @@ export default function LandingPage() {
             <motion.div 
               animate={{ y: [0, -10, 0] }}
               transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-              className="absolute -top-10 -left-10 bg-[#12161D]/90 backdrop-blur-md border border-brand-emerald/30 p-4 rounded-xl shadow-2xl text-left z-20 w-56 flex flex-col gap-2 select-none"
+              className="absolute -top-10 -left-10 bg-[#12161D]/90 backdrop-blur-md border border-brand-emerald/30 p-4 rounded-xl shadow-2xl text-left z-20 w-56 flex flex-col gap-2 "
             >
               <div className="flex items-center space-x-2.5">
                 <div className="w-8 h-8 rounded-full bg-brand-emerald/20 text-brand-emerald flex items-center justify-center font-bold text-xs shrink-0">
                   SJ
                 </div>
                 <div className="text-left">
-                  <h4 className="text-[10px] font-black text-white">J. Ashwath</h4>
-                  <span className="text-[8px] text-slate-400">DevFlow Inc.</span>
+                  <h4 className="text-[10px] font-black text-white">Sarah Chen</h4>
+                  <span className="text-[11px] text-slate-400">DevFlow Inc.</span>
                 </div>
               </div>
               <div className="h-px bg-border-primary/50" />
-              <p className="text-[9px] text-slate-200 leading-normal italic">"... Setup took less than 15 minutes! REST APIs integrated in under 30 minutes! ..."</p>
-              <div className="flex items-center justify-between text-[8px] pt-1">
+              <p className="text-[11px] text-slate-200 leading-normal italic">"... Setup took less than 15 minutes! REST APIs integrated in under 30 minutes! ..."</p>
+              <div className="flex items-center justify-between text-[11px] pt-1">
                 <span className="bg-brand-emerald/10 text-brand-emerald px-1.5 py-0.5 rounded font-black tracking-wider border border-brand-emerald/20 uppercase">
                   AI: Positive
                 </span>
@@ -554,9 +554,9 @@ export default function LandingPage() {
             <motion.div 
               animate={{ y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 7, ease: "easeInOut", delay: 1.5 }}
-              className="absolute -bottom-10 -right-10 bg-[#12161D]/90 backdrop-blur-md border border-[#6366F1]/30 p-4 rounded-xl shadow-2xl text-left z-20 w-60 flex flex-col gap-2.5 select-none"
+              className="absolute -bottom-10 -right-10 bg-[#12161D]/90 backdrop-blur-md border border-[#6366F1]/30 p-4 rounded-xl shadow-2xl text-left z-20 w-60 flex flex-col gap-2.5 "
             >
-              <div className="flex items-center justify-between text-[9px]">
+              <div className="flex items-center justify-between text-[11px]">
                 <span className="font-extrabold text-white flex items-center space-x-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#6366F1] animate-pulse" />
                   <span>AI Video Intelligence</span>
@@ -574,13 +574,13 @@ export default function LandingPage() {
                   />
                 ))}
               </div>
-              <p className="text-[8px] text-slate-300 italic line-clamp-1">
+              <p className="text-[11px] text-slate-300 italic line-clamp-1">
                 " SETUP TOOK LESS THAN 15 MINUTES. WE INTEGRATED THE REST APIS... "
               </p>
             </motion.div>
             
             {/* Product demo subtitle indicator */}
-            <div className="text-center sm:text-right text-[10px] font-black uppercase tracking-widest text-[#6366F1] mb-2 animate-pulse flex items-center justify-center sm:justify-end space-x-1.5 select-none">
+            <div className="text-center sm:text-right text-[10px] font-black uppercase tracking-widest text-[#6366F1] mb-2 animate-pulse flex items-center justify-center sm:justify-end space-x-1.5 ">
               <span>Explore the product in 15 seconds</span>
               <span className="w-1.5 h-1.5 rounded-full bg-[#6366F1] animate-ping" />
             </div>
@@ -591,13 +591,13 @@ export default function LandingPage() {
               {/* Window Header: Window Controls & Premium Connected Workflow Indicator */}
               <div className="flex flex-col gap-4 border-b border-border-primary/50 pb-4">
                 {/* Window Dots & Status */}
-                <div className="flex items-center justify-between select-none">
+                <div className="flex items-center justify-between ">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-red-500" />
                     <div className="w-3 h-3 rounded-full bg-yellow-500" />
                     <div className="w-3 h-3 rounded-full bg-green-500" />
                   </div>
-                  <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-widest">Interactive Sandbox Workflow</span>
+                  <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-widest">Interactive Sandbox Workflow</span>
                 </div>
                 
                 {/* Premium Workflow Navigation Indicator Row */}
@@ -612,10 +612,10 @@ export default function LandingPage() {
                         {idx > 0 && (
                           <>
                             {/* Mobile Connector Arrow */}
-                            <span className="sm:hidden text-zinc-700 text-xs font-black select-none">→</span>
+                            <span className="sm:hidden text-zinc-700 text-xs font-black ">→</span>
                             
                             {/* Desktop Glowing Animated SVG Connector */}
-                            <div className="hidden sm:block w-12 h-2 relative select-none">
+                            <div className="hidden sm:block w-12 h-2 relative ">
                               <svg className="w-full h-full overflow-visible" viewBox="0 0 48 8">
                                 <line x1="0" y1="4" x2="48" y2="4" stroke="#27272A" strokeWidth="2" strokeDasharray="3 3" />
                                 {((idx === 1 && heroTab === 'recorder') || (idx === 2 && heroTab === 'dashboard')) && (
@@ -648,7 +648,7 @@ export default function LandingPage() {
                               handleHeroTabChange(tab.id as any);
                             }
                           }}
-                          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer select-none relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1]/50 ${
+                          className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 cursor-pointer  relative focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1]/50 ${
                             heroTab === tab.id
                               ? 'bg-gradient-to-r from-[#4338CA] to-[#6366F1] border border-[#6366F1]/40 text-white shadow-[0_0_15px_rgba(108,92,255,0.45)] scale-[1.03]'
                               : 'bg-white/5 border border-white/10 text-white/70 hover:text-white backdrop-blur-md'
@@ -677,7 +677,7 @@ export default function LandingPage() {
                       className="space-y-4 text-left relative"
                     >
                       {/* Outcome Text Block */}
-                      <div className="space-y-1 select-none">
+                      <div className="space-y-1 ">
                         <h3 className="text-sm sm:text-base font-extrabold text-white leading-tight">
                           Capture customer testimonials in under 60 seconds.
                         </h3>
@@ -717,7 +717,7 @@ export default function LandingPage() {
                           <span className="text-[10px] font-black text-brand-emerald bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase tracking-wider">
                             Acme Space ➔ Review Submission
                           </span>
-                          <span className="text-[8px] font-mono text-zinc-500">Video Recorder Active</span>
+                          <span className="text-[11px] font-mono text-zinc-500">Video Recorder Active</span>
                         </div>
 
                         {/* Split Form & Video preview */}
@@ -751,7 +751,7 @@ export default function LandingPage() {
                             </div>
 
                             {/* Custom Guiding Prompt Banner overlay */}
-                            <div className="bg-gradient-to-r from-brand-emerald/15 to-brand-teal/15 border border-brand-emerald/20 px-2 py-1 rounded text-[8px] text-left text-slate-300 z-10 leading-snug">
+                            <div className="bg-gradient-to-r from-brand-emerald/15 to-brand-teal/15 border border-brand-emerald/20 px-2 py-1 rounded text-[11px] text-left text-slate-300 z-10 leading-snug">
                               ❓ <strong>Q1:</strong> What do you love about Acme?
                             </div>
 
@@ -772,7 +772,7 @@ export default function LandingPage() {
                                   >
                                     <Check className="w-4 h-4" />
                                   </motion.div>
-                                  <span className="text-[9px] font-bold text-white uppercase tracking-wider block">Submission Success!</span>
+                                  <span className="text-[11px] font-bold text-white uppercase tracking-wider block">Submission Success!</span>
                                   <span className="text-[7px] text-zinc-500 font-mono">Sending to Wall of Love...</span>
                                 </motion.div>
                               )}
@@ -782,13 +782,13 @@ export default function LandingPage() {
                           {/* Customer name / email Form */}
                           <div className="space-y-2 text-left">
                             <div className="space-y-0.5">
-                              <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-wider block">Customer Name</span>
+                              <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">Customer Name</span>
                               <div className="w-full bg-[#18181B] border border-border-primary px-2.5 py-1.5 rounded text-[10px] text-white font-mono">
-                                J. Ashwath
+                                Sarah Chen
                               </div>
                             </div>
                             <div className="space-y-0.5">
-                              <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-wider block">Email Address</span>
+                              <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">Email Address</span>
                               <div className="w-full bg-[#18181B] border border-border-primary px-2.5 py-1.5 rounded text-[10px] text-white font-mono truncate">
                                 sarah@devflow.io
                               </div>
@@ -808,10 +808,10 @@ export default function LandingPage() {
 
                         {/* Action buttons footer */}
                         <div className="flex items-center justify-between border-t border-border-primary/50 pt-2">
-                          <span className="text-[8px] text-zinc-500 font-semibold">Webcam review collection preview</span>
+                          <span className="text-[11px] text-zinc-500 font-semibold">Webcam review collection preview</span>
                           
                           {/* Record button */}
-                          <div className="flex items-center space-x-2 bg-[#18181B] border border-border-primary px-3 py-1 rounded-full text-[9px] font-bold text-slate-300">
+                          <div className="flex items-center space-x-2 bg-[#18181B] border border-border-primary px-3 py-1 rounded-full text-[11px] font-bold text-slate-300">
                             <span className="w-2.5 h-2.5 bg-red-600 rounded-full animate-ping" />
                             <span>Stop Video</span>
                           </div>
@@ -820,7 +820,7 @@ export default function LandingPage() {
                       </div>
 
                       {/* Outcome Footer with CTA */}
-                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
+                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[11px] ">
                         <span className="text-zinc-500 font-bold uppercase tracking-wider">Fast. Simple. Frictionless.</span>
                         <Link href="/demo">
                           <span className="text-[#6366F1] hover:text-[#4338CA] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
@@ -843,7 +843,7 @@ export default function LandingPage() {
                       className="space-y-4 text-left"
                     >
                       {/* Outcome Text Block */}
-                      <div className="space-y-1 select-none">
+                      <div className="space-y-1 ">
                         <h3 className="text-sm sm:text-base font-extrabold text-white leading-tight">
                           AI organizes, summarizes, and analyzes every testimonial automatically.
                         </h3>
@@ -880,20 +880,20 @@ export default function LandingPage() {
                         {/* Left column: Inbox feed list & Search bar */}
                         <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-2 flex flex-col sm:col-span-1">
                           {/* Search bar with typing effect */}
-                          <div className="bg-zinc-950 border border-border-primary px-2.5 py-1 rounded text-[9px] text-slate-300 font-mono flex items-center justify-between">
+                          <div className="bg-zinc-950 border border-border-primary px-2.5 py-1 rounded text-[11px] text-slate-300 font-mono flex items-center justify-between">
                             <span className="truncate">{searchText || "search reviews..."}</span>
                             <Search className="w-2.5 h-2.5 text-zinc-500" />
                           </div>
                           
                           {/* Small list items */}
                           <div className="space-y-1.5 flex-1 overflow-y-auto">
-                            <div className="bg-brand-emerald/5 border border-brand-emerald/30 p-1.5 rounded text-[8px] flex items-center justify-between">
-                              <span className="font-bold text-white truncate">J. Ashwath</span>
-                              <span className="text-[6px] text-brand-emerald font-black uppercase bg-brand-emerald/10 border border-brand-emerald/20 px-1 py-0.2 rounded">Positive</span>
+                            <div className="bg-brand-emerald/5 border border-brand-emerald/30 p-1.5 rounded text-[11px] flex items-center justify-between">
+                              <span className="font-bold text-white truncate">Sarah Chen</span>
+                              <span className="text-[6px] text-brand-emerald font-black uppercase bg-brand-emerald/10 border border-brand-emerald/20 px-1 py-0.5 rounded">Positive</span>
                             </div>
-                            <div className="bg-zinc-950 border border-border-primary/50 p-1.5 rounded text-[8px] flex items-center justify-between opacity-60">
-                              <span className="font-bold text-slate-400 truncate">Ateeqhulla Khan</span>
-                              <span className="text-[6px] text-brand-teal font-black uppercase bg-brand-teal/10 border border-brand-teal/20 px-1 py-0.2 rounded">Video</span>
+                            <div className="bg-zinc-950 border border-border-primary/50 p-1.5 rounded text-[11px] flex items-center justify-between opacity-60">
+                              <span className="font-bold text-slate-400 truncate">Marcus Webb</span>
+                              <span className="text-[6px] text-brand-teal font-black uppercase bg-brand-teal/10 border border-brand-teal/20 px-1 py-0.5 rounded">Video</span>
                             </div>
                           </div>
                         </div>
@@ -902,7 +902,7 @@ export default function LandingPage() {
                         <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-2 flex flex-col justify-between sm:col-span-1 text-left">
                           <div className="space-y-1 relative">
                             <div className="flex items-center justify-between">
-                              <span className="text-[8px] font-black text-[#6366F1] uppercase tracking-wider block">AI Analysis Summary</span>
+                              <span className="text-[11px] font-black text-[#6366F1] uppercase tracking-wider block">AI Analysis Summary</span>
                               {showSparkle && (
                                 <motion.span
                                   initial={{ scale: 0, opacity: 0 }}
@@ -914,7 +914,7 @@ export default function LandingPage() {
                                 </motion.span>
                               )}
                             </div>
-                            <div className="bg-zinc-950 border border-border-primary/60 p-2 rounded text-[8px] font-mono text-slate-300 min-h-[65px] leading-relaxed">
+                            <div className="bg-zinc-950 border border-border-primary/60 p-2 rounded text-[11px] font-mono text-slate-300 min-h-[65px] leading-relaxed">
                               {typedText}
                               <span className="w-1 h-2.5 bg-brand-teal inline-block ml-0.5 animate-pulse" />
                             </div>
@@ -929,7 +929,7 @@ export default function LandingPage() {
 
                         {/* Right column: SVG Line chart */}
                         <div className="bg-[#09090B] border border-border-primary rounded-xl p-3 space-y-1 text-left relative overflow-hidden flex flex-col justify-between sm:col-span-1">
-                          <span className="text-[8px] text-muted-foreground uppercase font-bold tracking-wider block">Conversion Lift</span>
+                          <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider block">Conversion Lift</span>
                           
                           {/* SVG line chart */}
                           <div className="flex-1 w-full h-10 relative pt-2">
@@ -962,7 +962,7 @@ export default function LandingPage() {
                       </div>
 
                       {/* Outcome Footer with CTA */}
-                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
+                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[11px] ">
                         <span className="text-zinc-500 font-bold uppercase tracking-wider">Organized. Intelligent. Time-saving.</span>
                         <Link href="/demo">
                           <span className="text-[#6366F1] hover:text-[#4338CA] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
@@ -985,7 +985,7 @@ export default function LandingPage() {
                       className="space-y-4 text-left relative"
                     >
                       {/* Outcome Text Block */}
-                      <div className="space-y-1 select-none">
+                      <div className="space-y-1 ">
                         <h3 className="text-sm sm:text-base font-extrabold text-white leading-tight">
                           Publish beautiful social proof that increases trust and conversions.
                         </h3>
@@ -1024,7 +1024,7 @@ export default function LandingPage() {
                         
                         {/* Company branding header */}
                         <div className="flex items-center justify-between border-b border-border-primary/50 pb-2 mb-2">
-                          <span className="text-[9px] font-black text-white uppercase tracking-wider">
+                          <span className="text-[11px] font-black text-white uppercase tracking-wider">
                             🚀 Acme SaaS ➔ Testimonial Widget
                           </span>
                           <span className="text-[7px] text-zinc-500 font-mono">Embedded Wall of Love</span>
@@ -1114,12 +1114,12 @@ export default function LandingPage() {
                                  />
                                  <div className="space-y-1">
                                    <div className="flex items-center justify-between">
-                                     <div className="flex space-x-0.5 text-amber-400 text-[8px]">
+                                     <div className="flex space-x-0.5 text-amber-400 text-[11px]">
                                        {Array.from({ length: 5 }).map((_, i) => (
                                          <Star key={i} className="w-2.5 h-2.5 fill-current" />
                                        ))}
                                      </div>
-                                     <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[6px] font-black uppercase px-1 py-0.2 rounded">
+                                     <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 text-[6px] font-black uppercase px-1 py-0.5 rounded">
                                        Positive
                                      </span>
                                    </div>
@@ -1130,11 +1130,11 @@ export default function LandingPage() {
                                  <div className="flex items-center space-x-2 pt-1.5 border-t border-zinc-900/60">
                                    <img 
                                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50" 
-                                     alt="J. Ashwath"
+                                     alt="Sarah Chen"
                                      className="w-5 h-5 rounded-full object-cover border border-zinc-800"
                                    />
                                    <div className="text-left leading-none">
-                                     <span className="text-[9px] font-bold text-white block">J. Ashwath</span>
+                                     <span className="text-[11px] font-bold text-white block">Sarah Chen</span>
                                      <span className="text-[7px] text-zinc-500 block mt-0.5">SaaS Founder</span>
                                    </div>
                                  </div>
@@ -1149,12 +1149,12 @@ export default function LandingPage() {
                                >
                                 <div className="space-y-1">
                                   <div className="flex items-center justify-between">
-                                    <div className="flex space-x-0.5 text-amber-400 text-[8px]">
+                                    <div className="flex space-x-0.5 text-amber-400 text-[11px]">
                                       {Array.from({ length: 5 }).map((_, i) => (
                                         <Star key={i} className="w-2 h-2 fill-current" />
                                       ))}
                                     </div>
-                                    <span className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 text-[6px] font-black uppercase px-1 py-0.2 rounded">
+                                    <span className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 text-[6px] font-black uppercase px-1 py-0.5 rounded">
                                       Video
                                     </span>
                                   </div>
@@ -1165,11 +1165,11 @@ export default function LandingPage() {
                                 <div className="flex items-center space-x-2 pt-1.5 border-t border-zinc-900/60">
                                   <img 
                                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50" 
-                                    alt="Ateeqhulla Khan"
+                                    alt="Marcus Webb"
                                     className="w-5 h-5 rounded-full object-cover border border-zinc-800"
                                   />
                                   <div className="text-left leading-none">
-                                    <span className="text-[9px] font-bold text-white block">Ateeqhulla Khan</span>
+                                    <span className="text-[11px] font-bold text-white block">Marcus Webb</span>
                                     <span className="text-[7px] text-zinc-500 block mt-0.5">Agency Owner</span>
                                   </div>
                                 </div>
@@ -1181,7 +1181,7 @@ export default function LandingPage() {
                       </div>
 
                       {/* Outcome Footer with CTA */}
-                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[9px] select-none">
+                      <div className="flex items-center justify-between border-t border-border-primary/40 pt-2.5 text-[11px] ">
                         <span className="text-zinc-500 font-bold uppercase tracking-wider">Trust. Credibility. Growth.</span>
                         <Link href="/demo">
                           <span className="text-[#6366F1] hover:text-[#4338CA] font-black uppercase tracking-wider cursor-pointer flex items-center space-x-1 transition duration-150">
@@ -1213,7 +1213,7 @@ export default function LandingPage() {
             {['SaaS Teams', 'Agencies', 'Startups', 'Creators', 'Consultants', 'SaaS Teams', 'Agencies', 'Startups', 'Creators', 'Consultants'].map((logo, idx) => (
               <div 
                 key={idx} 
-                className="bg-[#18181B] border border-border-primary px-6 py-3.5 rounded-full text-xs font-black text-slate-300 tracking-wider shadow-lg hover:border-brand-emerald/30 hover:text-white transition duration-200 cursor-pointer select-none flex items-center space-x-1.5"
+                className="bg-[#18181B] border border-border-primary px-6 py-3.5 rounded-full text-xs font-black text-slate-300 tracking-wider shadow-lg hover:border-brand-emerald/30 hover:text-white transition duration-200 cursor-pointer  flex items-center space-x-1.5"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-teal/40" />
                 <span>{logo}</span>
@@ -1342,9 +1342,9 @@ export default function LandingPage() {
                 <span>Customer Sentiment Trends</span>
               </h4>
               <div className="h-4 bg-[#09090B] rounded-full overflow-hidden flex border border-border-primary/50">
-                <div className="h-full bg-brand-emerald flex items-center justify-center text-[8px] font-black text-white" style={{ width: '84%' }}>84% Positive</div>
-                <div className="h-full bg-brand-teal flex items-center justify-center text-[8px] font-black text-white" style={{ width: '12%' }}>12%</div>
-                <div className="h-full bg-red-500 flex items-center justify-center text-[8px] font-black text-white" style={{ width: '4%' }} />
+                <div className="h-full bg-brand-emerald flex items-center justify-center text-[11px] font-black text-white" style={{ width: '84%' }}>84% Positive</div>
+                <div className="h-full bg-brand-teal flex items-center justify-center text-[11px] font-black text-white" style={{ width: '12%' }}>12%</div>
+                <div className="h-full bg-red-500 flex items-center justify-center text-[11px] font-black text-white" style={{ width: '4%' }} />
               </div>
               <div className="flex justify-between text-[10px] text-slate-400 font-medium">
                 <span>🟢 84% Positive</span>
@@ -1361,7 +1361,7 @@ export default function LandingPage() {
               </h4>
               <div className="flex flex-wrap gap-1.5">
                 {['#RESTAPI', '#onboarding', '#performance', '#support', '#15-minutes', '#pricing'].map((kw, i) => (
-                  <span key={kw} className={`text-[9px] font-bold px-2 py-0.5 rounded border ${
+                  <span key={kw} className={`text-[11px] font-bold px-2 py-0.5 rounded border ${
                     i % 2 === 0 ? 'bg-brand-emerald/10 text-brand-emerald border-brand-emerald/20' : 'bg-brand-teal/10 text-brand-teal border-brand-teal/20'
                   }`}>
                     {kw}
@@ -1505,7 +1505,7 @@ export default function LandingPage() {
           </div>
 
           {/* Liquid Transition Tab controls */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 select-none">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 ">
             {/* Format Filter Tabs */}
             <div className="flex items-center justify-center space-x-1.5 p-1.5 bg-[#18181B] border border-border-primary rounded-xl shrink-0 relative shadow-inner w-full md:w-auto">
               {([
@@ -1579,7 +1579,7 @@ export default function LandingPage() {
               <p className="text-xs text-slate-400">
                 Be one of the first companies using Proofly. Help us build a better platform by sharing your feedback in under 10 seconds.
               </p>
-              <Link href="/collect/acme-saas" className="inline-block">
+              <Link href="/collect/demo" className="inline-block">
                 <button className="bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 font-bold text-xs py-2.5 px-6 rounded-lg shadow-md shadow-brand-emerald/10 cursor-pointer transition">
                   Leave Us a Review 🎥
                 </button>
@@ -1621,7 +1621,7 @@ export default function LandingPage() {
                 glowColor={tier.accent ? 'rgba(99, 102, 241, 0.15)' : 'rgba(99, 102, 241, 0.08)'}
               >
                 {tier.accent && (
-                  <span className="absolute top-0 right-0 bg-brand-emerald text-white text-[9px] font-black tracking-widest uppercase px-3 py-1 rounded-bl-lg rounded-tr-lg">
+                  <span className="absolute top-0 right-0 bg-brand-emerald text-white text-[11px] font-black tracking-widest uppercase px-3 py-1 rounded-bl-lg rounded-tr-lg">
                     Popular
                   </span>
                 )}
@@ -1713,9 +1713,9 @@ export default function LandingPage() {
                 Generate highly interactive review submission links and shareable QR codes. Gather video testimonials and text reviews effortlessly.
               </p>
             </div>
-            <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-2 font-mono text-[9px] text-slate-500">
+            <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-2 font-mono text-[11px] text-slate-500">
               <span className="text-brand-teal font-extrabold uppercase block">QR Code & Form Link</span>
-              <span className="block truncate">useproofly.vercel.app/collect/acme-saas</span>
+              <span className="block truncate">useproofly.com/collect/demo</span>
             </div>
           </SpotlightCard>
 
@@ -1730,7 +1730,7 @@ export default function LandingPage() {
                 AI transcribes video uploads automatically, filters for positive sentiments, extracts primary keywords, and highlights conversion-optimized quotes.
               </p>
             </div>
-            <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-1.5 font-mono text-[9px]">
+            <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-1.5 font-mono text-[11px]">
               <div className="flex justify-between text-brand-emerald">
                 <span>Transcription Match:</span>
                 <span className="font-bold">96% SUCCESS</span>
@@ -1752,9 +1752,9 @@ export default function LandingPage() {
                 Publish curated lists, masonry walls, or auto-sliding carousels to your product page with a lightweight HTML/JS script bundle.
               </p>
             </div>
-            <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-1 font-mono text-[9px] text-slate-500">
+            <div className="bg-[#09090B] border border-border-primary p-3.5 rounded-lg w-full text-left space-y-1 font-mono text-[11px] text-slate-500">
               <span className="text-brand-teal font-extrabold uppercase block">One-Click Embed Code</span>
-              <code className="text-slate-400 block truncate">&lt;script src="useproofly.vercel.app/embed.js"&gt;&lt;/script&gt;</code>
+              <code className="text-slate-400 block truncate">&lt;script src="useproofly.com/embed.js"&gt;&lt;/script&gt;</code>
             </div>
           </SpotlightCard>
         </div>
@@ -1786,7 +1786,7 @@ export default function LandingPage() {
               <div key={idx} className="bg-[#18181B]">
                 <button
                   onClick={() => setActiveFaq(isOpen ? null : idx)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-white font-bold text-xs sm:text-sm cursor-pointer select-none"
+                  className="w-full px-6 py-5 flex items-center justify-between text-white font-bold text-xs sm:text-sm cursor-pointer "
                 >
                   <span>{faq.q}</span>
                   <ChevronDown className={`w-4 h-4 text-brand-teal transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
@@ -1840,7 +1840,7 @@ export default function LandingPage() {
                   <X className="w-4 h-4" />
                 </button>
               </div>
-              <div className="aspect-video bg-black relative overflow-hidden flex flex-col justify-between select-none group/player">
+              <div className="aspect-video bg-black relative overflow-hidden flex flex-col justify-between  group/player">
                 {/* VIDEO DISPLAY AREA */}
                 <div className="flex-1 w-full h-full flex flex-col justify-center items-center p-6 relative">
                   
@@ -1858,7 +1858,7 @@ export default function LandingPage() {
                         <span className="text-[10px] font-black text-brand-emerald bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase tracking-wider">
                           🎥 Phase 1: Collect Testimonials
                         </span>
-                        <div className="flex items-center space-x-1.5 text-[8px] font-mono text-zinc-500">
+                        <div className="flex items-center space-x-1.5 text-[11px] font-mono text-zinc-500">
                           <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
                           <span>WEBCAM ACTIVE</span>
                         </div>
@@ -1876,12 +1876,12 @@ export default function LandingPage() {
                           {/* Face avatar placeholder */}
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="w-12 h-12 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-                              <Smile className="w-5 h-5 text-zinc-600 animate-bounce" />
+                              <Smile className="w-5 h-5 text-zinc-600 animate-pulse" />
                             </div>
                           </div>
 
                           <div className="w-full flex justify-center z-10">
-                            <span className="text-[7px] font-bold text-slate-400 bg-black/60 px-2 py-0.5 rounded">J. Ashwath</span>
+                            <span className="text-[7px] font-bold text-slate-400 bg-black/60 px-2 py-0.5 rounded">Sarah Chen</span>
                           </div>
                         </div>
 
@@ -1889,24 +1889,24 @@ export default function LandingPage() {
                         <div className="space-y-2 flex flex-col justify-center text-left">
                           <div className="space-y-1">
                             <label className="text-[7px] font-bold text-zinc-500 uppercase">Reviewer Name</label>
-                            <div className="bg-zinc-950 border border-zinc-850 px-2 py-1 rounded text-[9px] text-white">
-                              J. Ashwath
+                            <div className="bg-zinc-950 border border-zinc-850 px-2 py-1 rounded text-[11px] text-white">
+                              Sarah Chen
                             </div>
                           </div>
                           <div className="space-y-1">
                             <label className="text-[7px] font-bold text-zinc-500 uppercase">Reviewer Email</label>
-                            <div className="bg-zinc-950 border border-zinc-850 px-2 py-1 rounded text-[9px] text-white truncate">
+                            <div className="bg-zinc-950 border border-zinc-850 px-2 py-1 rounded text-[11px] text-white truncate">
                               sarah@devflow.io
                             </div>
                           </div>
-                          <div className="bg-brand-emerald/10 border border-brand-emerald/20 p-1.5 rounded text-[8px] text-slate-300">
+                          <div className="bg-brand-emerald/10 border border-brand-emerald/20 p-1.5 rounded text-[11px] text-slate-300">
                             💡 <strong>Question:</strong> How fast was the setup?
                           </div>
                         </div>
                       </div>
 
                       {/* Caption */}
-                      <div className="text-[9px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2">
+                      <div className="text-[11px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2">
                         "Collect video or text testimonials in under 60 seconds."
                       </div>
                     </motion.div>
@@ -1926,24 +1926,24 @@ export default function LandingPage() {
                         <span className="text-[10px] font-black text-brand-teal bg-brand-teal/10 border border-brand-teal/20 px-2 py-0.5 rounded uppercase tracking-wider">
                           📊 Phase 2: AI Management Dashboard
                         </span>
-                        <span className="text-[8px] font-mono text-zinc-500">SENTIMENT: 99.4% POSITIVE</span>
+                        <span className="text-[11px] font-mono text-zinc-500">SENTIMENT: 99.4% POSITIVE</span>
                       </div>
 
                       {/* Inbox detail card */}
                       <div className="bg-zinc-950 border border-zinc-850 p-3 rounded-lg space-y-2 flex-1 flex flex-col justify-center">
-                        <div className="flex items-center justify-between text-[9px] font-bold">
-                          <span className="text-white">Review from J. Ashwath (DevFlow)</span>
+                        <div className="flex items-center justify-between text-[11px] font-bold">
+                          <span className="text-white">Review from Sarah Chen (DevFlow)</span>
                           <span className="text-brand-emerald uppercase text-[7px] border border-brand-emerald/20 bg-brand-emerald/10 px-1.5 py-0.5 rounded">AI Tagged</span>
                         </div>
                         
                         {/* Auto summary typing effect */}
-                        <div className="bg-black border border-zinc-900 p-2 rounded text-[9px] font-mono text-slate-300 min-h-[36px]">
-                          {videoTime >= 18 ? "J. Ashwath details the fast 15-minute onboarding configuration..." : "Analyzing review sentiment..."}
+                        <div className="bg-black border border-zinc-900 p-2 rounded text-[11px] font-mono text-slate-300 min-h-[36px]">
+                          {videoTime >= 18 ? "Sarah Chen details the fast 15-minute onboarding configuration..." : "Analyzing review sentiment..."}
                         </div>
 
                         {/* Social Draft auto-generated */}
                         <div className="bg-zinc-900/60 p-1.5 rounded flex items-center justify-between">
-                          <div className="text-[8px] text-zinc-400 font-mono truncate max-w-xs">
+                          <div className="text-[11px] text-zinc-400 font-mono truncate max-w-xs">
                             𝕏 Draft: "Onboarding setup took under 15 minutes! Onboarding speed doubled..."
                           </div>
                           <span className="bg-brand-teal text-white text-[7px] font-black uppercase px-2 py-0.5 rounded shadow cursor-pointer">
@@ -1953,7 +1953,7 @@ export default function LandingPage() {
                       </div>
 
                       {/* Caption */}
-                      <div className="text-[9px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2">
+                      <div className="text-[11px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2">
                         "Organize every testimonial and discover customer insights powered by AI."
                       </div>
                     </motion.div>
@@ -1989,34 +1989,34 @@ export default function LandingPage() {
                         <span className="text-[10px] font-black text-brand-emerald bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase tracking-wider">
                           💖 Phase 3: Wall of Love Embedded Widget
                         </span>
-                        <span className="text-[8px] font-mono text-[#6366F1] border border-[#6366F1]/20 bg-[#6366F1]/10 px-1.5 py-0.5 rounded">+24% CONVERSION LIFT</span>
+                        <span className="text-[11px] font-mono text-[#6366F1] border border-[#6366F1]/20 bg-[#6366F1]/10 px-1.5 py-0.5 rounded">+24% CONVERSION LIFT</span>
                       </div>
 
                       {/* Mini Wall of Love grid */}
                       <div className="grid grid-cols-2 gap-3 flex-1 items-center">
                         <div className="bg-zinc-950 border border-zinc-850 p-2.5 rounded-lg space-y-1.5 text-left h-[100px] flex flex-col justify-between">
-                          <p className="text-[9px] leading-relaxed text-slate-300 italic">
+                          <p className="text-[11px] leading-relaxed text-slate-300 italic">
                             "Setup took under 15 minutes. Onboarding speed doubled!"
                           </p>
                           <div className="flex items-center space-x-1.5">
-                            <span className="text-[8px] font-bold text-white">J. Ashwath</span>
+                            <span className="text-[11px] font-bold text-white">Sarah Chen</span>
                             <span className="text-[7px] text-zinc-500 font-mono">SaaS Founder</span>
                           </div>
                         </div>
 
                         <div className="bg-zinc-950 border border-zinc-850 p-2.5 rounded-lg space-y-1.5 text-left h-[100px] flex flex-col justify-between">
-                          <p className="text-[9px] leading-relaxed text-slate-300 italic">
+                          <p className="text-[11px] leading-relaxed text-slate-300 italic">
                             "We increased conversion rates by 18% in our first week!"
                           </p>
                           <div className="flex items-center space-x-1.5">
-                            <span className="text-[8px] font-bold text-white">Ateeqhulla Khan</span>
+                            <span className="text-[11px] font-bold text-white">Marcus Webb</span>
                             <span className="text-[7px] text-zinc-500 font-mono">Agency Owner</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Caption */}
-                      <div className="text-[9px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2 z-10 relative">
+                      <div className="text-[11px] text-slate-400 font-bold italic text-center border-t border-zinc-800 pt-2 z-10 relative">
                         "Turn customer proof into trust that drives more conversions."
                       </div>
                     </motion.div>
@@ -2075,7 +2075,7 @@ export default function LandingPage() {
                     </div>
 
                     {/* Active phase indicator tag */}
-                    <div className="hidden sm:flex items-center space-x-1.5 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-wider text-slate-300">
+                    <div className="hidden sm:flex items-center space-x-1.5 bg-zinc-900 border border-zinc-800 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider text-slate-300">
                       <span>Status:</span>
                       <span className="text-brand-emerald">
                         {videoTime < 15 ? "Collecting Feedback" : videoTime < 30 ? "Processing Insights" : "Displaying Widgets"}
@@ -2084,7 +2084,7 @@ export default function LandingPage() {
 
                     {/* Quality / Fullscreen */}
                     <div className="flex items-center space-x-3 text-zinc-400 text-[10px]">
-                      <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 px-1 py-0.5 rounded text-[8px] font-black tracking-widest font-mono">1080p HD</span>
+                      <span className="bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 px-1 py-0.5 rounded text-[11px] font-black tracking-widest font-mono">1080p HD</span>
                       <Maximize2 className="w-3.5 h-3.5 hover:text-white cursor-pointer transition" />
                     </div>
                   </div>

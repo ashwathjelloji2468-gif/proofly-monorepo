@@ -104,7 +104,7 @@ export default function CollectionsPage() {
     if (user?.tier === 'FREE') {
       const pageCount = collectionPages.length;
       if (pageCount >= 1) {
-        setErrorToast('LIMIT_REACHED: Free tier is limited to 1 Collection page. Please upgrade to Pro.');
+        setErrorToast('Free tier is limited to 1 Collection page. Please upgrade to Pro.');
         setTimeout(() => setErrorToast(null), 4000);
         return;
       }
@@ -266,13 +266,13 @@ export default function CollectionsPage() {
       
       {/* Toast notifications */}
       {saveSuccess && (
-        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-bounce">
+        <div className="fixed top-5 right-5 z-50 bg-brand-emerald text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <CheckCircle2 className="w-4 h-4" />
           <span>Collection Saved Successfully!</span>
         </div>
       )}
       {errorToast && (
-        <div className="fixed top-5 right-5 z-50 bg-red-650 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
+        <div className="fixed top-5 right-5 z-50 bg-red-600 text-white font-bold text-xs px-4 py-3 rounded-lg flex items-center space-x-2 shadow-2xl transition animate-pulse">
           <HelpCircle className="w-4 h-4" />
           <span>{errorToast}</span>
         </div>
@@ -420,7 +420,7 @@ export default function CollectionsPage() {
 
       {/* ─── 2. CREATOR / EDITOR WIZARD VIEW ────────────────────────────────────── */}
       {activeView === 'editor' && (
-        <div className="flex-1 flex flex-col min-h-0 select-none">
+        <div className="flex-1 flex flex-col min-h-0 ">
           <header className="border-b border-border-primary bg-[#09090B] px-8 py-4 flex items-center justify-between sticky top-0 z-30">
             <div className="flex items-center space-x-4">
               <button 
@@ -537,7 +537,7 @@ export default function CollectionsPage() {
                         ×
                       </button>
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold uppercase text-slate-400">Question #{idx + 1} Label</label>
+                        <label className="text-[11px] font-bold uppercase text-slate-400">Question #{idx + 1} Label</label>
                         <input
                           type="text"
                           value={q.label}
@@ -548,7 +548,7 @@ export default function CollectionsPage() {
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label className="text-[9px] font-bold uppercase text-slate-400 block mb-0.5">Type</label>
+                          <label className="text-[11px] font-bold uppercase text-slate-400 block mb-0.5">Type</label>
                           <select
                             value={q.type}
                             onChange={(e) => updateQuestionField(idx, { type: e.target.value })}
@@ -561,7 +561,7 @@ export default function CollectionsPage() {
                           </select>
                         </div>
                         <div className="flex items-end justify-center pb-2">
-                          <label className="flex items-center space-x-1 text-xs text-slate-350 cursor-pointer select-none">
+                          <label className="flex items-center space-x-1 text-xs text-slate-350 cursor-pointer ">
                             <input
                               type="checkbox"
                               checked={q.required}
@@ -700,7 +700,7 @@ export default function CollectionsPage() {
                   ].map(stat => (
                     <div key={stat.label} className="bg-[#18181B] border border-border-primary p-5 rounded-xl shadow-lg flex flex-col justify-between h-28 hover:border-zinc-800 transition">
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-slate-400 uppercase font-black tracking-wider">{stat.label}</span>
+                        <span className="text-[11px] text-slate-400 uppercase font-black tracking-wider">{stat.label}</span>
                         {stat.icon}
                       </div>
                       <div className="text-2xl font-black text-white">{stat.value}</div>

@@ -146,11 +146,11 @@ export function WebcamRecorder({ onRecordComplete, questions, spaceName }: Webca
 
         {/* Guiding Questions Overlay */}
         {!videoURL && streamActive && (
-          <div className="absolute bottom-3 left-3 right-3 bg-black/75 border border-white/10 rounded-lg p-2.5 text-left z-20 select-none pointer-events-none">
-            <p className="text-[9px] font-black uppercase text-brand-emerald tracking-widest mb-1 flex items-center gap-1">
+          <div className="absolute bottom-3 left-3 right-3 bg-black/75 border border-white/10 rounded-lg p-2.5 text-left z-20  pointer-events-none">
+            <p className="text-[11px] font-black uppercase text-brand-emerald tracking-widest mb-1 flex items-center gap-1">
               <span>💡 Guiding Prompts:</span>
             </p>
-            <ul className="space-y-0.5 text-[8px] text-slate-300 font-medium list-decimal pl-3.5">
+            <ul className="space-y-0.5 text-[11px] text-slate-300 font-medium list-decimal pl-3.5">
               {questions && questions.length > 1 ? (
                 questions.map((q, idx) => (
                   <li key={idx}>{q}</li>

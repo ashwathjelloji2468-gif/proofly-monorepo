@@ -225,7 +225,7 @@ export function LegalPageLayout({ slug }: LegalPageLayoutProps) {
             </article>
           ) : (
             <div className="text-center py-16 space-y-4">
-              <Scale className="w-12 h-12 text-muted-foreground mx-auto animate-bounce" />
+              <Scale className="w-12 h-12 text-muted-foreground mx-auto animate-pulse" />
               <h2 className="text-xl font-bold text-white">Document Not Found</h2>
               <p className="text-sm text-muted-foreground max-w-md mx-auto">
                 The requested legal document (`{slug}`) was not found or is currently being updated by the Proofly compliance team.

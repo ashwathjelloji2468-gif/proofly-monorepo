@@ -254,7 +254,7 @@ const review = await Proofly.process(reviewId, {
 
             {/* Template Presets */}
             <div className="space-y-2.5">
-              <span className="text-[8px] font-bold text-zinc-550 uppercase tracking-widest block">Startup Flow Presets</span>
+              <span className="text-[11px] font-bold text-zinc-550 uppercase tracking-widest block">Startup Flow Presets</span>
               {presets.map((p) => {
                 const isActive = activeFlowId === p.id;
                 return (
@@ -268,7 +268,7 @@ const review = await Proofly.process(reviewId, {
                     }`}
                   >
                     <span className="text-xs font-black text-white block">{p.title}</span>
-                    <span className="text-[9px] text-slate-450 leading-relaxed block mt-1 line-clamp-1">{p.prompt}</span>
+                    <span className="text-[11px] text-slate-450 leading-relaxed block mt-1 line-clamp-1">{p.prompt}</span>
                   </button>
                 );
               })}
@@ -276,8 +276,8 @@ const review = await Proofly.process(reviewId, {
           </div>
 
           {/* Real-time telemetry console */}
-          <div className="bg-[#05060b] border border-[#1F2937] rounded-xl p-3.5 font-mono text-[9px] text-slate-400 space-y-2 select-none">
-            <span className="text-indigo-400 font-extrabold uppercase text-[8px] tracking-widest block mb-1">Telemetry Console</span>
+          <div className="bg-[#05060b] border border-[#1F2937] rounded-xl p-3.5 font-mono text-[11px] text-slate-400 space-y-2 ">
+            <span className="text-indigo-400 font-extrabold uppercase text-[11px] tracking-widest block mb-1">Telemetry Console</span>
             <div className="space-y-1 max-h-[85px] overflow-y-auto">
               {logs.map((log, idx) => (
                 <div key={idx} className="flex items-start space-x-1">
@@ -299,7 +299,7 @@ const review = await Proofly.process(reviewId, {
               <div className="w-2 h-2 rounded-full bg-yellow-500/80" />
               <div className="w-2 h-2 rounded-full bg-green-500/80" />
             </div>
-            <span className="text-[8px] font-mono text-[#4338CA] uppercase tracking-widest flex items-center space-x-1.5">
+            <span className="text-[11px] font-mono text-[#4338CA] uppercase tracking-widest flex items-center space-x-1.5">
               <Activity className="w-3.5 h-3.5 animate-pulse text-indigo-400" />
               <span>Interactive flow steps canvas</span>
             </span>
@@ -380,7 +380,7 @@ const review = await Proofly.process(reviewId, {
                     }`}
                   >
                     <Database className="w-5 h-5 text-indigo-400" />
-                    <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.trigger}</span>
+                    <span className="text-[11px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.trigger}</span>
                     <span className="text-[6px] text-zinc-550 block font-bold">TRIGGER</span>
                   </button>
                 </div>
@@ -396,7 +396,7 @@ const review = await Proofly.process(reviewId, {
                     }`}
                   >
                     <Video className="w-5 h-5 text-brand-teal" />
-                    <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.collector}</span>
+                    <span className="text-[11px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.collector}</span>
                     <span className="text-[6px] text-zinc-550 block font-bold">COLLECTION</span>
                   </button>
                 </div>
@@ -412,7 +412,7 @@ const review = await Proofly.process(reviewId, {
                     }`}
                   >
                     <Cpu className="w-5 h-5 text-brand-emerald" />
-                    <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.ai}</span>
+                    <span className="text-[11px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.ai}</span>
                     <span className="text-[6px] text-zinc-550 block font-bold">AI moderation</span>
                   </button>
                 </div>
@@ -428,7 +428,7 @@ const review = await Proofly.process(reviewId, {
                     }`}
                   >
                     <Layout className="w-5 h-5 text-amber-400" />
-                    <span className="text-[8px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.showcase}</span>
+                    <span className="text-[11px] font-black text-white uppercase tracking-wider block leading-tight">{currentFlow.showcase}</span>
                     <span className="text-[6px] text-zinc-550 block font-bold">SHOWCASE</span>
                   </button>
                 </div>
@@ -437,13 +437,13 @@ const review = await Proofly.process(reviewId, {
             </div>
 
             {/* Config details & developer code section at bottom */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 border-t border-[#1F2937] pt-4 items-stretch select-none z-10 bg-[#090912]/95 rounded-b-xl">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 border-t border-[#1F2937] pt-4 items-stretch  z-10 bg-[#090912]/95 rounded-b-xl">
               
               {/* Form settings controls (col 5) */}
               <div className="md:col-span-5 space-y-3 pr-2 border-r border-[#1F2937]/50">
                 <div className="flex items-center space-x-1.5">
                   <Settings className="w-3.5 h-3.5 text-indigo-400" />
-                  <span className="text-[9px] font-black uppercase text-indigo-300 tracking-wider">Node parameters</span>
+                  <span className="text-[11px] font-black uppercase text-indigo-300 tracking-wider">Node parameters</span>
                 </div>
 
                 <div className="space-y-2.5">
@@ -479,7 +479,7 @@ const review = await Proofly.process(reviewId, {
                   {selectedNodeId === 'collector' && (
                     <>
                       <div className="space-y-1">
-                        <div className="flex justify-between text-[9px] text-slate-400">
+                        <div className="flex justify-between text-[11px] text-slate-400">
                           <span>Incentive Reward Coupon</span>
                           <span className="font-mono text-white">{nodeSettings.collector.rewardCoupon}% OFF</span>
                         </div>
@@ -515,7 +515,7 @@ const review = await Proofly.process(reviewId, {
                   {selectedNodeId === 'ai' && (
                     <>
                       <div className="space-y-1">
-                        <label className="text-[9px] text-slate-400 font-bold block uppercase">Transcription Language</label>
+                        <label className="text-[11px] text-slate-400 font-bold block uppercase">Transcription Language</label>
                         <select
                           value={nodeSettings.ai.language}
                           onChange={(e) => {
@@ -532,7 +532,7 @@ const review = await Proofly.process(reviewId, {
                         </select>
                       </div>
                       <div className="space-y-1">
-                        <div className="flex justify-between text-[9px] text-slate-400">
+                        <div className="flex justify-between text-[11px] text-slate-400">
                           <span>Min Sentiment Threshold</span>
                           <span className="font-mono text-white">{nodeSettings.ai.minSentiment}%</span>
                         </div>
@@ -556,7 +556,7 @@ const review = await Proofly.process(reviewId, {
                   {selectedNodeId === 'showcase' && (
                     <>
                       <div className="space-y-1">
-                        <label className="text-[9px] text-slate-400 font-bold block uppercase">Widget Layout</label>
+                        <label className="text-[11px] text-slate-400 font-bold block uppercase">Widget Layout</label>
                         <select
                           value={nodeSettings.showcase.layout}
                           onChange={(e) => {
@@ -594,11 +594,11 @@ const review = await Proofly.process(reviewId, {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1.5">
                     <Code className="w-3.5 h-3.5 text-brand-teal" />
-                    <span className="text-[9px] font-black uppercase text-brand-teal tracking-wider">Generated React/API integration code</span>
+                    <span className="text-[11px] font-black uppercase text-brand-teal tracking-wider">Generated React/API integration code</span>
                   </div>
                   <button
                     onClick={() => handleCopyCode(getCodeSnippet())}
-                    className="p-1 rounded bg-[#0d0e1b] hover:bg-zinc-800 text-zinc-400 hover:text-white cursor-pointer transition flex items-center space-x-1 text-[8px] border border-zinc-800"
+                    className="p-1 rounded bg-[#0d0e1b] hover:bg-zinc-800 text-zinc-400 hover:text-white cursor-pointer transition flex items-center space-x-1 text-[11px] border border-zinc-800"
                   >
                     {copied ? (
                       <>
@@ -614,7 +614,7 @@ const review = await Proofly.process(reviewId, {
                   </button>
                 </div>
 
-                <div className="bg-[#05060b] border border-[#1F2937] rounded-lg p-2.5 font-mono text-[8px] text-zinc-300 overflow-x-auto whitespace-pre h-[90px] relative">
+                <div className="bg-[#05060b] border border-[#1F2937] rounded-lg p-2.5 font-mono text-[11px] text-zinc-300 overflow-x-auto whitespace-pre h-[90px] relative">
                   {getCodeSnippet()}
                 </div>
               </div>

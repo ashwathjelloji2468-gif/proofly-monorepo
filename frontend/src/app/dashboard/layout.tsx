@@ -151,7 +151,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-[#09090B] text-slate-100 flex flex-row relative selection:bg-brand-emerald selection:text-white font-sans">
       {/* Sidebar Navigation */}
       <aside 
-        className={`bg-[#09090B] border-r border-border-primary transition-all duration-300 flex flex-col justify-between shrink-0 select-none ${
+        className={`bg-[#09090B] border-r border-border-primary transition-all duration-300 flex flex-col justify-between shrink-0  ${
           isCollapsed ? 'w-16' : 'w-64'
         }`}
       >
@@ -188,14 +188,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {!isCollapsed && user && user.tier === 'FREE' && (
             <div className="mx-3 my-4 p-4 rounded-xl bg-slate-900/60 border border-white/[0.06] backdrop-blur space-y-3 text-left">
               <div className="flex items-center justify-between">
-                <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Usage Limits</span>
-                <span className="text-[8px] font-bold text-brand-emerald bg-brand-emerald/10 px-2 py-0.5 rounded-full uppercase">Free Plan</span>
+                <span className="text-[11px] font-black uppercase tracking-wider text-slate-400">Usage Limits</span>
+                <span className="text-[11px] font-bold text-brand-emerald bg-brand-emerald/10 px-2 py-0.5 rounded-full uppercase">Free Plan</span>
               </div>
               
               <div className="space-y-2">
                 {/* Meter 1: Spaces */}
                 <div className="space-y-0.5">
-                  <div className="flex items-center justify-between text-[9px] font-medium text-slate-300">
+                  <div className="flex items-center justify-between text-[11px] font-medium text-slate-300">
                     <span>Spaces</span>
                     <span className="font-bold">{collections.length} / 1</span>
                   </div>
@@ -209,7 +209,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                 {/* Meter 2: Testimonials */}
                 <div className="space-y-0.5">
-                  <div className="flex items-center justify-between text-[9px] font-medium text-slate-300">
+                  <div className="flex items-center justify-between text-[11px] font-medium text-slate-300">
                     <span>Testimonials</span>
                     <span className="font-bold">{testimonials.length} / 25</span>
                   </div>
@@ -223,7 +223,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                 {/* Meter 3: Videos */}
                 <div className="space-y-0.5">
-                  <div className="flex items-center justify-between text-[9px] font-medium text-slate-300">
+                  <div className="flex items-center justify-between text-[11px] font-medium text-slate-300">
                     <span>Videos</span>
                     <span className="font-bold">{testimonials.filter(t => t.video_url).length} / 5</span>
                   </div>
@@ -237,7 +237,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                 {/* Meter 4: AI Credits */}
                 <div className="space-y-0.5">
-                  <div className="flex items-center justify-between text-[9px] font-medium text-slate-300">
+                  <div className="flex items-center justify-between text-[11px] font-medium text-slate-300">
                     <span>AI Credits</span>
                     <span className="font-bold">{user.aiCreditsUsed} / 10</span>
                   </div>
@@ -251,7 +251,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
 
               <Link href="/dashboard/settings" className="block pt-1">
-                <button className="w-full bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white hover:opacity-95 text-[9px] font-bold py-1.5 rounded-lg flex items-center justify-center space-x-1 shadow-lg shadow-[#6366F1]/20 transition cursor-pointer">
+                <button className="w-full bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white hover:opacity-95 text-[11px] font-bold py-1.5 rounded-lg flex items-center justify-center space-x-1 shadow-lg shadow-[#6366F1]/20 transition cursor-pointer">
                   <Sparkles className="w-2.5 h-2.5 text-yellow-300 animate-pulse" />
                   <span>⭐⭐ Upgrade to Pro</span>
                 </button>
@@ -272,11 +272,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 />
                 <div className="truncate">
                   <span className="text-xs font-bold text-white block truncate">{user.name}</span>
-                  <span className="text-[9px] text-muted-foreground block truncate">{user.email}</span>
+                  <span className="text-[11px] text-muted-foreground block truncate">{user.email}</span>
                 </div>
               </div>
               
-              <div className="flex items-center justify-between pt-1 border-t border-border-primary/50 text-[9px]">
+              <div className="flex items-center justify-between pt-1 border-t border-border-primary/50 text-[11px]">
                 <span className="text-muted-foreground">Tier:</span>
                 <span className="text-brand-emerald font-black flex items-center space-x-0.5 uppercase">
                   <ShieldCheck className="w-3 h-3" />
@@ -303,7 +303,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Bell className="w-4 h-4 text-brand-emerald" />
             {!isCollapsed && <span>Alert Center</span>}
             {inAppNotifications.filter(n => n.status === 'UNREAD').length > 0 && (
-              <span className="absolute right-3 top-2 bg-red-500 text-white text-[8px] font-black rounded-full h-4.5 w-4.5 flex items-center justify-center">
+              <span className="absolute right-3 top-2 bg-red-500 text-white text-[11px] font-black rounded-full h-4.5 w-4.5 flex items-center justify-center">
                 {inAppNotifications.filter(n => n.status === 'UNREAD').length}
               </span>
             )}
@@ -332,7 +332,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main Content Area */}
       <div className="flex-1 bg-[#09090B] flex flex-col min-w-0 overflow-y-auto pb-16 md:pb-0">
         {!isOnline && (
-          <div className="bg-amber-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-center space-x-2 animate-pulse select-none z-50 shadow-md">
+          <div className="bg-amber-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-center space-x-2 animate-pulse  z-50 shadow-md">
             <WifiOff className="w-4 h-4 shrink-0" />
             <span>Offline Mode Active. Operations will cache and sync automatically when network returns.</span>
           </div>
@@ -341,14 +341,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
 
       {/* Bottom Mobile Navigation bar */}
-      <div className="md:hidden border-t border-border-primary bg-[#09090B] px-4 py-3 fixed bottom-0 inset-x-0 z-40 flex items-center justify-around select-none">
+      <div className="md:hidden border-t border-border-primary bg-[#09090B] px-4 py-3 fixed bottom-0 inset-x-0 z-40 flex items-center justify-around ">
         <Link href="/dashboard" className="flex flex-col items-center text-slate-400 hover:text-white transition">
           <LayoutGrid className="w-5 h-5" />
-          <span className="text-[9px] mt-0.5">Home</span>
+          <span className="text-[11px] mt-0.5">Home</span>
         </Link>
         <Link href="/dashboard/collections" className="flex flex-col items-center text-slate-400 hover:text-white transition">
           <FolderHeart className="w-5 h-5" />
-          <span className="text-[9px] mt-0.5">Spaces</span>
+          <span className="text-[11px] mt-0.5">Spaces</span>
         </Link>
         <button 
           onClick={() => setShowNotifDrawer(true)} 
@@ -356,15 +356,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         >
           <Bell className="w-5 h-5 text-brand-emerald" />
           {inAppNotifications.filter(n => n.status === 'UNREAD').length > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-black rounded-full h-4 w-4 flex items-center justify-center animate-bounce">
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[11px] font-black rounded-full h-4 w-4 flex items-center justify-center animate-pulse">
               {inAppNotifications.filter(n => n.status === 'UNREAD').length}
             </span>
           )}
-          <span className="text-[9px] mt-0.5">Alerts</span>
+          <span className="text-[11px] mt-0.5">Alerts</span>
         </button>
         <Link href="/dashboard/settings" className="flex flex-col items-center text-slate-400 hover:text-white transition">
           <Settings className="w-5 h-5" />
-          <span className="text-[9px] mt-0.5">Settings</span>
+          <span className="text-[11px] mt-0.5">Settings</span>
         </Link>
       </div>
 
@@ -398,8 +398,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] bg-brand-emerald/10 text-brand-emerald px-2 py-0.5 rounded font-mono font-black">{notif.category}</span>
-                        <span className="text-[8px] text-slate-450">{new Date(notif.createdAt).toLocaleTimeString()}</span>
+                        <span className="text-[11px] bg-brand-emerald/10 text-brand-emerald px-2 py-0.5 rounded font-mono font-black">{notif.category}</span>
+                        <span className="text-[11px] text-slate-450">{new Date(notif.createdAt).toLocaleTimeString()}</span>
                       </div>
                       <span className="text-xs font-bold text-white block">{notif.title}</span>
                       <p className="text-[10px] text-slate-400 leading-relaxed">{notif.description}</p>

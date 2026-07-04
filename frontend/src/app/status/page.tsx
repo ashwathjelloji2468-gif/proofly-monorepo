@@ -32,7 +32,7 @@ export default function StatusPage() {
   ];
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       {/* Hero Header Status */}
@@ -104,7 +104,7 @@ export default function StatusPage() {
             ))}
           </div>
 
-          <div className="flex justify-between text-[8px] text-zinc-500 font-bold uppercase pt-1">
+          <div className="flex justify-between text-[11px] text-zinc-500 font-bold uppercase pt-1">
             <span>90 days ago</span>
             <span>45 days ago</span>
             <span>Today</span>
@@ -127,10 +127,10 @@ export default function StatusPage() {
                 }`} />
                 
                 <div className="flex items-center space-x-2">
-                  <span className="text-[9px] font-black uppercase text-zinc-500 tracking-wider">
+                  <span className="text-[11px] font-black uppercase text-zinc-500 tracking-wider">
                     {inc.date}
                   </span>
-                  <span className={`text-[8px] font-black uppercase px-1.5 rounded ${
+                  <span className={`text-[11px] font-black uppercase px-1.5 rounded ${
                     inc.type === 'MAINTENANCE' ? 'bg-[#6366F1]/10 border border-[#6366F1]/20 text-[#6366F1]' : 'bg-brand-teal/10 border border-brand-teal/20 text-brand-teal'
                   }`}>
                     {inc.type}

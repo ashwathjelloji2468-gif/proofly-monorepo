@@ -316,7 +316,7 @@ export default function SettingsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
           {/* Navigation Sidebar */}
-          <aside className="md:col-span-1 space-y-2 shrink-0 select-none">
+          <aside className="md:col-span-1 space-y-2 shrink-0 ">
             {[
               { id: 'profile', label: 'Profile & Security', desc: 'Account credentials', icon: <UserIcon className="w-4 h-4 text-brand-emerald" /> },
               { id: 'billing', label: 'Subscription Plans', desc: 'Manage Stripe billing', icon: <CreditCard className="w-4 h-4 text-brand-teal" /> },
@@ -340,7 +340,7 @@ export default function SettingsPage() {
                 {tab.icon}
                 <div>
                   <span className="text-xs font-bold block">{tab.label}</span>
-                  <span className="text-[9px] text-muted-foreground block">{tab.desc}</span>
+                  <span className="text-[11px] text-muted-foreground block">{tab.desc}</span>
                 </div>
               </button>
             ))}
@@ -369,7 +369,7 @@ export default function SettingsPage() {
 
                 {/* Change Name form */}
                 <form onSubmit={handleUpdateProfileName} className="space-y-4 bg-[#09090B] border border-border-primary p-5 rounded-xl">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wide">Workspace Profile Name</h4>
+                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wide">Your Display Name</h4>
                   <div className="space-y-1.5 max-w-md">
                     <input
                       type="text"
@@ -395,7 +395,7 @@ export default function SettingsPage() {
                   <div className="p-3 text-[10px] text-yellow-400 bg-yellow-950/20 border border-yellow-800/40 rounded-lg flex items-start space-x-2 leading-relaxed">
                     <AlertCircle className="w-4 h-4 shrink-0 text-yellow-400 mt-0.5" />
                     <span>
-                      <strong>Enterprise Security Precaution</strong>: To change your login email address, Proofly requires a double-confirmation mechanism. Verification links will be sent to both your **current email address** (${user.email}) and your **target new address**. The switch will take effect only after both are verified.
+                      <strong>Enterprise Security Precaution</strong>: To change your login email address, Proofly requires a double-confirmation mechanism. Verification links will be sent to both your <strong>current email address</strong> (${user.email}) and your <strong>target new address</strong>. The switch will take effect only after both are verified.
                     </span>
                   </div>
 
@@ -518,7 +518,7 @@ export default function SettingsPage() {
                                 {session.deviceType || 'Browser Session'}
                               </span>
                               {session.isCurrent && (
-                                <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20">
+                                <span className="text-[11px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20">
                                   Current Session
                                 </span>
                               )}
@@ -557,7 +557,7 @@ export default function SettingsPage() {
                     <CreditCard className="w-4 h-4 text-brand-teal" />
                     <span>Billing Plans</span>
                   </h3>
-                  <p className="text-xs text-muted-foreground">Select a plan to upgrade your workspace. Upgrading is simulated instantly via Stripe SDK hooks.</p>
+                  <p className="text-xs text-muted-foreground">Select a plan to upgrade your workspace. Changes take effect immediately.</p>
                 </div>
 
                 <div className="bg-[#09090B] border border-border-primary p-4 rounded-xl flex items-center justify-between">
@@ -588,7 +588,7 @@ export default function SettingsPage() {
                         }`}
                       >
                         {isCurrent && (
-                          <span className="absolute -top-2.5 right-4 bg-brand-emerald text-white text-[8px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider shadow">
+                          <span className="absolute -top-2.5 right-4 bg-brand-emerald text-white text-[11px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider shadow">
                             Current Plan
                           </span>
                         )}
@@ -786,7 +786,7 @@ export default function SettingsPage() {
                               <span className="text-[10px] text-muted-foreground block">{member.user?.email}</span>
                             </div>
                             <div className="flex items-center space-x-3">
-                              <span className={`text-[9px] px-2 py-0.5 rounded font-black uppercase border ${
+                              <span className={`text-[11px] px-2 py-0.5 rounded font-black uppercase border ${
                                 isOwner 
                                   ? 'bg-brand-emerald/10 text-brand-emerald border-brand-emerald/20' 
                                   : 'bg-zinc-800 border-border-primary text-slate-400'
@@ -817,10 +817,10 @@ export default function SettingsPage() {
                         <div key={invite.id} className="bg-[#09090B]/50 border border-border-primary p-3.5 rounded-lg flex items-center justify-between">
                           <div>
                             <span className="text-xs font-semibold text-slate-300 block">{invite.email}</span>
-                            <span className="text-[9px] text-zinc-500 block">Expires: {new Date(invite.expiresAt).toLocaleDateString()}</span>
+                            <span className="text-[11px] text-zinc-500 block">Expires: {new Date(invite.expiresAt).toLocaleDateString()}</span>
                           </div>
                           <div className="flex items-center space-x-3">
-                            <span className="text-[8px] bg-brand-teal/10 border border-brand-teal/20 text-brand-teal px-2 py-0.5 rounded font-bold uppercase">
+                            <span className="text-[11px] bg-brand-teal/10 border border-brand-teal/20 text-brand-teal px-2 py-0.5 rounded font-bold uppercase">
                               {invite.role} (Pending)
                             </span>
                           </div>

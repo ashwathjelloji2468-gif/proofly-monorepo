@@ -45,7 +45,7 @@ export default function CareersPage() {
   };
 
   return (
-    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans select-none overflow-hidden">
+    <div className="bg-[#09090B] text-white min-h-screen flex flex-col font-sans  overflow-hidden">
       <Navbar />
 
       {/* Hero Section */}
@@ -147,7 +147,7 @@ export default function CareersPage() {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1 text-left">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Full Name</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Full Name</label>
                   <input 
                     type="text" 
                     required
@@ -158,7 +158,7 @@ export default function CareersPage() {
                   />
                 </div>
                 <div className="space-y-1 text-left">
-                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Contact Email</label>
+                  <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Contact Email</label>
                   <input 
                     type="email" 
                     required
@@ -171,7 +171,7 @@ export default function CareersPage() {
               </div>
 
               <div className="space-y-1 text-left">
-                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Resume / Portfolio Link</label>
+                <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Resume / Portfolio Link</label>
                 <input 
                   type="url" 
                   required
@@ -183,7 +183,7 @@ export default function CareersPage() {
               </div>
 
               <div className="space-y-1 text-left">
-                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Short Cover Note / Message</label>
+                <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Short Cover Note / Message</label>
                 <textarea 
                   value={candidateNote}
                   onChange={(e) => setCandidateNote(e.target.value)}

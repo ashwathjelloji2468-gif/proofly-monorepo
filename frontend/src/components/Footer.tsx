@@ -52,7 +52,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t border-white/[0.08] bg-[#0A0B14] py-16 relative text-left select-none overflow-hidden">
+    <footer className="border-t border-white/[0.08] bg-[#0A0B14] py-16 relative text-left  overflow-hidden">
       
       {/* Background Glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#6366F1]/5 rounded-full blur-[140px] pointer-events-none -z-10" />

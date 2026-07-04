@@ -60,7 +60,7 @@ export function ConfettiRibbons() {
   if (!active) return null;
 
   return (
-    <div className="fixed inset-0 w-full h-full pointer-events-none overflow-hidden z-[9999] select-none">
+    <div className="fixed inset-0 w-full h-full pointer-events-none overflow-hidden z-[9999] ">
       {ribbons.map((r) => {
         const renderShape = () => {
           if (r.shape === 'circle') {

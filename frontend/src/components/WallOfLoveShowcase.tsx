@@ -46,7 +46,7 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
   return (
     <WallOfLoveCard>
       <SpotlightCard 
-        className="p-6 flex flex-col justify-between space-y-4 h-full cursor-pointer select-none"
+        className="p-6 flex flex-col justify-between space-y-4 h-full cursor-pointer "
         glowColor={isVideo ? 'rgba(99, 102, 241, 0.12)' : 'rgba(99, 102, 241, 0.08)'}
         hoverScale={isVideo ? 1.05 : 1.03}
         tiltMax={isVideo ? 4 : 5}
@@ -71,21 +71,21 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
             <div className="flex items-center space-x-2">
               {/* CTR / Views badge if sort active */}
               {sortBy === 'ctr' && (
-                <span className="bg-brand-emerald/10 border border-brand-emerald/25 text-brand-emerald px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider">
+                <span className="bg-brand-emerald/10 border border-brand-emerald/25 text-brand-emerald px-1.5 py-0.5 rounded text-[11px] font-black uppercase tracking-wider">
                   🎯 {Math.round((t.clicks / (t.views || 1)) * 100)}% CTR
                 </span>
               )}
               {sortBy === 'views' && (
-                <span className="bg-brand-emerald/10 border border-brand-emerald/25 text-brand-emerald px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider">
+                <span className="bg-brand-emerald/10 border border-brand-emerald/25 text-brand-emerald px-1.5 py-0.5 rounded text-[11px] font-black uppercase tracking-wider">
                   👁️ {t.views} Views
                 </span>
               )}
               {sortBy === 'trust' && t.trustScore && (
-                <span className="bg-brand-teal/10 border border-brand-teal/25 text-brand-teal px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider">
+                <span className="bg-brand-teal/10 border border-brand-teal/25 text-brand-teal px-1.5 py-0.5 rounded text-[11px] font-black uppercase tracking-wider">
                   🛡️ {t.trustScore}% Trust
                 </span>
               )}
-              <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition duration-300 group-hover/spotlight:scale-105 ${
+              <span className={`px-2 py-0.5 rounded text-[11px] font-black uppercase tracking-wider transition duration-300 group-hover/spotlight:scale-105 ${
                 isVideo 
                   ? 'bg-brand-teal/15 border border-brand-teal/20 text-brand-teal' 
                   : 'bg-brand-emerald/15 border border-brand-emerald/20 text-brand-emerald'
@@ -126,7 +126,7 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
               {/* Play Button Glow & Watch Button Overlay */}
               {!isPlaying && (
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none transition duration-300">
-                  <div className="bg-brand-emerald/10 text-brand-emerald px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center space-x-1.5 border border-brand-emerald/20 shadow-md">
+                  <div className="bg-brand-emerald/10 text-brand-emerald px-3 py-1.5 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center space-x-1.5 border border-brand-emerald/20 shadow-md">
                     <Play className="w-2.5 h-2.5 fill-current text-brand-emerald" />
                     <span>Hover Card to Play</span>
                   </div>
@@ -135,14 +135,14 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
 
               {isPlaying && (
                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-                  <div className="bg-[#6366F1] text-white px-4 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center space-x-2 shadow-[0_0_20px_rgba(108,92,255,0.6)] transform scale-100 transition duration-300">
+                  <div className="bg-[#6366F1] text-white px-4 py-2 rounded-lg text-[11px] font-black uppercase tracking-widest flex items-center space-x-2 shadow-[0_0_20px_rgba(108,92,255,0.6)] transform scale-100 transition duration-300">
                     <Play className="w-3 h-3 fill-current text-white animate-pulse" />
                     <span>Playing Preview</span>
                   </div>
                 </div>
               )}
 
-              <div className="absolute bottom-2 left-2 bg-[#09090B]/85 backdrop-blur text-[8px] font-black text-white px-2 py-0.5 rounded border border-border-primary/50 flex items-center space-x-1 uppercase tracking-wider z-20">
+              <div className="absolute bottom-2 left-2 bg-[#09090B]/85 backdrop-blur text-[11px] font-black text-white px-2 py-0.5 rounded border border-border-primary/50 flex items-center space-x-1 uppercase tracking-wider z-20">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand-teal animate-pulse" />
                 <span>Live Video</span>
               </div>
@@ -168,7 +168,7 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
 
           <div className="flex flex-col items-end space-y-1">
             {t.sentiment && (
-              <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-wider transition duration-300 group-hover/spotlight:animate-pulse ${
+              <span className={`px-2 py-0.5 rounded text-[11px] font-black uppercase tracking-wider transition duration-300 group-hover/spotlight:animate-pulse ${
                 t.sentiment === 'POSITIVE'
                   ? 'bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30'
                   : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
@@ -176,7 +176,7 @@ function WallOfLoveShowcard({ t, sortBy }: ShowcardProps) {
                 {t.sentiment}
               </span>
             )}
-            <span className="text-[9px] text-zinc-500 font-mono" suppressHydrationWarning>
+            <span className="text-[11px] text-zinc-500 font-mono" suppressHydrationWarning>
               {new Date(t.createdAt).toLocaleDateString()}
             </span>
           </div>
@@ -238,7 +238,7 @@ function WallOfLoveCard({ children }: { children: React.ReactNode }) {
             scale: h.scale,
           }}
           transition={{ duration: h.duration, ease: 'easeOut' }}
-          className="absolute text-red-500 font-bold pointer-events-none z-50 select-none"
+          className="absolute text-red-500 font-bold pointer-events-none z-50 "
           style={{
             fontSize: `${h.size}px`,
             left: 0,
@@ -416,7 +416,7 @@ export function WallOfLoveShowcase({ testimonials, layout }: WallOfLoveProps) {
                 <circle cx="38" cy="28" r="8" fill="#fff" opacity="0.32" />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[12px] font-black tracking-widest text-indigo-950 uppercase select-none drop-shadow">LOVE</span>
+                <span className="text-[12px] font-black tracking-widest text-indigo-950 uppercase  drop-shadow">LOVE</span>
               </div>
             </div>
           </motion.div>
@@ -425,7 +425,7 @@ export function WallOfLoveShowcase({ testimonials, layout }: WallOfLoveProps) {
 
       {/* Floating Social Proof Emojis in background - only render/animate when in viewport & after reveal */}
       {isInView && startFloating && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden  z-0">
           {reactions.map((item) => (
             <motion.div
               key={item.id}
@@ -442,7 +442,7 @@ export function WallOfLoveShowcase({ testimonials, layout }: WallOfLoveProps) {
                 delay: item.delay,
                 ease: 'linear',
               }}
-              className="absolute text-lg sm:text-xl font-bold select-none pointer-events-none"
+              className="absolute text-lg sm:text-xl font-bold  pointer-events-none"
               style={{
                 left: `${item.left}%`,
                 color: item.id % 3 === 0 ? '#4338CA' : item.id % 3 === 1 ? '#6366F1' : '#FFFFFF',
