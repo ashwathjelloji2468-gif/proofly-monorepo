@@ -16,7 +16,9 @@ export default withSentryConfig(nextConfig, {
 
   // Upload source maps in production builds only
   silent: true,
-  hideSourceMaps: true,
+  sourcemaps: {
+    deleteFilesAfterUpload: ["**/*.js.map"],
+  },
 
   // Disable automatic instrumentation of Vercel Cron Monitors
   automaticVercelMonitors: false,
