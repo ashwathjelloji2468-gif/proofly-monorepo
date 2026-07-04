@@ -1,3 +1,4 @@
+import { oauthLogger as logger } from '../utils/logger';
 import { Router, Request, Response } from 'express';
 import { PrismaClient, BillingTier } from '@prisma/client';
 import crypto from 'crypto';
@@ -213,7 +214,7 @@ router.get('/google/callback', async (req: Request, res: Response) => {
 
     if (!tokenRes.ok) {
       const err = await tokenRes.text();
-      console.error('Google token exchange failed:', err);
+      logger.error('Google token exchange failed:', err);
       return res.redirect(`${clientUrl}/login?error=token_exchange_failed`);
     }
 
@@ -262,7 +263,7 @@ router.get('/google/callback', async (req: Request, res: Response) => {
 
     return res.redirect(`${clientUrl}/dashboard?oauth=google`);
   } catch (err: any) {
-    console.error('Google OAuth callback error:', err);
+    logger.error('Google OAuth callback error:', err);
     return res.redirect(`${clientUrl}/login?error=server_error`);
   }
 });
@@ -353,7 +354,7 @@ router.get('/github/callback', async (req: Request, res: Response) => {
 
     if (!tokenRes.ok) {
       const err = await tokenRes.text();
-      console.error('GitHub token exchange failed:', err);
+      logger.error('GitHub token exchange failed:', err);
       return res.redirect(`${clientUrl}/login?error=token_exchange_failed`);
     }
 
@@ -416,7 +417,7 @@ router.get('/github/callback', async (req: Request, res: Response) => {
 
     return res.redirect(`${clientUrl}/dashboard?oauth=github`);
   } catch (err: any) {
-    console.error('GitHub OAuth callback error:', err);
+    logger.error('GitHub OAuth callback error:', err);
     return res.redirect(`${clientUrl}/login?error=server_error`);
   }
 });

@@ -25,17 +25,31 @@ import { authMiddleware } from './middleware/auth';
 import { rateLimiter } from './security/rateLimiter';
 import oauthRouter from './controllers/oauthController';
 import { publicApiRouter } from './controllers/api';
+import {
+  requestIdMiddleware,
+  requestLoggerMiddleware,
+  errorHandlerMiddleware,
+  securityMonitorMiddleware,
+  setupProcessErrorHandlers,
+} from './middleware/monitoring';
+import { metricsStore } from './middleware/metrics';
+import { logger } from './utils/logger';
 
 async function startServer() {
+  setupProcessErrorHandlers();
   const app = express();
   
   // Configure security headers, trust proxy, signed cookieParser, and compression
   app.set('trust proxy', 1);
   app.use(helmet({ contentSecurityPolicy: false }));
   app.use(compression());
-  // Use COOKIE_SECRET so oauth_state cookies are signed and tamper-proof
   app.use(cookieParser(process.env.COOKIE_SECRET || 'fallback-dev-secret'));
   app.use(express.json());
+
+  // ─── Monitoring: Request IDs + Logging + Security ──────────────────────────
+  app.use(requestIdMiddleware);
+  app.use(requestLoggerMiddleware);
+  app.use(securityMonitorMiddleware);
 
   // ─── OAuth REST Routes (before Apollo, before auth middleware) ────────────────
   const oauthCors = cors<cors.CorsRequest>({
@@ -75,53 +89,93 @@ async function startServer() {
     }),
   );
 
-  // Health check route
+  // ─── Health & Monitoring Endpoints ───────────────────────────────────────
+
+  // Detailed health check
   app.get('/health', async (_req, res) => {
+    const mem = process.memoryUsage();
+    const stats = metricsStore.getStats();
     try {
       const userCount = await prisma.user.count();
       const sessionCount = await prisma.session.count();
-      const oauthCount = await prisma.oAuthAccount.count();
-      const refreshCount = await prisma.refreshToken.count();
-      const auditCount = await prisma.auditLog.count();
-      const loginCount = await prisma.loginHistory.count();
       res.status(200).json({
         status: 'ok',
-        version: 'refactored-auth-v7',
-        nodeEnv: process.env.NODE_ENV,
-        database: 'connected',
-        tables: {
-          user: userCount >= 0 ? 'exists' : 'missing',
-          session: sessionCount >= 0 ? 'exists' : 'missing',
-          oAuthAccount: oauthCount >= 0 ? 'exists' : 'missing',
-          refreshToken: refreshCount >= 0 ? 'exists' : 'missing',
-          auditLog: auditCount >= 0 ? 'exists' : 'missing',
-          loginHistory: loginCount >= 0 ? 'exists' : 'missing'
+        version: process.env.npm_package_version || '1.0.0',
+        buildVersion: process.env.BUILD_VERSION || 'dev',
+        gitCommit: process.env.GIT_COMMIT || 'local',
+        nodeVersion: process.version,
+        environment: process.env.NODE_ENV || 'development',
+        uptime: stats.uptime,
+        uptimeHuman: stats.uptimeHuman,
+        database: { status: 'connected', users: userCount, sessions: sessionCount },
+        memory: {
+          rss: `${Math.round(mem.rss / 1024 / 1024)}MB`,
+          heapUsed: `${Math.round(mem.heapUsed / 1024 / 1024)}MB`,
+          heapTotal: `${Math.round(mem.heapTotal / 1024 / 1024)}MB`,
         },
-        timestamp: new Date()
+        services: {
+          stripe: process.env.STRIPE_SECRET_KEY ? 'configured' : 'not_configured',
+          cloudinary: process.env.CLOUDINARY_CLOUD_NAME ? 'configured' : 'not_configured',
+          email: process.env.RESEND_API_KEY ? 'configured' : 'not_configured',
+          openai: process.env.OPENAI_API_KEY ? 'configured' : 'not_configured',
+        },
+        requests: stats.requests,
+        timestamp: new Date().toISOString(),
       });
     } catch (dbError: any) {
-      res.status(500).json({
-        status: 'error',
-        version: 'refactored-auth-v7',
-        database: 'error',
-        message: dbError.message || 'Unknown database error',
-        timestamp: new Date()
+      res.status(503).json({
+        status: 'degraded',
+        database: { status: 'error', message: 'Cannot reach database' },
+        memory: {
+          rss: `${Math.round(mem.rss / 1024 / 1024)}MB`,
+          heapUsed: `${Math.round(mem.heapUsed / 1024 / 1024)}MB`,
+        },
+        timestamp: new Date().toISOString(),
       });
     }
   });
 
+  // Kubernetes readiness probe
   app.get('/ready', async (_req, res) => {
     try {
       await prisma.$queryRaw`SELECT 1`;
-      res.status(200).send('READY');
+      res.status(200).json({ status: 'ready', timestamp: new Date().toISOString() });
     } catch {
-      res.status(503).send('NOT_READY');
+      res.status(503).json({ status: 'not_ready', timestamp: new Date().toISOString() });
     }
   });
 
+  // Kubernetes liveness probe
   app.get('/live', (_req, res) => {
-    res.status(200).send('LIVE');
+    res.status(200).json({ status: 'alive', uptime: process.uptime(), timestamp: new Date().toISOString() });
   });
+
+  // Metrics endpoint (admin only in production)
+  app.get('/metrics', (_req, res) => {
+    const stats = metricsStore.getStats();
+    const mem = process.memoryUsage();
+    res.status(200).json({
+      server: {
+        uptime: stats.uptime,
+        uptimeHuman: stats.uptimeHuman,
+        nodeVersion: process.version,
+        environment: process.env.NODE_ENV,
+        memory: {
+          rssBytes: mem.rss,
+          heapUsedBytes: mem.heapUsed,
+          heapTotalBytes: mem.heapTotal,
+          externalBytes: mem.external,
+        },
+      },
+      requests: stats.requests,
+      slowestEndpoints: stats.slowestEndpoints,
+      errors: stats.errors,
+      securityEvents: stats.securityEvents,
+      jobs: stats.jobs,
+      timestamp: new Date().toISOString(),
+    });
+  });
+
 
   // Serve uploaded files statically
   app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
@@ -541,11 +595,24 @@ Always stay in character. Keep answers helpful, conversational, and concise (max
     }
   });
 
+  // ─── Global Error Handler (must be last middleware) ──────────────────────
+  app.use(errorHandlerMiddleware);
+
   const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4000;
   await new Promise<void>((resolve) => httpServer.listen({ port: PORT }, resolve));
-  console.log(`🚀 Testimonials Backend Server ready at http://localhost:${PORT}/graphql`);
+  logger.info(`Proofly backend ready`, {
+    metadata: {
+      port: PORT,
+      graphql: `http://localhost:${PORT}/graphql`,
+      health: `http://localhost:${PORT}/health`,
+      metrics: `http://localhost:${PORT}/metrics`,
+      environment: process.env.NODE_ENV,
+    },
+  });
 }
 
 startServer().catch((err) => {
-  console.error('Failed to start server:', err);
+  logger.error('Failed to start server', err);
+  process.exit(1);
 });
+
