@@ -7,6 +7,23 @@ import * as Sentry from '@sentry/nextjs';
 
 const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
+const SENSITIVE_KEYS = [
+  'password', 'token', 'secret', 'api_key', 'apiKey',
+  'authorization', 'cookie', 'accessToken', 'refreshToken',
+];
+
+function redact(obj: unknown): unknown {
+  if (!obj || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) return obj.map(redact);
+  const result: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
+    result[k] = SENSITIVE_KEYS.some(s => k.toLowerCase().includes(s.toLowerCase()))
+      ? '[REDACTED]'
+      : redact(v);
+  }
+  return result;
+}
+
 Sentry.init({
   dsn: SENTRY_DSN,
   environment: process.env.NODE_ENV,
@@ -19,10 +36,9 @@ Sentry.init({
 
   integrations: [
     Sentry.replayIntegration({
-      // Block recording of sensitive fields
       blockAllMedia: false,
       maskAllText: false,
-      maskAllInputs: true, // Mask all form inputs (passwords, emails)
+      maskAllInputs: true,
     }),
   ],
 
@@ -35,31 +51,11 @@ Sentry.init({
     /^Loading chunk/,
   ],
 
-  beforeSend(event) {
-    // Never send events to Sentry in development
+  beforeSend(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null {
     if (process.env.NODE_ENV === 'development') return null;
-    return sanitizeClientEvent(event);
+    if (event.request) {
+      event.request = redact(event.request) as typeof event.request;
+    }
+    return event;
   },
 });
-
-function sanitizeClientEvent(event: Sentry.Event): Sentry.Event {
-  const SENSITIVE_KEYS = [
-    'password', 'token', 'secret', 'api_key', 'apiKey',
-    'authorization', 'cookie', 'accessToken', 'refreshToken',
-  ];
-
-  function redact(obj: unknown): unknown {
-    if (!obj || typeof obj !== 'object') return obj;
-    if (Array.isArray(obj)) return obj.map(redact);
-    const result: Record<string, unknown> = {};
-    for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
-      result[k] = SENSITIVE_KEYS.some(s => k.toLowerCase().includes(s.toLowerCase()))
-        ? '[REDACTED]'
-        : redact(v);
-    }
-    return result;
-  }
-
-  if (event.request) event.request = redact(event.request) as typeof event.request;
-  return event;
-}
