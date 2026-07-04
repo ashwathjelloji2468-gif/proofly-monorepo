@@ -1,8 +1,15 @@
+// Sentry must be initialized before any other imports
+import { initSentry } from './monitoring/sentry';
+initSentry();
+
 import dotenv from 'dotenv';
 dotenv.config();
 
 import { PrismaClient } from '@prisma/client';
+import { applyPrismaMonitoring, getQueryStats } from './monitoring/prismaMonitor';
 const prisma = new PrismaClient();
+// Apply query monitoring middleware immediately after client creation
+applyPrismaMonitoring(prisma);
 
 import fs from 'fs';
 import path from 'path';
@@ -25,6 +32,7 @@ import { authMiddleware } from './middleware/auth';
 import { rateLimiter } from './security/rateLimiter';
 import oauthRouter from './controllers/oauthController';
 import { publicApiRouter } from './controllers/api';
+import { adminRouter } from './controllers/adminController';
 import {
   requestIdMiddleware,
   requestLoggerMiddleware,
@@ -34,9 +42,12 @@ import {
 } from './middleware/monitoring';
 import { metricsStore } from './middleware/metrics';
 import { logger } from './utils/logger';
+import { initRedis, getRedisHealth, getRedisStats } from './monitoring/redis';
 
 async function startServer() {
   setupProcessErrorHandlers();
+  // Initialize Redis (non-blocking, falls back to in-memory if unavailable)
+  initRedis();
   const app = express();
   
   // Configure security headers, trust proxy, signed cookieParser, and compression
@@ -61,6 +72,7 @@ async function startServer() {
   });
   app.use('/auth', oauthCors, rateLimiter(30, 10 * 60 * 1000), oauthRouter);
   app.use('/api/v1', oauthCors, publicApiRouter);
+  app.use('/api/v1/admin', oauthCors, rateLimiter(60, 60 * 1000), adminRouter);
 
   // Global authentication & token rotation middleware
   app.use(authMiddleware);
@@ -95,6 +107,10 @@ async function startServer() {
   app.get('/health', async (_req, res) => {
     const mem = process.memoryUsage();
     const stats = metricsStore.getStats();
+    const queryStats = getQueryStats();
+    const [redisHealth] = await Promise.all([
+      getRedisHealth(),
+    ]);
     try {
       const userCount = await prisma.user.count();
       const sessionCount = await prisma.session.count();
@@ -107,7 +123,18 @@ async function startServer() {
         environment: process.env.NODE_ENV || 'development',
         uptime: stats.uptime,
         uptimeHuman: stats.uptimeHuman,
-        database: { status: 'connected', users: userCount, sessions: sessionCount },
+        database: {
+          status: 'connected',
+          users: userCount,
+          sessions: sessionCount,
+          queryHealth: {
+            score: queryStats.healthScore,
+            avgMs: queryStats.avgDurationMs,
+            p95Ms: queryStats.p95Ms,
+            slowQueries: queryStats.byCategory.slow + queryStats.byCategory.critical,
+          },
+        },
+        redis: redisHealth,
         memory: {
           rss: `${Math.round(mem.rss / 1024 / 1024)}MB`,
           heapUsed: `${Math.round(mem.heapUsed / 1024 / 1024)}MB`,
@@ -118,6 +145,8 @@ async function startServer() {
           cloudinary: process.env.CLOUDINARY_CLOUD_NAME ? 'configured' : 'not_configured',
           email: process.env.RESEND_API_KEY ? 'configured' : 'not_configured',
           openai: process.env.OPENAI_API_KEY ? 'configured' : 'not_configured',
+          sentry: process.env.SENTRY_DSN ? 'configured' : 'not_configured',
+          redis: process.env.REDIS_URL ? redisHealth.status : 'not_configured',
         },
         requests: stats.requests,
         timestamp: new Date().toISOString(),
@@ -126,6 +155,7 @@ async function startServer() {
       res.status(503).json({
         status: 'degraded',
         database: { status: 'error', message: 'Cannot reach database' },
+        redis: redisHealth,
         memory: {
           rss: `${Math.round(mem.rss / 1024 / 1024)}MB`,
           heapUsed: `${Math.round(mem.heapUsed / 1024 / 1024)}MB`,
@@ -134,6 +164,7 @@ async function startServer() {
       });
     }
   });
+
 
   // Kubernetes readiness probe
   app.get('/ready', async (_req, res) => {
@@ -151,9 +182,14 @@ async function startServer() {
   });
 
   // Metrics endpoint (admin only in production)
-  app.get('/metrics', (_req, res) => {
+  app.get('/metrics', async (_req, res) => {
     const stats = metricsStore.getStats();
     const mem = process.memoryUsage();
+    const queryStats = getQueryStats();
+    const [redisStats, redisHealth] = await Promise.all([
+      getRedisStats(),
+      getRedisHealth(),
+    ]);
     res.status(200).json({
       server: {
         uptime: stats.uptime,
@@ -172,9 +208,12 @@ async function startServer() {
       errors: stats.errors,
       securityEvents: stats.securityEvents,
       jobs: stats.jobs,
+      database: queryStats,
+      redis: { health: redisHealth, ...redisStats },
       timestamp: new Date().toISOString(),
     });
   });
+
 
 
   // Serve uploaded files statically

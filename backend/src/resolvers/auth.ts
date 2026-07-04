@@ -3,6 +3,7 @@ import { BillingTier, SpaceRole } from '@prisma/client';
 import { setAuthCookies, clearAuthCookies } from '../security/cookies';
 import { checkRateLimit } from '../security/rateLimiter';
 import { requireSpaceRole } from '../middleware/roles';
+import { writeAuditLog } from '../monitoring/auditLogger';
 
 export const authResolvers = {
   Query: {
@@ -30,16 +31,38 @@ export const authResolvers = {
   Mutation: {
     signup: async (_parent: any, args: any, context: GraphQLContext) => {
       const ip = context.req.ip || context.req.headers['x-forwarded-for']?.toString() || 'unknown';
-      checkRateLimit(ip, 'signup', 3, 60 * 1000); // 3 per minute
-      return context.services.user.signup(args.email, args.name, args.password);
+      checkRateLimit(ip, 'signup', 3, 60 * 1000);
+      const result = await context.services.user.signup(args.email, args.name, args.password);
+      if (result?.user?.id) {
+        writeAuditLog(context.prisma, {
+          userId: result.user.id,
+          action: 'AUTH_SIGNUP',
+          ipAddress: ip,
+          userAgent: context.req.headers['user-agent'],
+          requestId: (context.req as any).requestId,
+          severity: 'INFO',
+          metadata: { email: args.email, name: args.name },
+        });
+      }
+      return result;
     },
     login: async (_parent: any, args: any, context: GraphQLContext) => {
       const ip = context.req.ip || context.req.headers['x-forwarded-for']?.toString() || 'unknown';
-      checkRateLimit(ip, 'login', 5, 60 * 1000); // 5 per minute
+      checkRateLimit(ip, 'login', 5, 60 * 1000);
       const userAgent = context.req.headers['user-agent'] || null;
       const ipAddress = context.req.ip || null;
       const { accessToken, refreshToken, user } = await context.services.user.login(args.email, args.password, userAgent, ipAddress);
       setAuthCookies(context.res, accessToken, refreshToken);
+      // Audit: successful login
+      writeAuditLog(context.prisma, {
+        userId: user.id,
+        action: 'AUTH_LOGIN',
+        ipAddress: ip,
+        userAgent: userAgent || undefined,
+        requestId: (context.req as any).requestId,
+        severity: 'INFO',
+        metadata: { provider: 'email' },
+      });
       return { user };
     },
     githubLogin: async (_parent: any, args: { code: string }, context: GraphQLContext) => {
@@ -57,10 +80,21 @@ export const authResolvers = {
       return { user };
     },
     logout: async (_parent: any, _args: any, context: GraphQLContext) => {
+      const userId = context.currentUser?.id;
       if (context.currentSession) {
         await context.services.session.revokeSession(context.currentSession.id);
       }
       clearAuthCookies(context.res);
+      if (userId) {
+        writeAuditLog(context.prisma, {
+          userId,
+          action: 'AUTH_LOGOUT',
+          ipAddress: context.req.ip,
+          userAgent: context.req.headers['user-agent'],
+          requestId: (context.req as any).requestId,
+          severity: 'INFO',
+        });
+      }
       return true;
     },
     refreshSession: async (_parent: any, _args: any, _context: GraphQLContext) => {
