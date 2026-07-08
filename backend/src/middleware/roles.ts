@@ -58,3 +58,22 @@ export async function requireSpaceRole(
 
   return member;
 }
+
+export function requireFounder(context: GraphQLContext) {
+  const currentUser = requireUser(context);
+  if ((currentUser as any).role !== 'FOUNDER') {
+    throw new Error('FORBIDDEN: Founder permissions required.');
+  }
+  return currentUser;
+}
+
+import { Request, Response, NextFunction } from 'express';
+
+export function requireFounderMiddleware(req: Request, res: Response, next: NextFunction) {
+  const user = (req as any).user;
+  if (!user || user.role !== 'FOUNDER') {
+    res.status(403).json({ error: 'FORBIDDEN: Platform Founder access required.' });
+    return;
+  }
+  next();
+}

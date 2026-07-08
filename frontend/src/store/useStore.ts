@@ -72,6 +72,7 @@ export interface User {
   aiCreditsUsed: number;
   provider: string;
   hasPassword: boolean;
+  role: 'USER' | 'FOUNDER';
 }
 
 export interface Collection {
@@ -538,6 +539,22 @@ interface AppState {
   revokeSessionREST: (sessionId: string) => Promise<boolean>;
   revokeAllSessionsREST: () => Promise<boolean>;
   getActiveSessionsREST: () => Promise<any[]>;
+  getFounderOverview: () => Promise<any>;
+  getFounderMetrics: () => Promise<any>;
+  getFounderUsers: (search?: string, tier?: string, status?: string, limit?: number, offset?: number) => Promise<any>;
+  suspendUser: (userId: string, suspend: boolean) => Promise<any>;
+  resetUserOTP: (userId: string) => Promise<any>;
+  forceUserLogout: (userId: string) => Promise<any>;
+  deleteUser: (userId: string) => Promise<any>;
+  getFounderWorkspaces: (search?: string, plan?: string, limit?: number, offset?: number) => Promise<any>;
+  disableWorkspace: (spaceId: string, disable: boolean) => Promise<any>;
+  transferWorkspaceOwnership: (spaceId: string, targetEmail: string) => Promise<any>;
+  impersonateWorkspaceOwner: (spaceId: string) => Promise<any>;
+  getFounderFeatureFlags: () => Promise<any>;
+  toggleFeatureFlag: (key: string, enabled: boolean, rolloutPercentage?: number, betaUserIds?: string[], canaryUserIds?: string[], isKillSwitch?: boolean) => Promise<any>;
+  toggleMaintenanceMode: (enabled: boolean) => Promise<any>;
+  getFounderAuditLogs: (filters?: { userId?: string; action?: string; ipAddress?: string; limit?: number; offset?: number }) => Promise<any>;
+  getFounderSecurity: () => Promise<any>;
   
   // Billing action
   updateBillingTier: (tier: 'FREE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE') => Promise<void>;
@@ -1934,6 +1951,7 @@ export const useStore = create<AppState>((set, get) => ({
             aiCreditsUsed
             provider
             hasPassword
+            role
             spaces {
               id
               name
@@ -2019,7 +2037,8 @@ export const useStore = create<AppState>((set, get) => ({
             tier: u.tier,
             aiCreditsUsed: u.aiCreditsUsed,
             provider: u.provider,
-            hasPassword: u.hasPassword
+            hasPassword: u.hasPassword,
+            role: u.role
           },
           collections: mappedCollections,
           testimonials: mappedTestimonials.length > 0 ? mappedTestimonials : initialTestimonials,
@@ -2315,6 +2334,182 @@ export const useStore = create<AppState>((set, get) => ({
     try {
       const data = await restRequest('/auth/sessions', 'DELETE');
       return !!data?.success;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getFounderOverview: async () => {
+    try {
+      const data = await restRequest('/api/v1/founder/overview', 'GET');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getFounderMetrics: async () => {
+    try {
+      const data = await restRequest('/api/v1/founder/monitoring', 'GET');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getFounderUsers: async (search?: string, tier?: string, status?: string, limit?: number, offset?: number) => {
+    try {
+      const query = new URLSearchParams();
+      if (search) query.append('search', search);
+      if (tier) query.append('tier', tier);
+      if (status) query.append('status', status);
+      if (limit) query.append('limit', limit.toString());
+      if (offset) query.append('offset', offset.toString());
+
+      const data = await restRequest(`/api/v1/founder/users?${query.toString()}`, 'GET');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  suspendUser: async (userId: string, suspend: boolean) => {
+    try {
+      const data = await restRequest(`/api/v1/founder/user/${userId}/suspend`, 'POST', { suspend });
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  resetUserOTP: async (userId: string) => {
+    try {
+      const data = await restRequest(`/api/v1/founder/user/${userId}/reset-otp`, 'POST');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  forceUserLogout: async (userId: string) => {
+    try {
+      const data = await restRequest(`/api/v1/founder/user/${userId}/force-logout`, 'POST');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  deleteUser: async (userId: string) => {
+    try {
+      const data = await restRequest(`/api/v1/founder/user/${userId}`, 'DELETE');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getFounderWorkspaces: async (search?: string, plan?: string, limit?: number, offset?: number) => {
+    try {
+      const query = new URLSearchParams();
+      if (search) query.append('search', search);
+      if (plan) query.append('plan', plan);
+      if (limit) query.append('limit', limit.toString());
+      if (offset) query.append('offset', offset.toString());
+
+      const data = await restRequest(`/api/v1/founder/workspaces?${query.toString()}`, 'GET');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  disableWorkspace: async (spaceId: string, disable: boolean) => {
+    try {
+      const data = await restRequest(`/api/v1/founder/workspace/${spaceId}/disable`, 'POST', { disable });
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  transferWorkspaceOwnership: async (spaceId: string, targetEmail: string) => {
+    try {
+      const data = await restRequest(`/api/v1/founder/workspace/${spaceId}/transfer`, 'POST', { targetEmail });
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  impersonateWorkspaceOwner: async (spaceId: string) => {
+    try {
+      const data = await restRequest(`/api/v1/founder/workspace/${spaceId}/impersonate`, 'POST');
+      if (data.success && data.user) {
+        set({ user: data.user });
+      }
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getFounderFeatureFlags: async () => {
+    try {
+      const data = await restRequest('/api/v1/founder/feature-flags', 'GET');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  toggleFeatureFlag: async (key: string, enabled: boolean, rolloutPercentage?: number, betaUserIds?: string[], canaryUserIds?: string[], isKillSwitch?: boolean) => {
+    try {
+      const data = await restRequest('/api/v1/founder/feature-flag', 'POST', {
+        key,
+        enabled,
+        rolloutPercentage,
+        betaUserIds,
+        canaryUserIds,
+        isKillSwitch
+      });
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  toggleMaintenanceMode: async (enabled: boolean) => {
+    try {
+      const data = await restRequest('/api/v1/founder/feature-flag', 'POST', {
+        isMaintenanceMode: enabled
+      });
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getFounderAuditLogs: async (filters?: { userId?: string; action?: string; ipAddress?: string; limit?: number; offset?: number }) => {
+    try {
+      const query = new URLSearchParams();
+      if (filters?.userId) query.append('userId', filters.userId);
+      if (filters?.action) query.append('action', filters.action);
+      if (filters?.ipAddress) query.append('ipAddress', filters.ipAddress);
+      if (filters?.limit) query.append('limit', filters.limit.toString());
+      if (filters?.offset) query.append('offset', filters.offset.toString());
+
+      const data = await restRequest(`/api/v1/founder/audit-logs?${query.toString()}`, 'GET');
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getFounderSecurity: async () => {
+    try {
+      const data = await restRequest('/api/v1/founder/security', 'GET');
+      return data;
     } catch (err: any) {
       throw err;
     }

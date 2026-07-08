@@ -48,6 +48,7 @@ model User {
   aiCreditsUsed        Int                   @default(0)
   isVerified           Boolean               @default(false)
   status               String                @default("ACTIVE") // ACTIVE, DISABLED
+  role                 UserRole              @default(USER)
   provider             String                @default("EMAIL") // EMAIL, GOOGLE, GITHUB
   hasPassword          Boolean               @default(true)
   failedLoginAttempts  Int                   @default(0)
@@ -924,4 +925,29 @@ model InAppNotification {
   space       Space    @relation(fields: [spaceId], references: [id], onDelete: Cascade)
 
   @@index([spaceId])
+}
+
+enum UserRole {
+  USER
+  FOUNDER
+}
+
+model FeatureFlag {
+  id                String   @id @default(uuid())
+  key               String   @unique
+  description       String?
+  enabled           Boolean  @default(false)
+  rolloutPercentage Int      @default(100)
+  betaUserIds       String[]
+  canaryUserIds     String[]
+  isKillSwitch      Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model SystemSetting {
+  key       String   @id
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

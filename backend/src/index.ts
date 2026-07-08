@@ -34,6 +34,8 @@ import oauthRouter from './controllers/oauthController';
 import { authRouter } from './controllers/authController';
 import { publicApiRouter } from './controllers/api';
 import { adminRouter } from './controllers/adminController';
+import { founderRouter } from './controllers/founderController';
+import { requireFounderMiddleware } from './middleware/roles';
 import {
   requestIdMiddleware,
   requestLoggerMiddleware,
@@ -73,12 +75,40 @@ async function startServer() {
   });
   app.use('/auth', oauthCors, rateLimiter(30, 10 * 60 * 1000), oauthRouter);
   app.use('/api/v1', oauthCors, publicApiRouter);
-  app.use('/api/v1/admin', oauthCors, rateLimiter(60, 60 * 1000), adminRouter);
 
   // Global authentication & token rotation middleware
   app.use(authMiddleware);
 
   app.use('/auth', oauthCors, authRouter);
+
+  // Maintenance mode checker
+  app.use(async (req, res, next) => {
+    if (
+      req.path.startsWith('/health') ||
+      req.path.startsWith('/ready') ||
+      req.path.startsWith('/live') ||
+      req.path.startsWith('/auth') ||
+      req.path.startsWith('/api/v1/founder')
+    ) {
+      return next();
+    }
+
+    try {
+      const maintenanceMode = await prisma.systemSetting.findUnique({
+        where: { key: 'MAINTENANCE_MODE' }
+      });
+      if (maintenanceMode?.value === 'true') {
+        const user = (req as any).user;
+        if (!user || user.role !== 'FOUNDER') {
+          return res.status(503).json({ error: 'MAINTENANCE_MODE: Proofly is undergoing maintenance.' });
+        }
+      }
+    } catch (e) {}
+    next();
+  });
+
+  app.use('/api/v1/admin', oauthCors, rateLimiter(60, 60 * 1000), requireFounderMiddleware, adminRouter);
+  app.use('/api/v1/founder', oauthCors, rateLimiter(100, 60 * 1000), requireFounderMiddleware, founderRouter);
 
   const httpServer = http.createServer(app);
 

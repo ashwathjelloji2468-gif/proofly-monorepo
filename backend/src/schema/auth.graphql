@@ -37,6 +37,7 @@ type User {
   status: String!
   provider: String!
   hasPassword: Boolean!
+  role: String!
   createdAt: String!
   updatedAt: String!
   spaces: [Space!]!
