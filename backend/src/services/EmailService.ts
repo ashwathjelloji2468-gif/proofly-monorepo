@@ -62,6 +62,7 @@ export class EmailService {
         console.log('--- BODY ---');
         console.log(html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '').trim());
         console.log('==================================================');
+        throw err;
       }
     } else if (this.transporter) {
       try {
@@ -80,6 +81,7 @@ export class EmailService {
         console.log('--- BODY ---');
         console.log(html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '').trim());
         console.log('==================================================');
+        throw err;
       }
     } else {
       console.log('==================================================');

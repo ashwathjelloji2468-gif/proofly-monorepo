@@ -27,6 +27,8 @@ function AuthContent() {
   const [fullName, setFullName] = useState('');
   const [workspaceName, setWorkspaceName] = useState('');
 
+  const [debugOtpCode, setDebugOtpCode] = useState('');
+
   // UI Status
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
@@ -56,11 +58,17 @@ function AuthContent() {
 
     try {
       useStore.setState({ isLoading: true });
-      await requestOTP(email);
+      const res = await requestOTP(email);
       setResendTimer(60);
       setStep('otp');
       setOtpCodes(Array(6).fill(''));
-      setSuccessMsg(`We sent a 6-digit verification code to ${email}`);
+      if (res?.debugOtp) {
+        setDebugOtpCode(res.debugOtp);
+        setSuccessMsg(`We generated a verification code for ${email}`);
+      } else {
+        setDebugOtpCode('');
+        setSuccessMsg(`We sent a 6-digit verification code to ${email}`);
+      }
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to request verification code. Please try again.');
     } finally {
@@ -75,9 +83,15 @@ function AuthContent() {
     setSuccessMsg('');
     try {
       useStore.setState({ isLoading: true });
-      await requestOTP(email);
+      const res = await requestOTP(email);
       setResendTimer(60);
-      setSuccessMsg('Verification code resent successfully!');
+      if (res?.debugOtp) {
+        setDebugOtpCode(res.debugOtp);
+        setSuccessMsg('A new verification code was generated!');
+      } else {
+        setDebugOtpCode('');
+        setSuccessMsg('Verification code resent successfully!');
+      }
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to resend code.');
     } finally {
@@ -306,6 +320,21 @@ function AuthContent() {
                   We sent a 6-digit verification code to <span className="text-white font-bold">{email}</span>. Enter it below to authenticate.
                 </p>
               </div>
+
+              {debugOtpCode && (
+                <div className="p-4 bg-purple-950/20 border border-purple-900/30 text-purple-400 text-xs rounded-xl text-left space-y-1.5 animate-pulse">
+                  <div className="flex items-center space-x-1.5">
+                    <Sparkles className="w-4 h-4 text-purple-400 shrink-0" />
+                    <span className="font-extrabold uppercase tracking-wide">Demo Sandbox Mode</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    This recipient is unverified on the Resend free tier. Use this code to bypass:
+                  </p>
+                  <div className="bg-purple-950/40 border border-purple-900/40 rounded-lg p-2 text-center font-mono font-black text-sm text-purple-300 tracking-widest mt-1">
+                    {debugOtpCode}
+                  </div>
+                </div>
+              )}
 
               {/* OTP Digits boxes */}
               <div className="flex justify-between gap-2.5">

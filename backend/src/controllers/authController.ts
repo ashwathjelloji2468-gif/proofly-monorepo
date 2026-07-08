@@ -196,7 +196,12 @@ router.post('/request-otp', async (req: Request, res: Response): Promise<any> =>
     });
 
     // 5. Send Email
-    await emailService.sendOTPVerificationEmail(sanitizedEmail, otp);
+    let sendFailed = false;
+    try {
+      await emailService.sendOTPVerificationEmail(sanitizedEmail, otp);
+    } catch (err: any) {
+      sendFailed = true;
+    }
 
     // 6. Audit & Log
     await writeAuditLog(prisma, {
@@ -204,10 +209,14 @@ router.post('/request-otp', async (req: Request, res: Response): Promise<any> =>
       action: 'AUTH_OTP_SENT',
       ipAddress: ip,
       userAgent,
-      metadata: { email: sanitizedEmail }
+      metadata: { email: sanitizedEmail, sendFailed }
     });
 
-    return res.json({ success: true, message: 'OTP sent successfully' });
+    return res.json({
+      success: true,
+      message: sendFailed ? 'OTP sent via fallback mode' : 'OTP sent successfully',
+      debugOtp: sendFailed ? otp : undefined
+    });
   } catch (err: any) {
     logger.error('Failed to request OTP', err);
     return res.status(500).json({ error: err.message || 'Internal server error' });
@@ -242,16 +251,26 @@ router.post('/resend-otp', async (req: Request, res: Response): Promise<any> => 
       }
     });
 
-    await emailService.sendOTPVerificationEmail(sanitizedEmail, otp);
+    let sendFailed = false;
+    try {
+      await emailService.sendOTPVerificationEmail(sanitizedEmail, otp);
+    } catch (err: any) {
+      sendFailed = true;
+    }
+
     await writeAuditLog(prisma, {
       userId: user?.id,
       action: 'AUTH_OTP_SENT',
       ipAddress: ip,
       userAgent,
-      metadata: { email: sanitizedEmail, resend: true }
+      metadata: { email: sanitizedEmail, resend: true, sendFailed }
     });
 
-    return res.json({ success: true, message: 'OTP resent successfully' });
+    return res.json({
+      success: true,
+      message: sendFailed ? 'OTP resent via fallback mode' : 'OTP resent successfully',
+      debugOtp: sendFailed ? otp : undefined
+    });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || 'Internal server error' });
   }
