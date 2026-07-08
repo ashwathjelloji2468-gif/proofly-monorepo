@@ -8,7 +8,7 @@ COPY frontend/package*.json ./frontend/
 
 # Install dependencies
 RUN npm ci --prefix backend --ignore-scripts
-RUN npm ci --prefix frontend --ignore-scripts
+RUN npm install --prefix frontend --ignore-scripts --no-audit --no-fund --legacy-peer-deps
 
 # Copy sources
 COPY backend/ ./backend/
