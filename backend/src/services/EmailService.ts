@@ -56,7 +56,12 @@ export class EmailService {
         console.log(`✉️ Email successfully sent via Resend REST API to ${to}: "${subject}" (ID: ${data.id})`);
       } catch (err) {
         console.error(`❌ Failed to send email via Resend REST API to ${to}:`, err);
-        throw err;
+        console.log('==================================================');
+        console.log(`✉️ [FALLBACK CONSOLE LOG] TO: ${to}`);
+        console.log(`SUBJECT: ${subject}`);
+        console.log('--- BODY ---');
+        console.log(html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '').trim());
+        console.log('==================================================');
       }
     } else if (this.transporter) {
       try {
@@ -69,7 +74,12 @@ export class EmailService {
         console.log(`✉️ Email successfully sent via SMTP to ${to}: "${subject}"`);
       } catch (err) {
         console.error(`❌ Failed to send email via SMTP to ${to}:`, err);
-        throw err;
+        console.log('==================================================');
+        console.log(`✉️ [FALLBACK CONSOLE LOG] TO: ${to}`);
+        console.log(`SUBJECT: ${subject}`);
+        console.log('--- BODY ---');
+        console.log(html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '').trim());
+        console.log('==================================================');
       }
     } else {
       console.log('==================================================');
