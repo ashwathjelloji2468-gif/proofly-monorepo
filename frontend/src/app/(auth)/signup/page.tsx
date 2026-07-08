@@ -1,200 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as zod from 'zod';
-import Link from 'next/link';
-import { Loader, Mail, ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { ProoflyLogo } from '@/components/ProoflyLogo';
-import { useStore } from '@/store/useStore';
-
-const signupSchema = zod.object({
-  firstName: zod.string().min(1, { message: 'First name is required.' }),
-  lastName: zod.string().min(1, { message: 'Last name is required.' }),
-  email: zod.string().email({ message: 'Provide a valid email address.' }),
-  password: zod.string().min(6, { message: 'Password must be at least 6 characters.' }),
-  confirmPassword: zod.string().min(6, { message: 'Password confirmation is required.' })
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match.",
-  path: ["confirmPassword"]
-});
-
-type SignupFormValues = zod.infer<typeof signupSchema>;
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Loader } from 'lucide-react';
 
 export default function SignupPage() {
-  const signup = useStore(state => state.signup);
-  const isLoading = useStore(state => state.isLoading);
-  const [authError, setAuthError] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [registeredEmail, setRegisteredEmail] = useState('');
+  const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupFormValues>({
-    resolver: zodResolver(signupSchema),
-  });
-
-  const onSubmit = async (values: SignupFormValues) => {
-    try {
-      setAuthError('');
-      const fullName = `${values.firstName.trim()} ${values.lastName.trim()}`;
-      // Note: backend signup does not auto-login (returns token: "")
-      await signup(values.email, fullName, values.password);
-      setRegisteredEmail(values.email);
-      setIsSubmitted(true);
-    } catch (err: any) {
-      setAuthError(err.message || 'Signup failed. Please try again.');
-    }
-  };
+  useEffect(() => {
+    router.replace('/auth');
+  }, [router]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4 bg-[#09090B] relative overflow-hidden font-sans">
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-emerald/5 rounded-full blur-[120px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-teal/5 rounded-full blur-[120px]" />
-
-      <div className="w-full max-w-md z-10">
-        <div className="bg-[#18181B] border border-border-primary rounded-2xl shadow-2xl p-8 space-y-6 text-left">
-          
-          {/* Logo & Header */}
-          <div className="text-center space-y-2 flex flex-col items-center justify-center">
-            <Link href="/" className="inline-block hover:opacity-90 transition">
-              <ProoflyLogo iconSize={36} showText={true} />
-            </Link>
-            <h2 className="text-xl font-bold tracking-tight text-white mt-4">
-              {isSubmitted ? 'Verify your account' : 'Create your account'}
-            </h2>
-            <p className="text-muted-foreground text-xs">
-              {isSubmitted ? `Verification email has been sent` : 'Get started collecting customer reviews with AI in seconds'}
-            </p>
-          </div>
-
-          {isSubmitted ? (
-            <div className="space-y-4 text-center py-4">
-              <div className="w-12 h-12 rounded-full bg-brand-emerald/10 flex items-center justify-center mx-auto text-brand-emerald">
-                <Mail className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-white text-sm">Check your inbox</h3>
-              <p className="text-muted-foreground text-xs leading-relaxed">
-                We have sent a verification email to <strong className="text-white">{registeredEmail}</strong>. 
-                Please click the link in the email to confirm your account and log in.
-              </p>
-              <div className="pt-4">
-                <Link href="/login" className="inline-flex items-center space-x-1.5 text-xs text-brand-emerald hover:underline font-semibold">
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>Back to Login</span>
-                </Link>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              {authError && (
-                <div className="p-3 text-xs rounded bg-red-950/40 border border-red-900/50 text-red-400">
-                  {authError}
-                </div>
-              )}
-
-              {/* Names row */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <label htmlFor="firstName" className="text-slate-300 text-xs font-bold uppercase tracking-wider block">First Name</label>
-                  <input
-                    id="firstName"
-                    type="text"
-                    placeholder="John"
-                    className="w-full bg-[#09090B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
-                    {...register('firstName')}
-                  />
-                  {errors.firstName && (
-                    <p className="text-[10px] text-red-400 mt-1">{errors.firstName.message}</p>
-                  )}
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="lastName" className="text-slate-300 text-xs font-bold uppercase tracking-wider block">Last Name</label>
-                  <input
-                    id="lastName"
-                    type="text"
-                    placeholder="Doe"
-                    className="w-full bg-[#09090B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
-                    {...register('lastName')}
-                  />
-                  {errors.lastName && (
-                    <p className="text-[10px] text-red-400 mt-1">{errors.lastName.message}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="email" className="text-slate-300 text-xs font-bold uppercase tracking-wider block">Email Address</label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="founder@my-saas.com"
-                  className="w-full bg-[#09090B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
-                  {...register('email')}
-                />
-                {errors.email && (
-                  <p className="text-[10px] text-red-400 mt-1">{errors.email.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="password" className="text-slate-300 text-xs font-bold uppercase tracking-wider block">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full bg-[#09090B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
-                  {...register('password')}
-                />
-                {errors.password && (
-                  <p className="text-[10px] text-red-400 mt-1">{errors.password.message}</p>
-                )}
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="confirmPassword" className="text-slate-300 text-xs font-bold uppercase tracking-wider block">Confirm Password</label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full bg-[#09090B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
-                  {...register('confirmPassword')}
-                />
-                {errors.confirmPassword && (
-                  <p className="text-[10px] text-red-400 mt-1">{errors.confirmPassword.message}</p>
-                )}
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-gradient-to-r from-brand-emerald to-brand-teal text-white hover:opacity-90 disabled:opacity-50 font-bold text-xs uppercase tracking-widest py-3.5 rounded-lg flex items-center justify-center space-x-1.5 shadow-md shadow-brand-emerald/10 cursor-pointer transition"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader className="w-3.5 h-3.5 animate-spin" />
-                    <span>Creating Account...</span>
-                  </>
-                ) : (
-                  <span>Sign Up</span>
-                )}
-              </button>
-            </form>
-          )}
-
-          <div className="h-px bg-border-primary/50" />
-
-          <div className="text-center text-xs text-muted-foreground mt-4">
-            Already have an account?{' '}
-            <Link href="/login" className="text-brand-emerald hover:underline font-semibold">
-              Log in
-            </Link>
-          </div>
-        </div>
+    <div className="flex items-center justify-center min-h-screen px-4 bg-[#09090B] text-slate-400">
+      <div className="flex flex-col items-center space-y-3">
+        <Loader className="w-8 h-8 text-brand-emerald animate-spin" />
+        <span className="text-xs">Redirecting to passwordless sign up...</span>
       </div>
     </div>
   );

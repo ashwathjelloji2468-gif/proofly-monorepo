@@ -31,6 +31,7 @@ import { createContext } from './context';
 import { authMiddleware } from './middleware/auth';
 import { rateLimiter } from './security/rateLimiter';
 import oauthRouter from './controllers/oauthController';
+import { authRouter } from './controllers/authController';
 import { publicApiRouter } from './controllers/api';
 import { adminRouter } from './controllers/adminController';
 import {
@@ -76,6 +77,8 @@ async function startServer() {
 
   // Global authentication & token rotation middleware
   app.use(authMiddleware);
+
+  app.use('/auth', oauthCors, authRouter);
 
   const httpServer = http.createServer(app);
 

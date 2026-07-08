@@ -42,7 +42,7 @@ enum SpaceRole {
 model User {
   id                   String                @id @default(uuid())
   email                String                @unique
-  passwordHash         String
+  passwordHash         String?
   name                 String
   tier                 BillingTier           @default(FREE)
   aiCreditsUsed        Int                   @default(0)
@@ -179,13 +179,22 @@ model PasswordResetToken {
 
 model OTPToken {
   id        String   @id @default(uuid())
-  userId    String
+  userId    String?
+  email     String
   otpHash   String
-  attempts  Int      @default(0)
   expiresAt DateTime
+  attempts  Int      @default(0)
+  used      Boolean  @default(false)
+  ip        String?
+  device    String?
+  browser   String?
   createdAt DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([expiresAt])
+  @@index([userId])
 }
 
 model EmailChangeRequest {
@@ -248,14 +257,18 @@ model OAuthAccount {
 
 model LoginHistory {
   id         String   @id @default(uuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   ipAddress  String?
   userAgent  String?
   browser    String?
   os         String?
   device     String?
   status     String   // "SUCCESS", "FAIL_PASSWORD", "FAIL_LOCKED", etc.
+  country    String?
+  city       String?
+  authMethod String?  // "OTP", "GOOGLE", "GITHUB", "PASSWORD"
+  riskScore  Float?   @default(0.0)
   createdAt  DateTime @default(now())
 
   @@index([userId])
@@ -263,13 +276,13 @@ model LoginHistory {
 
 model AuditLog {
   id         String   @id @default(uuid())
-  userId     String
+  userId     String?
   action     String
   ipAddress  String?
   deviceInfo String?
   createdAt  DateTime @default(now())
 
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Testimonial {

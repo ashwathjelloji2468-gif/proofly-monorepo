@@ -31,13 +31,15 @@ export default function SettingsPage() {
   const removeWorkspaceMember = useStore(state => state.removeWorkspaceMember);
   const requestEmailChange = useStore(state => state.requestEmailChange);
   const updateProfile = useStore(state => state.updateProfile);
-  const setPasswordAction = useStore(state => state.setPassword);
-  const getActiveSessions = useStore(state => state.getActiveSessions);
-  const revokeSessionAction = useStore(state => state.revokeSession);
-  const revokeAllSessionsAction = useStore(state => state.revokeAllSessions);
+  const setPasswordAction = useStore(state => state.enablePasswordREST);
+  const disablePasswordAction = useStore(state => state.disablePasswordREST);
+  const changePasswordAction = useStore(state => state.changePasswordREST);
+  const getActiveSessions = useStore(state => state.getActiveSessionsREST);
+  const revokeSessionAction = useStore(state => state.revokeSessionREST);
+  const revokeAllSessionsAction = useStore(state => state.revokeAllSessionsREST);
 
   // States
-  const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'billing' | 'domains' | 'team'>('profile');
+  const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'security' | 'billing' | 'domains' | 'team'>('profile');
   const [selectedSpaceId, setSelectedSpaceId] = useState<string>('');
   
   // Profile settings
@@ -47,7 +49,10 @@ export default function SettingsPage() {
   const [profileSuccess, setProfileSuccess] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [securitySuccess, setSecuritySuccess] = useState('');
+  const [securityError, setSecurityError] = useState('');
   const [deviceSessions, setDeviceSessions] = useState<any[]>([]);
   const [sessionsLoading, setSessionsLoading] = useState(false);
 
@@ -157,6 +162,43 @@ export default function SettingsPage() {
     }
   };
 
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!oldPassword.trim() || !newPassword.trim()) return;
+    if (newPassword !== confirmPassword) {
+      setSecurityError("Passwords don't match.");
+      return;
+    }
+    setIsSubmitting(true);
+    setSecurityError('');
+    setSecuritySuccess('');
+    try {
+      await changePasswordAction(oldPassword, newPassword);
+      setSecuritySuccess('Password updated successfully.');
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err: any) {
+      setSecurityError(err.message || 'Failed to update password.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDisablePassword = async () => {
+    setIsSubmitting(true);
+    setSecurityError('');
+    setSecuritySuccess('');
+    try {
+      await disablePasswordAction();
+      setSecuritySuccess('Password login disabled. You must now use OTP or linked OAuth providers.');
+    } catch (err: any) {
+      setSecurityError(err.message || 'Failed to disable password login.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const loadSessions = async () => {
     setSessionsLoading(true);
     try {
@@ -170,7 +212,7 @@ export default function SettingsPage() {
   };
 
   useEffect(() => {
-    if (activeSettingsTab === 'profile') {
+    if (activeSettingsTab === 'security') {
       loadSessions();
     }
   }, [activeSettingsTab]);
@@ -318,7 +360,8 @@ export default function SettingsPage() {
           {/* Navigation Sidebar */}
           <aside className="md:col-span-1 space-y-2 shrink-0 ">
             {[
-              { id: 'profile', label: 'Profile & Security', desc: 'Account credentials', icon: <UserIcon className="w-4 h-4 text-brand-emerald" /> },
+              { id: 'profile', label: 'Profile Settings', desc: 'Display name & email', icon: <UserIcon className="w-4 h-4 text-brand-emerald" /> },
+              { id: 'security', label: 'Security & Sessions', desc: 'Passwords & active devices', icon: <ShieldCheck className="w-4 h-4 text-amber-500" /> },
               { id: 'billing', label: 'Subscription Plans', desc: 'Manage Stripe billing', icon: <CreditCard className="w-4 h-4 text-brand-teal" /> },
               { id: 'domains', label: 'Custom Domains', desc: 'CNAME setup links', icon: <Globe className="w-4 h-4 text-brand-emerald" /> },
               { id: 'team', label: 'Workspace Team', desc: 'Teammates & Invites', icon: <Users className="w-4 h-4 text-brand-teal" /> }
@@ -431,66 +474,193 @@ export default function SettingsPage() {
                     </form>
                   )}
                 </div>
+              </div>
+            )}
 
-                {!user.hasPassword && (
-                  <div className="space-y-4 bg-[#09090B] border border-border-primary p-5 rounded-xl">
-                    <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wide">Establish Login Password</h4>
-                    
-                    <div className="p-3 text-[10px] text-brand-teal bg-brand-teal/5 border border-brand-teal/20 rounded-lg flex items-start space-x-2 leading-relaxed">
-                      <AlertCircle className="w-4 h-4 shrink-0 text-brand-teal mt-0.5" />
-                      <span>
-                        You are currently signed in via <strong>{user.provider}</strong> and do not have a local login password. Establish a password below to enable logging in via email/password later.
-                      </span>
-                    </div>
+            {/* SECURITY & SESSIONS TAB */}
+            {activeSettingsTab === 'security' && user && (
+              <div className="space-y-6 text-left">
+                <div className="space-y-1">
+                  <h3 className="text-sm font-bold text-white flex items-center space-x-1.5">
+                    <ShieldCheck className="w-4 h-4 text-amber-500" />
+                    <span>Security & Session Settings</span>
+                  </h3>
+                  <p className="text-xs text-muted-foreground">Manage password login, connected OAuth accounts, active browser sessions, and security history.</p>
+                </div>
 
-                    {passwordSuccess && (
-                      <div className="p-3 text-xs rounded bg-brand-emerald/10 border border-brand-emerald/30 text-brand-emerald">
-                        {passwordSuccess}
-                      </div>
-                    )}
-
-                    <form onSubmit={handleSetPassword} className="space-y-4 max-w-md">
-                      <div className="space-y-1.5">
-                        <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">New Password</label>
-                        <input
-                          type="password"
-                          required
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          placeholder="Min 6 characters"
-                          className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
-                        />
-                      </div>
-                      
-                      <div className="space-y-1.5">
-                        <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">Confirm Password</label>
-                        <input
-                          type="password"
-                          required
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          placeholder="Re-enter password"
-                          className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="bg-brand-emerald/10 border border-brand-emerald/20 hover:bg-brand-emerald/20 text-brand-emerald font-bold text-[10px] uppercase tracking-widest py-2 px-6 rounded-lg transition cursor-pointer disabled:opacity-50"
-                      >
-                        {isSubmitting ? 'Establishing...' : 'Set Password'}
-                      </button>
-                    </form>
+                {securitySuccess && (
+                  <div className="p-3 text-xs rounded bg-brand-emerald/10 border border-brand-emerald/30 text-brand-emerald">
+                    {securitySuccess}
                   </div>
                 )}
 
-                {/* Session Management */}
+                {securityError && (
+                  <div className="p-3 text-xs rounded bg-red-950/40 border border-red-900/40 text-red-400">
+                    {securityError}
+                  </div>
+                )}
+
+                {/* Password Login Section */}
+                <div className="space-y-4 bg-[#09090B] border border-border-primary p-5 rounded-xl">
+                  <div className="flex items-center justify-between border-b border-border-primary/50 pb-3">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wide">Password Login</h4>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">Toggle and configure standard password access for this account.</p>
+                    </div>
+                    <div>
+                      <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded border ${
+                        user.hasPassword 
+                          ? 'bg-brand-emerald/10 border-brand-emerald/20 text-brand-emerald' 
+                          : 'bg-slate-800 border-slate-700 text-slate-400'
+                      }`}>
+                        {user.hasPassword ? 'Enabled' : 'Disabled'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {user.hasPassword ? (
+                    <div className="space-y-4">
+                      {/* Change Password Form */}
+                      <form onSubmit={handleChangePassword} className="space-y-4 max-w-md pt-2">
+                        <h5 className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">Change Password</h5>
+                        <div className="space-y-1.5">
+                          <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">Current Password</label>
+                          <input
+                            type="password"
+                            required
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
+                            placeholder="Current Password"
+                            className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">New Password</label>
+                          <input
+                            type="password"
+                            required
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Min 8 characters, uppercase, number, special"
+                            className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">Confirm New Password</label>
+                          <input
+                            type="password"
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Re-enter new password"
+                            className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
+                          />
+                        </div>
+                        <div className="flex space-x-3 pt-2">
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="bg-brand-emerald/10 border border-brand-emerald/20 hover:bg-brand-emerald/20 text-brand-emerald font-bold text-[10px] uppercase tracking-widest py-2 px-6 rounded-lg transition cursor-pointer disabled:opacity-50"
+                          >
+                            Update Password
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleDisablePassword}
+                            disabled={isSubmitting}
+                            className="bg-red-950/20 border border-red-900/30 hover:bg-red-950/40 text-red-400 font-bold text-[10px] uppercase tracking-widest py-2 px-6 rounded-lg transition cursor-pointer"
+                          >
+                            Disable Password Login
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  ) : (
+                    <div className="space-y-4 pt-2">
+                      <div className="p-3 text-[10px] text-brand-teal bg-brand-teal/5 border border-brand-teal/20 rounded-lg flex items-start space-x-2 leading-relaxed">
+                        <AlertCircle className="w-4 h-4 shrink-0 text-brand-teal mt-0.5" />
+                        <span>
+                          Password login is currently disabled. You are logging in passwordlessly via OTP or social OAuth. You can establish a password below to enable password-based logins.
+                        </span>
+                      </div>
+
+                      <form onSubmit={handleSetPassword} className="space-y-4 max-w-md">
+                        <div className="space-y-1.5">
+                          <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">Create Password</label>
+                          <input
+                            type="password"
+                            required
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Min 8 characters, uppercase, number, special"
+                            className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
+                          />
+                        </div>
+                        
+                        <div className="space-y-1.5">
+                          <label className="text-slate-400 text-[10px] uppercase tracking-wider font-bold block">Confirm Password</label>
+                          <input
+                            type="password"
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm password"
+                            className="w-full bg-[#18181B] border border-border-primary text-white text-xs px-3.5 py-3 rounded-lg focus:outline-none focus:border-brand-emerald transition"
+                          />
+                        </div>
+
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="bg-brand-emerald/10 border border-brand-emerald/20 hover:bg-brand-emerald/20 text-brand-emerald font-bold text-[10px] uppercase tracking-widest py-2 px-6 rounded-lg transition cursor-pointer disabled:opacity-50"
+                        >
+                          Enable Password Login
+                        </button>
+                      </form>
+                    </div>
+                  )}
+                </div>
+
+                {/* Connected OAuth Accounts */}
+                <div className="space-y-4 bg-[#09090B] border border-border-primary p-5 rounded-xl">
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wide">Connected OAuth Accounts</h4>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">Integrate third-party social single sign-on (SSO) providers.</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center justify-between p-3.5 bg-[#18181B] border border-border-primary rounded-xl">
+                      <div>
+                        <span className="text-xs font-bold text-slate-200 block">Google</span>
+                        <span className="text-[10px] text-slate-400">
+                          {user.provider === 'GOOGLE' ? 'Used for current sign in' : 'Connected'}
+                        </span>
+                      </div>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 font-bold uppercase">
+                        Connected
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3.5 bg-[#18181B] border border-border-primary rounded-xl">
+                      <div>
+                        <span className="text-xs font-bold text-slate-200 block">GitHub</span>
+                        <span className="text-[10px] text-slate-400">
+                          {user.provider === 'GITHUB' ? 'Used for current sign in' : 'Connected'}
+                        </span>
+                      </div>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 font-bold uppercase">
+                        Connected
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Active Sessions */}
                 <div className="space-y-4 bg-[#09090B] border border-border-primary p-5 rounded-xl">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wide">Active Browser Sessions</h4>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">Manage and revoke your active logins on different devices.</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">Manage and revoke active logins on different devices.</p>
                     </div>
                     {deviceSessions.filter(s => !s.isCurrent).length > 0 && (
                       <button

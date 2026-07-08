@@ -38,6 +38,31 @@ async function gqlRequest(query: string, variables: any = {}) {
   }
 }
 
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:4000';
+
+export async function restRequest(path: string, method: string = 'GET', body: any = null) {
+  const headers: Record<string, string> = {};
+  if (body) {
+    headers['Content-Type'] = 'application/json';
+  }
+  try {
+    const res = await fetch(`${SERVER_URL}${path}`, {
+      method,
+      headers,
+      credentials: 'include',
+      body: body ? JSON.stringify(body) : undefined
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Request failed');
+    }
+    return data;
+  } catch (err: any) {
+    console.error('REST request error:', err);
+    throw err;
+  }
+}
+
 export interface User {
   id: string;
   email: string;
@@ -490,7 +515,10 @@ interface AppState {
   verifyEmail: (token: string) => Promise<boolean>;
   resendVerificationEmail: (email: string) => Promise<boolean>;
   requestPasswordReset: (email: string) => Promise<{ email: string; message: string }>;
-  verifyOTP: (email: string, otp: string) => Promise<string>;
+  requestOTP: (email: string) => Promise<any>;
+  resendOTP: (email: string) => Promise<any>;
+  verifyOTP: (email: string, otp: string) => Promise<{ success: boolean; userExists: boolean; signupToken?: string; user?: User }>;
+  completeSignup: (email: string, signupToken: string, name: string, workspaceName: string) => Promise<{ success: boolean; user: User }>;
   resetPassword: (email: string, token: string, passwordHashRaw: string) => Promise<boolean>;
   requestEmailChange: (newEmail: string) => Promise<boolean>;
   verifyEmailChange: (token: string) => Promise<boolean>;
@@ -500,10 +528,16 @@ interface AppState {
   getWorkspaceMembers: (spaceId: string) => Promise<any[]>;
   removeWorkspaceMember: (memberId: string) => Promise<boolean>;
   setPassword: (password: string) => Promise<boolean>;
+  enablePasswordREST: (password: string) => Promise<any>;
+  disablePasswordREST: () => Promise<any>;
+  changePasswordREST: (oldPass: string, newPass: string) => Promise<any>;
   refreshSession: () => Promise<boolean>;
   revokeSession: (sessionId: string) => Promise<boolean>;
   revokeAllSessions: () => Promise<boolean>;
   getActiveSessions: () => Promise<any[]>;
+  revokeSessionREST: (sessionId: string) => Promise<boolean>;
+  revokeAllSessionsREST: () => Promise<boolean>;
+  getActiveSessionsREST: () => Promise<any[]>;
   
   // Billing action
   updateBillingTier: (tier: 'FREE' | 'PRO' | 'BUSINESS' | 'ENTERPRISE') => Promise<void>;
@@ -2180,14 +2214,107 @@ export const useStore = create<AppState>((set, get) => ({
     }
   },
 
+  requestOTP: async (email: string) => {
+    try {
+      const data = await restRequest('/auth/request-otp', 'POST', { email });
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  resendOTP: async (email: string) => {
+    try {
+      const data = await restRequest('/auth/resend-otp', 'POST', { email });
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
   verifyOTP: async (email: string, otp: string) => {
     try {
-      const data = await gqlRequest(`
-        mutation VerifyOTP($email: String!, $otp: String!) {
-          verifyOTP(email: $email, otp: $otp)
-        }
-      `, { email, otp });
-      return data.verifyOTP;
+      const data = await restRequest('/auth/verify-otp', 'POST', { email, otp });
+      if (data.success && data.userExists && data.user) {
+        set({ user: data.user });
+      }
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  completeSignup: async (email: string, signupToken: string, name: string, workspaceName: string) => {
+    try {
+      const data = await restRequest('/auth/verify-otp', 'POST', {
+        email,
+        signupToken,
+        name,
+        workspaceName
+      });
+      if (data.success && data.user) {
+        set({ user: data.user });
+      }
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  enablePasswordREST: async (password: string) => {
+    try {
+      const data = await restRequest('/auth/enable-password', 'POST', { password });
+      await get().fetchUser();
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  disablePasswordREST: async () => {
+    try {
+      const data = await restRequest('/auth/disable-password', 'POST');
+      await get().fetchUser();
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  changePasswordREST: async (oldPass: string, newPass: string) => {
+    try {
+      const data = await restRequest('/auth/change-password', 'POST', {
+        oldPassword: oldPass,
+        newPassword: newPass
+      });
+      return data;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  getActiveSessionsREST: async () => {
+    try {
+      const data = await restRequest('/auth/sessions', 'GET');
+      return data || [];
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  revokeSessionREST: async (sessionId: string) => {
+    try {
+      const data = await restRequest(`/auth/session/${sessionId}`, 'DELETE');
+      return !!data?.success;
+    } catch (err: any) {
+      throw err;
+    }
+  },
+
+  revokeAllSessionsREST: async () => {
+    try {
+      const data = await restRequest('/auth/sessions', 'DELETE');
+      return !!data?.success;
     } catch (err: any) {
       throw err;
     }

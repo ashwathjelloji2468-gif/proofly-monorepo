@@ -279,4 +279,17 @@ export class EmailService {
     const html = this.getBaseTemplate(title, bodyContent, { text: 'Confirm Email Change', url: verifyUrl });
     await this.sendHtmlEmail(email, title, html);
   }
+
+  async sendOTPVerificationEmail(email: string, otp: string) {
+    const title = 'Your Proofly verification code';
+    const bodyContent = `
+      <h1>Verify your Proofly login</h1>
+      <p>Hello,</p>
+      <p>We received a request to access your Proofly account. Use the 6-digit verification code below to authorize the sign-in.</p>
+      <div class="otp-box">${otp}</div>
+      <p>This verification code is valid for <strong>10 minutes</strong>. If you did not request this code, you can safely ignore this email.</p>
+    `;
+    const html = this.getBaseTemplate(title, bodyContent);
+    await this.sendHtmlEmail(email, title, html);
+  }
 }

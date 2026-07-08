@@ -156,7 +156,7 @@ export class UserService extends BaseService {
       throw new Error(`OAUTH_ACCOUNT: This account was created using ${user.provider}. Please continue with ${user.provider} or set a password first.`);
     }
 
-    const valid = await bcrypt.compare(passwordHashRaw, user.passwordHash);
+    const valid = await bcrypt.compare(passwordHashRaw, user.passwordHash || '');
     if (!valid) {
       // Increment failed attempts
       const attempts = user.failedLoginAttempts + 1;
@@ -310,6 +310,7 @@ export class UserService extends BaseService {
     await this.prisma.oTPToken.create({
       data: {
         userId: user.id,
+        email: user.email,
         otpHash,
         expiresAt
       }
