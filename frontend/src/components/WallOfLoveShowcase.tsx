@@ -319,7 +319,7 @@ export function WallOfLoveShowcase({ testimonials, layout }: WallOfLoveProps) {
   const textParallaxY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
 
   // Sort testimonials dynamically
-  const sortedTestimonials = [...testimonials].sort((a, b) => {
+  const baseSorted = [...testimonials].sort((a, b) => {
     if (sortBy === 'newest') {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     }
@@ -336,6 +336,17 @@ export function WallOfLoveShowcase({ testimonials, layout }: WallOfLoveProps) {
     }
     return 0;
   });
+
+  // Limit to exactly 4 testimonials: 2 video (t.video_url) and 2 text (no t.video_url)
+  const videos = baseSorted.filter((t: any) => !!t.video_url).slice(0, 2);
+  const texts = baseSorted.filter((t: any) => !t.video_url).slice(0, 2);
+  let combined = [...videos, ...texts];
+  if (combined.length < 4) {
+    const existingIds = new Set(combined.map((c: any) => c.id));
+    const extra = baseSorted.filter((t: any) => !existingIds.has(t.id));
+    combined = [...combined, ...extra].slice(0, 4);
+  }
+  const sortedTestimonials = combined;
 
   if (testimonials.length === 0) {
     return (
