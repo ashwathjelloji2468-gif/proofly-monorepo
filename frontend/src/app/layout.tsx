@@ -16,12 +16,43 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Proofly - Premium AI Social Proof",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_CLIENT_URL || 'https://useproofly.vercel.app'),
+  title: {
+    default: "Proofly - Premium AI Social Proof",
+    template: "%s | Proofly"
+  },
   description: "AI-powered social proof, testimonial collections, and interactive displays.",
   icons: {
     icon: "/favicon.svg",
     apple: "/favicon.svg",
   },
+  alternates: {
+    canonical: "/"
+  },
+  openGraph: {
+    title: "Proofly - Premium AI Social Proof",
+    description: "AI-powered social proof, testimonial collections, and interactive displays.",
+    url: "https://useproofly.vercel.app",
+    siteName: "Proofly",
+    locale: "en_US",
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Proofly - Premium AI Social Proof",
+    description: "AI-powered social proof, testimonial collections, and interactive displays."
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  }
 };
 
 export default function RootLayout({
