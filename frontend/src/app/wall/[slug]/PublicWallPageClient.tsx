@@ -96,7 +96,7 @@ export default function PublicWallPageClient() {
   const { space, settings, testimonials } = data;
 
   // Filter approved testimonials
-  const filteredTestimonials = testimonials.filter((t: any) => {
+  const approvedTestimonials = testimonials.filter((t: any) => {
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const nameMatch = (t.reviewerName || '').toLowerCase().includes(q);
@@ -108,6 +108,17 @@ export default function PublicWallPageClient() {
     if (onlyVideo && !t.videoUrl) return false;
     return true;
   });
+
+  // Limit to exactly 4 testimonials (2 video and 2 text if possible)
+  const videos = approvedTestimonials.filter((t: any) => t.videoUrl).slice(0, 2);
+  const texts = approvedTestimonials.filter((t: any) => !t.videoUrl).slice(0, 2);
+  let combined = [...videos, ...texts];
+  if (combined.length < 4) {
+    const existingIds = new Set(combined.map((c: any) => c.id));
+    const extra = approvedTestimonials.filter((t: any) => !existingIds.has(t.id));
+    combined = [...combined, ...extra].slice(0, 4);
+  }
+  const filteredTestimonials = combined;
 
   // Calculate statistics metrics
   const totalReviews = testimonials.length;
