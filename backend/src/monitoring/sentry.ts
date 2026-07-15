@@ -12,7 +12,7 @@ const IS_PROD = ENV === 'production';
 export function initSentry(): void {
   if (!SENTRY_DSN) {
     if (IS_PROD) {
-      console.warn('[Sentry] SENTRY_DSN not set — error tracking disabled');
+      console.log('ℹ️ [Sentry] SENTRY_DSN not set — error tracking disabled');
     }
     return;
   }
