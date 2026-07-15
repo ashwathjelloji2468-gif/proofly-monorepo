@@ -11,10 +11,13 @@ export class EmailService {
     const brevoKey = process.env.BREVO_API_KEY;
     const smtpHost = process.env.SMTP_HOST;
 
-    if (provider === 'brevo' || brevoKey) {
+    const isBrevoSecret = apiSecret && apiSecret.startsWith('xkeysib-');
+    const isResendSecret = apiSecret && apiSecret.startsWith('re_');
+
+    if (provider === 'brevo' || brevoKey || isBrevoSecret) {
       this.brevoApiKey = brevoKey || apiSecret || null;
       console.log('✉️ Email service initialized with Brevo REST API.');
-    } else if (apiSecret) {
+    } else if (apiSecret && (isResendSecret || !provider)) {
       this.resendApiKey = apiSecret;
       console.log('✉️ Email service initialized with Resend HTTPS REST API.');
     } else if (smtpHost) {
