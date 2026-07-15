@@ -3,12 +3,18 @@ import nodemailer from 'nodemailer';
 export class EmailService {
   private transporter: nodemailer.Transporter | null = null;
   private resendApiKey: string | null = null;
+  private brevoApiKey: string | null = null;
 
   constructor() {
+    const provider = process.env.EMAIL_PROVIDER;
     const apiSecret = process.env.RESEND_API_KEY;
+    const brevoKey = process.env.BREVO_API_KEY;
     const smtpHost = process.env.SMTP_HOST;
 
-    if (apiSecret) {
+    if (provider === 'brevo' || brevoKey) {
+      this.brevoApiKey = brevoKey || apiSecret || null;
+      console.log('✉️ Email service initialized with Brevo REST API.');
+    } else if (apiSecret) {
       this.resendApiKey = apiSecret;
       console.log('✉️ Email service initialized with Resend HTTPS REST API.');
     } else if (smtpHost) {
@@ -23,14 +29,61 @@ export class EmailService {
       });
       console.log('✉️ Email service initialized with SMTP transport.');
     } else {
-      console.warn('⚠️ No email provider configured (missing RESEND_API_KEY or SMTP_HOST). Emails will be logged to the console only.');
+      console.warn('⚠️ No email provider configured (missing RESEND_API_KEY, BREVO_API_KEY, or SMTP_HOST). Emails will be logged to the console only.');
     }
   }
 
   private async sendHtmlEmail(to: string, subject: string, html: string) {
     const fromAddress = process.env.EMAIL_FROM || 'Proofly <onboarding@resend.dev>';
     
-    if (this.resendApiKey) {
+    if (this.brevoApiKey) {
+      try {
+        console.log(`✉️ Sending email via Brevo REST API to ${to}...`);
+        
+        let senderName = 'Proofly';
+        let senderEmail = 'onboarding@resend.dev';
+        
+        const match = fromAddress.match(/^(.*?)\s*<(.*?)>$/);
+        if (match) {
+          senderName = match[1].trim();
+          senderEmail = match[2].trim();
+        } else if (fromAddress.includes('@')) {
+          senderEmail = fromAddress.trim();
+        }
+
+        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'api-key': this.brevoApiKey,
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            sender: { name: senderName, email: senderEmail },
+            to: [{ email: to }],
+            subject,
+            htmlContent: html,
+          }),
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`Brevo API returned status ${response.status}: ${errText}`);
+        }
+
+        const data = await response.json() as { messageId: string };
+        console.log(`✉️ Email successfully sent via Brevo REST API to ${to}: "${subject}" (ID: ${data.messageId})`);
+      } catch (err) {
+        console.error(`❌ Failed to send email via Brevo REST API to ${to}:`, err);
+        console.log('==================================================');
+        console.log(`✉️ [FALLBACK CONSOLE LOG] TO: ${to}`);
+        console.log(`SUBJECT: ${subject}`);
+        console.log('--- BODY ---');
+        console.log(html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '').trim());
+        console.log('==================================================');
+        throw err;
+      }
+    } else if (this.resendApiKey) {
       try {
         console.log(`✉️ Sending email via Resend REST API to ${to}...`);
         const response = await fetch('https://api.resend.com/emails', {
